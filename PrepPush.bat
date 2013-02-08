@@ -1,4 +1,5 @@
 REM @echo off
+set original=..\..\phoenix-firestorm-release
 set src=\indra\newview\
 set settings=\indra\newview\app_settings
 set messages=\scripts\messages\
@@ -18,10 +19,10 @@ set files=%src%llappviewer.cpp %src%llappviewer.h %src%llstartup.cpp %src%llstar
 echo %files%
 
 git checkout FirestormHead
-xcopy /d /y ..\..\Firestorm%src%*.cpp Source\
-xcopy /d /y ..\..\Firestorm%src%*.h Source\
-xcopy /d /y ..\..\Firestorm%settings%*.xml Source\app_settings\
-xcopy /d /y ..\..\Firestorm%messages%*.msg Source\messages\
+xcopy /d /y %original%%src%*.cpp Source\
+xcopy /d /y %original%%src%*.h Source\
+xcopy /d /y %original%%settings%*.xml Source\app_settings\
+xcopy /d /y %original%%messages%*.msg Source\messages\
 git add Source/*
 git commit -m "Latest from Firestorm Trunk"
 
