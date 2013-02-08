@@ -9020,3 +9020,33 @@ version 2.0
 	}
 }
 
+// SetCameraProperties
+{ 
+	SetCameraProperties		Low	427 Trusted	Unencoded
+	{
+		CameraProperty	Single
+		{ 	FrustumOffsetH 	F32 }
+		{ 	FrustumOffsetV 	F32 }
+		{ 	FrustumNear 	F32 }
+		{ 	CameraAngle 	F32 }
+		{ 	AspectRatio 	F32 }
+		{ 	AspectSet 		BOOL }
+		{ 	SetNear 		BOOL }
+	}
+}
+
+
+// SetFrustum
+{ 
+	SetFrustum		Low	428 Trusted	Unencoded
+	{
+		Frustum	Single
+		{ 	x1 	F32 }
+		{ 	x2 	F32 }
+		{ 	y1 	F32 }
+		{ 	y2 	F32 }
+		{ 	dn 	F32 }
+		{ 	df 	F32 }
+		{ 	ControlFrustum 		BOOL }
+	}
+}
