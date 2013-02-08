@@ -1,7 +1,7 @@
 REM @echo off
 set original=..\..\phoenix-firestorm-release
 set src=\indra\newview\
-set settings=\indra\newview\app_settings
+set settings=\indra\newview\app_settings\
 set messages=\scripts\messages\
 set workingDir=%CD%
 
