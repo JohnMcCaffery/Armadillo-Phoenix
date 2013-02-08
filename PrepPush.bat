@@ -19,10 +19,10 @@ set files=%src%llappviewer.cpp %src%llappviewer.h %src%llstartup.cpp %src%llstar
 echo %files%
 
 git checkout FirestormHead
-xcopy /d /y %original%%src%*.cpp Source\
-xcopy /d /y %original%%src%*.h Source\
-xcopy /d /y %original%%settings%*.xml Source\app_settings\
-xcopy /d /y %original%%messages%*.msg Source\messages\
+xcopy /d /y %original%%src%*.cpp Source%src%
+xcopy /d /y %original%%src%*.h Source%src%
+xcopy /d /y %original%%settings%*.xml Source%settings%
+xcopy /d /y %original%%messages%*.msg Source%messages%
 git add Source/*
 git commit -m "Latest from Firestorm Trunk"
 
