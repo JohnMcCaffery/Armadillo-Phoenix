@@ -1,12 +1,14 @@
 REM @echo off
 set src=\indra\newview\
+set settings=\indra\newview\app_settings
+set messages=\scripts\messages\
 set workingDir=%CD%
 
 for /f "delims=" %%a in ('git symbolic-ref HEAD') do set head=%%a
 set head=%head:~11%
 
 cd ..\..\phoenix-firestorm-release
-hg pull -u
+REM hg pull -insecure -u
 cd %workingDir%
 
 Echo Updating source files
@@ -15,24 +17,30 @@ set files=%src%llappviewer.cpp %src%llappviewer.h %src%llstartup.cpp %src%llstar
 
 echo %files%
 
-REM git checkout FirestormHead
-REM xcopy /d /y ..\..\Firestorm%src%*.cpp Source\
-REM xcopy /d /y ..\..\Firestorm%src%*.h Source\
-REM git add Source/*
-REM git commit -m "Latest from Firestorm Trunk"
-REM 
-REM git checkout WorkingHead
-REM xcopy /d /y ..%src%*.cpp Source\
-REM xcopy /d /y ..%src%*.h Source\
-REM git add Source/*
-REM git commit -m "Latest from working directory"
+git checkout FirestormHead
+xcopy /d /y ..\..\Firestorm%src%*.cpp Source\
+xcopy /d /y ..\..\Firestorm%src%*.h Source\
+xcopy /d /y ..\..\Firestorm%settings%*.xml Source\app_settings\
+xcopy /d /y ..\..\Firestorm%messages%*.msg Source\messages\
+git add Source/*
+git commit -m "Latest from Firestorm Trunk"
 
-REM git checkout %head%
+git checkout WorkingHead
+xcopy /d /y ..%src%*.cpp Source\
+xcopy /d /y ..%src%*.h Source\
+xcopy /d /y ..%settings%*.xml Source\app_settings\
+xcopy /d /y ..%messages%*.msg Source\messages\
+git add Source/*
+git commit -m "Latest from working directory"
+
+git checkout %head%
 for /f "delims=" %%l in ('git diff --name-only FirestormHead WorkingHead') do (
 	call:subroutine "%%l"
 )
 REM call:diffFolder ..%src% *.cpp
 REM call:diffFolder ..%src% *.h
+REM call:diffFolder ..%settings% *.xml
+REM call:diffFolder ..%messages% *.msg
 
 xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..\build-vc100\newview\Release\* Bin\
 xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..\indra\newview\* Bin\
