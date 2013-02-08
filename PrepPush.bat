@@ -19,18 +19,18 @@ set files=%src%llappviewer.cpp %src%llappviewer.h %src%llstartup.cpp %src%llstar
 echo %files%
 
 git checkout FirestormHead
-xcopy /d /y %original%%src%*.cpp Source\
-xcopy /d /y %original%%src%*.h Source\
-xcopy /d /y %original%%settings%*.xml Source\app_settings\
-xcopy /d /y %original%%messages%*.msg Source\messages\
+xcopy /d /y %original%%src%*.cpp Source%src%
+xcopy /d /y %original%%src%*.h Source%src%
+xcopy /d /y %original%%settings%*.xml Source%settings%
+xcopy /d /y %original%%messages%*.msg Source%messages%
 git add Source/*
 git commit -m "Latest from Firestorm Trunk"
 
 git checkout WorkingHead
-xcopy /d /y ..%src%*.cpp Source\
-xcopy /d /y ..%src%*.h Source\
-xcopy /d /y ..%settings%*.xml Source\app_settings\
-xcopy /d /y ..%messages%*.msg Source\messages\
+xcopy /d /y ..%src%*.cpp Source%src%
+xcopy /d /y ..%src%*.h Source%src%
+xcopy /d /y ..%settings%*.xml Source%settings%
+xcopy /d /y ..%messages%*.msg Source%messages%
 git add Source/*
 git commit -m "Latest from working directory"
 
@@ -44,8 +44,8 @@ REM call:diffFolder ..%settings% *.xml
 REM call:diffFolder ..%messages% *.msg
 
 xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..\build-vc100\newview\Release\* Bin\
-xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..\indra\newview\* Bin\
-xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..\scripts\messages\message_template.msg Bin\app_settings\message_template.msg
+xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..%messages%message_template.msg ..%settings%
+xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..%src%* Bin\
 
 goto:eof
 :subroutine
