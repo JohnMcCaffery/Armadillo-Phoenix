@@ -44,8 +44,8 @@ REM call:diffFolder ..%settings% *.xml
 REM call:diffFolder ..%messages% *.msg
 
 xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..\build-vc100\newview\Release\* Bin\
-xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..\indra\newview\* Bin\
-xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..\scripts\messages\message_template.msg Bin\app_settings\message_template.msg
+xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..%messages%message_template.msg ..%settings%
+xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..%src%* Bin\
 
 goto:eof
 :subroutine
