@@ -1,0 +1,12 @@
+diff --git a/Source/indra/newview/llappviewer.cpp b/Source/indra/newview/llappviewer.cpp
+index 91bfa4a..afcb5fb 100644
+--- a/Source/indra/newview/llappviewer.cpp
++++ b/Source/indra/newview/llappviewer.cpp
+@@ -1404,6 +1404,7 @@ bool LLAppViewer::mainLoop()
+ 			if (!LLApp::isExiting())
+ 			{
+ 				pingMainloopTimeout("Main:JoystickKeyboard");
++				LLFollowCamMgr::updateScriptFollowCams();
+ 				
+ 				// Scan keyboard for movement keys.  Command keys and typing
+ 				// are handled by windows callbacks.  Don't do this until we're

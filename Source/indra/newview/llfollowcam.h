@@ -92,6 +92,8 @@ public:
 	virtual bool		getUseFocus() const { return mUseFocus; }
 	virtual bool		getUsePosition() const { return mUsePosition; }
 
+	virtual void		interpolate();
+
 protected:
 	F32		mPositionLag;
 	F32		mFocusLag;
@@ -110,6 +112,17 @@ protected:
 	bool			mUseFocus; // specific focus point specified by script
 	LLVector3		mPosition;			// where the camera is (in world-space)
 	LLVector3		mFocus;				// what the camera is aimed at (in world-space)
+
+	bool			mLastPositionStored; //Whether a previous position is stored
+	bool			mLastLookAtStored; //Whether a previous look at is stored
+	U64				mLastPositionUpdate; //When position was last updated
+	U64				mLastLookAtUpdate; //When look at was last updated
+	double			mPositionTimeDelta; //How long between the last two position updates (in seconds)
+	double			mLookAtTimeDelta; //How long between the last two position updates (in seconds)
+	LLVector3		mLastPosition; //The camera position last time it was set
+	LLVector3		mLastLookAt; //The camera look at last time it was set
+	LLVector3		mPositionDelta; //The change in camera position last time it was set
+	LLVector3		mLookAtDelta; //The change in camera look at last time it was set
 };
 
 class LLFollowCam : public LLFollowCamParams
@@ -183,6 +196,7 @@ protected:
 
 	bool mPitchSineAndCosineNeedToBeUpdated;
 
+
 	//------------------------------------------
 	// protected methods of FollowCam
 	//------------------------------------------
@@ -220,6 +234,8 @@ public:
 	static bool isScriptedCameraSource(const LLUUID& source);
 	static void dump();
 
+	static void markScriptFollowCam		( const LLUUID& source );
+	static void updateScriptFollowCams();
 protected:
 
 	typedef std::map<LLUUID, LLFollowCamParams*> param_map_t;
@@ -227,6 +243,7 @@ protected:
 
 	typedef std::vector<LLFollowCamParams*> param_stack_t;
 	static param_stack_t sParamStack;
+	static param_stack_t sScriptParamStack;
 };
 
 #endif //LL_FOLLOWCAM_H
