@@ -1,0 +1,46 @@
+diff --git a/Source/indra/newview/llviewercamera.cpp b/Source/indra/newview/llviewercamera.cpp
+index 7b6d0d2..704d530 100644
+--- a/Source/indra/newview/llviewercamera.cpp
++++ b/Source/indra/newview/llviewercamera.cpp
+@@ -82,12 +82,40 @@ glh::matrix4f gl_pick_matrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height
+ 
+ glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
+ {
+-	GLfloat f = 1.f/tanf(DEG_TO_RAD*fovy/2.f);
++	if (gSavedSettings.getBOOL("ControlFrustum")) {
++		GLfloat x1 = (GLfloat) gSavedSettings.getF32("x1");
++		GLfloat x2 = (GLfloat) gSavedSettings.getF32("x2");
++		GLfloat y1 = (GLfloat) gSavedSettings.getF32("y1");
++		GLfloat y2 = (GLfloat) gSavedSettings.getF32("y2");
++		GLfloat dn = (GLfloat) gSavedSettings.getF32("dn");
++		GLfloat df = (GLfloat) gSavedSettings.getF32("df");
++
++		return glh::matrix4f(
++			(2*dn) / (x2-x1), 0, (x2+x1)/(x2-x1), 0,
++			0, (2*dn)/(y1-y2), (y1+y2)/(y1-y2), 0,
++			0, 0, -(df+dn)/(df-dn), -(2.f*df*dn)/(df-dn),
++			0, 0, -1.f, 0);
++	} else {
++		GLfloat f = 1.f/tanf(DEG_TO_RAD*fovy/2.f);
++
++		//gSavedSettings.setF32("FrustumNear", (F32) zNear);
++		if (gSavedSettings.getBOOL("ControlNear"))
++			zNear =  ((GLfloat) gSavedSettings.getF32("FrustumNear"));
++		else
++			gSavedSettings.setF32("FrustumNear", (F32) zNear);
+ 
++		return glh::matrix4f(
++			f/aspect, 0, gSavedSettings.getF32("FrustumOffsetH"), 0,
++			0, f, gSavedSettings.getF32("FrustumOffsetV"), 0,
++			0, 0, (zFar+zNear)/(zNear-zFar), (2.f*zFar*zNear)/(zNear-zFar),
++			0, 0, -1.f, 0);
++	}
++	/*
+ 	return glh::matrix4f(f/aspect, 0, 0, 0,
+ 						 0, f, 0, 0,
+ 						 0, 0, (zFar+zNear)/(zNear-zFar), (2.f*zFar*zNear)/(zNear-zFar),
+ 						 0, 0, -1.f, 0);
++						 */
+ }
+ 
+ glh::matrix4f gl_lookat(LLVector3 eye, LLVector3 center, LLVector3 up)

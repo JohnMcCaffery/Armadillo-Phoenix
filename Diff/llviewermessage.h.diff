@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llviewermessage.h b/Source/indra/newview/llviewermessage.h
+index ae0d5a0..9d489c3 100644
+--- a/Source/indra/newview/llviewermessage.h
++++ b/Source/indra/newview/llviewermessage.h
+@@ -106,6 +106,8 @@ void process_avatar_appearance(LLMessageSystem *mesgsys, void **user_data);
+ void process_camera_constraint(LLMessageSystem *mesgsys, void **user_data);
+ void process_avatar_sit_response(LLMessageSystem *mesgsys, void **user_data);
+ void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_data);
++void process_set_camera_properties(LLMessageSystem *mesgsys, void **user_data);
++void process_set_frustum(LLMessageSystem *mesgsys, void **user_data);
+ void process_clear_follow_cam_properties(LLMessageSystem *mesgsys, void **user_data);
+ void process_name_value(LLMessageSystem *mesgsys, void **user_data);
+ void process_remove_name_value(LLMessageSystem *mesgsys, void **user_data);
