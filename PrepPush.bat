@@ -25,8 +25,8 @@ git commit -m "Latest from Firestorm Trunk"
 git checkout WorkingHead
 xcopy /d /y ..%src%*.cpp Source%src%
 xcopy /d /y ..%src%*.h Source%src%
-xcopy /d /y ..%settings%*.xml Source%settings%
-xcopy /d /y ..%messages%*.msg Source%messages%
+xcopy /y ..%settings%*.xml Source%settings%
+xcopy /y ..%messages%*.msg Source%messages%
 git add Source/*
 git commit -m "Latest from working directory"
 
