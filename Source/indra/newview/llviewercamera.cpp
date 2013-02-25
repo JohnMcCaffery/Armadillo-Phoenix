@@ -48,16 +48,15 @@
 // Linden library includes
 #include "lldrawable.h"
 #include "llface.h"
+#include "llgl.h"
+#include "llglheaders.h"
 #include "llquaternion.h"
 #include "llwindow.h"			// getPixelAspectRatio()
-#include "llglheaders.h"
 
 // System includes
 #include <iomanip> // for setprecision
 
 U32 LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
-bool			lManualProjectionMatrixSet; //Whether to set the projection matrix from manually set values.
-glh::matrix4f 	lManualProjectionMatrix; //The projection matrix set manually from external values
 
 //glu pick matrix implementation borrowed from Mesa3D
 glh::matrix4f gl_pick_matrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLint* viewport)
@@ -83,10 +82,27 @@ glh::matrix4f gl_pick_matrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height
 
 glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
 {
-	if (gSavedSettings.getBOOL("AllowOverrideProjectionMatrix") && lManualProjectionMatrixSet) {
-		return lManualProjectionMatrix;
+	if (gSavedSettings.getBOOL("ControlFrustum")) {
+		GLfloat x1 = (GLfloat) gSavedSettings.getF32("x1");
+		GLfloat x2 = (GLfloat) gSavedSettings.getF32("x2");
+		GLfloat y1 = (GLfloat) gSavedSettings.getF32("y1");
+		GLfloat y2 = (GLfloat) gSavedSettings.getF32("y2");
+		GLfloat dn = (GLfloat) gSavedSettings.getF32("dn");
+		GLfloat df = (GLfloat) gSavedSettings.getF32("df");
+
+		return glh::matrix4f(
+			(2*dn) / (x2-x1), 0, (x2+x1)/(x2-x1), 0,
+			0, (2*dn)/(y1-y2), (y1+y2)/(y1-y2), 0,
+			0, 0, -(df+dn)/(df-dn), -(2.f*df*dn)/(df-dn),
+			0, 0, -1.f, 0);
 	} else {
 		GLfloat f = 1.f/tanf(DEG_TO_RAD*fovy/2.f);
+
+		//gSavedSettings.setF32("FrustumNear", (F32) zNear);
+		if (gSavedSettings.getBOOL("ControlNear"))
+			zNear =  ((GLfloat) gSavedSettings.getF32("FrustumNear"));
+		else
+			gSavedSettings.setF32("FrustumNear", (F32) zNear);
 
 		return glh::matrix4f(
 			f/aspect, 0, gSavedSettings.getF32("FrustumOffsetH"), 0,
@@ -96,10 +112,10 @@ glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloa
 	}
 	/*
 	return glh::matrix4f(f/aspect, 0, 0, 0,
-	0, f, 0, 0,
-	0, 0, (zFar+zNear)/(zNear-zFar), (2.f*zFar*zNear)/(zNear-zFar),
-	0, 0, -1.f, 0);
-	*/
+						 0, f, 0, 0,
+						 0, 0, (zFar+zNear)/(zNear-zFar), (2.f*zFar*zNear)/(zNear-zFar),
+						 0, 0, -1.f, 0);
+						 */
 }
 
 glh::matrix4f gl_lookat(LLVector3 eye, LLVector3 center, LLVector3 up)
@@ -908,20 +924,3 @@ void LLViewerCamera::updateCameraAngle( void* user_data, const LLSD& value)
 	self->setDefaultFOV(value.asReal());	
 }
 
-bool			LLViewerCamera::sManualProjectionMatrixSet; //Whether to set the projection matrix from manually set values.
-glh::matrix4f 	LLViewerCamera::sManualProjectionMatrix; //The projection matrix set manually from external values
-
-
-void LLViewerCamera::setManualProjectionMatrix(LLMatrix4 mat) 
-{
-	lManualProjectionMatrix = glh::matrix4f(
-		glh::ns_float::real(mat.mMatrix[0][0]), glh::ns_float::real(mat.mMatrix[1][0]), glh::ns_float::real(mat.mMatrix[2][0]), glh::ns_float::real(mat.mMatrix[3][0]), 
-		glh::ns_float::real(mat.mMatrix[0][1]), glh::ns_float::real(mat.mMatrix[1][1]), glh::ns_float::real(mat.mMatrix[2][1]), glh::ns_float::real(mat.mMatrix[3][1]), 
-		glh::ns_float::real(mat.mMatrix[0][2]), glh::ns_float::real(mat.mMatrix[1][2]), glh::ns_float::real(mat.mMatrix[2][2]), glh::ns_float::real(mat.mMatrix[3][2]), 
-		glh::ns_float::real(mat.mMatrix[0][3]), glh::ns_float::real(mat.mMatrix[1][3]), glh::ns_float::real(mat.mMatrix[2][3]), glh::ns_float::real(mat.mMatrix[3][3]));
-}
-
-void LLViewerCamera::setManualProjectionMatrixSet(bool set) 
-{
-	lManualProjectionMatrixSet = set;
-}
