@@ -93,6 +93,7 @@ public:
 	virtual bool		getUsePosition() const { return mUsePosition; }
 
 	virtual void		interpolate();
+	virtual void		setWindow(LLVector3 position, LLVector3 positionDelta, LLVector3 lookAt, LLVector3 lookAtDelta, int tickLength);
 
 protected:
 	F32		mPositionLag;
@@ -113,12 +114,9 @@ protected:
 	LLVector3		mPosition;			// where the camera is (in world-space)
 	LLVector3		mFocus;				// what the camera is aimed at (in world-space)
 
-	bool			mLastPositionStored; //Whether a previous position is stored
-	bool			mLastLookAtStored; //Whether a previous look at is stored
-	U64				mLastPositionUpdate; //When position was last updated
-	U64				mLastLookAtUpdate; //When look at was last updated
-	double			mPositionTimeDelta; //How long between the last two position updates (in seconds)
-	double			mLookAtTimeDelta; //How long between the last two position updates (in seconds)
+	U64				mLastUpdate;	//When the last updated was received
+	U32				mTickLength;	//How long between updates
+	U64				mThreshold;
 	LLVector3		mLastPosition; //The camera position last time it was set
 	LLVector3		mLastLookAt; //The camera look at last time it was set
 	LLVector3		mPositionDelta; //The change in camera position last time it was set
@@ -234,8 +232,9 @@ public:
 	static bool isScriptedCameraSource(const LLUUID& source);
 	static void dump();
 
-	static void markScriptFollowCam		( const LLUUID& source );
 	static void updateScriptFollowCams();
+	static void	setWindow( const LLUUID& source, LLVector3 position, LLVector3 positionDelta, LLVector3 lookAt, LLVector3 lookAtDelta, int tickLength);
+	static void	removeScriptFollowCam( const LLUUID& source );
 protected:
 
 	typedef std::map<LLUUID, LLFollowCamParams*> param_map_t;
