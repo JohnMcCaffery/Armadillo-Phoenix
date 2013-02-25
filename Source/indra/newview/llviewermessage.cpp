@@ -6145,64 +6145,55 @@ void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_dat
 }
 //end Ventrella 
 
-void process_set_camera_properties(LLMessageSystem *msg, void ** )
+
+void process_set_window(LLMessageSystem *msg, void ** window)
 {
-	F32 frustumOffsetH;
-	F32 frustumOffsetV;
-	F32 frustumNear;
-	F32 viewAngle;
-	F32 aspectRatio; //width / height
-	BOOL aspectSet;
-	BOOL setNear;
+	LLMatrix4 mat;
+	LLVector4 r1;
+	LLVector4 r2;
+	LLVector4 r3;
+	LLVector4 r4;
 
-	msg->getF32( "CameraProperty", "FrustumOffsetH", frustumOffsetH );
-	msg->getF32( "CameraProperty", "FrustumOffsetV", frustumOffsetV);
-	msg->getF32( "CameraProperty", "FrustumNear", frustumNear);
-	msg->getF32( "CameraProperty", "CameraAngle", viewAngle );
-	msg->getF32( "CameraProperty", "AspectRatio", aspectRatio );
-	msg->getBOOL( "CameraProperty", "AspectSet", aspectSet );
-	msg->getBOOL( "CameraProperty", "SetNear", setNear);
+	msg->getVector4("Window", "MatR1", r1);
+	msg->getVector4("Window", "MatR2", r2);
+	msg->getVector4("Window", "MatR3", r3);
+	msg->getVector4("Window", "MatR4", r4);
+	mat.initRows(r1, r2, r3, r4);
 
-	gSavedSettings.setF32("FrustumOffsetH", frustumOffsetH);
-	gSavedSettings.setF32("FrustumOffsetV", frustumOffsetV);
-	gSavedSettings.setF32("FrustumNear", frustumNear);
-	gSavedSettings.setF32("CameraAngle", viewAngle);
-	gSavedSettings.setBOOL("ControlNear", setNear);
+	LLVector3 position;
+	LLVector3 positionDelta;
+	LLVector3 lookAt;
+	LLVector3 lookAtDelta;
+	msg->getVector3("Window", "Position", position);
+	msg->getVector3("Window", "PositionDelta", positionDelta);
+	msg->getVector3("Window", "LookAt", lookAt);
+	msg->getVector3("Window", "LookAtDelta", lookAtDelta);
 
-	if (aspectSet)
-		LLViewerCamera::getInstance()->setAspect(aspectRatio);
+	U32 tickLength;
+	msg->getU32("Window", "TickLength", tickLength);
+
+	LLUUID		source_id;
+	msg->getUUID("Window", "Source", source_id);
+	
+	LLViewerCamera::setManualProjectionMatrixSet(true);
+	LLViewerCamera::setManualProjectionMatrix(mat);
+
+	LLViewerObject* objectp = gObjectList.findObject(source_id);
+	if (objectp)
+	{
+		objectp->setFlagsWithoutUpdate(FLAGS_CAMERA_SOURCE, TRUE);
+	}
+	LLFollowCamMgr::setWindow(source_id, position, positionDelta, lookAt, lookAtDelta, tickLength);
 }
 
-void process_set_frustum(LLMessageSystem *msg, void ** )
+void process_clear_window(LLMessageSystem *mesgsys, void **user_data)
 {
-	BOOL controlFrustum;
+	LLUUID		source_id;
 
-	msg->getBOOL( "Frustum", "ControlFrustum", controlFrustum);
-	gSavedSettings.setBOOL("ControlFrustum", controlFrustum);
+	mesgsys->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, source_id);
 
-	if (!controlFrustum)
-		return;
-
-	F32 x1;
-	F32 x2;
-	F32 y1;
-	F32 y2;
-	F32 dn;
-	F32 df;
-
-	msg->getF32( "Frustum", "x1", x1);
-	msg->getF32( "Frustum", "x2", x2);
-	msg->getF32( "Frustum", "y1", y1);
-	msg->getF32( "Frustum", "y2", y2);
-	msg->getF32( "Frustum", "dn", dn);
-	msg->getF32( "Frustum", "df", df);
-
-	gSavedSettings.setF32("x1", x1);
-	gSavedSettings.setF32("x2", x2);
-	gSavedSettings.setF32("y1", y1);
-	gSavedSettings.setF32("y2", y2);
-	gSavedSettings.setF32("dn", dn);
-	gSavedSettings.setF32("df", df);
+	LLFollowCamMgr::removeScriptFollowCam(source_id);
+	LLViewerCamera::setManualProjectionMatrixSet(false);
 }
 
 // Culled from newsim lltask.cpp
