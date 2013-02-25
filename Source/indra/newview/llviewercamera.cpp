@@ -84,7 +84,7 @@ glh::matrix4f gl_pick_matrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height
 glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
 {
 	if (gSavedSettings.getBOOL("AllowOverrideProjectionMatrix") && lManualProjectionMatrixSet) {
-		return lManualProjectionMatrix;
+		return glh::matrix4f(lManualProjectionMatrix);
 	} else {
 		GLfloat f = 1.f/tanf(DEG_TO_RAD*fovy/2.f);
 
@@ -915,10 +915,10 @@ glh::matrix4f 	LLViewerCamera::sManualProjectionMatrix; //The projection matrix 
 void LLViewerCamera::setManualProjectionMatrix(LLMatrix4 mat) 
 {
 	lManualProjectionMatrix = glh::matrix4f(
-		glh::ns_float::real(mat.mMatrix[0][0]), glh::ns_float::real(mat.mMatrix[1][0]), glh::ns_float::real(mat.mMatrix[2][0]), glh::ns_float::real(mat.mMatrix[3][0]), 
-		glh::ns_float::real(mat.mMatrix[0][1]), glh::ns_float::real(mat.mMatrix[1][1]), glh::ns_float::real(mat.mMatrix[2][1]), glh::ns_float::real(mat.mMatrix[3][1]), 
-		glh::ns_float::real(mat.mMatrix[0][2]), glh::ns_float::real(mat.mMatrix[1][2]), glh::ns_float::real(mat.mMatrix[2][2]), glh::ns_float::real(mat.mMatrix[3][2]), 
-		glh::ns_float::real(mat.mMatrix[0][3]), glh::ns_float::real(mat.mMatrix[1][3]), glh::ns_float::real(mat.mMatrix[2][3]), glh::ns_float::real(mat.mMatrix[3][3]));
+		glh::ns_float::real(mat.mMatrix[0][0]), glh::ns_float::real(mat.mMatrix[0][1]), glh::ns_float::real(mat.mMatrix[0][2]), glh::ns_float::real(mat.mMatrix[0][3]), 
+		glh::ns_float::real(mat.mMatrix[1][0]), glh::ns_float::real(mat.mMatrix[1][1]), glh::ns_float::real(mat.mMatrix[1][2]), glh::ns_float::real(mat.mMatrix[1][3]), 
+		glh::ns_float::real(mat.mMatrix[2][0]), glh::ns_float::real(mat.mMatrix[2][1]), glh::ns_float::real(mat.mMatrix[2][2]), glh::ns_float::real(mat.mMatrix[2][3]), 
+		glh::ns_float::real(mat.mMatrix[3][0]), glh::ns_float::real(mat.mMatrix[3][1]), glh::ns_float::real(mat.mMatrix[3][2]), glh::ns_float::real(mat.mMatrix[3][3]));
 }
 
 void LLViewerCamera::setManualProjectionMatrixSet(bool set) 

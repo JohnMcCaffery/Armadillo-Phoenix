@@ -259,7 +259,7 @@ void		LLFollowCamParams::setWindow(LLVector3 position, LLVector3 positionDelta, 
 	setFocus(position + lookAt);
 
 	mLastPosition = position;
-	mLastLookAt = position;
+	mLastLookAt = lookAt;
 
 	mPositionDelta = positionDelta;
 	mLookAtDelta = lookAtDelta;
@@ -279,9 +279,6 @@ void LLFollowCamParams::interpolate()
 		//Get how long it has been since the last update
 		U64 microseconds = current - mLastUpdate;
 		double scale = double(microseconds) / double(mLastUpdate);
-		double microsecondsd = double(current - mLastUpdate);
-		double scaled = microseconds / double(mLastUpdate);
-		printf("Scale: %d Ms: %i ScaleD: %d MicrosecondsD: %d Crt: %i LastUp: %i Thresh: %i TickLength: %i", scale, microseconds, scaled, microsecondsd, current, mLastUpdate, mThreshold, mTickLength);
 		if (microseconds < mThreshold) { //If it hasn't been too long since the last position update interpolate a new position
 			mPosition = mLastPosition + (mPositionDelta * scale);
 			LLVector3 lookAt = mLastLookAt + (mLookAtDelta * scale);
