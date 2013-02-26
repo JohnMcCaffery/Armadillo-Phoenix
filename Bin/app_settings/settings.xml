@@ -2,311 +2,264 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="llsd.xsd">
 	<map>
-		<key>ControlFrustum</key>
+		<key>InterpolateScriptFollowCam</key>
 		<map>
 			<key>Comment</key>
-			<string>Whether to set the frustum directly from x1, x2, y1, y2, dn and df values.</string>
+			<string>Whether to interpolate look at and position vectors every frame when follow cam is being controlled by received packets.</string>
 			<key>Persist</key>
-			<integer>0</integer>
+			<integer>1</integer>
 			<key>Type</key>
 			<string>Boolean</string>
 			<key>Value</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</map>		
-		<key>x1</key>
+		<key>AllowOverrideProjectionMatrix</key>
 		<map>
 			<key>Comment</key>
-			<string>Coordinate of the left edge of the view frustum.</string>
+			<string>Whether to set the projection directly from values received in SetWindow packets.</string>
 			<key>Persist</key>
-			<integer>0</integer>
+			<integer>1</integer>
 			<key>Type</key>
-			<string>F32</string>
+			<string>Boolean</string>
 			<key>Value</key>
-			<real>-1.0</real>
+			<integer>1</integer>
 		</map>		
-		<key>x2</key>
-		<map>
-			<key>Comment</key>
-			<string>Coordinate of the right edge of the view frustum.</string>
-			<key>Persist</key>
-			<integer>0</integer>
-			<key>Type</key>
-			<string>F32</string>
-			<key>Value</key>
-			<real>1.0</real>
-		</map>
-		<key>y1</key>
-		<map>
-			<key>Comment</key>
-			<string>Coordinate of the bottom edge of the view frustum.</string>
-			<key>Persist</key>
-			<integer>0</integer>
-			<key>Type</key>
-			<string>F32</string>
-			<key>Value</key>
-			<real>-1.0</real>
-		</map>		
-		<key>y2</key>
-		<map>
-			<key>Comment</key>
-			<string>Coordinate of the top edge of the view frustum.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>F32</string>
-			<key>Value</key>
-			<real>1.0</real>
-		</map>
-		<key>dn</key>
-		<map>
-			<key>Comment</key>
-			<string>Near plane of the viewing frustum.</string>
-			<key>Persist</key>
-			<integer>0</integer>
-			<key>Type</key>
-			<string>F32</string>
-			<key>Value</key>
-			<real>.01</real>
-		</map>		
-		<key>df</key>
-		<map>
-			<key>Comment</key>
-			<string>Far plane of the viewing frustum.</string>
-			<key>Persist</key>
-			<integer>0</integer>
-			<key>Type</key>
-			<string>F32</string>
-			<key>Value</key>
-			<real>1024.0</real>
-		</map>
-		<key>FrustumOffsetH</key>
-		<map>
-			<key>Comment</key>
-			<string>Offset the view frustum left or right.</string>
-			<key>Persist</key>
-			<integer>0</integer>
-			<key>Type</key>
-			<string>F32</string>
-			<key>Value</key>
-			<real>0.0</real>
-		</map>
-		<key>FrustumOffsetV</key>
-		<map>
-			<key>Comment</key>
-			<string>Offset the view frustum up or down.</string>
-			<key>Persist</key>
-			<integer>0</integer>
-			<key>Type</key>
-			<string>F32</string>
-			<key>Value</key>
-			<real>0.0</real>
-		</map>
-		<key>ControlNear</key>
-		<map>
-			<key>Comment</key>
-			<string>Whether the saved setting FrustumNear should be used when calculating the frustum.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>0</integer>
-		</map>
-		<key>FrustumNear</key>
-		<map>
-			<key>Comment</key>
-			<string>Frustum near plane.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>F32</string>
-			<key>Value</key>
-			<real>0.0</real>
-		</map>
-		<key>FSFloaterBlacklistSortColumn</key>
-		<map>
-			<key>Comment</key>
-			<string>SortColumn for the Blacklist.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>String</string>
-			<key>Value</key>
-			<string>date</string>
-		</map>
-		<key>FSFloaterBlacklistSortAscending</key>
-		<map>
-			<key>Comment</key>
-			<string>SortOrder for the Blacklist.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>0</integer>
-		</map>
-		<key>FSLandmarkCreatedNotification</key>
-		<map>
-			<key>Comment</key>
-			<string>Display a notification if a landmark is added to your inventory.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<string />
-		</map>
-		<key>FSPublishRadarTag</key>
-		<map>
-			<key>Comment</key>
-			<string>Enables the publishing of a 'Firestorm' radar tag, as well as the display of published radar tags of other avatars.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>0</integer>
-		</map>
-		<key>FSUseV2Friends</key>
-		<map>
-			<key>Comment</key>
-			<string>Makes Comm->Friends and Comm->Groups open the v2 based windows.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>0</integer>
-		</map>
-		<key>FSFolderViewItemHeight</key>
-		<map>
-			<key>Comment</key>
-			<string>Controls the height of folder items, for instance in inventory</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>S32</string>
-			<key>Value</key>
-			<integer>20</integer>
-		</map>
-		<key>FSShowGroupNameLength</key>
-		<map>
-			<key>Comment</key>
-			<string>Max length of group name to be printed in chat (-1 for full group name, 0 for disabled).</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>S32</string>
-			<key>Value</key>
-			<integer>0</integer>
-		</map>
-		<key>FSIMChatFlashOnFriendStatusChange</key>
-		<map>
-			<key>Comment</key>
-			<string>Flash IM tab when friend goes online or offline.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>0</integer>
-		</map>
-		<key>FSIMChatHistoryFade</key>
-		<map>
-			<key>Comment</key>
-			<string>Ammount to fade IM text into the background of the chat history floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>F32</string>
-			<key>Value</key>
-			<real>0.5</real>
-			<key>SanityCheckType</key>
-			<string>GreaterThan</string>
-			<key>SanityValue</key>
-			<array>
-				<real>0.24</real>
-			</array>
-			<key>SanityComment</key>
-			<string>If you make this too small you might not be able to read IMs that are shown in chat history.</string>
-		</map>
-		<key>UsePieMenu</key>
-		<map>
-			<key>Comment</key>
-			<string>Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>1</integer>
-		</map>
-		<key>AutohideChatBar</key>
-		<map>
-			<key>Comment</key>
-			<string>Hide the chat bar from the bottom button bar and only show it as an overlay when needed.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>0</integer>
-		</map>
-		<key>EditAppearanceLighting</key>
-		<map>
-			<key>Comment</key>
-			<string>Enable or disable the additional lighting used while editing avatar appearance.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>1</integer>
-		</map>
-		<key>GridListDownload</key>
-		<map>
-			<key>Comment</key>
-			<string>Whether to fetch a grid list from the URL specified in GridListDownloadURL.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>1</integer>
-		</map>
-		<key>GridListDownloadURL</key>
-		<map>
-			<key>Comment</key>
-			<string>Fetch a grid list from this URL.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>String</string>
-			<key>Value</key>
-			<string>http://phoenixviewer.com/app/fsdata/grids.xml</string>
-		</map>
-		<key>LastConnectedGrid</key>
-		<map>
-			<key>Comment</key>
-			<string>Last grid with successful connection</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>String</string>
-			<key>Value</key>
-			<string/>
-		</map>
-		<key>OpensimPrefsAddGrid</key>
-		<map>
-			<key>Comment</key>
-			<string>Transient string for adding new grids in Preferences > Opensim</string>
-			<key>Persist</key>
-			<integer>0</integer>
-			<key>Type</key>
-			<string>String</string>
-			<key>Value</key>
-			<string/>
-		</map>
+		<key>PerspectiveMatrixDiagonal</key>
+    <map>
+      <key>Comment</key>
+      <string>Persective matrix values for 00, 11 and 22</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Vector3</string>
+      <key>Value</key>
+      <array>
+        <real>3.55887341</real>
+        <real>7.406304</real>
+        <real>-1.0</real>
+      </array>
+    </map>
+		<key>PerspectiveMatrixOther</key>
+    <map>
+      <key>Comment</key>
+      <string>Perspective matrix values for 02, 12 and 23</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Vector3</string>
+      <key>Value</key>
+      <array>
+        <real>0.0</real>
+        <real>-1.05561924</real>
+        <real>-.202066913</real>
+      </array>
+    </map>
+    <key>FrustumOffsetH</key>
+    <map>
+      <key>Comment</key>
+      <string>Offset the view frustum left or right.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.0</real>
+    </map>
+    <key>FrustumOffsetV</key>
+    <map>
+      <key>Comment</key>
+      <string>Offset the view frustum up or down.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.0</real>
+    </map>
+    <key>FSFloaterBlacklistSortColumn</key>
+    <map>
+      <key>Comment</key>
+      <string>SortColumn for the Blacklist.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>date</string>
+    </map>
+    <key>FSFloaterBlacklistSortAscending</key>
+    <map>
+      <key>Comment</key>
+      <string>SortOrder for the Blacklist.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSLandmarkCreatedNotification</key>
+    <map>
+      <key>Comment</key>
+      <string>Display a notification if a landmark is added to your inventory.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <string />
+    </map>
+    <key>FSPublishRadarTag</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables the publishing of a 'Firestorm' radar tag, as well as the display of published radar tags of other avatars.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSUseV2Friends</key>
+    <map>
+      <key>Comment</key>
+      <string>Makes Comm->Friends and Comm->Groups open the v2 based windows.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSFolderViewItemHeight</key>
+    <map>
+      <key>Comment</key>
+      <string>Controls the height of folder items, for instance in inventory</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>20</integer>
+    </map>
+    <key>FSShowGroupNameLength</key>
+    <map>
+      <key>Comment</key>
+      <string>Max length of group name to be printed in chat (-1 for full group name, 0 for disabled).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSIMChatFlashOnFriendStatusChange</key>
+    <map>
+      <key>Comment</key>
+      <string>Flash IM tab when friend goes online or offline.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSIMChatHistoryFade</key>
+    <map>
+      <key>Comment</key>
+      <string>Ammount to fade IM text into the background of the chat history floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.5</real>
+      <key>SanityCheckType</key>
+      <string>GreaterThan</string>
+      <key>SanityValue</key>
+      <array>
+        <real>0.24</real>
+      </array>
+      <key>SanityComment</key>
+      <string>If you make this too small you might not be able to read IMs that are shown in chat history.</string>
+    </map>
+    <key>UsePieMenu</key>
+    <map>
+      <key>Comment</key>
+      <string>Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>AutohideChatBar</key>
+    <map>
+      <key>Comment</key>
+      <string>Hide the chat bar from the bottom button bar and only show it as an overlay when needed.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>EditAppearanceLighting</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable or disable the additional lighting used while editing avatar appearance.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>GridListDownload</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether to fetch a grid list from the URL specified in GridListDownloadURL.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>GridListDownloadURL</key>
+    <map>
+      <key>Comment</key>
+      <string>Fetch a grid list from this URL.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>http://phoenixviewer.com/app/fsdata/grids.xml</string>
+    </map>
+    <key>LastConnectedGrid</key>
+    <map>
+      <key>Comment</key>
+      <string>Last grid with successful connection</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string/>
+    </map>
+    <key>OpensimPrefsAddGrid</key>
+    <map>
+      <key>Comment</key>
+      <string>Transient string for adding new grids in Preferences > Opensim</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string/>
+    </map>
 
 		<key>ShowMutedAvatarsAsCloud</key>
 		<map>
