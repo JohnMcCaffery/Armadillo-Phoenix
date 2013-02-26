@@ -1,0 +1,22 @@
+diff --git a/Source/indra/newview/llviewercamera.h b/Source/indra/newview/llviewercamera.h
+index b857c7f..61e1632 100644
+--- a/Source/indra/newview/llviewercamera.h
++++ b/Source/indra/newview/llviewercamera.h
+@@ -33,6 +33,7 @@
+ #include "lltimer.h"
+ #include "m4math.h"
+ #include "llcoord.h"
++#include "llgl.h"
+ 
+ class LLViewerObject;
+ 
+@@ -127,6 +128,9 @@ public:
+ 	F32 getZoomFactor() { return mZoomFactor; }                             
+ 	S16 getZoomSubRegion() { return mZoomSubregion; } 
+ 
++	static void setManualProjectionMatrixSet(bool set);
++	static void setManualProjectionMatrix(LLMatrix4 mat);
++
+ protected:
+ 	void calcProjection(const F32 far_distance) const;
+ 
