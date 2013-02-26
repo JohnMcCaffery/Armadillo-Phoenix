@@ -31,6 +31,7 @@ git add Source/*
 git commit -m "Latest from working directory"
 
 git checkout %head%
+
 for /f "delims=" %%l in ('git diff --name-only FirestormHead WorkingHead') do (
 	call:subroutine "%%l"
 )
