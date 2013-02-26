@@ -33,7 +33,6 @@
 #include "lltimer.h"
 #include "m4math.h"
 #include "llcoord.h"
-#include "llgl.h"
 
 class LLViewerObject;
 
@@ -128,9 +127,6 @@ public:
 	F32 getZoomFactor() { return mZoomFactor; }                             
 	S16 getZoomSubRegion() { return mZoomSubregion; } 
 
-	static void setManualProjectionMatrixSet(bool set);
-	static void setManualProjectionMatrix(LLMatrix4 mat);
-
 protected:
 	void calcProjection(const F32 far_distance) const;
 
@@ -149,8 +145,6 @@ protected:
 	S32					mScreenPixelArea; // Pixel area of entire window
 	F32					mZoomFactor;
 	S16					mZoomSubregion;
-	static bool				sManualProjectionMatrixSet; //Whether to set the projection matrix from manually set values.
-	static glh::matrix4f 	sManualProjectionMatrix; //The projection matrix set manually from external values
 
 public:
 } LL_ALIGN_POSTFIX(16);
