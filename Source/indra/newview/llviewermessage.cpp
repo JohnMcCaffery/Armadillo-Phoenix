@@ -6146,56 +6146,6 @@ void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_dat
 //end Ventrella 
 
 
-void process_set_window(LLMessageSystem *msg, void ** window)
-{
-	LLMatrix4 mat;
-	LLVector4 r1;
-	LLVector4 r2;
-	LLVector4 r3;
-	LLVector4 r4;
-
-	msg->getVector4("Window", "MatR1", r1);
-	msg->getVector4("Window", "MatR2", r2);
-	msg->getVector4("Window", "MatR3", r3);
-	msg->getVector4("Window", "MatR4", r4);
-	mat.initRows(r1, r2, r3, r4);
-
-	LLVector3 position;
-	LLVector3 positionDelta;
-	LLVector3 lookAt;
-	LLVector3 lookAtDelta;
-	msg->getVector3("Window", "Position", position);
-	msg->getVector3("Window", "PositionDelta", positionDelta);
-	msg->getVector3("Window", "LookAt", lookAt);
-	msg->getVector3("Window", "LookAtDelta", lookAtDelta);
-
-	U32 tickLength;
-	msg->getU32("Window", "TickLength", tickLength);
-
-	LLUUID		source_id;
-	msg->getUUID("Window", "Source", source_id);
-	
-	LLViewerCamera::setManualProjectionMatrixSet(true);
-	LLViewerCamera::setManualProjectionMatrix(mat);
-
-	LLViewerObject* objectp = gObjectList.findObject(source_id);
-	if (objectp)
-	{
-		objectp->setFlagsWithoutUpdate(FLAGS_CAMERA_SOURCE, TRUE);
-	}
-	LLFollowCamMgr::setWindow(source_id, position, positionDelta, lookAt, lookAtDelta, tickLength);
-}
-
-void process_clear_window(LLMessageSystem *mesgsys, void **user_data)
-{
-	LLUUID		source_id;
-
-	mesgsys->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, source_id);
-
-	LLFollowCamMgr::removeScriptFollowCam(source_id);
-	LLViewerCamera::setManualProjectionMatrixSet(false);
-}
-
 // Culled from newsim lltask.cpp
 void process_name_value(LLMessageSystem *mesgsys, void **user_data)
 {

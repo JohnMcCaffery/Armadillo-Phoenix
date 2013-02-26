@@ -1404,7 +1404,6 @@ bool LLAppViewer::mainLoop()
 			if (!LLApp::isExiting())
 			{
 				pingMainloopTimeout("Main:JoystickKeyboard");
-				LLFollowCamMgr::updateScriptFollowCams();
 				
 				// Scan keyboard for movement keys.  Command keys and typing
 				// are handled by windows callbacks.  Don't do this until we're
