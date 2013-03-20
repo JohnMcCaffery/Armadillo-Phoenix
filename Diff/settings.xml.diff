@@ -1,8 +1,8 @@
 diff --git a/Source/indra/newview/app_settings/settings.xml b/Source/indra/newview/app_settings/settings.xml
-index 0b1ba83..3d7cf18 100644
+index 0b1ba83..0fd329e 100644
 --- a/Source/indra/newview/app_settings/settings.xml
 +++ b/Source/indra/newview/app_settings/settings.xml
-@@ -1,754 +1,96 @@
+@@ -1,587 +1,141 @@
  <?xml version="1.0" ?>
  <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 -  xsi:noNamespaceSchemaLocation="llsd.xsd">
@@ -530,50 +530,51 @@ index 0b1ba83..3d7cf18 100644
 -      <integer>0</integer>
 -    </map>
 -    <key>FSContactSetsShowFolders</key>
--    <map>
--      <key>Comment</key>
--      <string>Whether to show fake folders in constacts sets window</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
--    </map>
--    <key>FSContactSetsUseColorHighlight</key>
--    <map>
--      <key>Comment</key>
--      <string>Whether to use a stronger color where your mouse is in the contacts sets floater</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
--    </map>
--    <key>FSContactSetsDoZoom</key>
--    <map>
--      <key>Comment</key>
--      <string>Whether to zoom in over the friend in the floater</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
--    </map>
--    <key>FSContactSetsRequireCTRL</key>
--    <map>
--      <key>Comment</key>
--      <string>Whether to require the ctrl key to be pressed to multi select friends</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
--    </map>
--    <key>FSContactSetsColorizeNameTag</key>
++		<key>ControlRenderFrustum</key>
++		<map>
++			<key>Comment</key>
++			<string>Whether to use the alternative view frustum when getting the projection matrix in the render method.</string>
++			<key>Persist</key>
++			<integer>1</integer>
++			<key>Type</key>
++			<string>Boolean</string>
++			<key>Value</key>
++			<integer>1</integer>
++		</map>		
++		<key>ControlSpotLightFrustum</key>
++		<map>
++			<key>Comment</key>
++			<string>Whether to use the alternative view frustum when getting the projection matrix in the spot light method.</string>
++			<key>Persist</key>
++			<integer>1</integer>
++			<key>Type</key>
++			<string>Boolean</string>
++			<key>Value</key>
++			<integer>0</integer>
++		</map>		
++		<key>ControlShadowFrustum</key>
++		<map>
++			<key>Comment</key>
++			<string>Whether to use the alternative view frustum when getting the projection matrix in the shadow method.</string>
++			<key>Persist</key>
++			<integer>1</integer>
++			<key>Type</key>
++			<string>Boolean</string>
++			<key>Value</key>
++			<integer>0</integer>
++		</map>		
++		<key>ControlImposterFrustum</key>
++		<map>
++			<key>Comment</key>
++			<string>Whether to use the alternative view frustum when getting the projection matrix in the imposter method.</string>
++			<key>Persist</key>
++			<integer>1</integer>
++			<key>Type</key>
++			<string>Boolean</string>
++			<key>Value</key>
++			<integer>0</integer>
++		</map>		
++    
 +		<key>InterpolateScriptFollowCam</key>
 +		<map>
 +			<key>Comment</key>
@@ -599,7 +600,7 @@ index 0b1ba83..3d7cf18 100644
 +		<key>PerspectiveMatrixDiagonal</key>
      <map>
        <key>Comment</key>
--      <string>Whether to color a friends name tag based on their friends groups</string>
+-      <string>Whether to show fake folders in constacts sets window</string>
 +      <string>Persective matrix values for 00, 11 and 22</string>
        <key>Persist</key>
        <integer>1</integer>
@@ -607,18 +608,18 @@ index 0b1ba83..3d7cf18 100644
 -      <string>Boolean</string>
 +      <string>Vector3</string>
        <key>Value</key>
--      <integer>0</integer>
+-      <integer>1</integer>
 +      <array>
 +        <real>3.55887341</real>
 +        <real>7.406304</real>
 +        <real>-1.0</real>
 +      </array>
      </map>
--    <key>FSContactSetsColorizeRadar</key>
+-    <key>FSContactSetsUseColorHighlight</key>
 +		<key>PerspectiveMatrixOther</key>
      <map>
        <key>Comment</key>
--      <string>Whether to color a friends name in the radar list based on their friends groups</string>
+-      <string>Whether to use a stronger color where your mouse is in the contacts sets floater</string>
 +      <string>Perspective matrix values for 02, 12 and 23</string>
        <key>Persist</key>
        <integer>1</integer>
@@ -626,52 +627,113 @@ index 0b1ba83..3d7cf18 100644
 -      <string>Boolean</string>
 +      <string>Vector3</string>
        <key>Value</key>
--      <integer>0</integer>
+-      <integer>1</integer>
 +      <array>
 +        <real>0.0</real>
 +        <real>-1.05561924</real>
 +        <real>-.202066913</real>
 +      </array>
      </map>
--    <key>FSContactSetsColorizeText</key>
+-    <key>FSContactSetsDoZoom</key>
 +    <key>FrustumOffsetH</key>
      <map>
        <key>Comment</key>
--      <string>Colorise text instead of backgrounds in the friends groups floater</string>
+-      <string>Whether to zoom in over the friend in the floater</string>
 +      <string>Offset the view frustum left or right.</string>
        <key>Persist</key>
 -      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
-       <integer>0</integer>
--    </map>
--    <key>FSContactSetsColorizeBar</key>
--    <map>
--      <key>Comment</key>
--      <string>Colorise only a small area of the backgrounds in the friends groups floater</string>
--      <key>Persist</key>
--      <integer>1</integer>
++      <integer>0</integer>
        <key>Type</key>
 -      <string>Boolean</string>
 +      <string>F32</string>
        <key>Value</key>
--      <integer>0</integer>
+-      <integer>1</integer>
 +      <real>0.0</real>
      </map>
--    <key>FSContactSetsColorizeChat</key>
+-    <key>FSContactSetsRequireCTRL</key>
 +    <key>FrustumOffsetV</key>
      <map>
        <key>Comment</key>
--      <string>Whether to color a friends chat based on their friends groups</string>
+-      <string>Whether to require the ctrl key to be pressed to multi select friends</string>
 +      <string>Offset the view frustum up or down.</string>
        <key>Persist</key>
 -      <integer>1</integer>
--      <key>Type</key>
++      <integer>0</integer>
+       <key>Type</key>
 -      <string>Boolean</string>
--      <key>Value</key>
++      <string>F32</string>
+       <key>Value</key>
+-      <integer>1</integer>
++      <real>0.0</real>
+     </map>
+-    <key>FSContactSetsColorizeNameTag</key>
++    <key>FSFloaterBlacklistSortColumn</key>
+     <map>
+       <key>Comment</key>
+-      <string>Whether to color a friends name tag based on their friends groups</string>
++      <string>SortColumn for the Blacklist.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+-      <string>Boolean</string>
++      <string>String</string>
+       <key>Value</key>
+-      <integer>0</integer>
++      <string>date</string>
+     </map>
+-    <key>FSContactSetsColorizeRadar</key>
++    <key>FSFloaterBlacklistSortAscending</key>
+     <map>
+       <key>Comment</key>
+-      <string>Whether to color a friends name in the radar list based on their friends groups</string>
++      <string>SortOrder for the Blacklist.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+@@ -589,21 +143,21 @@
+       <key>Value</key>
        <integer>0</integer>
--    </map>
+     </map>
+-    <key>FSContactSetsColorizeText</key>
++    <key>FSLandmarkCreatedNotification</key>
+     <map>
+       <key>Comment</key>
+-      <string>Colorise text instead of backgrounds in the friends groups floater</string>
++      <string>Display a notification if a landmark is added to your inventory.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+       <string>Boolean</string>
+       <key>Value</key>
+-      <integer>0</integer>
++      <string />
+     </map>
+-    <key>FSContactSetsColorizeBar</key>
++    <key>FSPublishRadarTag</key>
+     <map>
+       <key>Comment</key>
+-      <string>Colorise only a small area of the backgrounds in the friends groups floater</string>
++      <string>Enables the publishing of a 'Firestorm' radar tag, as well as the display of published radar tags of other avatars.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+@@ -611,10 +165,10 @@
+       <key>Value</key>
+       <integer>0</integer>
+     </map>
+-    <key>FSContactSetsColorizeChat</key>
++    <key>FSUseV2Friends</key>
+     <map>
+       <key>Comment</key>
+-      <string>Whether to color a friends chat based on their friends groups</string>
++      <string>Makes Comm->Friends and Comm->Groups open the v2 based windows.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+@@ -622,145 +176,32 @@
+       <key>Value</key>
+       <integer>0</integer>
+     </map>
 -    <key>FSContactSetsShowOnline</key>
 -    <map>
 -      <key>Comment</key>
@@ -706,8 +768,9 @@ index 0b1ba83..3d7cf18 100644
 -      <integer>1</integer>
 -    </map>
 -    <key>FSContactSetsShowOtherGroups</key>
--    <map>
--      <key>Comment</key>
++    <key>FSFolderViewItemHeight</key>
+     <map>
+       <key>Comment</key>
 -      <string>Whether to show and colorize other groups in the friends groups floater</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
@@ -775,114 +838,117 @@ index 0b1ba83..3d7cf18 100644
 -    <map>
 -      <key>Comment</key>
 -      <string>Channel for whispering radar alerts</string>
--      <key>Persist</key>
--      <integer>1</integer>
++      <string>Controls the height of folder items, for instance in inventory</string>
+       <key>Persist</key>
+       <integer>1</integer>
        <key>Type</key>
--      <string>S32</string>
-+      <string>F32</string>
+       <string>S32</string>
        <key>Value</key>
 -      <integer>-777777777</integer>
-+      <real>0.0</real>
-     </map>
+-    </map>
 -    
 -  <key>RadarLegacyChannelAlertRefreshUUID</key>
-+    <key>FSFloaterBlacklistSortColumn</key>
-     <map>
-       <key>Comment</key>
--      <string>UUID of sound asset that when detected, will request a full radar channel alert update</string>
-+      <string>SortColumn for the Blacklist.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-       <string>String</string>
-       <key>Value</key>
--      <string>76c78607-93f9-f55a-5238-e19b1a181389</string>
-+      <string>date</string>
-     </map>
--
--  <key>RadarEnterChannelAlert</key>
-+    <key>FSFloaterBlacklistSortAscending</key>
-     <map>
-       <key>Comment</key>
--      <string>Toggles whether radar sends out chat alerts when it detects a new avatar</string>
-+      <string>SortOrder for the Blacklist.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-@@ -756,47 +98,32 @@
-       <key>Value</key>
-       <integer>0</integer>
-     </map>
--    
--   <key>RadarLeaveChannelAlert</key>
-+    <key>FSLandmarkCreatedNotification</key>
-     <map>
-       <key>Comment</key>
--      <string>Toggles whether radar sends out chat alerts when it detects an avatar has left</string>
-+      <string>Display a notification if a landmark is added to your inventory.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-       <string>Boolean</string>
-       <key>Value</key>
--      <integer>0</integer>
-+      <string />
-     </map>
--
--  <key>ShowRadarMinimap</key>
-+    <key>FSPublishRadarTag</key>
-     <map>
-       <key>Comment</key>
--      <string>Toggle visibility of the embedded minimap in the radar panel</string>
-+      <string>Enables the publishing of a 'Firestorm' radar tag, as well as the display of published radar tags of other avatars.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-       <string>Boolean</string>
-       <key>Value</key>
--      <integer>1</integer>
--    </map>
--
--  <key>RadarNameFormat</key>
 -    <map>
 -      <key>Comment</key>
--      <string>0=DisplayName,1=Username,2=Displayname/Username,3=Username/Displayname</string>
+-      <string>UUID of sound asset that when detected, will request a full radar channel alert update</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
--      <string>U32</string>
+-      <string>String</string>
 -      <key>Value</key>
-       <integer>0</integer>
-     </map>
--    
--  <key>LimitRadarByRange</key>
-+    <key>FSUseV2Friends</key>
-     <map>
-       <key>Comment</key>
--      <string>RestrictRadarToNearmeRange</string>
-+      <string>Makes Comm->Friends and Comm->Groups open the v2 based windows.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-@@ -804,95 +131,62 @@
-       <key>Value</key>
-       <integer>0</integer>
+-      <string>76c78607-93f9-f55a-5238-e19b1a181389</string>
++      <integer>20</integer>
      </map>
 -
--  <key>AvatarSitOnAway</key>
-+    <key>FSFolderViewItemHeight</key>
+-  <key>RadarEnterChannelAlert</key>
++    <key>FSShowGroupNameLength</key>
      <map>
        <key>Comment</key>
--      <string>Sit down when marked AFK</string>
-+      <string>Controls the height of folder items, for instance in inventory</string>
+-      <string>Toggles whether radar sends out chat alerts when it detects a new avatar</string>
++      <string>Max length of group name to be printed in chat (-1 for full group name, 0 for disabled).</string>
        <key>Persist</key>
        <integer>1</integer>
        <key>Type</key>
 -      <string>Boolean</string>
 +      <string>S32</string>
        <key>Value</key>
+       <integer>0</integer>
+     </map>
+-    
+-   <key>RadarLeaveChannelAlert</key>
++    <key>FSIMChatFlashOnFriendStatusChange</key>
+     <map>
+       <key>Comment</key>
+-      <string>Toggles whether radar sends out chat alerts when it detects an avatar has left</string>
++      <string>Flash IM tab when friend goes online or offline.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+@@ -768,70 +209,40 @@
+       <key>Value</key>
+       <integer>0</integer>
+     </map>
+-
+-  <key>ShowRadarMinimap</key>
+-    <map>
+-      <key>Comment</key>
+-      <string>Toggle visibility of the embedded minimap in the radar panel</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>1</integer>
+-    </map>
+-
+-  <key>RadarNameFormat</key>
++    <key>FSIMChatHistoryFade</key>
+     <map>
+       <key>Comment</key>
+-      <string>0=DisplayName,1=Username,2=Displayname/Username,3=Username/Displayname</string>
++      <string>Ammount to fade IM text into the background of the chat history floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+-      <string>U32</string>
++      <string>F32</string>
+       <key>Value</key>
 -      <integer>0</integer>
-+      <integer>20</integer>
++      <real>0.5</real>
++      <key>SanityCheckType</key>
++      <string>GreaterThan</string>
++      <key>SanityValue</key>
++      <array>
++        <real>0.24</real>
++      </array>
++      <key>SanityComment</key>
++      <string>If you make this too small you might not be able to read IMs that are shown in chat history.</string>
+     </map>
+-    
+-  <key>LimitRadarByRange</key>
++    <key>UsePieMenu</key>
+     <map>
+       <key>Comment</key>
+-      <string>RestrictRadarToNearmeRange</string>
++      <string>Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+       <string>Boolean</string>
+       <key>Value</key>
+-      <integer>0</integer>
+-    </map>
+-
+-  <key>AvatarSitOnAway</key>
+-    <map>
+-      <key>Comment</key>
+-      <string>Sit down when marked AFK</string>
+-      <key>Persist</key>
+       <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>0</integer>
      </map>
 -  <key>FSUseNearbyChatConsole</key>
 -  <map>
@@ -897,71 +963,56 @@ index 0b1ba83..3d7cf18 100644
 -  </map>
 -
 -  <key>FSLogImToChatConsole</key>
-+    <key>FSShowGroupNameLength</key>
++    <key>AutohideChatBar</key>
      <map>
        <key>Comment</key>
 -      <string>Defines if (group) IM notifications should be sent to the nearby chat console (v1-style) or toasts (v2-style).</string>
-+      <string>Max length of group name to be printed in chat (-1 for full group name, 0 for disabled).</string>
++      <string>Hide the chat bar from the bottom button bar and only show it as an overlay when needed.</string>
        <key>Persist</key>
        <integer>1</integer>
        <key>Type</key>
--      <string>Boolean</string>
-+      <string>S32</string>
+@@ -839,60 +250,21 @@
        <key>Value</key>
        <integer>0</integer>
      </map>
 -
 -
 -  <key>FSOOCPrefix</key>
-+    <key>FSIMChatFlashOnFriendStatusChange</key>
-     <map>
-       <key>Comment</key>
--      <string>Prefix to mark OOC chat</string>
-+      <string>Flash IM tab when friend goes online or offline.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
--      <string>String</string>
-+      <string>Boolean</string>
-       <key>Value</key>
--      <string>((</string>
-+      <integer>0</integer>
-     </map>
--
--  <key>FSOOCPostfix</key>
-+    <key>FSIMChatHistoryFade</key>
-     <map>
-       <key>Comment</key>
--      <string>Postfix to mark OOC chat</string>
-+      <string>Ammount to fade IM text into the background of the chat history floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
--      <string>String</string>
-+      <string>F32</string>
-       <key>Value</key>
--      <string>))</string>
-+      <real>0.5</real>
-+      <key>SanityCheckType</key>
-+      <string>GreaterThan</string>
-+      <key>SanityValue</key>
-+      <array>
-+        <real>0.24</real>
-+      </array>
-+      <key>SanityComment</key>
-+      <string>If you make this too small you might not be able to read IMs that are shown in chat history.</string>
-     </map>
--
--  <key>FSPlayChatAnimation</key>
 -    <map>
 -      <key>Comment</key>
--      <string>Play the avatar chat animations, e.g. shouting</string>
+-      <string>Prefix to mark OOC chat</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
--      <string>Boolean</string>
+-      <string>String</string>
 -      <key>Value</key>
+-      <string>((</string>
+-    </map>
+-
+-  <key>FSOOCPostfix</key>
+-    <map>
+-      <key>Comment</key>
+-      <string>Postfix to mark OOC chat</string>
+-      <key>Persist</key>
 -      <integer>1</integer>
+-      <key>Type</key>
+-      <string>String</string>
+-      <key>Value</key>
+-      <string>))</string>
+-    </map>
+-
+-  <key>FSPlayChatAnimation</key>
++    <key>EditAppearanceLighting</key>
+     <map>
+       <key>Comment</key>
+-      <string>Play the avatar chat animations, e.g. shouting</string>
++      <string>Enable or disable the additional lighting used while editing avatar appearance.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+       <string>Boolean</string>
+       <key>Value</key>
+       <integer>1</integer>
 -    </map>  
 -
 -  <key>FSShowChatChannel</key>
@@ -977,15 +1028,16 @@ index 0b1ba83..3d7cf18 100644
 -    </map>  
 -
 -  <key>ShowScriptDialogsTopRight</key>
-+    <key>UsePieMenu</key>
++    </map>
++    <key>GridListDownload</key>
      <map>
        <key>Comment</key>
 -      <string>Show script llDialog floaters always in the top right corner of the screen.</string>
-+      <string>Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments.</string>
++      <string>Whether to fetch a grid list from the URL specified in GridListDownloadURL.</string>
        <key>Persist</key>
        <integer>1</integer>
        <key>Type</key>
-@@ -900,62 +194,10 @@
+@@ -900,15152 +272,14068 @@
        <key>Value</key>
        <integer>1</integer>
      </map>
@@ -1042,76 +1094,10 @@ index 0b1ba83..3d7cf18 100644
 -  </map>
 -
 -  <key>RadarReportChatRangeEnter</key>
-+    <key>AutohideChatBar</key>
-     <map>
-       <key>Comment</key>
--      <string>Display a chat message when avatar enters chat distance</string>
-+      <string>Hide the chat bar from the bottom button bar and only show it as an overlay when needed.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-@@ -963,15089 +205,14090 @@
-       <key>Value</key>
-       <integer>0</integer>
-     </map>
--	
--	<key>RadarReportChatRangeLeave</key>
-+    <key>EditAppearanceLighting</key>
-     <map>
-       <key>Comment</key>
--      <string>Display a chat message when avatar leaves chat distance</string>
-+      <string>Enable or disable the additional lighting used while editing avatar appearance.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-       <string>Boolean</string>
-       <key>Value</key>
--      <integer>0</integer>
--    </map>
--	
--  <key>RadarReportDrawRangeEnter</key>
--    <map>
--      <key>Comment</key>
--      <string>Display a chat message when avatar enters draw distance</string>
--      <key>Persist</key>
-       <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>0</integer>
-     </map>
--	
--  <key>RadarReportDrawRangeLeave</key>
-+    <key>GridListDownload</key>
-     <map>
-       <key>Comment</key>
--      <string>Display a chat message when avatar leaves draw distance</string>
-+      <string>Whether to fetch a grid list from the URL specified in GridListDownloadURL.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-       <string>Boolean</string>
-       <key>Value</key>
--      <integer>0</integer>
--    </map>
--
--  <key>RadarReportSimRangeEnter</key>
--    <map>
--      <key>Comment</key>
--      <string>Display a chat message when avatar enteres local region</string>
--      <key>Persist</key>
-       <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>0</integer>
-     </map>
--	
--	<key>RadarReportSimRangeLeave</key>	
 +    <key>GridListDownloadURL</key>
      <map>
        <key>Comment</key>
--      <string>Display a chat message when avatar leaves local region</string>
+-      <string>Display a chat message when avatar enters chat distance</string>
 +      <string>Fetch a grid list from this URL.</string>
        <key>Persist</key>
        <integer>1</integer>
@@ -1122,12 +1108,12 @@ index 0b1ba83..3d7cf18 100644
 -      <integer>0</integer>
 +      <string>http://phoenixviewer.com/app/fsdata/grids.xml</string>
      </map>
--
--  <key>PermAllowScriptedMedia</key>
+-	
+-	<key>RadarReportChatRangeLeave</key>
 +    <key>LastConnectedGrid</key>
      <map>
        <key>Comment</key>
--      <string>Allow scripts to control media</string>
+-      <string>Display a chat message when avatar leaves chat distance</string>
 +      <string>Last grid with successful connection</string>
        <key>Persist</key>
        <integer>1</integer>
@@ -1135,26 +1121,86 @@ index 0b1ba83..3d7cf18 100644
 -      <string>Boolean</string>
 +      <string>String</string>
        <key>Value</key>
--      <integer>0</integer>   
+-      <integer>0</integer>
 +      <string/>
      </map>
--
--  <key>TempAllowScriptedMedia</key>
+-	
+-  <key>RadarReportDrawRangeEnter</key>
 +    <key>OpensimPrefsAddGrid</key>
      <map>
        <key>Comment</key>
--      <string>Allow scripts to control media</string>
+-      <string>Display a chat message when avatar enters draw distance</string>
 +      <string>Transient string for adding new grids in Preferences > Opensim</string>
        <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
        <integer>0</integer>
+-    </map>
+-	
+-  <key>RadarReportDrawRangeLeave</key>
+-    <map>
+-      <key>Comment</key>
+-      <string>Display a chat message when avatar leaves draw distance</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
        <key>Type</key>
 -      <string>Boolean</string>
 +      <string>String</string>
        <key>Value</key>
--      <integer>0</integer>   
+-      <integer>0</integer>
 +      <string/>
      </map>
  
+-  <key>RadarReportSimRangeEnter</key>
+-    <map>
+-      <key>Comment</key>
+-      <string>Display a chat message when avatar enteres local region</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>0</integer>
+-    </map>
+-	
+-	<key>RadarReportSimRangeLeave</key>	
+-    <map>
+-      <key>Comment</key>
+-      <string>Display a chat message when avatar leaves local region</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>0</integer>
+-    </map>
+-
+-  <key>PermAllowScriptedMedia</key>
+-    <map>
+-      <key>Comment</key>
+-      <string>Allow scripts to control media</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>0</integer>   
+-    </map>
+-
+-  <key>TempAllowScriptedMedia</key>
+-    <map>
+-      <key>Comment</key>
+-      <string>Allow scripts to control media</string>
+-      <key>Persist</key>
+-      <integer>0</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>0</integer>   
+-    </map>
+-
 -  <key>NearbyListShowRange</key>
 -    <map>
 -      <key>Comment</key>
@@ -8711,17 +8757,6 @@ index 0b1ba83..3d7cf18 100644
 -      <string>S32</string>
 -      <key>Value</key>
 -      <integer>90</integer>
--    </map>
--    <key>ChannelBottomPanelMargin</key>
--    <map>
--      <key>Comment</key>
--      <string>Space from a lower toast to the Bottom Tray</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>S32</string>
--      <key>Value</key>
--      <integer>35</integer>
 +		<key>StreamMetadataAnnounceToChat</key>
 +		<map>
 +			<key>Comment</key>
@@ -14187,17 +14222,17 @@ index 0b1ba83..3d7cf18 100644
 +	  <string>http://search.secondlife.com/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;g=[GODLIKE]&amp;sid=[SESSION_ID]&amp;rid=[REGION_ID]&amp;pid=[PARCEL_ID]&amp;channel=[CHANNEL]&amp;version=[VERSION]&amp;major=[VERSION_MAJOR]&amp;minor=[VERSION_MINOR]&amp;patch=[VERSION_PATCH]&amp;build=[VERSION_BUILD]</string>
 +	  -->
      </map>
--    <key>NotificationChannelRightMargin</key>
+-    <key>ChannelBottomPanelMargin</key>
 +    <key>WebProfileURL</key>
      <map>
 -      <key>Comment</key>
--      <string>Space between toasts and a right border of an area where they can appear</string>
+-      <string>Space from a lower toast to the Bottom Tray</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
 -      <string>S32</string>
 -      <key>Value</key>
--      <integer>5</integer>
+-      <integer>35</integer>
 +	    <key>Comment</key>
 +	    <string>URL for Web Profiles</string>
 +	    <key>Persist</key>
@@ -14218,17 +14253,17 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <string>https://my-demo.secondlife.com/[AGENT_NAME]</string>
      </map>
--    <key>NotificationChannelHeightRatio</key>
+-    <key>NotificationChannelRightMargin</key>
 +    <key>HighResSnapshot</key>
      <map>
 -      <key>Comment</key>
--      <string>Notification channel and World View ratio(0.0 - always show 1 notification, 1.0 - max ratio).</string>
+-      <string>Space between toasts and a right border of an area where they can appear</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
--      <string>F32</string>
+-      <string>S32</string>
 -      <key>Value</key>
--      <real>0.5</real>
+-      <integer>5</integer>
 +	    <key>Comment</key>
 +	    <string>Double resolution of snapshot from current window resolution</string>
 +	    <key>Persist</key>
@@ -14238,17 +14273,17 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>0</integer>
      </map>
--    <key>OverflowToastHeight</key>
+-    <key>NotificationChannelHeightRatio</key>
 +    <key>HideSelectedObjects</key>
      <map>
 -      <key>Comment</key>
--      <string>Height of an overflow toast</string>
+-      <string>Notification channel and World View ratio(0.0 - always show 1 notification, 1.0 - max ratio).</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
--      <string>S32</string>
+-      <string>F32</string>
 -      <key>Value</key>
--      <integer>72</integer>
+-      <real>0.5</real>
 +	    <key>Comment</key>
 +	    <string>Hide Selected Objects</string>
 +	    <key>Persist</key>
@@ -14269,8 +14304,28 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <string />
      </map>
--    <key>NearbyToastWidth</key>
+-    <key>OverflowToastHeight</key>
 +    <key>HtmlHelpLastPage</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Height of an overflow toast</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>S32</string>
+-      <key>Value</key>
+-      <integer>72</integer>
++	    <key>Comment</key>
++	    <string>Last URL visited via help system</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string />
+     </map>
+-    <key>NearbyToastWidth</key>
++    <key>IMShowControlPanel</key>
      <map>
 -      <key>Comment</key>
 -      <string>Width of a the nearby chat toasts in percent of screen width</string>
@@ -14289,16 +14344,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>SanityComment</key>
 -      <string>If you make this too small your viewer might crash.</string>
 +	    <key>Comment</key>
-+	    <string>Last URL visited via help system</string>
++	    <string>Show IM Control Panel</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>String</string>
++	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <string />
++	    <integer>1</integer>
      </map>
 -    <key>NotifyMoneyChange</key>
-+    <key>IMShowControlPanel</key>
++    <key>IgnoreAllNotifications</key>
      <map>
 -      <key>Comment</key>
 -      <string>Pop up notifications for all L$ transactions</string>
@@ -14308,26 +14363,6 @@ index 0b1ba83..3d7cf18 100644
 -      <string>Boolean</string>
 -      <key>Value</key>
 -      <integer>1</integer>
-+	    <key>Comment</key>
-+	    <string>Show IM Control Panel</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>Boolean</string>
-+	    <key>Value</key>
-+	    <integer>1</integer>
-     </map>
--    <key>NotifyTipDuration</key>
-+    <key>IgnoreAllNotifications</key>
-     <map>
--      <key>Comment</key>
--      <string>Length of time that notification tips stay on screen (seconds)</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>F32</string>
--      <key>Value</key>
--      <real>4.0</real>
 +	    <key>Comment</key>
 +	    <string>Ignore all notifications so we never need user input on them.</string>
 +	    <key>Persist</key>
@@ -14348,8 +14383,28 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>0</integer>
      </map>
--    <key>NumSessions</key>
+-    <key>NotifyTipDuration</key>
 +    <key>ImagePipelineUseHTTP</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Length of time that notification tips stay on screen (seconds)</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>F32</string>
+-      <key>Value</key>
+-      <real>4.0</real>
++	    <key>Comment</key>
++	    <string>If TRUE use HTTP GET to fetch textures from the server</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>Boolean</string>
++	    <key>Value</key>
++	    <integer>1</integer>
+     </map>
+-    <key>NumSessions</key>
++    <key>InactiveFloaterTransparency</key>
      <map>
 -      <key>Comment</key>
 -      <string>Number of successful logins to Second Life</string>
@@ -14360,26 +14415,6 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>If TRUE use HTTP GET to fetch textures from the server</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>Boolean</string>
-+	    <key>Value</key>
-+	    <integer>1</integer>
-     </map>
--    <key>ObjectCacheEnabled</key>
-+    <key>InactiveFloaterTransparency</key>
-     <map>
--      <key>Comment</key>
--      <string>Enable the object cache.</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
-+	    <key>Comment</key>
 +	    <string>Transparency of inactive floaters (floaters that have no focus)</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
@@ -14388,11 +14423,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <real>0.65</real>
      </map>
--    <key>OpenDebugStatAdvanced</key>
+-    <key>ObjectCacheEnabled</key>
 +    <key>InBandwidth</key>
      <map>
 -      <key>Comment</key>
--      <string>Expand advanced performance stats display</string>
+-      <string>Enable the object cache.</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -14441,11 +14476,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <string>default</string>
      </map>
--    <key>OpenDebugStatBasic</key>
+-    <key>OpenDebugStatAdvanced</key>
 +    <key>InventoryAutoOpenDelay</key>
      <map>
 -      <key>Comment</key>
--      <string>Expand basic performance stats display</string>
+-      <string>Expand advanced performance stats display</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -14461,11 +14496,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <real>1.0</real>
      </map>
--    <key>OpenDebugStatNet</key>
+-    <key>OpenDebugStatBasic</key>
 +    <key>InventoryDisplayInbox</key>
      <map>
 -      <key>Comment</key>
--      <string>Expand network stats display</string>
+-      <string>Expand basic performance stats display</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -14481,11 +14516,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>0</integer>
      </map>
--    <key>OpenDebugStatRender</key>
+-    <key>OpenDebugStatNet</key>
 +    <key>InventoryDisplayOutbox</key>
      <map>
 -      <key>Comment</key>
--      <string>Expand render stats display</string>
+-      <string>Expand network stats display</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -14501,11 +14536,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>0</integer>
      </map>
--    <key>OpenDebugStatSim</key>
+-    <key>OpenDebugStatRender</key>
 +    <key>InventoryInboxToggleState</key>
      <map>
 -      <key>Comment</key>
--      <string>Expand simulator performance stats display</string>
+-      <string>Expand render stats display</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -14543,17 +14578,17 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>0</integer>
      </map>
--    <key>OpenDebugStatTexture</key>
+-    <key>OpenDebugStatSim</key>
 +    <key>InventoryOutboxMaxFolderCount</key>
      <map>
 -      <key>Comment</key>
--      <string>Expand Texture performance stats display</string>
+-      <string>Expand simulator performance stats display</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
 -      <string>Boolean</string>
 -      <key>Value</key>
--      <integer>0</integer>
+-      <integer>1</integer>
 +	    <key>Comment</key>
 +	    <string>Maximum number of subfolders allowed in a listing in the merchant outbox.</string>
 +	    <key>Persist</key>
@@ -14563,11 +14598,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>21</integer>
      </map>
--    <key>OpenDebugStatSimPathfinding</key>
+-    <key>OpenDebugStatTexture</key>
 +    <key>InventoryOutboxMaxFolderDepth</key>
      <map>
 -      <key>Comment</key>
--      <string>Expand Pathfinding performance stats display</string>
+-      <string>Expand Texture performance stats display</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -14583,11 +14618,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>4</integer>
      </map>
--    <key>OpenDebugStatPhysicsDetails</key>
+-    <key>OpenDebugStatSimPathfinding</key>
 +    <key>InventoryOutboxMaxItemCount</key>
      <map>
 -      <key>Comment</key>
--      <string>Expand Physics Details performance stats display</string>
+-      <string>Expand Pathfinding performance stats display</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -14603,17 +14638,17 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>200</integer>
      </map>
--    <key>OpenDebugStatSimTime</key>
+-    <key>OpenDebugStatPhysicsDetails</key>
 +    <key>InventorySortOrder</key>
      <map>
 -      <key>Comment</key>
--      <string>Expand Simulator Time performance stats display</string>
+-      <string>Expand Physics Details performance stats display</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
 -      <string>Boolean</string>
 -      <key>Value</key>
--      <integer>1</integer>
+-      <integer>0</integer>
 +	    <key>Comment</key>
 +	    <string>Specifies sort key for inventory items (+0 = name, +1 = date, +2 = folders always by name, +4 = system folders to top)</string>
 +	    <key>Persist</key>
@@ -14623,11 +14658,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>7</integer>
      </map>
--    <key>OpenDebugStatSimTimeDetails</key>
+-    <key>OpenDebugStatSimTime</key>
 +    <key>InvertMouse</key>
      <map>
 -      <key>Comment</key>
--      <string>Expand Simulator Time Details performance stats display</string>
+-      <string>Expand Simulator Time performance stats display</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -14643,8 +14678,28 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>0</integer>
      </map>
--    <key>OutBandwidth</key>
+-    <key>OpenDebugStatSimTimeDetails</key>
 +    <key>JoystickAvatarEnabled</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Expand Simulator Time Details performance stats display</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>1</integer>
++	    <key>Comment</key>
++	    <string>Enables the Joystick to control Avatar movement.</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>Boolean</string>
++	    <key>Value</key>
++	    <integer>1</integer>
+     </map>
+-    <key>OutBandwidth</key>
++    <key>JoystickAxis0</key>
      <map>
 -      <key>Comment</key>
 -      <string>Outgoing bandwidth throttle (bps)</string>
@@ -14655,16 +14710,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0.0</real>
 +	    <key>Comment</key>
-+	    <string>Enables the Joystick to control Avatar movement.</string>
++	    <string>Flycam hardware axis mapping for internal axis 0 ([0, 5]).</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>Boolean</string>
++	    <string>S32</string>
 +	    <key>Value</key>
 +	    <integer>1</integer>
      </map>
 -    <key>OverlayTitle</key>
-+    <key>JoystickAxis0</key>
++    <key>JoystickAxis1</key>
      <map>
 -      <key>Comment</key>
 -      <string>Controls watermark text message displayed on screen when "ShowOverlayTitle" is enabled (one word, underscores become spaces)</string>
@@ -14675,16 +14730,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <string>Set_via_OverlayTitle_in_settings.xml</string>
 +	    <key>Comment</key>
-+	    <string>Flycam hardware axis mapping for internal axis 0 ([0, 5]).</string>
++	    <string>Flycam hardware axis mapping for internal axis 1 ([0, 5]).</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>1</integer>
++	    <integer>0</integer>
      </map>
 -    <key>PTTCurrentlyEnabled</key>
-+    <key>JoystickAxis1</key>
++    <key>JoystickAxis2</key>
      <map>
 -      <key>Comment</key>
 -      <string>Use Push to Talk mode</string>
@@ -14695,16 +14750,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
-+	    <string>Flycam hardware axis mapping for internal axis 1 ([0, 5]).</string>
++	    <string>Flycam hardware axis mapping for internal axis 2 ([0, 5]).</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>0</integer>
++	    <integer>2</integer>
      </map>
 -    <key>PacketDropPercentage</key>
-+    <key>JoystickAxis2</key>
++    <key>JoystickAxis3</key>
      <map>
 -      <key>Comment</key>
 -      <string>Percentage of packets dropped by the client.</string>
@@ -14715,13 +14770,13 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0.0</real>
 +	    <key>Comment</key>
-+	    <string>Flycam hardware axis mapping for internal axis 2 ([0, 5]).</string>
++	    <string>Flycam hardware axis mapping for internal axis 3 ([0, 5]).</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>2</integer>
++	    <integer>4</integer>
      </map>
 -  <key>ObjectCostHighThreshold</key>
 -  <map>
@@ -14784,7 +14839,7 @@ index 0b1ba83..3d7cf18 100644
 -  </map>
 -  
 -    <key>ParcelMediaAutoPlayEnable</key>
-+    <key>JoystickAxis3</key>
++    <key>JoystickAxis4</key>
      <map>
 -      <key>Comment</key>
 -      <string>Auto play parcel media when available</string>
@@ -14795,16 +14850,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>Flycam hardware axis mapping for internal axis 3 ([0, 5]).</string>
++	    <string>Flycam hardware axis mapping for internal axis 4 ([0, 5]).</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>4</integer>
++	    <integer>3</integer>
      </map>
 -    <key>ParticipantListShowIcons</key>
-+    <key>JoystickAxis4</key>
++    <key>JoystickAxis5</key>
      <map>
 -      <key>Comment</key>
 -      <string>Show/hide people icons in participant list</string>
@@ -14815,16 +14870,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
-+	    <string>Flycam hardware axis mapping for internal axis 4 ([0, 5]).</string>
++	    <string>Flycam hardware axis mapping for internal axis 5 ([0, 5]).</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>3</integer>
++	    <integer>5</integer>
      </map>
 -    <key>PerAccountSettingsFile</key>
-+    <key>JoystickAxis5</key>
++    <key>JoystickAxis6</key>
      <map>
 -      <key>Comment</key>
 -      <string>Persisted client settings file name (per user).</string>
@@ -14835,16 +14890,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <string />
 +	    <key>Comment</key>
-+	    <string>Flycam hardware axis mapping for internal axis 5 ([0, 5]).</string>
++	    <string>Flycam hardware axis mapping for internal axis 6 ([0, 5]).</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>5</integer>
++	    <integer>-1</integer>
      </map>
 -    <key>PermissionsCautionEnabled</key>
-+    <key>JoystickAxis6</key>
++    <key>JoystickBuildEnabled</key>
      <map>
 -      <key>Comment</key>
 -      <string>When enabled, changes the handling of script permission requests to help avoid accidental granting of certain permissions, such as the debit permission</string>
@@ -14855,18 +14910,29 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
-+	    <string>Flycam hardware axis mapping for internal axis 6 ([0, 5]).</string>
++	    <string>Enables the Joystick to move edited objects.</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>S32</string>
++	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <integer>-1</integer>
++	    <integer>0</integer>
 +    </map>
-+    <key>JoystickBuildEnabled</key>
++    <key>JoystickEnabled</key>
 +    <map>
 +	    <key>Comment</key>
-+	    <string>Enables the Joystick to move edited objects.</string>
++	    <string>Enables Joystick Input.</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>Boolean</string>
++	    <key>Value</key>
++	    <integer>1</integer>
++    </map>
++    <key>JoystickFlycamEnabled</key>
++    <map>
++	    <key>Comment</key>
++	    <string>Enables the Joystick to control the flycam.</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
@@ -14875,7 +14941,7 @@ index 0b1ba83..3d7cf18 100644
 +	    <integer>0</integer>
      </map>
 -    <key>PermissionsCautionNotifyBoxHeight</key>
-+    <key>JoystickEnabled</key>
++    <key>JoystickInitialized</key>
      <map>
 -      <key>Comment</key>
 -      <string>Height of caution-style notification messages</string>
@@ -14886,16 +14952,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>344</integer>
 +	    <key>Comment</key>
-+	    <string>Enables Joystick Input.</string>
++	    <string>Whether or not a joystick has been detected and initialized.</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>Boolean</string>
++	    <string>String</string>
 +	    <key>Value</key>
-+	    <integer>1</integer>
++	    <string />
      </map>
 -    <key>PickerContextOpacity</key>
-+    <key>JoystickFlycamEnabled</key>
++    <key>JoystickMouselookYaw</key>
      <map>
 -      <key>Comment</key>
 -      <string>Controls overall opacity of context frustrum connecting color and texture pickers with their swatches</string>
@@ -14906,16 +14972,17 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0.34999999404</real>
 +	    <key>Comment</key>
-+	    <string>Enables the Joystick to control the flycam.</string>
++	    <string>Pass joystick yaw to scripts in mouse look.</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <integer>0</integer>
++	    <integer>1</integer>
      </map>
 -    <key>PicksPerSecondMouseMoving</key>
-+    <key>JoystickInitialized</key>
++
++    <key>JoystickRunThreshold</key>
      <map>
 -      <key>Comment</key>
 -      <string>How often to perform hover picks while the mouse is moving (picks per second)</string>
@@ -14926,16 +14993,17 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>5.0</real>
 +	    <key>Comment</key>
-+	    <string>Whether or not a joystick has been detected and initialized.</string>
++	    <string>Input threshold to initiate running</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>String</string>
++	    <string>F32</string>
 +	    <key>Value</key>
-+	    <string />
++	    <real>0.25</real>
      </map>
 -    <key>PicksPerSecondMouseStationary</key>
-+    <key>JoystickMouselookYaw</key>
++
++    <key>Jpeg2000AdvancedCompression</key>
      <map>
 -      <key>Comment</key>
 -      <string>How often to perform hover picks while the mouse is stationary (picks per second)</string>
@@ -14946,17 +15014,17 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0.0</real>
 +	    <key>Comment</key>
-+	    <string>Pass joystick yaw to scripts in mouse look.</string>
++	    <string>Use advanced Jpeg2000 compression options (precincts, blocks, ordering, markers)</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <integer>1</integer>
++	    <integer>0</integer>
      </map>
 -    <key>PieMenuLineWidth</key>
 +
-+    <key>JoystickRunThreshold</key>
++    <key>Jpeg2000PrecinctsSize</key>
      <map>
 -      <key>Comment</key>
 -      <string>Width of lines in pie menu display (pixels)</string>
@@ -14967,17 +15035,17 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>2.5</real>
 +	    <key>Comment</key>
-+	    <string>Input threshold to initiate running</string>
++	    <string>Size of image precincts. Assumed square and same for all levels. Must be power of 2.</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>F32</string>
++	    <string>S32</string>
 +	    <key>Value</key>
-+	    <real>0.25</real>
++	    <integer>256</integer>
      </map>
 -    <key>PingInterpolate</key>
 +
-+    <key>Jpeg2000AdvancedCompression</key>
++    <key>Jpeg2000BlocksSize</key>
      <map>
 -      <key>Comment</key>
 -      <string>Extrapolate object position along velocity vector based on ping delay</string>
@@ -14988,17 +15056,18 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>Use advanced Jpeg2000 compression options (precincts, blocks, ordering, markers)</string>
++	    <string>Size of encoding blocks. Assumed square and same for all levels. Must be power of 2. Max 64, Min 4.</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>Boolean</string>
++	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>0</integer>
++	    <integer>64</integer>
      </map>
 -    <key>PitchFromMousePosition</key>
 +
-+    <key>Jpeg2000PrecinctsSize</key>
++
++    <key>SnapshotLayers</key>
      <map>
 -      <key>Comment</key>
 -      <string>Vertical range over which avatar head tracks mouse position (degrees of head rotation from top of window to bottom)</string>
@@ -15009,17 +15078,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>90.0</real>
 +	    <key>Comment</key>
-+	    <string>Size of image precincts. Assumed square and same for all levels. Must be power of 2.</string>
++	    <string>Which layers should be used for a snapshot.</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>256</integer>
++	    <integer>0</integer>
      </map>
 -    <key>PlayTypingAnim</key>
-+
-+    <key>Jpeg2000BlocksSize</key>
++    <key>KeepAspectForSnapshot</key>
      <map>
 -      <key>Comment</key>
 -      <string>Your avatar plays the typing animation whenever you type in the chat bar</string>
@@ -15030,18 +15098,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
-+	    <string>Size of encoding blocks. Assumed square and same for all levels. Must be power of 2. Max 64, Min 4.</string>
++	    <string>Always keep width to height ratio in snapshots the same, regardless of image size</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>S32</string>
++	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <integer>64</integer>
++	    <integer>1</integer>
      </map>
 -    <key>PluginAttachDebuggerToPlugins</key>
-+
-+
-+    <key>SnapshotLayers</key>
++    <key>KeepAspectForProfileSnapshot</key>
      <map>
 -      <key>Comment</key>
 -      <string>If true, attach a debugger session to each plugin process as it's launched.</string>
@@ -15052,16 +15118,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>Which layers should be used for a snapshot.</string>
++	    <string>Always keep width to height ratio in profile snapshots the same, regardless of image size</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>S32</string>
++	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <integer>0</integer>
++	    <integer>1</integer>
      </map>
 -    <key>PluginInstancesCPULimit</key>
-+    <key>KeepAspectForSnapshot</key>
++    <key>KeepAspectForEmailSnapshot</key>
      <map>
 -      <key>Comment</key>
 -      <string>Amount of total plugin CPU usage before inworld plugins start getting turned down to "slideshow" priority.  Set to 0 to disable this check.</string>
@@ -15072,7 +15138,7 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0.9</real>
 +	    <key>Comment</key>
-+	    <string>Always keep width to height ratio in snapshots the same, regardless of image size</string>
++	    <string>Always keep width to height ratio in postcard snapshots the same, regardless of image size</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
@@ -15082,7 +15148,7 @@ index 0b1ba83..3d7cf18 100644
      </map>
 -    
 -   <key>PlainTextChatHistory</key>
-+    <key>KeepAspectForProfileSnapshot</key>
++    <key>KeepAspectForDiskSnapshot</key>
      <map>
 -      <key>Comment</key>
 -      <string>Enable/Disable plain text chat history style</string>
@@ -15093,7 +15159,7 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
-+	    <string>Always keep width to height ratio in profile snapshots the same, regardless of image size</string>
++	    <string>Always keep width to height ratio in local snapshots the same, regardless of image size</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
@@ -15103,7 +15169,7 @@ index 0b1ba83..3d7cf18 100644
      </map>
 -    
 -    <key>PluginInstancesLow</key>
-+    <key>KeepAspectForEmailSnapshot</key>
++    <key>KeepAspectForInventorySnapshot</key>
      <map>
 -      <key>Comment</key>
 -      <string>Limit on the number of inworld media plugins that will run at "low" priority</string>
@@ -15114,7 +15180,7 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>4</integer>
 +	    <key>Comment</key>
-+	    <string>Always keep width to height ratio in postcard snapshots the same, regardless of image size</string>
++	    <string>Always keep width to height ratio in inventory snapshots the same, regardless of image size</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
@@ -15123,7 +15189,8 @@ index 0b1ba83..3d7cf18 100644
 +	    <integer>1</integer>
      </map>
 -    <key>PluginInstancesNormal</key>
-+    <key>KeepAspectForDiskSnapshot</key>
++
++    <key>LandBrushSize</key>
      <map>
 -      <key>Comment</key>
 -      <string>Limit on the number of inworld media plugins that will run at "normal" or higher priority</string>
@@ -15134,16 +15201,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>2</integer>
 +	    <key>Comment</key>
-+	    <string>Always keep width to height ratio in local snapshots the same, regardless of image size</string>
++	    <string>Size of affected region when using terraform tool</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>Boolean</string>
++	    <string>F32</string>
 +	    <key>Value</key>
-+	    <integer>1</integer>
++	    <real>2.0</real>
      </map>
 -    <key>PluginInstancesTotal</key>
-+    <key>KeepAspectForInventorySnapshot</key>
++    <key>LCDDestination</key>
      <map>
 -      <key>Comment</key>
 -      <string>Hard limit on the number of plugins that will be instantiated at once for inworld media</string>
@@ -15154,17 +15221,17 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>8</integer>
 +	    <key>Comment</key>
-+	    <string>Always keep width to height ratio in inventory snapshots the same, regardless of image size</string>
++	    <string>Which LCD to use</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>Boolean</string>
++	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>1</integer>
++	    <integer>0</integer>
      </map>
- 
+-
 -   <key>PluginUseReadThread</key>
-+    <key>LandBrushSize</key>
++    <key>LeapCommand</key>
      <map>
 -      <key>Comment</key>
 -      <string>Use a separate thread to read incoming messages from plugins</string>
@@ -15175,13 +15242,13 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>Size of affected region when using terraform tool</string>
++	    <string>Zero or more command lines to run LLSD Event API Plugin programs.</string>
 +	    <key>Persist</key>
-+	    <integer>1</integer>
++	    <integer>0</integer>
 +	    <key>Type</key>
-+	    <string>F32</string>
++	    <string>LLSD</string>
 +	    <key>Value</key>
-+	    <real>2.0</real>
++	    <array />
      </map>
 -   <key>PostFirstLoginIntroURL</key>
 -   <map>
@@ -15206,7 +15273,7 @@ index 0b1ba83..3d7cf18 100644
 -      <integer>0</integer>
 -  </map>
 -    <key>PrecachingDelay</key>
-+    <key>LCDDestination</key>
++    <key>LSLFindCaseInsensitivity</key>
      <map>
 -      <key>Comment</key>
 -      <string>Delay when logging in to load world before showing it (seconds)</string>
@@ -15217,16 +15284,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>6.0</real>
 +	    <key>Comment</key>
-+	    <string>Which LCD to use</string>
++	    <string>Use case insensitivity when searching for text</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>S32</string>
++	    <string>Boolean</string>
 +	    <key>Value</key>
 +	    <integer>0</integer>
      </map>
 -	<key>PreferredMaturity</key>
-+    <key>LeapCommand</key>
++    <key>LSLFindDirection</key>
      <map>
 -      <key>Comment</key>
 -      <string>Setting for the user's preferred maturity level (consts in indra_constants.h)</string>
@@ -15237,13 +15304,13 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -	  <integer>13</integer>
 +	    <key>Comment</key>
-+	    <string>Zero or more command lines to run LLSD Event API Plugin programs.</string>
++	    <string>Direction text will be searched for a match (0: down ; 1: up)</string>
 +	    <key>Persist</key>
-+	    <integer>0</integer>
++	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>LLSD</string>
++	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <array />
++	    <integer>0</integer>
      </map>
 -
 -  <key>PreviewAmbientColor</key>
@@ -15425,16 +15492,16 @@ index 0b1ba83..3d7cf18 100644
 -      <string>Boolean</string>
 -      <key>Value</key>
 -      <integer>1</integer>
-+    <key>LSLFindCaseInsensitivity</key>
++    <key>LSLHelpURL</key>
 +    <map>
 +	    <key>Comment</key>
-+	    <string>Use case insensitivity when searching for text</string>
++	    <string>URL that points to LSL help files, with [LSL_STRING] corresponding to the referenced LSL function or keyword</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>Boolean</string>
++	    <string>String</string>
 +	    <key>Value</key>
-+	    <integer>0</integer>
++	    <string>http://wiki.secondlife.com/wiki/[LSL_STRING]</string>
      </map>
 -	<key>PrimMediaControlsUseHoverControlSet</key>
 -	<map>
@@ -15446,10 +15513,10 @@ index 0b1ba83..3d7cf18 100644
 -      <string>Boolean</string>
 -      <key>Value</key>
 -      <integer>0</integer>
-+    <key>LSLFindDirection</key>
++    <key>LagMeterShrunk</key>
 +    <map>
 +	    <key>Comment</key>
-+	    <string>Direction text will be searched for a match (0: down ; 1: up)</string>
++	    <string>Last large/small state for lag meter</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
@@ -15469,7 +15536,7 @@ index 0b1ba83..3d7cf18 100644
 -		<integer>1</integer>
 -	</map>
 -    <key>PrimMediaMaxRetries</key>
-+    <key>LSLHelpURL</key>
++    <key>Language</key>
      <map>
 -      <key>Comment</key>
 -      <string>Maximum number of retries for media queries.</string>
@@ -15480,16 +15547,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>4</integer>
 +	    <key>Comment</key>
-+	    <string>URL that points to LSL help files, with [LSL_STRING] corresponding to the referenced LSL function or keyword</string>
++	    <string>Specifies language (for UI)</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>http://wiki.secondlife.com/wiki/[LSL_STRING]</string>
++	    <string>default</string>
      </map>
 -    <key>PrimMediaRequestQueueDelay</key>
-+    <key>LagMeterShrunk</key>
++    <key>LanguageIsPublic</key>
      <map>
 -      <key>Comment</key>
 -      <string>Timer delay for fetching media from the queue (in seconds).</string>
@@ -15500,16 +15567,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>1.0</real>
 +	    <key>Comment</key>
-+	    <string>Last large/small state for lag meter</string>
++	    <string>Let other residents see our language information</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <integer>0</integer>
++	    <integer>1</integer>
      </map>
 -    <key>PrimMediaRetryTimerDelay</key>
-+    <key>Language</key>
++    <key>LastGPUString</key>
      <map>
 -      <key>Comment</key>
 -      <string>Timer delay for retrying on media queries (in seconds).</string>
@@ -15520,16 +15587,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>5.0</real>
 +	    <key>Comment</key>
-+	    <string>Specifies language (for UI)</string>
++	    <string>[DO NOT MODIFY] previous GPU id string for tracking hardware changes</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>default</string>
++	    <string></string>
      </map>
 -	<key>PrimMediaMaxSortedQueueSize</key>
-+    <key>LanguageIsPublic</key>
++    <key>LastFeatureVersion</key>
      <map>
 -      <key>Comment</key>
 -      <string>Maximum number of objects the viewer will load media for initially</string>
@@ -15540,16 +15607,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>100000</integer>
 +	    <key>Comment</key>
-+	    <string>Let other residents see our language information</string>
++	    <string>[DO NOT MODIFY] Feature Table Version number for tracking rendering system changes</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>Boolean</string>
++	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>1</integer>
++	    <integer>0</integer>
      </map>
 -	<key>PrimMediaMaxRoundRobinQueueSize</key>
-+    <key>LastGPUString</key>
++    <key>LastFindPanel</key>
      <map>
 -      <key>Comment</key>
 -      <string>Maximum number of objects the viewer will continuously update media for</string>
@@ -15560,16 +15627,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>100000</integer>
 +	    <key>Comment</key>
-+	    <string>[DO NOT MODIFY] previous GPU id string for tracking hardware changes</string>
++	    <string>Controls which find operation appears by default when clicking "Find" button </string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string></string>
++	    <string>find_all_panel</string>
      </map>
 -    <key>ProbeHardwareOnStartup</key>
-+    <key>LastFeatureVersion</key>
++    <key>LastName</key>
      <map>
 -      <key>Comment</key>
 -      <string>Query current hardware configuration on application startup</string>
@@ -15580,16 +15647,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
-+	    <string>[DO NOT MODIFY] Feature Table Version number for tracking rendering system changes</string>
++	    <string>Login last name</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>S32</string>
++	    <string>String</string>
 +	    <key>Value</key>
-+	    <integer>0</integer>
++	    <string />
      </map>
 -    <key>PurgeCacheOnNextStartup</key>
-+    <key>LastFindPanel</key>
++    <key>LastPrefTab</key>
      <map>
 -      <key>Comment</key>
 -      <string>Clear local file cache next time viewer is run</string>
@@ -15600,16 +15667,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>Controls which find operation appears by default when clicking "Find" button </string>
++	    <string>Last selected tab in preferences window</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>String</string>
++	    <string>S32</string>
 +	    <key>Value</key>
-+	    <string>find_all_panel</string>
++	    <integer>0</integer>
      </map>
 -    <key>PurgeCacheOnStartup</key>
-+    <key>LastName</key>
++    <key>LastMediaSettingsTab</key>
      <map>
 -      <key>Comment</key>
 -      <string>Clear local file cache every time viewer is run</string>
@@ -15627,29 +15694,6 @@ index 0b1ba83..3d7cf18 100644
 -      </array>
 -      <key>SanityComment</key>
 -      <string>Purging your cache on each login will add more traffic to the asset servers and your world will load a lot slower. Please only clear your cache when you see issues with inventory, texture or sculpties loading.</string>
-+	    <key>Comment</key>
-+	    <string>Login last name</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string />
-     </map>
--    <key>PushToTalkButton</key>
-+    <key>LastPrefTab</key>
-+    <map>
-+	    <key>Comment</key>
-+	    <string>Last selected tab in preferences window</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>S32</string>
-+	    <key>Value</key>
-+	    <integer>0</integer>
-+    </map>
-+    <key>LastMediaSettingsTab</key>
-+    <map>
 +	    <key>Comment</key>
 +	    <string>Last selected tab in media settings window</string>
 +	    <key>Persist</key>
@@ -15672,6 +15716,18 @@ index 0b1ba83..3d7cf18 100644
 +    </map>
 +
 +    <key>LastSnapshotToProfileHeight</key>
++    <map>
++	    <key>Comment</key>
++	    <string>The height of the last profile snapshot, in px</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>S32</string>
++	    <key>Value</key>
++	    <integer>768</integer>
+     </map>
+-    <key>PushToTalkButton</key>
++    <key>LastSnapshotToEmailHeight</key>
      <map>
 -      <key>Comment</key>
 -      <string>Which button or keyboard key is used for push-to-talk</string>
@@ -15682,26 +15738,6 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <string>MiddleMouse</string>
 +	    <key>Comment</key>
-+	    <string>The height of the last profile snapshot, in px</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>S32</string>
-+	    <key>Value</key>
-+	    <integer>768</integer>
-     </map>
--    <key>PushToTalkToggle</key>
-+    <key>LastSnapshotToEmailHeight</key>
-     <map>
--      <key>Comment</key>
--      <string>Should the push-to-talk button behave as a toggle</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>0</integer>
-+	    <key>Comment</key>
 +	    <string>The height of the last email snapshot, in px</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
@@ -15710,11 +15746,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>768</integer>
      </map>
--    <key>QAMode</key>
+-    <key>PushToTalkToggle</key>
 +    <key>LastSnapshotToProfileWidth</key>
      <map>
 -      <key>Comment</key>
--      <string>Enable Testing Features.</string>
+-      <string>Should the push-to-talk button behave as a toggle</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -15730,17 +15766,17 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>1024</integer>
      </map>
--    <key>QAModeEventHostPort</key>
+-    <key>QAMode</key>
 +    <key>LastSnapshotToProfileResolution</key>
      <map>
 -      <key>Comment</key>
--      <string>DEPRECATED: Port on which lleventhost should listen</string>
+-      <string>Enable Testing Features.</string>
 -      <key>Persist</key>
--      <integer>0</integer>
+-      <integer>1</integer>
 -      <key>Type</key>
--      <string>S32</string>
+-      <string>Boolean</string>
 -      <key>Value</key>
--      <integer>-1</integer>
+-      <integer>0</integer>
 +	    <key>Comment</key>
 +	    <string>At what resolution should snapshots be taken to the profile. 0=Current Window, 1=640x480, 2=800x600, 3=1024x768, 4=Custom</string>
 +	    <key>Persist</key>
@@ -15750,11 +15786,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>1</integer>
      </map>
--    <key>QAModeTermCode</key>
+-    <key>QAModeEventHostPort</key>
 +    <key>SnapshotToProfileIncludeLocation</key>
      <map>
 -      <key>Comment</key>
--      <string>On LL_ERRS, terminate with this code instead of OS message box</string>
+-      <string>DEPRECATED: Port on which lleventhost should listen</string>
 -      <key>Persist</key>
 -      <integer>0</integer>
 -      <key>Type</key>
@@ -15770,8 +15806,28 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>0</integer>
      </map>
--    <key>QAModeMetrics</key>
+-    <key>QAModeTermCode</key>
 +    <key>LastSnapshotToEmailWidth</key>
+     <map>
+-      <key>Comment</key>
+-      <string>On LL_ERRS, terminate with this code instead of OS message box</string>
+-      <key>Persist</key>
+-      <integer>0</integer>
+-      <key>Type</key>
+-      <string>S32</string>
+-      <key>Value</key>
+-      <integer>-1</integer>
++	    <key>Comment</key>
++	    <string>The width of the last email snapshot, in px</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>S32</string>
++	    <key>Value</key>
++	    <integer>1024</integer>
+     </map>
+-    <key>QAModeMetrics</key>
++    <key>LastSnapshotToEmailResolution</key>
      <map>
 -      <key>Comment</key>
 -      <string>"Enables QA features (logging, faster cycling) for metrics collector"</string>
@@ -15782,17 +15838,17 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>The width of the last email snapshot, in px</string>
++	    <string>At what resolution should snapshots be taken as postcards. 0=Current Window, 1=640x480, 2=800x600, 3=1024x768, 4=Custom</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>1024</integer>
++	    <integer>2</integer>
      </map>
 -
 -   <key>QuitAfterSeconds</key>
-+    <key>LastSnapshotToEmailResolution</key>
++    <key>LastSnapshotToDiskHeight</key>
      <map>
 -      <key>Comment</key>
 -      <string>The duration allowed before quitting.</string>
@@ -15803,17 +15859,17 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0.0</real>
 +	    <key>Comment</key>
-+	    <string>At what resolution should snapshots be taken as postcards. 0=Current Window, 1=640x480, 2=800x600, 3=1024x768, 4=Custom</string>
++	    <string>The height of the last disk snapshot, in px</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>2</integer>
++	    <integer>768</integer>
      </map>
 -
 -    <key>QuitAfterSecondsOfAFK</key>
-+    <key>LastSnapshotToDiskHeight</key>
++    <key>LastSnapshotToDiskWidth</key>
      <map>
 -      <key>Comment</key>
 -      <string>The duration allowed after being AFK before quitting.</string>
@@ -15824,27 +15880,6 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0</real>
 +	    <key>Comment</key>
-+	    <string>The height of the last disk snapshot, in px</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>S32</string>
-+	    <key>Value</key>
-+	    <integer>768</integer>
-     </map>
--
--    <key>QuitOnLoginActivated</key>
-+    <key>LastSnapshotToDiskWidth</key>
-     <map>
--      <key>Comment</key>
--      <string>Quit if login page is activated (used when auto login is on and users must not be able to login manually)</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>0</integer>
-+	    <key>Comment</key>
 +	    <string>The width of the last disk snapshot, in px</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
@@ -15853,15 +15888,16 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>1024</integer>
      </map>
--    <key>RadioLandBrushAction</key>
+-
+-    <key>QuitOnLoginActivated</key>
 +    <key>LastSnapshotToDiskResolution</key>
      <map>
 -      <key>Comment</key>
--      <string>Last selected land modification operation (0 = flatten, 1 = raise, 2 = lower, 3 = smooth, 4 = roughen, 5 = revert)</string>
+-      <string>Quit if login page is activated (used when auto login is on and users must not be able to login manually)</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
--      <string>S32</string>
+-      <string>Boolean</string>
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
@@ -15873,11 +15909,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>4</integer>
      </map>
--    <key>RadioLandBrushSize</key>
+-    <key>RadioLandBrushAction</key>
 +    <key>LastSnapshotToFlickrResolution</key>
      <map>
 -      <key>Comment</key>
--      <string>Size of land modification brush (0 = small, 1 = medium, 2 = large)</string>
+-      <string>Last selected land modification operation (0 = flatten, 1 = raise, 2 = lower, 3 = smooth, 4 = roughen, 5 = revert)</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -15893,8 +15929,28 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>4</integer>
      </map>
--    <key>RezUnderLandGroup</key>
+-    <key>RadioLandBrushSize</key>
 +    <key>SnapshotToDiskQuality</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Size of land modification brush (0 = small, 1 = medium, 2 = large)</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>S32</string>
+-      <key>Value</key>
+-      <integer>0</integer>
++	    <key>Comment</key>
++	    <string>Quality setting of snapshot to disk JPEGs (0 = worst, 100 = best)</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>S32</string>
++	    <key>Value</key>
++	    <integer>75</integer>
+     </map>
+-    <key>RezUnderLandGroup</key>
++    <key>LastSnapshotToInventoryHeight</key>
      <map>
 -      <key>Comment</key>
 -      <string>Rez objects under land group when possible.</string>
@@ -15905,13 +15961,13 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
-+	    <string>Quality setting of snapshot to disk JPEGs (0 = worst, 100 = best)</string>
++	    <string>The height of the last texture snapshot, in px</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>S32</string>
 +	    <key>Value</key>
-+	    <integer>75</integer>
++	    <integer>512</integer>
      </map>
 -    <key>LandBrushForce</key>
 -        <map>
@@ -15925,7 +15981,7 @@ index 0b1ba83..3d7cf18 100644
 -            <real>1.0</real>
 -        </map>
 -    <key>MediaBrowserWindowLimit</key>
-+    <key>LastSnapshotToInventoryHeight</key>
++    <key>LastSnapshotToInventoryWidth</key>
      <map>
 -      <key>Comment</key>
 -      <string>Maximum number of media brower windows that can be open at once in the media browser floater (0 for no limit)</string>
@@ -15936,7 +15992,7 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>5</integer>
 +	    <key>Comment</key>
-+	    <string>The height of the last texture snapshot, in px</string>
++	    <string>The width of the last texture snapshot, in px</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
@@ -15945,7 +16001,7 @@ index 0b1ba83..3d7cf18 100644
 +	    <integer>512</integer>
      </map>
 -    <key>WebContentWindowLimit</key>
-+    <key>LastSnapshotToInventoryWidth</key>
++    <key>LastSnapshotToInventoryResolution</key>
      <map>
 -      <key>Comment</key>
 -      <string>Maximum number of web browser windows that can be open at once in the Web content floater (0 for no limit)</string>
@@ -15991,25 +16047,6 @@ index 0b1ba83..3d7cf18 100644
 -  </map>
 -  <key>RecentItemsSortOrder</key>
 +	    <key>Comment</key>
-+	    <string>The width of the last texture snapshot, in px</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>S32</string>
-+	    <key>Value</key>
-+	    <integer>512</integer>
-+    </map>
-+    <key>LastSnapshotToInventoryResolution</key>
-     <map>
--      <key>Comment</key>
--      <string>Specifies sort key for recent inventory items (+0 = name, +1 = date, +2 = folders always by name, +4 = system folders to top)</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>U32</string>
--      <key>Value</key>
--      <integer>1</integer>
-+	    <key>Comment</key>
 +	    <string>At what resolution should snapshots be taken into inventory. 0=Current Window, 1=128x128, 2=256x256, 3=512x512, 4=Custom</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
@@ -16017,16 +16054,15 @@ index 0b1ba83..3d7cf18 100644
 +	    <string>S32</string>
 +	    <key>Value</key>
 +	    <integer>2</integer>
-     </map>
--    <key>RectangleSelectInclusive</key>
++    </map>
 +    <key>LeftClickShowMenu</key>
      <map>
 -      <key>Comment</key>
--      <string>Select objects that have at least one vertex inside selection rectangle</string>
+-      <string>Specifies sort key for recent inventory items (+0 = name, +1 = date, +2 = folders always by name, +4 = system folders to top)</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
--      <string>Boolean</string>
+-      <string>U32</string>
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
@@ -16038,17 +16074,17 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>0</integer>
      </map>
--    <key>RegInClient</key>
+-    <key>RectangleSelectInclusive</key>
 +    <key>LegacyMultiAttachmentSupport</key>
      <map>
 -      <key>Comment</key>
--      <string>Experimental: Embed registration in login screen</string>
+-      <string>Select objects that have at least one vertex inside selection rectangle</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
 -      <string>Boolean</string>
 -      <key>Value</key>
--      <integer>0</integer>
+-      <integer>1</integer>
 +	    <key>Comment</key>
 +	    <string>Converts legacy "secondary attachment points" to multi-attachments for other avatars</string>
 +	    <key>Persist</key>
@@ -16058,11 +16094,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>0</integer>
      </map>
--    <key>QuickBuyCurrency</key>
+-    <key>RegInClient</key>
 +    <key>LimitDragDistance</key>
      <map>
 -      <key>Comment</key>
--      <string>Toggle between HTML based currency purchase floater and legacy XUI version</string>
+-      <string>Experimental: Embed registration in login screen</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -16078,8 +16114,28 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>1</integer>
      </map>
--    <key>RegionTextureSize</key>
+-    <key>QuickBuyCurrency</key>
 +    <key>LimitSelectDistance</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Toggle between HTML based currency purchase floater and legacy XUI version</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>0</integer>
++	    <key>Comment</key>
++	    <string>Disallow selection of objects beyond max select distance</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>Boolean</string>
++	    <key>Value</key>
++	    <integer>1</integer>
+     </map>
+-    <key>RegionTextureSize</key>
++    <key>LipSyncAah</key>
      <map>
 -      <key>Comment</key>
 -      <string>Terrain texture dimensions (power of 2)</string>
@@ -16090,16 +16146,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>256</integer>
 +	    <key>Comment</key>
-+	    <string>Disallow selection of objects beyond max select distance</string>
++	    <string>Aah (jaw opening) babble loop</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>Boolean</string>
++	    <string>String</string>
 +	    <key>Value</key>
-+	    <integer>1</integer>
++	    <string>257998776531013446642343</string>
      </map>
 -    <key>RememberPassword</key>
-+    <key>LipSyncAah</key>
++    <key>LipSyncAahPowerTransfer</key>
      <map>
 -      <key>Comment</key>
 -      <string>Keep password (in encrypted form) for next login</string>
@@ -16110,13 +16166,13 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
-+	    <string>Aah (jaw opening) babble loop</string>
++	    <string>Transfer curve for Voice Interface power to aah lip sync amplitude</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>257998776531013446642343</string>
++	    <string>0000123456789</string>
      </map>
 -
 -  <key>OctreeMaxNodeCapacity</key>
@@ -16188,30 +16244,10 @@ index 0b1ba83..3d7cf18 100644
 -  </map>
 -
 -    <key>RenderAnisotropic</key>
-+    <key>LipSyncAahPowerTransfer</key>
-     <map>
--      <key>Comment</key>
--      <string>Render textures using anisotropic filtering</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>0</integer>
-+	    <key>Comment</key>
-+	    <string>Transfer curve for Voice Interface power to aah lip sync amplitude</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>0000123456789</string>
-     </map>
--    <key>RenderAppleUseMultGL</key>
 +    <key>LipSyncEnabled</key>
      <map>
 -      <key>Comment</key>
--      <string>Whether we want to use multi-threaded OpenGL on Apple hardware (requires restart of SL).</string>
+-      <string>Render textures using anisotropic filtering</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -16226,6 +16262,26 @@ index 0b1ba83..3d7cf18 100644
 +	    <string>Boolean</string>
 +	    <key>Value</key>
 +	    <integer>1</integer>
+     </map>
+-    <key>RenderAppleUseMultGL</key>
++    <key>LipSyncOoh</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Whether we want to use multi-threaded OpenGL on Apple hardware (requires restart of SL).</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>0</integer>
++	    <key>Comment</key>
++	    <string>Ooh (mouth width) babble loop</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string>1247898743223344444443200000</string>
      </map>
 -    <key>RenderAttachedLights</key>
 -        <map>
@@ -16250,32 +16306,12 @@ index 0b1ba83..3d7cf18 100644
 -            <integer>1</integer>
 -        </map>
 -  <key>RenderAvatar</key>
-+    <key>LipSyncOoh</key>
++    <key>LipSyncOohAahRate</key>
      <map>
 -      <key>Comment</key>
 -      <string>Render Avatars</string>
 -      <key>Persist</key>
 -      <integer>0</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
-+	    <key>Comment</key>
-+	    <string>Ooh (mouth width) babble loop</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>1247898743223344444443200000</string>
-     </map>
--  <key>RenderAvatarCloth</key>
-+    <key>LipSyncOohAahRate</key>
-     <map>
--      <key>Comment</key>
--      <string>Controls if avatars use wavy cloth</string>
--      <key>Persist</key>
--      <integer>1</integer>
 -      <key>Type</key>
 -      <string>Boolean</string>
 -      <key>Value</key>
@@ -16289,8 +16325,28 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <real>24.0</real>
      </map>
--  <key>RenderAvatarComplexityLimit</key>
+-  <key>RenderAvatarCloth</key>
 +    <key>LipSyncOohPowerTransfer</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Controls if avatars use wavy cloth</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>1</integer>
++	    <key>Comment</key>
++	    <string>Transfer curve for Voice Interface power to ooh lip sync amplitude</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string>0012345566778899</string>
+     </map>
+-  <key>RenderAvatarComplexityLimit</key>
++    <key>LocalCacheVersion</key>
      <map>
 -      <key>Comment</key>
 -      <string>Max visual complexity of avatars in a scene</string>
@@ -16301,31 +16357,6 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>-1</integer>
 +	    <key>Comment</key>
-+	    <string>Transfer curve for Voice Interface power to ooh lip sync amplitude</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>0012345566778899</string>
-     </map>
--  <key>RenderComplexityColorMin</key>
-+    <key>LocalCacheVersion</key>
-     <map>
--      <key>Comment</key>
--      <string>Max visual complexity of avatars in a scene</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Color4</string>
--      <key>Value</key>
--      <array>
--        <real>0.0</real>
--        <real>0.0</real>
--        <real>1.0</real>
--        <real>0.5</real>
--      </array>
-+	    <key>Comment</key>
 +	    <string>Version number of cache</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
@@ -16334,7 +16365,7 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>0</integer>
      </map>
--  <key>RenderComplexityColorMid</key>
+-  <key>RenderComplexityColorMin</key>
 +    <key>LocalFileSystemBrowsingEnabled</key>
      <map>
 -      <key>Comment</key>
@@ -16346,8 +16377,8 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <array>
 -        <real>0.0</real>
--        <real>1.0</real>
 -        <real>0.0</real>
+-        <real>1.0</real>
 -        <real>0.5</real>
 -      </array>
 +	    <key>Comment</key>
@@ -16392,8 +16423,66 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <integer>0</integer>
      </map>
--  <key>RenderComplexityColorMax</key>
+-  <key>RenderComplexityColorMid</key>
 +    <key>LogTextureNetworkTraffic</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Max visual complexity of avatars in a scene</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Color4</string>
+-      <key>Value</key>
+-      <array>
+-        <real>0.0</real>
+-        <real>1.0</real>
+-        <real>0.0</real>
+-        <real>0.5</real>
+-      </array>
++	    <key>Comment</key>
++	    <string>Log network traffic for textures</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>Boolean</string>
++	    <key>Value</key>
++	    <integer>0</integer>
++    </map>
++    <key>LoginAsGod</key>
++    <map>
++	    <key>Comment</key>
++	    <string>Attempt to login with god powers (Linden accounts only)</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>Boolean</string>
++	    <key>Value</key>
++	    <integer>0</integer>
++    </map>
++    <key>LoginLocation</key>
++    <map>
++	    <key>Comment</key>
++	    <string>Default Login location ('last', 'home') preference</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string>last</string>
++    </map>
++    <key>LoginPage</key>
++    <map>
++	    <key>Comment</key>
++	    <string>Login authentication page.</string>
++	    <key>Persist</key>
++	    <integer>1</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string/>
+     </map>
+-  <key>RenderComplexityColorMax</key>
++    <key>LosslessJ2CUpload</key>
      <map>
 -      <key>Comment</key>
 -      <string>Max visual complexity of avatars in a scene</string>
@@ -16409,16 +16498,16 @@ index 0b1ba83..3d7cf18 100644
 -        <real>0.5</real>
 -      </array>
 +	    <key>Comment</key>
-+	    <string>Log network traffic for textures</string>
++	    <string>Use lossless compression for small image uploads</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
 +	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <integer>0</integer>
++	    <integer>1</integer>
      </map>
 -  <key>RenderComplexityThreshold</key>
-+    <key>LoginAsGod</key>
++    <key>MainloopTimeoutDefault</key>
      <map>
 -      <key>Comment</key>
 -      <string>Only color objects higher than render threshold</string>
@@ -16429,16 +16518,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>-1</integer>
 +	    <key>Comment</key>
-+	    <string>Attempt to login with god powers (Linden accounts only)</string>
++	    <string>Timeout duration for main loop lock detection, in seconds.</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>Boolean</string>
++	    <string>F32</string>
 +	    <key>Value</key>
-+	    <integer>0</integer>
++	    <real>60.0</real>
      </map>
 -  <key>RenderComplexityStaticMax</key>
-+    <key>LoginLocation</key>
++    <key>MapOverlayIndex</key>
      <map>
 -      <key>Comment</key>
 -      <string>Sets a static max value for scaling of RenderComplexity 
@@ -16450,16 +16539,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>-1</integer>
 +	    <key>Comment</key>
-+	    <string>Default Login location ('last', 'home') preference</string>
++	    <string>Currently selected world map type</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>String</string>
++	    <string>S32</string>
 +	    <key>Value</key>
-+	    <string>last</string>
++	    <integer>0</integer>
      </map>
 -    <key>RenderAvatarLODFactor</key>
-+    <key>LoginPage</key>
++    <key>MapScale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Controls level of detail of avatars (multiplier for current screen area when calculated level of detail)</string>
@@ -16470,16 +16559,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0.5</real>
 +	    <key>Comment</key>
-+	    <string>Login authentication page.</string>
++	    <string>World map zoom level (pixels per region)</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>String</string>
++	    <string>F32</string>
 +	    <key>Value</key>
-+	    <string/>
++	    <real>128.0</real>
      </map>
 -    <key>RenderAvatarMaxVisible</key>
-+    <key>LosslessJ2CUpload</key>
++    <key>MapServerURL</key>
      <map>
 -      <key>Comment</key>
 -      <string>Maximum number of avatars to display at any one time</string>
@@ -16490,16 +16579,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>12</integer>
 +	    <key>Comment</key>
-+	    <string>Use lossless compression for small image uploads</string>
++	    <string>World map URL template for locating map tiles</string>
 +	    <key>Persist</key>
-+	    <integer>1</integer>
++	    <integer>0</integer>
 +	    <key>Type</key>
-+	    <string>Boolean</string>
++	    <string>String</string>
 +	    <key>Value</key>
-+	    <integer>1</integer>
++	    <string>http://map.secondlife.com.s3.amazonaws.com/</string>
      </map>
 -    <key>RenderAvatarPhysicsLODFactor</key>
-+    <key>MainloopTimeoutDefault</key>
++    <key>CurrentMapServerURL</key>
      <map>
 -      <key>Comment</key>
 -      <string>Controls level of detail of avatar physics (such as breast physics).</string>
@@ -16510,16 +16599,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>1.0</real>
 +	    <key>Comment</key>
-+	    <string>Timeout duration for main loop lock detection, in seconds.</string>
++	    <string>Current Session World map URL</string>
 +	    <key>Persist</key>
-+	    <integer>1</integer>
++	    <integer>0</integer>
 +	    <key>Type</key>
-+	    <string>F32</string>
++	    <string>String</string>
 +	    <key>Value</key>
-+	    <real>60.0</real>
++	    <string></string>
      </map>
 -    <key>RenderAvatarVP</key>
-+    <key>MapOverlayIndex</key>
++    <key>MapShowEvents</key>
      <map>
 -      <key>Comment</key>
 -      <string>Use vertex programs to perform hardware skinning of avatar</string>
@@ -16530,13 +16619,13 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
-+	    <string>Currently selected world map type</string>
++	    <string>Show events on world map</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>S32</string>
++	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <integer>0</integer>
++	    <integer>1</integer>
      </map>
 -  <key>RenderCompressTextures</key>
 -  <map>
@@ -16550,7 +16639,7 @@ index 0b1ba83..3d7cf18 100644
 -    <integer>0</integer>
 -  </map>
 -    <key>RenderPerformanceTest</key>
-+    <key>MapScale</key>
++    <key>MapShowInfohubs</key>
      <map>
 -      <key>Comment</key>
 -            <string>
@@ -16564,13 +16653,13 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>World map zoom level (pixels per region)</string>
++	    <string>Show infohubs on the world map</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>F32</string>
++	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <real>128.0</real>
++	    <integer>1</integer>
      </map>
 -   
 -  <key>RenderLocalLights</key>
@@ -16727,7 +16816,7 @@ index 0b1ba83..3d7cf18 100644
 -    </array>
 -  </map>
 -  <key>RenderBumpmapMinDistanceSquared</key>
-+    <key>MapServerURL</key>
++    <key>MapShowLandForSale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Maximum distance at which to render bumpmapped primitives (distance in meters, squared)</string>
@@ -16751,15 +16840,15 @@ index 0b1ba83..3d7cf18 100644
 -  </map>
 -    <key>RenderCubeMap</key>
 +	    <key>Comment</key>
-+	    <string>World map URL template for locating map tiles</string>
++	    <string>Show land for sale on world map</string>
 +	    <key>Persist</key>
-+	    <integer>0</integer>
++	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>String</string>
++	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <string>http://map.secondlife.com.s3.amazonaws.com/</string>
++	    <integer>1</integer>
 +    </map>
-+    <key>CurrentMapServerURL</key>
++    <key>MapShowPeople</key>
      <map>
 -      <key>Comment</key>
 -      <string>Whether we can render the cube map or not</string>
@@ -16770,16 +16859,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
-+	    <string>Current Session World map URL</string>
++	    <string>Show other users on world map</string>
 +	    <key>Persist</key>
-+	    <integer>0</integer>
++	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>String</string>
++	    <string>Boolean</string>
 +	    <key>Value</key>
-+	    <string></string>
++	    <integer>1</integer>
      </map>
 -    <key>RenderDebugAlphaMask</key>
-+    <key>MapShowEvents</key>
++    <key>MapShowTelehubs</key>
      <map>
 -      <key>Comment</key>
 -      <string>Test Alpha Masking Cutoffs.</string>
@@ -16790,7 +16879,7 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0.5</real>
 +	    <key>Comment</key>
-+	    <string>Show events on world map</string>
++	    <string>Show telehubs on world map</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
@@ -16799,7 +16888,7 @@ index 0b1ba83..3d7cf18 100644
 +	    <integer>1</integer>
      </map>
 -    <key>RenderDebugGL</key>
-+    <key>MapShowInfohubs</key>
++    <key>MiniMapAutoCenter</key>
      <map>
 -      <key>Comment</key>
 -      <string>Enable strict GL debugging.</string>
@@ -16810,7 +16899,7 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>Show infohubs on the world map</string>
++	    <string>Center the focal point of the minimap.</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
@@ -16830,7 +16919,7 @@ index 0b1ba83..3d7cf18 100644
 -    <real>0.03</real>
 -  </map>
 -  <key>RenderDebugPipeline</key>
-+    <key>MapShowLandForSale</key>
++    <key>Marker</key>
      <map>
 -      <key>Comment</key>
 -      <string>Enable strict pipeline debugging.</string>
@@ -16841,13 +16930,13 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>Show land for sale on world map</string>
++	    <string>[NOT USED]</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
 +	    <key>Type</key>
-+	    <string>Boolean</string>
++	    <string>String</string>
 +	    <key>Value</key>
-+	    <integer>1</integer>
++	    <string />
      </map>
 -  <key>RenderMaxTextureIndex</key>
 -  <map>
@@ -16861,7 +16950,7 @@ index 0b1ba83..3d7cf18 100644
 -    <integer>16</integer>
 -  </map>
 -    <key>RenderDebugTextureBind</key>
-+    <key>MapShowPeople</key>
++    <key>MarketplaceURL</key>
      <map>
 -      <key>Comment</key>
 -      <string>Enable texture bind performance test.</string>
@@ -16872,13 +16961,13 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>Show other users on world map</string>
++	    <string>URL to the Marketplace</string>
 +	    <key>Persist</key>
-+	    <integer>1</integer>
++	    <integer>0</integer>
 +	    <key>Type</key>
-+	    <string>Boolean</string>
++	    <string>String</string>
 +	    <key>Value</key>
-+	    <integer>1</integer>
++	    <string>https://marketplace.secondlife.com/</string>
      </map>
 -  <key>RenderDelayCreation</key>
 -  <map>
@@ -17416,90 +17505,10 @@ index 0b1ba83..3d7cf18 100644
 -  </map>
 -
 -  <key>RenderDynamicLOD</key>
-+    <key>MapShowTelehubs</key>
-     <map>
--      <key>Comment</key>
--      <string>Dynamically adjust level of detail.</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
-+	    <key>Comment</key>
-+	    <string>Show telehubs on world map</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>Boolean</string>
-+	    <key>Value</key>
-+	    <integer>1</integer>
-     </map>
--    <key>RenderFSAASamples</key>
-+    <key>MiniMapAutoCenter</key>
-     <map>
--      <key>Comment</key>
--      <string>Number of samples to use for FSAA (0 = no AA).</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>U32</string>
--      <key>Value</key>
--      <integer>0</integer>
-+	    <key>Comment</key>
-+	    <string>Center the focal point of the minimap.</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>Boolean</string>
-+	    <key>Value</key>
-+	    <integer>1</integer>
-     </map>
--    <key>RenderFarClip</key>
-+    <key>Marker</key>
-     <map>
--      <key>Comment</key>
--      <string>Distance of far clip plane from camera (meters)</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>F32</string>
--      <key>Value</key>
--      <real>256.0</real>
-+	    <key>Comment</key>
-+	    <string>[NOT USED]</string>
-+	    <key>Persist</key>
-+	    <integer>1</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string />
-     </map>
--    <key>RenderAutoMaskAlphaNonDeferred</key>
-+    <key>MarketplaceURL</key>
-     <map>
--      <key>Comment</key>
--      <string>Use alpha masks where appropriate, in the non-deferred (non-'Lighting and Shadows') graphics mode</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
-+	    <key>Comment</key>
-+	    <string>URL to the Marketplace</string>
-+	    <key>Persist</key>
-+	    <integer>0</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/</string>
-     </map>
--    <key>RenderAutoMaskAlphaDeferred</key>
 +    <key>MarketplaceURL_objectFemale</key>
      <map>
 -      <key>Comment</key>
--      <string>Use alpha masks where appropriate, in the deferred ('Lighting and Shadows') graphics mode</string>
+-      <string>Dynamically adjust level of detail.</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -17515,8 +17524,88 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <string>https://marketplace.secondlife.com/trampoline/viewer21/attachments</string>
      </map>
--    <key>RenderFlexTimeFactor</key>
+-    <key>RenderFSAASamples</key>
 +    <key>MarketplaceURL_objectMale</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Number of samples to use for FSAA (0 = no AA).</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>U32</string>
+-      <key>Value</key>
+-      <integer>0</integer>
++	    <key>Comment</key>
++	    <string>URL to the Marketplace Attachments Male</string>
++	    <key>Persist</key>
++	    <integer>0</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/attachments</string>
+     </map>
+-    <key>RenderFarClip</key>
++    <key>MarketplaceURL_clothingFemale</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Distance of far clip plane from camera (meters)</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>F32</string>
+-      <key>Value</key>
+-      <real>256.0</real>
++	    <key>Comment</key>
++	    <string>URL to the Marketplace Clothing Female</string>
++	    <key>Persist</key>
++	    <integer>0</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/clothing_female_avatar</string>
+     </map>
+-    <key>RenderAutoMaskAlphaNonDeferred</key>
++    <key>MarketplaceURL_clothingMale</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Use alpha masks where appropriate, in the non-deferred (non-'Lighting and Shadows') graphics mode</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>1</integer>
++	    <key>Comment</key>
++	    <string>URL to the Marketplace Clothing Male</string>
++	    <key>Persist</key>
++	    <integer>0</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/clothing_male_avatar</string>
+     </map>
+-    <key>RenderAutoMaskAlphaDeferred</key>
++    <key>MarketplaceURL_bodypartFemale</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Use alpha masks where appropriate, in the deferred ('Lighting and Shadows') graphics mode</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>1</integer>
++	    <key>Comment</key>
++	    <string>URL to the Marketplace Bodyparts Female</string>
++	    <key>Persist</key>
++	    <integer>0</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string>https://marketplace.secondlife.com/</string>
+     </map>
+-    <key>RenderFlexTimeFactor</key>
++    <key>MarketplaceURL_bodypartMale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Controls level of detail of flexible objects (multiplier for amount of time spent processing flex objects)</string>
@@ -17527,16 +17616,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>1.0</real>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Attachments Male</string>
++	    <string>URL to the Marketplace Bodyparts Male</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/attachments</string>
++	    <string>https://marketplace.secondlife.com/</string>
      </map>
 -    <key>RenderFogRatio</key>
-+    <key>MarketplaceURL_clothingFemale</key>
++    <key>MarketplaceURL_glovesMale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Distance from camera where fog reaches maximum density (fraction or multiple of far clip distance)</string>
@@ -17547,16 +17636,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>4.0</real>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Clothing Female</string>
++	    <string>URL to the Marketplace Gloves Male</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/clothing_female_avatar</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/gloves_both_women_and_men</string>
      </map>
 -    <key>RenderGamma</key>
-+    <key>MarketplaceURL_clothingMale</key>
++    <key>MarketplaceURL_glovesFemale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Sets gamma exponent for renderer</string>
@@ -17567,16 +17656,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0.0</real>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Clothing Male</string>
++	    <string>URL to the Marketplace Gloves Female</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/clothing_male_avatar</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/gloves_both_women_and_men</string>
      </map>
 -    <key>RenderGammaFull</key>
-+    <key>MarketplaceURL_bodypartFemale</key>
++    <key>MarketplaceURL_jacketFemale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Use fully controllable gamma correction, instead of faster, hard-coded gamma correction of 2.</string>
@@ -17587,16 +17676,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>1.0</real>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Bodyparts Female</string>
++	    <string>URL to the Marketplace Jacket Female</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/jacket_womens</string>
      </map>
 -    <key>RenderGLCoreProfile</key>
-+    <key>MarketplaceURL_bodypartMale</key>
++    <key>MarketplaceURL_jacketMale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Don't use a compatibility profile OpenGL context.  Requires restart.  Basic shaders MUST be enabled.</string>
@@ -17607,16 +17696,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Bodyparts Male</string>
++	    <string>URL to the Marketplace Jacket Male</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/jacket_mens</string>
      </map>
 -    <key>RenderGlow</key>
-+    <key>MarketplaceURL_glovesMale</key>
++    <key>MarketplaceURL_physicsFemale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Render bloom post effect.</string>
@@ -17627,16 +17716,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Gloves Male</string>
++	    <string>URL to the Marketplace Bodyparts Female</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/gloves_both_women_and_men</string>
++	    <string>http://marketplace.secondlife.com</string>
      </map>
 -    <key>RenderGlowIterations</key>
-+    <key>MarketplaceURL_glovesFemale</key>
++    <key>MarketplaceURL_physicsMale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Number of times to iterate the glow (higher = wider and smoother but slower)</string>
@@ -17647,16 +17736,38 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>2</integer>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Gloves Female</string>
++	    <string>URL to the Marketplace Bodyparts Male</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/gloves_both_women_and_men</string>
++	    <string>http://marketplace.secondlife.com/</string>
      </map>
 -    <key>RenderGlowLumWeights</key>
-+    <key>MarketplaceURL_jacketFemale</key>
++    <key>MarketplaceURL_shirtFemale</key>
++    <map>
++	    <key>Comment</key>
++	    <string>URL to the Marketplace Shirt Female</string>
++	    <key>Persist</key>
++	    <integer>0</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/shirt_womens</string>
++    </map>
++    <key>MarketplaceURL_shirtMale</key>
++    <map>
++	    <key>Comment</key>
++	    <string>URL to the Marketplace Shirt Male</string>
++	    <key>Persist</key>
++	    <integer>0</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/shirt_mens</string>
++    </map>
++    <key>MarketplaceURL_undershirtFemale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Weights for each color channel to be used in calculating luminance (should add up to 1.0)</string>
@@ -17671,49 +17782,16 @@ index 0b1ba83..3d7cf18 100644
 -        <real>0</real>
 -      </array>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Jacket Female</string>
++	    <string>URL to the Marketplace Undershirt Female</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/jacket_womens</string>
-+    </map>
-+    <key>MarketplaceURL_jacketMale</key>
-+    <map>
-+	    <key>Comment</key>
-+	    <string>URL to the Marketplace Jacket Male</string>
-+	    <key>Persist</key>
-+	    <integer>0</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/jacket_mens</string>
-+    </map>
-+    <key>MarketplaceURL_physicsFemale</key>
-+    <map>
-+	    <key>Comment</key>
-+	    <string>URL to the Marketplace Bodyparts Female</string>
-+	    <key>Persist</key>
-+	    <integer>0</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>http://marketplace.secondlife.com</string>
-+    </map>
-+    <key>MarketplaceURL_physicsMale</key>
-+    <map>
-+	    <key>Comment</key>
-+	    <string>URL to the Marketplace Bodyparts Male</string>
-+	    <key>Persist</key>
-+	    <integer>0</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>http://marketplace.secondlife.com/</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/undershirt_womens</string>
      </map>
 -    <key>RenderGlowMaxExtractAlpha</key>
-+    <key>MarketplaceURL_shirtFemale</key>
++    <key>MarketplaceURL_undershirtMale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Max glow alpha value for brightness extraction to auto-glow.</string>
@@ -17724,16 +17802,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0.25</real>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Shirt Female</string>
++	    <string>URL to the Marketplace Undershirt Male</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/shirt_womens</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/undershirt_mens</string>
      </map>
 -    <key>RenderGlowMinLuminance</key>
-+    <key>MarketplaceURL_shirtMale</key>
++    <key>MarketplaceURL_skirtFemale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Min luminance intensity necessary to consider an object bright enough to automatically glow.</string>
@@ -17744,16 +17822,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>9999</real>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Shirt Male</string>
++	    <string>URL to the Marketplace Skirt Female</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/shirt_mens</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/skirts_women</string>
      </map>
 -    <key>RenderGlowResolutionPow</key>
-+    <key>MarketplaceURL_undershirtFemale</key>
++    <key>MarketplaceURL_skirtMale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Glow map resolution power of two.</string>
@@ -17764,16 +17842,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>9</integer>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Undershirt Female</string>
++	    <string>URL to the Marketplace Skirt Male</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/undershirt_womens</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/skirts_women</string>
      </map>
 -    <key>RenderGlowStrength</key>
-+    <key>MarketplaceURL_undershirtMale</key>
++    <key>MarketplaceURL_pantsFemale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Additive strength of glow.</string>
@@ -17784,16 +17862,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0.35</real>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Undershirt Male</string>
++	    <string>URL to the Marketplace Pants Female</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/undershirt_mens</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/pants_women</string>
      </map>
 -    <key>RenderGlowWarmthAmount</key>
-+    <key>MarketplaceURL_skirtFemale</key>
++    <key>MarketplaceURL_pantsMale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Amount of warmth extraction to use (versus luminance extraction). 0 = lum, 1.0 = warmth</string>
@@ -17804,16 +17882,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>0.0</real>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Skirt Female</string>
++	    <string>URL to the Marketplace Pants Male</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/skirts_women</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/pants_men</string>
      </map>
 -    <key>RenderGlowWarmthWeights</key>
-+    <key>MarketplaceURL_skirtMale</key>
++    <key>MarketplaceURL_underpantsFemale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Weight of each color channel used before finding the max warmth</string>
@@ -17828,16 +17906,16 @@ index 0b1ba83..3d7cf18 100644
 -        <real>0.7</real>
 -      </array>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Skirt Male</string>
++	    <string>URL to the Marketplace Underwear Female</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/skirts_women</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/underwear_women</string>
      </map>
 -    <key>RenderGlowWidth</key>
-+    <key>MarketplaceURL_pantsFemale</key>
++    <key>MarketplaceURL_underpantsMale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Glow sample size (higher = wider and softer but eventually more pixelated)</string>
@@ -17848,66 +17926,6 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>1.3</real>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Pants Female</string>
-+	    <key>Persist</key>
-+	    <integer>0</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/pants_women</string>
-     </map>
--    <key>RenderGround</key>
-+    <key>MarketplaceURL_pantsMale</key>
-     <map>
--      <key>Comment</key>
--	  <string>Determines whether we can render the ground pool or not</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
-+	    <key>Comment</key>
-+	    <string>URL to the Marketplace Pants Male</string>
-+	    <key>Persist</key>
-+	    <integer>0</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/pants_men</string>
-     </map>
--    <key>RenderHUDInSnapshot</key>
-+    <key>MarketplaceURL_underpantsFemale</key>
-     <map>
--      <key>Comment</key>
--      <string>Display HUD attachments in snapshot</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>0</integer>
-+	    <key>Comment</key>
-+	    <string>URL to the Marketplace Underwear Female</string>
-+	    <key>Persist</key>
-+	    <integer>0</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/underwear_women</string>
-     </map>
--    <key>RenderHUDParticles</key>
-+    <key>MarketplaceURL_underpantsMale</key>
-     <map>
--      <key>Comment</key>
--      <string>Display particle systems in HUD attachments (experimental)</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>0</integer>
-+	    <key>Comment</key>
 +	    <string>URL to the Marketplace Underwear Male</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
@@ -17916,13 +17934,13 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <string>https://marketplace.secondlife.com/trampoline/viewer21/underwear_men</string>
      </map>
--    <key>RenderHighlightSelections</key>
+-    <key>RenderGround</key>
 +    <key>MarketplaceURL_shoesFemale</key>
      <map>
 -      <key>Comment</key>
--      <string>Show selection outlines on objects</string>
+-	  <string>Determines whether we can render the ground pool or not</string>
 -      <key>Persist</key>
--      <integer>0</integer>
+-      <integer>1</integer>
 -      <key>Type</key>
 -      <string>Boolean</string>
 -      <key>Value</key>
@@ -17936,11 +17954,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <string>https://marketplace.secondlife.com/trampoline/viewer21/shoes_women</string>
      </map>
--    <key>RenderHiddenSelections</key>
+-    <key>RenderHUDInSnapshot</key>
 +    <key>MarketplaceURL_shoesMale</key>
      <map>
 -      <key>Comment</key>
--      <string>Show selection lines on objects that are behind other objects</string>
+-      <string>Display HUD attachments in snapshot</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -17956,11 +17974,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <string>https://marketplace.secondlife.com/trampoline/viewer21/shoes_men</string>
      </map>
--    <key>RenderHideGroupTitle</key>
+-    <key>RenderHUDParticles</key>
 +    <key>MarketplaceURL_socksFemale</key>
      <map>
 -      <key>Comment</key>
--      <string>Don't show my group title in my name label</string>
+-      <string>Display particle systems in HUD attachments (experimental)</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -17976,13 +17994,13 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <string>https://marketplace.secondlife.com/trampoline/viewer21/socks_women</string>
      </map>
--    <key>NameTagShowGroupTitles</key>
+-    <key>RenderHighlightSelections</key>
 +    <key>MarketplaceURL_socksMale</key>
      <map>
 -      <key>Comment</key>
--      <string>Show group titles in name labels</string>
+-      <string>Show selection outlines on objects</string>
 -      <key>Persist</key>
--      <integer>1</integer>
+-      <integer>0</integer>
 -      <key>Type</key>
 -      <string>Boolean</string>
 -      <key>Value</key>
@@ -17996,17 +18014,17 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <string>https://marketplace.secondlife.com/trampoline/viewer21/socks_women</string>
      </map>
--    <key>NameTagShowDisplayNames</key>
+-    <key>RenderHiddenSelections</key>
 +    <key>MarketplaceURL_tattooMale</key>
      <map>
 -      <key>Comment</key>
--      <string>Show display names in name labels</string>
+-      <string>Show selection lines on objects that are behind other objects</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
 -      <string>Boolean</string>
 -      <key>Value</key>
--      <integer>1</integer>
+-      <integer>0</integer>
 +	    <key>Comment</key>
 +	    <string>URL to the Marketplace Tattoo Male</string>
 +	    <key>Persist</key>
@@ -18016,17 +18034,17 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <string>https://marketplace.secondlife.com/trampoline/viewer21/tattoo_both_women_and_men</string>
      </map>
--    <key>NameTagShowFriends</key>
+-    <key>RenderHideGroupTitle</key>
 +    <key>MarketplaceURL_tattooFemale</key>
      <map>
 -      <key>Comment</key>
--      <string>Highlight the name tags of your friends</string>
+-      <string>Don't show my group title in my name label</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
 -      <string>Boolean</string>
 -      <key>Value</key>
--      <integer>1</integer>
+-      <integer>0</integer>
 +	    <key>Comment</key>
 +	    <string>URL to the Marketplace Tattoo Female</string>
 +	    <key>Persist</key>
@@ -18036,11 +18054,11 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <string>https://marketplace.secondlife.com/trampoline/viewer21/tattoo_both_women_and_men</string>
      </map>
--    <key>NameTagShowUsernames</key>
+-    <key>NameTagShowGroupTitles</key>
 +    <key>MarketplaceURL_hairFemale</key>
      <map>
 -      <key>Comment</key>
--      <string>Show usernames in avatar name tags</string>
+-      <string>Show group titles in name labels</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
@@ -18056,8 +18074,68 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <string>https://marketplace.secondlife.com/trampoline/viewer21/womens_hair</string>
      </map>
--    <key>RenderInitError</key>
+-    <key>NameTagShowDisplayNames</key>
 +    <key>MarketplaceURL_hairMale</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Show display names in name labels</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>1</integer>
++	    <key>Comment</key>
++	    <string>URL to the Marketplace Hair Male</string>
++	    <key>Persist</key>
++	    <integer>0</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/mens_hair</string>
+     </map>
+-    <key>NameTagShowFriends</key>
++    <key>MarketplaceURL_eyesFemale</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Highlight the name tags of your friends</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>1</integer>
++	    <key>Comment</key>
++	    <string>URL to the Marketplace Eyes Female</string>
++	    <key>Persist</key>
++	    <integer>0</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/womens_eyes</string>
+     </map>
+-    <key>NameTagShowUsernames</key>
++    <key>MarketplaceURL_eyesMale</key>
+     <map>
+-      <key>Comment</key>
+-      <string>Show usernames in avatar name tags</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>1</integer>
++	    <key>Comment</key>
++	    <string>URL to the Marketplace Eyes Male</string>
++	    <key>Persist</key>
++	    <integer>0</integer>
++	    <key>Type</key>
++	    <string>String</string>
++	    <key>Value</key>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/mens_eyes</string>
+     </map>
+-    <key>RenderInitError</key>
++    <key>MarketplaceURL_shapeFemale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Error occured while initializing GL</string>
@@ -18068,16 +18146,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Hair Male</string>
++	    <string>URL to the Marketplace Shape Female</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/mens_hair</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/womens_shape</string>
      </map>
 -    <key>RenderLightRadius</key>
-+    <key>MarketplaceURL_eyesFemale</key>
++    <key>MarketplaceURL_shapeMale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Render the radius of selected lights</string>
@@ -18088,16 +18166,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>0</integer>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Eyes Female</string>
++	    <string>URL to the Marketplace Shape Male</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/womens_eyes</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/mens_shape</string>
      </map>
 -    <key>RenderMaxPartCount</key>
-+    <key>MarketplaceURL_eyesMale</key>
++    <key>MarketplaceURL_skinFemale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Maximum number of particles to display on screen</string>
@@ -18121,15 +18199,15 @@ index 0b1ba83..3d7cf18 100644
 -  </map>
 -    <key>RenderMaxVBOSize</key>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Eyes Male</string>
++	    <string>URL to the Marketplace Skin Female</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/mens_eyes</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/womens_skin</string>
 +    </map>
-+    <key>MarketplaceURL_shapeFemale</key>
++    <key>MarketplaceURL_skinMale</key>
      <map>
 -      <key>Comment</key>
 -      <string>Maximum size of a vertex buffer (in KB).</string>
@@ -18140,16 +18218,16 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <integer>512</integer>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Shape Female</string>
++	    <string>URL to the Marketplace Skins Male</string>
 +	    <key>Persist</key>
 +	    <integer>0</integer>
 +	    <key>Type</key>
 +	    <string>String</string>
 +	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/womens_shape</string>
++	    <string>https://marketplace.secondlife.com/trampoline/viewer21/mens_skin</string>
      </map>
 -    <key>RenderNameFadeDuration</key>
-+    <key>MarketplaceURL_shapeMale</key>
++    <key>MaxDragDistance</key>
      <map>
 -      <key>Comment</key>
 -      <string>Time interval over which to fade avatar names (seconds)</string>
@@ -18160,66 +18238,6 @@ index 0b1ba83..3d7cf18 100644
 -      <key>Value</key>
 -      <real>1.0</real>
 +	    <key>Comment</key>
-+	    <string>URL to the Marketplace Shape Male</string>
-+	    <key>Persist</key>
-+	    <integer>0</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/mens_shape</string>
-     </map>
--    <key>RenderNameShowSelf</key>
-+    <key>MarketplaceURL_skinFemale</key>
-     <map>
--      <key>Comment</key>
--      <string>Display own name above avatar</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
-+	    <key>Comment</key>
-+	    <string>URL to the Marketplace Skin Female</string>
-+	    <key>Persist</key>
-+	    <integer>0</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/womens_skin</string>
-     </map>
--    <key>RenderNameShowTime</key>
-+    <key>MarketplaceURL_skinMale</key>
-     <map>
--      <key>Comment</key>
--      <string>Fade avatar names after specified time (seconds)</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>F32</string>
--      <key>Value</key>
--      <real>10.0</real>
-+	    <key>Comment</key>
-+	    <string>URL to the Marketplace Skins Male</string>
-+	    <key>Persist</key>
-+	    <integer>0</integer>
-+	    <key>Type</key>
-+	    <string>String</string>
-+	    <key>Value</key>
-+	    <string>https://marketplace.secondlife.com/trampoline/viewer21/mens_skin</string>
-     </map>
--    <key>RenderObjectBump</key>
-+    <key>MaxDragDistance</key>
-     <map>
--      <key>Comment</key>
--      <string>Show bumpmapping on primitives</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
-+	    <key>Comment</key>
 +	    <string>Maximum allowed translation distance in a single operation of translate tool (meters from start point)</string>
 +	    <key>Persist</key>
 +	    <integer>1</integer>
@@ -18228,15 +18246,15 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <real>48.0</real>
      </map>
--    <key>RenderQualityPerformance</key>
+-    <key>RenderNameShowSelf</key>
 +    <key>MaxHeapSize</key>
      <map>
 -      <key>Comment</key>
--      <string>Which graphics settings you've chosen</string>
+-      <string>Display own name above avatar</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
--      <string>U32</string>
+-      <string>Boolean</string>
 -      <key>Value</key>
 -      <integer>1</integer>
 +	    <key>Comment</key>
@@ -18248,17 +18266,17 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <real>1.6</real>
      </map>
--    <key>RenderReflectionDetail</key>
+-    <key>RenderNameShowTime</key>
 +    <key>MaxSelectDistance</key>
      <map>
 -      <key>Comment</key>
--      <string>Detail of reflection render pass.</string>
+-      <string>Fade avatar names after specified time (seconds)</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
--      <string>S32</string>
+-      <string>F32</string>
 -      <key>Value</key>
--      <integer>2</integer>
+-      <real>10.0</real>
 +	    <key>Comment</key>
 +	    <string>Maximum allowed selection distance (meters from avatar)</string>
 +	    <key>Persist</key>
@@ -18268,17 +18286,17 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <real>128.0</real>
      </map>
--    <key>RenderShadowDetail</key>
+-    <key>RenderObjectBump</key>
 +    <key>MaxWearableWaitTime</key>
      <map>
 -      <key>Comment</key>
--      <string>Detail of shadows.</string>
+-      <string>Show bumpmapping on primitives</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
--      <string>S32</string>
+-      <string>Boolean</string>
 -      <key>Value</key>
--      <integer>2</integer>
+-      <integer>1</integer>
 +	    <key>Comment</key>
 +	    <string>Max seconds to wait for wearable assets to fetch.</string>
 +	    <key>Persist</key>
@@ -18447,10 +18465,17 @@ index 0b1ba83..3d7cf18 100644
 +	    <key>Value</key>
 +	    <real>600.0</real>
      </map>
--
--    <key>RenderReflectionRes</key>
+-    <key>RenderQualityPerformance</key>
 +    <key>MemoryPrivatePoolEnabled</key>
-+    <map>
+     <map>
+-      <key>Comment</key>
+-      <string>Which graphics settings you've chosen</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>U32</string>
+-      <key>Value</key>
+-      <integer>1</integer>
 +	    <key>Comment</key>
 +	    <string>Enable the private memory pool management</string>
 +	    <key>Persist</key>
@@ -18459,9 +18484,18 @@ index 0b1ba83..3d7cf18 100644
 +	    <string>Boolean</string>
 +	    <key>Value</key>
 +	    <integer>0</integer>
-+    </map>
+     </map>
+-    <key>RenderReflectionDetail</key>
 +    <key>MemoryPrivatePoolSize</key>
-+    <map>
+     <map>
+-      <key>Comment</key>
+-      <string>Detail of reflection render pass.</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>S32</string>
+-      <key>Value</key>
+-      <integer>2</integer>
 +	    <key>Comment</key>
 +	    <string>Size of the private memory pool in MB (min. value is 256)</string>
 +	    <key>Persist</key>
@@ -18470,9 +18504,18 @@ index 0b1ba83..3d7cf18 100644
 +	    <string>U32</string>
 +	    <key>Value</key>
 +	    <integer>512</integer>
-+    </map>
+     </map>
+-    <key>RenderShadowDetail</key>
 +    <key>MemProfiling</key>
-+    <map>
+     <map>
+-      <key>Comment</key>
+-      <string>Detail of shadows.</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>S32</string>
+-      <key>Value</key>
+-      <integer>2</integer>
 +	    <key>Comment</key>
 +	    <string>You want to use tcmalloc's memory profiling options.</string>
 +	    <key>Persist</key>
@@ -18492,7 +18535,9 @@ index 0b1ba83..3d7cf18 100644
 +	    <string>F32</string>
 +	    <key>Value</key>
 +	    <real>0.25</real>
-+    </map>
+     </map>
+-
+-    <key>RenderReflectionRes</key>
 +    <key>MenuBarHeight</key>
      <map>
 -      <key>Comment</key>
@@ -29117,7 +29162,7 @@ index 0b1ba83..3d7cf18 100644
  			<key>Persist</key>
  			<integer>1</integer>
  			<key>Type</key>
-@@ -16053,3037 +14296,4868 @@ Change of this parameter will affect the layout of buttons in notification toast
+@@ -16053,3037 +14341,4868 @@ Change of this parameter will affect the layout of buttons in notification toast
  			<key>Value</key>
  			<integer>0</integer>
  		</map>
