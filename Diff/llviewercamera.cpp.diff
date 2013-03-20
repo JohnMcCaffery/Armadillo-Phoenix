@@ -1,5 +1,5 @@
 diff --git a/Source/indra/newview/llviewercamera.cpp b/Source/indra/newview/llviewercamera.cpp
-index 7b6d0d2..e1e0851 100644
+index 7b6d0d2..013eed3 100644
 --- a/Source/indra/newview/llviewercamera.cpp
 +++ b/Source/indra/newview/llviewercamera.cpp
 @@ -48,15 +48,16 @@
@@ -21,13 +21,16 @@ index 7b6d0d2..e1e0851 100644
  
  //glu pick matrix implementation borrowed from Mesa3D
  glh::matrix4f gl_pick_matrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLint* viewport)
-@@ -82,12 +83,35 @@ glh::matrix4f gl_pick_matrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height
+@@ -80,14 +81,37 @@ glh::matrix4f gl_pick_matrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height
+ 	return glh::matrix4f(m);
+ }
  
- glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
+-glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
++glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar, bool render)
  {
 -	GLfloat f = 1.f/tanf(DEG_TO_RAD*fovy/2.f);
 -
-+	if (gSavedSettings.getBOOL("AllowOverrideProjectionMatrix") && lManualProjectionMatrixSet) {
++	if (render && gSavedSettings.getBOOL("AllowOverrideProjectionMatrix") && lManualProjectionMatrixSet) {
 +		LLVector3 diag = gSavedSettings.getVector3("PerspectiveMatrixDiagonal");
 +		LLVector3 other = gSavedSettings.getVector3("PerspectiveMatrixOther");
 +		return glh::matrix4f(
@@ -62,6 +65,15 @@ index 7b6d0d2..e1e0851 100644
  }
  
  glh::matrix4f gl_lookat(LLVector3 eye, LLVector3 center, LLVector3 up)
+@@ -396,7 +420,7 @@ void LLViewerCamera::setPerspective(BOOL for_selection,
+ 
+ 	calcProjection(z_far); // Update the projection matrix cache
+ 
+-	proj_mat *= gl_perspective(fov_y,aspect,z_near,z_far);
++	proj_mat *= gl_perspective(fov_y,aspect,z_near,z_far, gSavedSettings.getBOOL("ControlRenderFrustum"));
+ 
+ 	gGL.loadMatrix(proj_mat.m);
+ 
 @@ -896,3 +920,19 @@ void LLViewerCamera::updateCameraAngle( void* user_data, const LLSD& value)
  	self->setDefaultFOV(value.asReal());	
  }
