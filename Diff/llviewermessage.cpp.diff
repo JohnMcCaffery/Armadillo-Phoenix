@@ -1,5 +1,5 @@
 diff --git a/Source/indra/newview/llviewermessage.cpp b/Source/indra/newview/llviewermessage.cpp
-index 0f4fa06..25eec1a 100644
+index 0f4fa06..c8c198a 100644
 --- a/Source/indra/newview/llviewermessage.cpp
 +++ b/Source/indra/newview/llviewermessage.cpp
 @@ -94,6 +94,7 @@
@@ -10,7 +10,7 @@ index 0f4fa06..25eec1a 100644
  #include "llviewernetwork.h" // <FS:AW opensim currency support>
  #include "llviewerobjectlist.h"
  #include "llviewerparcelmgr.h"
-@@ -6146,6 +6147,78 @@ void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_dat
+@@ -6146,6 +6147,82 @@ void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_dat
  //end Ventrella 
  
  
@@ -80,6 +80,10 @@ index 0f4fa06..25eec1a 100644
 +	msg->getF32("Delta", "Yaw", yaw);
 +
 +	LLViewerRemoteControl::getInstance()->Update(delta, pitch, yaw);
++
++	gSavedSettings.setVector3("PositionDelta", delta);
++	gSavedSettings.setF32("PitchDelta", pitch);
++	gSavedSettings.setF32("YawDelta", yaw);
 +}
 +
 +void process_clear_remote_control(LLMessageSystem *mesgys, void **user_data) {
