@@ -8,6 +8,8 @@ set workingDir=%CD%
 for /f "delims=" %%a in ('git symbolic-ref HEAD') do set head=%%a
 set head=%head:~11%
 
+git commit -m "Saving state before pulling changes."
+
 cd ..\..\phoenix-firestorm-release
 REM hg pull -insecure -u
 cd %workingDir%
