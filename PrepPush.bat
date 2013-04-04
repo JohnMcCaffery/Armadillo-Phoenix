@@ -40,9 +40,7 @@ for /f "delims=" %%l in ('git diff --name-only FirestormHead WorkingHead') do (
 	call:subroutine "%%l"
 )
 
-xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..\build-vc100\newview\Release\* Bin\
-xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..%src%* Bin\
-xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..%settings%* Bin\app_settings\
+UpdateBin.bat
 
 goto:eof
 :subroutine
