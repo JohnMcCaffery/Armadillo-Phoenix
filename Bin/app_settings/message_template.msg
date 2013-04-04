@@ -9020,3 +9020,29 @@ version 2.0
 	}
 }
 
+// SetWindow
+{ 
+	SetWindow		Low	427 Trusted Unencoded
+	{
+		Window Single
+		{ 	MatR1 			LLVector4 }
+		{ 	MatR2 			LLVector4 }
+		{ 	MatR3 			LLVector4 }
+		{ 	MatR4 			LLVector4 }
+		{ 	Position 		LLVector3 }
+		{ 	PositionDelta 	LLVector3 }
+		{ 	LookAt 			LLVector3 }
+		{ 	LookAtDelta 	LLVector3 }
+		{ 	TickLength 		U32 }
+		{ 	Source 			LLUUID }
+	}
+}
+
+// ClearWindow
+{ 
+	ClearWindow		Low	428 Trusted Unencoded
+	{
+		ObjectData			Single
+		{	ObjectID				LLUUID	}
+	}
+}
