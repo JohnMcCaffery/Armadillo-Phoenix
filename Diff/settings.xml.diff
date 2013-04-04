@@ -1,8 +1,8 @@
 diff --git a/Source/indra/newview/app_settings/settings.xml b/Source/indra/newview/app_settings/settings.xml
-index 0b1ba83..0fd329e 100644
+index 0b1ba83..6d36fbd 100644
 --- a/Source/indra/newview/app_settings/settings.xml
 +++ b/Source/indra/newview/app_settings/settings.xml
-@@ -1,587 +1,141 @@
+@@ -1,521 +1,11 @@
  <?xml version="1.0" ?>
  <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 -  xsi:noNamespaceSchemaLocation="llsd.xsd">
@@ -519,18 +519,77 @@ index 0b1ba83..0fd329e 100644
 -    <integer>100</integer>
 -  </map>
 -    <key>FSContactSetsColorizeMiniMap</key>
++    <key>RemoteControlScaleSpeed</key>
+     <map>
+       <key>Comment</key>
+-      <string>Whether to color a friends mini map icon based on their friends groups</string>
++      <string>Whether to allow the scale how far the avatar moves with the deltas or just use unit values when moving the avatar via remote control packets.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+@@ -523,54 +13,10 @@
+       <key>Value</key>
+       <integer>0</integer>
+     </map>
+-    <key>FSContactSetsShowFolders</key>
 -    <map>
 -      <key>Comment</key>
--      <string>Whether to color a friends mini map icon based on their friends groups</string>
+-      <string>Whether to show fake folders in constacts sets window</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
 -      <string>Boolean</string>
 -      <key>Value</key>
--      <integer>0</integer>
+-      <integer>1</integer>
 -    </map>
--    <key>FSContactSetsShowFolders</key>
-+		<key>ControlRenderFrustum</key>
+-    <key>FSContactSetsUseColorHighlight</key>
+-    <map>
+-      <key>Comment</key>
+-      <string>Whether to use a stronger color where your mouse is in the contacts sets floater</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>1</integer>
+-    </map>
+-    <key>FSContactSetsDoZoom</key>
++    <key>EnableRemoteControl</key>
+     <map>
+       <key>Comment</key>
+-      <string>Whether to zoom in over the friend in the floater</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>1</integer>
+-    </map>
+-    <key>FSContactSetsRequireCTRL</key>
+-    <map>
+-      <key>Comment</key>
+-      <string>Whether to require the ctrl key to be pressed to multi select friends</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>1</integer>
+-    </map>
+-    <key>FSContactSetsColorizeNameTag</key>
+-    <map>
+-      <key>Comment</key>
+-      <string>Whether to color a friends name tag based on their friends groups</string>
++      <string>Whether to allow the LLViewerRemoteControl class to control the position of the avatar.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+@@ -578,177 +24,162 @@
+       <key>Value</key>
+       <integer>0</integer>
+     </map>
+-    <key>FSContactSetsColorizeRadar</key>
++    <key>ControlRenderFrustum</key>
 +		<map>
 +			<key>Comment</key>
 +			<string>Whether to use the alternative view frustum when getting the projection matrix in the render method.</string>
@@ -600,7 +659,7 @@ index 0b1ba83..0fd329e 100644
 +		<key>PerspectiveMatrixDiagonal</key>
      <map>
        <key>Comment</key>
--      <string>Whether to show fake folders in constacts sets window</string>
+-      <string>Whether to color a friends name in the radar list based on their friends groups</string>
 +      <string>Persective matrix values for 00, 11 and 22</string>
        <key>Persist</key>
        <integer>1</integer>
@@ -608,18 +667,18 @@ index 0b1ba83..0fd329e 100644
 -      <string>Boolean</string>
 +      <string>Vector3</string>
        <key>Value</key>
--      <integer>1</integer>
+-      <integer>0</integer>
 +      <array>
 +        <real>3.55887341</real>
 +        <real>7.406304</real>
 +        <real>-1.0</real>
 +      </array>
      </map>
--    <key>FSContactSetsUseColorHighlight</key>
+-    <key>FSContactSetsColorizeText</key>
 +		<key>PerspectiveMatrixOther</key>
      <map>
        <key>Comment</key>
--      <string>Whether to use a stronger color where your mouse is in the contacts sets floater</string>
+-      <string>Colorise text instead of backgrounds in the friends groups floater</string>
 +      <string>Perspective matrix values for 02, 12 and 23</string>
        <key>Persist</key>
        <integer>1</integer>
@@ -627,34 +686,44 @@ index 0b1ba83..0fd329e 100644
 -      <string>Boolean</string>
 +      <string>Vector3</string>
        <key>Value</key>
--      <integer>1</integer>
+-      <integer>0</integer>
 +      <array>
 +        <real>0.0</real>
 +        <real>-1.05561924</real>
 +        <real>-.202066913</real>
 +      </array>
      </map>
--    <key>FSContactSetsDoZoom</key>
+-    <key>FSContactSetsColorizeBar</key>
 +    <key>FrustumOffsetH</key>
      <map>
        <key>Comment</key>
--      <string>Whether to zoom in over the friend in the floater</string>
+-      <string>Colorise only a small area of the backgrounds in the friends groups floater</string>
 +      <string>Offset the view frustum left or right.</string>
        <key>Persist</key>
 -      <integer>1</integer>
-+      <integer>0</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+       <integer>0</integer>
+-    </map>
+-    <key>FSContactSetsColorizeChat</key>
+-    <map>
+-      <key>Comment</key>
+-      <string>Whether to color a friends chat based on their friends groups</string>
+-      <key>Persist</key>
+-      <integer>1</integer>
        <key>Type</key>
 -      <string>Boolean</string>
 +      <string>F32</string>
        <key>Value</key>
--      <integer>1</integer>
+-      <integer>0</integer>
 +      <real>0.0</real>
      </map>
--    <key>FSContactSetsRequireCTRL</key>
+-    <key>FSContactSetsShowOnline</key>
 +    <key>FrustumOffsetV</key>
      <map>
        <key>Comment</key>
--      <string>Whether to require the ctrl key to be pressed to multi select friends</string>
+-      <string>Whether to show online friends in the friends groups floater</string>
 +      <string>Offset the view frustum up or down.</string>
        <key>Persist</key>
 -      <integer>1</integer>
@@ -666,11 +735,11 @@ index 0b1ba83..0fd329e 100644
 -      <integer>1</integer>
 +      <real>0.0</real>
      </map>
--    <key>FSContactSetsColorizeNameTag</key>
+-    <key>FSContactSetsShowOffline</key>
 +    <key>FSFloaterBlacklistSortColumn</key>
      <map>
        <key>Comment</key>
--      <string>Whether to color a friends name tag based on their friends groups</string>
+-      <string>Whether to show offline friends in the friends groups floater</string>
 +      <string>SortColumn for the Blacklist.</string>
        <key>Persist</key>
        <integer>1</integer>
@@ -678,105 +747,34 @@ index 0b1ba83..0fd329e 100644
 -      <string>Boolean</string>
 +      <string>String</string>
        <key>Value</key>
--      <integer>0</integer>
+-      <integer>1</integer>
 +      <string>date</string>
      </map>
--    <key>FSContactSetsColorizeRadar</key>
+-    <key>FSContactSetsShowAllFriends</key>
 +    <key>FSFloaterBlacklistSortAscending</key>
      <map>
        <key>Comment</key>
--      <string>Whether to color a friends name in the radar list based on their friends groups</string>
+-      <string>Whether to show all friends in the window, instead of only the selected group</string>
 +      <string>SortOrder for the Blacklist.</string>
        <key>Persist</key>
        <integer>1</integer>
        <key>Type</key>
-@@ -589,21 +143,21 @@
+       <string>Boolean</string>
        <key>Value</key>
-       <integer>0</integer>
+-      <integer>1</integer>
++      <integer>0</integer>
      </map>
--    <key>FSContactSetsColorizeText</key>
+-    <key>FSContactSetsShowOtherGroups</key>
 +    <key>FSLandmarkCreatedNotification</key>
      <map>
        <key>Comment</key>
--      <string>Colorise text instead of backgrounds in the friends groups floater</string>
+-      <string>Whether to show and colorize other groups in the friends groups floater</string>
 +      <string>Display a notification if a landmark is added to your inventory.</string>
        <key>Persist</key>
        <integer>1</integer>
        <key>Type</key>
        <string>Boolean</string>
        <key>Value</key>
--      <integer>0</integer>
-+      <string />
-     </map>
--    <key>FSContactSetsColorizeBar</key>
-+    <key>FSPublishRadarTag</key>
-     <map>
-       <key>Comment</key>
--      <string>Colorise only a small area of the backgrounds in the friends groups floater</string>
-+      <string>Enables the publishing of a 'Firestorm' radar tag, as well as the display of published radar tags of other avatars.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-@@ -611,10 +165,10 @@
-       <key>Value</key>
-       <integer>0</integer>
-     </map>
--    <key>FSContactSetsColorizeChat</key>
-+    <key>FSUseV2Friends</key>
-     <map>
-       <key>Comment</key>
--      <string>Whether to color a friends chat based on their friends groups</string>
-+      <string>Makes Comm->Friends and Comm->Groups open the v2 based windows.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-@@ -622,145 +176,32 @@
-       <key>Value</key>
-       <integer>0</integer>
-     </map>
--    <key>FSContactSetsShowOnline</key>
--    <map>
--      <key>Comment</key>
--      <string>Whether to show online friends in the friends groups floater</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
--    </map>
--    <key>FSContactSetsShowOffline</key>
--    <map>
--      <key>Comment</key>
--      <string>Whether to show offline friends in the friends groups floater</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
--    </map>
--    <key>FSContactSetsShowAllFriends</key>
--    <map>
--      <key>Comment</key>
--      <string>Whether to show all friends in the window, instead of only the selected group</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
--    </map>
--    <key>FSContactSetsShowOtherGroups</key>
-+    <key>FSFolderViewItemHeight</key>
-     <map>
-       <key>Comment</key>
--      <string>Whether to show and colorize other groups in the friends groups floater</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
 -      <integer>1</integer>
 -    </map>
 -    <key>FSContactSetsSelectedGroup</key>
@@ -838,12 +836,11 @@ index 0b1ba83..0fd329e 100644
 -    <map>
 -      <key>Comment</key>
 -      <string>Channel for whispering radar alerts</string>
-+      <string>Controls the height of folder items, for instance in inventory</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-       <string>S32</string>
-       <key>Value</key>
+-      <key>Persist</key>
+-      <integer>1</integer>
+-      <key>Type</key>
+-      <string>S32</string>
+-      <key>Value</key>
 -      <integer>-777777777</integer>
 -    </map>
 -    
@@ -857,60 +854,92 @@ index 0b1ba83..0fd329e 100644
 -      <string>String</string>
 -      <key>Value</key>
 -      <string>76c78607-93f9-f55a-5238-e19b1a181389</string>
-+      <integer>20</integer>
++      <string />
      </map>
 -
 -  <key>RadarEnterChannelAlert</key>
-+    <key>FSShowGroupNameLength</key>
++    <key>FSPublishRadarTag</key>
      <map>
        <key>Comment</key>
 -      <string>Toggles whether radar sends out chat alerts when it detects a new avatar</string>
-+      <string>Max length of group name to be printed in chat (-1 for full group name, 0 for disabled).</string>
++      <string>Enables the publishing of a 'Firestorm' radar tag, as well as the display of published radar tags of other avatars.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+@@ -756,11 +187,10 @@
+       <key>Value</key>
+       <integer>0</integer>
+     </map>
+-    
+-   <key>RadarLeaveChannelAlert</key>
++    <key>FSUseV2Friends</key>
+     <map>
+       <key>Comment</key>
+-      <string>Toggles whether radar sends out chat alerts when it detects an avatar has left</string>
++      <string>Makes Comm->Friends and Comm->Groups open the v2 based windows.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+@@ -768,35 +198,32 @@
+       <key>Value</key>
+       <integer>0</integer>
+     </map>
+-
+-  <key>ShowRadarMinimap</key>
++    <key>FSFolderViewItemHeight</key>
+     <map>
+       <key>Comment</key>
+-      <string>Toggle visibility of the embedded minimap in the radar panel</string>
++      <string>Controls the height of folder items, for instance in inventory</string>
        <key>Persist</key>
        <integer>1</integer>
        <key>Type</key>
 -      <string>Boolean</string>
 +      <string>S32</string>
        <key>Value</key>
-       <integer>0</integer>
-     </map>
--    
--   <key>RadarLeaveChannelAlert</key>
-+    <key>FSIMChatFlashOnFriendStatusChange</key>
-     <map>
-       <key>Comment</key>
--      <string>Toggles whether radar sends out chat alerts when it detects an avatar has left</string>
-+      <string>Flash IM tab when friend goes online or offline.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-@@ -768,70 +209,40 @@
-       <key>Value</key>
-       <integer>0</integer>
-     </map>
--
--  <key>ShowRadarMinimap</key>
--    <map>
--      <key>Comment</key>
--      <string>Toggle visibility of the embedded minimap in the radar panel</string>
--      <key>Persist</key>
 -      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>1</integer>
--    </map>
++      <integer>20</integer>
+     </map>
 -
 -  <key>RadarNameFormat</key>
-+    <key>FSIMChatHistoryFade</key>
++    <key>FSShowGroupNameLength</key>
      <map>
        <key>Comment</key>
 -      <string>0=DisplayName,1=Username,2=Displayname/Username,3=Username/Displayname</string>
-+      <string>Ammount to fade IM text into the background of the chat history floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
++      <string>Max length of group name to be printed in chat (-1 for full group name, 0 for disabled).</string>
        <key>Persist</key>
        <integer>1</integer>
        <key>Type</key>
 -      <string>U32</string>
++      <string>S32</string>
+       <key>Value</key>
+       <integer>0</integer>
+     </map>
+-    
+-  <key>LimitRadarByRange</key>
++    <key>FSIMChatFlashOnFriendStatusChange</key>
+     <map>
+       <key>Comment</key>
+-      <string>RestrictRadarToNearmeRange</string>
++      <string>Flash IM tab when friend goes online or offline.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+@@ -804,95 +231,51 @@
+       <key>Value</key>
+       <integer>0</integer>
+     </map>
+-
+-  <key>AvatarSitOnAway</key>
++    <key>FSIMChatHistoryFade</key>
+     <map>
+       <key>Comment</key>
+-      <string>Sit down when marked AFK</string>
++      <string>Ammount to fade IM text into the background of the chat history floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+-      <string>Boolean</string>
 +      <string>F32</string>
        <key>Value</key>
 -      <integer>0</integer>
@@ -923,32 +952,6 @@ index 0b1ba83..0fd329e 100644
 +      </array>
 +      <key>SanityComment</key>
 +      <string>If you make this too small you might not be able to read IMs that are shown in chat history.</string>
-     </map>
--    
--  <key>LimitRadarByRange</key>
-+    <key>UsePieMenu</key>
-     <map>
-       <key>Comment</key>
--      <string>RestrictRadarToNearmeRange</string>
-+      <string>Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-       <string>Boolean</string>
-       <key>Value</key>
--      <integer>0</integer>
--    </map>
--
--  <key>AvatarSitOnAway</key>
--    <map>
--      <key>Comment</key>
--      <string>Sit down when marked AFK</string>
--      <key>Persist</key>
-       <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>0</integer>
      </map>
 -  <key>FSUseNearbyChatConsole</key>
 -  <map>
@@ -963,18 +966,18 @@ index 0b1ba83..0fd329e 100644
 -  </map>
 -
 -  <key>FSLogImToChatConsole</key>
-+    <key>AutohideChatBar</key>
++    <key>UsePieMenu</key>
      <map>
        <key>Comment</key>
 -      <string>Defines if (group) IM notifications should be sent to the nearby chat console (v1-style) or toasts (v2-style).</string>
-+      <string>Hide the chat bar from the bottom button bar and only show it as an overlay when needed.</string>
++      <string>Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments.</string>
        <key>Persist</key>
        <integer>1</integer>
        <key>Type</key>
-@@ -839,60 +250,21 @@
+       <string>Boolean</string>
        <key>Value</key>
-       <integer>0</integer>
-     </map>
+-      <integer>0</integer>
+-    </map>
 -
 -
 -  <key>FSOOCPrefix</key>
@@ -994,50 +997,50 @@ index 0b1ba83..0fd329e 100644
 -      <key>Comment</key>
 -      <string>Postfix to mark OOC chat</string>
 -      <key>Persist</key>
--      <integer>1</integer>
+       <integer>1</integer>
 -      <key>Type</key>
 -      <string>String</string>
 -      <key>Value</key>
 -      <string>))</string>
--    </map>
+     </map>
 -
 -  <key>FSPlayChatAnimation</key>
-+    <key>EditAppearanceLighting</key>
-     <map>
-       <key>Comment</key>
--      <string>Play the avatar chat animations, e.g. shouting</string>
-+      <string>Enable or disable the additional lighting used while editing avatar appearance.</string>
-       <key>Persist</key>
-       <integer>1</integer>
-       <key>Type</key>
-       <string>Boolean</string>
-       <key>Value</key>
-       <integer>1</integer>
--    </map>  
--
--  <key>FSShowChatChannel</key>
 -    <map>
 -      <key>Comment</key>
--      <string>Shows/Hides the channel selector in the Nearby Chat command line</string>
+-      <string>Play the avatar chat animations, e.g. shouting</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
 -      <key>Type</key>
 -      <string>Boolean</string>
 -      <key>Value</key>
--      <integer>0</integer>
+-      <integer>1</integer>
+-    </map>  
+-
+-  <key>FSShowChatChannel</key>
++    <key>AutohideChatBar</key>
+     <map>
+       <key>Comment</key>
+-      <string>Shows/Hides the channel selector in the Nearby Chat command line</string>
++      <string>Hide the chat bar from the bottom button bar and only show it as an overlay when needed.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+       <string>Boolean</string>
+       <key>Value</key>
+       <integer>0</integer>
 -    </map>  
 -
 -  <key>ShowScriptDialogsTopRight</key>
 +    </map>
-+    <key>GridListDownload</key>
++    <key>EditAppearanceLighting</key>
      <map>
        <key>Comment</key>
 -      <string>Show script llDialog floaters always in the top right corner of the screen.</string>
-+      <string>Whether to fetch a grid list from the URL specified in GridListDownloadURL.</string>
++      <string>Enable or disable the additional lighting used while editing avatar appearance.</string>
        <key>Persist</key>
        <integer>1</integer>
        <key>Type</key>
-@@ -900,15152 +272,14068 @@
+@@ -900,15152 +283,14079 @@
        <key>Value</key>
        <integer>1</integer>
      </map>
@@ -1094,10 +1097,36 @@ index 0b1ba83..0fd329e 100644
 -  </map>
 -
 -  <key>RadarReportChatRangeEnter</key>
-+    <key>GridListDownloadURL</key>
++    <key>GridListDownload</key>
      <map>
        <key>Comment</key>
 -      <string>Display a chat message when avatar enters chat distance</string>
++      <string>Whether to fetch a grid list from the URL specified in GridListDownloadURL.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+       <string>Boolean</string>
+       <key>Value</key>
+-      <integer>0</integer>
+-    </map>
+-	
+-	<key>RadarReportChatRangeLeave</key>
+-    <map>
+-      <key>Comment</key>
+-      <string>Display a chat message when avatar leaves chat distance</string>
+-      <key>Persist</key>
+       <integer>1</integer>
+-      <key>Type</key>
+-      <string>Boolean</string>
+-      <key>Value</key>
+-      <integer>0</integer>
+     </map>
+-	
+-  <key>RadarReportDrawRangeEnter</key>
++    <key>GridListDownloadURL</key>
+     <map>
+       <key>Comment</key>
+-      <string>Display a chat message when avatar enters draw distance</string>
 +      <string>Fetch a grid list from this URL.</string>
        <key>Persist</key>
        <integer>1</integer>
@@ -1109,11 +1138,11 @@ index 0b1ba83..0fd329e 100644
 +      <string>http://phoenixviewer.com/app/fsdata/grids.xml</string>
      </map>
 -	
--	<key>RadarReportChatRangeLeave</key>
+-  <key>RadarReportDrawRangeLeave</key>
 +    <key>LastConnectedGrid</key>
      <map>
        <key>Comment</key>
--      <string>Display a chat message when avatar leaves chat distance</string>
+-      <string>Display a chat message when avatar leaves draw distance</string>
 +      <string>Last grid with successful connection</string>
        <key>Persist</key>
        <integer>1</integer>
@@ -1124,12 +1153,12 @@ index 0b1ba83..0fd329e 100644
 -      <integer>0</integer>
 +      <string/>
      </map>
--	
--  <key>RadarReportDrawRangeEnter</key>
+-
+-  <key>RadarReportSimRangeEnter</key>
 +    <key>OpensimPrefsAddGrid</key>
      <map>
        <key>Comment</key>
--      <string>Display a chat message when avatar enters draw distance</string>
+-      <string>Display a chat message when avatar enteres local region</string>
 +      <string>Transient string for adding new grids in Preferences > Opensim</string>
        <key>Persist</key>
 -      <integer>1</integer>
@@ -1139,10 +1168,10 @@ index 0b1ba83..0fd329e 100644
        <integer>0</integer>
 -    </map>
 -	
--  <key>RadarReportDrawRangeLeave</key>
+-	<key>RadarReportSimRangeLeave</key>	
 -    <map>
 -      <key>Comment</key>
--      <string>Display a chat message when avatar leaves draw distance</string>
+-      <string>Display a chat message when avatar leaves local region</string>
 -      <key>Persist</key>
 -      <integer>1</integer>
        <key>Type</key>
@@ -1153,30 +1182,6 @@ index 0b1ba83..0fd329e 100644
 +      <string/>
      </map>
  
--  <key>RadarReportSimRangeEnter</key>
--    <map>
--      <key>Comment</key>
--      <string>Display a chat message when avatar enteres local region</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>0</integer>
--    </map>
--	
--	<key>RadarReportSimRangeLeave</key>	
--    <map>
--      <key>Comment</key>
--      <string>Display a chat message when avatar leaves local region</string>
--      <key>Persist</key>
--      <integer>1</integer>
--      <key>Type</key>
--      <string>Boolean</string>
--      <key>Value</key>
--      <integer>0</integer>
--    </map>
--
 -  <key>PermAllowScriptedMedia</key>
 -    <map>
 -      <key>Comment</key>
@@ -29162,7 +29167,7 @@ index 0b1ba83..0fd329e 100644
  			<key>Persist</key>
  			<integer>1</integer>
  			<key>Type</key>
-@@ -16053,3037 +14341,4868 @@ Change of this parameter will affect the layout of buttons in notification toast
+@@ -16053,3037 +14363,4868 @@ Change of this parameter will affect the layout of buttons in notification toast
  			<key>Value</key>
  			<integer>0</integer>
  		</map>
