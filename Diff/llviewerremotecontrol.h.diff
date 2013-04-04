@@ -1,9 +1,9 @@
 diff --git a/Source/indra/newview/llviewerremotecontrol.h b/Source/indra/newview/llviewerremotecontrol.h
 new file mode 100644
-index 0000000..bd8df1d
+index 0000000..5219ee7
 --- /dev/null
 +++ b/Source/indra/newview/llviewerremotecontrol.h
-@@ -0,0 +1,48 @@
+@@ -0,0 +1,50 @@
 +/** 
 + * @file llviewerremotecontrol.h
 + * @brief Remote Control functionality.
@@ -38,7 +38,9 @@ index 0000000..bd8df1d
 +
 +class LLViewerRemoteControl : public LLSingleton<LLViewerRemoteControl>
 +{
-+	LLVector3 mDelta;
++	S32 mForward;
++	S32 mSlide;
++	S32 mFly;
 +	F32 mYaw;
 +	F32 mPitch;
 +
