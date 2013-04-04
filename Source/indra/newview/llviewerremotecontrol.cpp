@@ -44,7 +44,10 @@
 
 // -----------------------------------------------------------------------------
 LLViewerRemoteControl::LLViewerRemoteControl()
-:	mDelta(LLVector3(0.f, 0.f, 0.f)),
+//:	mDelta(LLVector3(0.f, 0.f, 0.f)),
+:	mForward(0),
+	mSlide(0),
+	mFly(0),
 	mYaw(0.f),
 	mPitch(0.F)
 { }
@@ -53,31 +56,30 @@ LLViewerRemoteControl::~LLViewerRemoteControl() { }
 
 void LLViewerRemoteControl::Tick() { 
 	if (gSavedSettings.getBOOL("EnableRemoteControl")) {
-		if (mPitch < 0.F) 
-			gAgent.setControlFlags(AGENT_CONTROL_PITCH_POS);
-		else if (mPitch > 0.F)
-			gAgent.setControlFlags(AGENT_CONTROL_PITCH_NEG);
+		if (mYaw != 0.f) {
+			if (mPitch < 0.F) 
+				gAgent.setControlFlags(AGENT_CONTROL_PITCH_POS);
+			else if (mPitch > 0.F)
+				gAgent.setControlFlags(AGENT_CONTROL_PITCH_NEG);
+		}
 
 
-		if (mYaw < 0.F)
-			gAgent.setControlFlags(AGENT_CONTROL_YAW_POS);
-		else if (mYaw > 0.F)
-			gAgent.setControlFlags(AGENT_CONTROL_YAW_NEG);
+		if (mYaw != 0.f) {
+			if (mYaw < 0.F)
+				gAgent.setControlFlags(AGENT_CONTROL_YAW_POS);
+			else if (mYaw > 0.F)
+				gAgent.setControlFlags(AGENT_CONTROL_YAW_NEG);
+		}
 
 		
 		if (! (gAgent.getFlying() || !gAgent.canFly() || gAgent.upGrabbed() || !gSavedSettings.getBOOL("AutomaticFly")) )
 			gAgent.setFlying(true);
 
-		if (mDelta[0] != 0.f)
-			gAgent.moveAt(mDelta[0]);
-		if (mDelta[1] != 0.f)
-			gAgent.moveLeft(mDelta[1]);
-		if (mDelta[2] != 0.f)
-			gAgent.moveUp(mDelta[2]);
-		if (mYaw != 0.f)
-			gAgent.yaw(-mYaw);
-		if (mPitch != 0.f)
-			gAgent.pitch(-mPitch);
+		gAgent.moveAt(mForward, false);
+		gAgent.moveLeft(mSlide);
+		gAgent.moveUp(mFly);
+		gAgent.yaw(-mYaw);
+		gAgent.pitch(-mPitch);
 	}
 }
 
@@ -85,25 +87,29 @@ void LLViewerRemoteControl::Update(LLVector3 deltas, F32 pitch, F32 yaw) {
 	mPitch = pitch;
 	mYaw = yaw;
 
-	if (gSavedSettings.getBOOL("RemoteControlScaleSpeed"))
-		mDelta = deltas;
-	else {
-		if (deltas[0] == 0.f) mDelta[0] = 0.f;
-		else mDelta[0] = deltas[0] > 0.f ? 1.f : 0.f;
+	//if (gSavedSettings.getBOOL("RemoteControlScaleSpeed"))
+		//mDelta = deltas;
+	//else {
+		if (deltas[0] == 0.f) mForward = 0;
+		else mForward = deltas[0] > 0.f ? 1 : -1;
 
-		if (deltas[1] == 0.f) mDelta[1] = 0.f;
-		else mDelta[1] = deltas[1] > 0.f ? 1.f : 0.f;
+		if (deltas[1] == 0.f) mSlide = 0.f;
+		else mSlide = deltas[1] > 0.f ? 1 : -1;
 
-		if (deltas[2] == 0.f) mDelta[2] = 0.f;
-		else mDelta[2] = deltas[2] > 0.f ? 1.f : 0.f;
-	}
+		if (deltas[2] == 0.f) mFly = 0.f;
+		else mFly = deltas[2] > 0.f ? 1 : -1;
+	//}
 }
 
 void LLViewerRemoteControl::Reset() {
-	mDelta[0] = 0.f;
-	mDelta[1] = 0.f;
-	mDelta[2] = 0.f;
-
+	mForward = 0;
+	mSlide = 0;
+	mFly = 0;
 	mPitch = 0.f;
-	mYaw = 0.f;
+	mYaw = 0.f;
+	gAgent.moveAt(0);
+	gAgent.moveLeft(0);
+	gAgent.moveUp(0);
+	gAgent.yaw(0.f);
+	gAgent.pitch(0.f);
 }

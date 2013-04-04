@@ -6213,6 +6213,10 @@ void process_remote_control(LLMessageSystem *msg, void **user_data) {
 	msg->getF32("Delta", "Yaw", yaw);
 
 	LLViewerRemoteControl::getInstance()->Update(delta, pitch, yaw);
+
+	gSavedSettings.setVector3("PositionDelta", delta);
+	gSavedSettings.setF32("PitchDelta", pitch);
+	gSavedSettings.setF32("YawDelta", yaw);
 }
 
 void process_clear_remote_control(LLMessageSystem *mesgys, void **user_data) {
