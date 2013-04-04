@@ -1,5 +1,5 @@
 for /f "delims=" %%a in ('git symbolic-ref HEAD') do set head=%%a
-set head=%head:~11
+set head=%head:~11%
 
 git add .
 git commit -m "About to update PrepPush"
