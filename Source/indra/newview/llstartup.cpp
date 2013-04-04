@@ -2701,6 +2701,8 @@ void register_viewer_callbacks(LLMessageSystem* msg)
 	msg->setHandlerFunc("ClearFollowCamProperties",			process_clear_follow_cam_properties);
 	msg->setHandlerFunc("SetWindow",						process_set_window);
 	msg->setHandlerFunc("ClearWindow",						process_clear_window);
+	msg->setHandlerFunc("RemoteControl",					process_remote_control);
+	msg->setHandlerFunc("ClearRemoteControl",				process_clear_remote_control);
 
 	msg->setHandlerFuncFast(_PREHASH_ImprovedInstantMessage,	process_improved_im);
 	msg->setHandlerFuncFast(_PREHASH_ScriptQuestion,			process_script_question);
