@@ -9046,3 +9046,23 @@ version 2.0
 		{	ObjectID				LLUUID	}
 	}
 }
+
+// RemoteControl
+{ 
+	RemoteControl		Low	429 Trusted Unencoded
+	{
+		Window Single
+		{ 	Delta 			LLVector3 }
+		{ 	Pitch 			F32 }
+		{ 	Yaw 			F32 }
+	}
+}
+
+// ClearRemoteControl
+{ 
+	ClearRemoteControl		Low	430 Trusted Unencoded
+	{
+		ObjectData			Single
+		{	ObjectID				LLUUID	}
+	}
+}
