@@ -1,0 +1,31 @@
+diff --git a/Source/indra/newview/pipeline.cpp b/Source/indra/newview/pipeline.cpp
+index ba2fa04..4648c6a 100644
+--- a/Source/indra/newview/pipeline.cpp
++++ b/Source/indra/newview/pipeline.cpp
+@@ -8379,7 +8379,7 @@ void LLPipeline::setupSpotLight(LLGLSLShader& shader, LLDrawable* drawablep)
+ 	n.normalize();
+ 	
+ 	F32 proj_range = far_clip - near_clip;
+-	glh::matrix4f light_proj = gl_perspective(fovy, aspect, near_clip, far_clip);
++	glh::matrix4f light_proj = gl_perspective(fovy, aspect, near_clip, far_clip, gSavedSettings.getBOOL("ControlSpotLightFrustum"));
+ 	screen_to_light = trans * light_proj * screen_to_light;
+ 	shader.uniformMatrix4fv(LLShaderMgr::PROJECTOR_MATRIX, 1, FALSE, screen_to_light.m);
+ 	shader.uniform1f(LLShaderMgr::PROJECTOR_NEAR, near_clip);
+@@ -9886,7 +9886,7 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
+ 			F32 fovy = fov * RAD_TO_DEG;
+ 			F32 aspect = width/height;
+ 			
+-			proj[i+4] = gl_perspective(fovy, aspect, near_clip, far_clip);
++			proj[i+4] = gl_perspective(fovy, aspect, near_clip, far_clip, gSavedSettings.getBOOL("ControlShadowFrustum"));
+ 
+ 			//translate and scale to from [-1, 1] to [0, 1]
+ 			glh::matrix4f trans(0.5f, 0.f, 0.f, 0.5f,
+@@ -10104,7 +10104,7 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
+ 		F32 distance = (pos-camera.getOrigin()).length();
+ 		F32 fov = atanf(tdim.mV[1]/distance)*2.f*RAD_TO_DEG;
+ 		F32 aspect = tdim.mV[0]/tdim.mV[1];
+-		glh::matrix4f persp = gl_perspective(fov, aspect, 1.f, 256.f);
++		glh::matrix4f persp = gl_perspective(fov, aspect, 1.f, 256.f, gSavedSettings.getBOOL("ControlImposterFrustum"));
+ 		glh_set_current_projection(persp);
+ 		gGL.loadMatrix(persp.m);
+ 
