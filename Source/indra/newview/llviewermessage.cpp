@@ -94,6 +94,7 @@
 #include "llviewermenu.h"
 #include "llviewerinventory.h"
 #include "llviewerjoystick.h"
+#include "llviewerremotecontrol.h"
 #include "llviewernetwork.h" // <FS:AW opensim currency support>
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
@@ -6200,6 +6201,22 @@ void process_clear_window(LLMessageSystem *mesgsys, void **user_data)
 
 	LLFollowCamMgr::removeScriptFollowCam(source_id);
 	LLViewerCamera::setManualProjectionMatrixSet(false);
+}
+
+void process_remote_control(LLMessageSystem *msg, void **user_data) {
+	LLVector3 delta;
+	F32 pitch;
+	F32 yaw;
+
+	msg->getVector3("Delta", "Position", delta);
+	msg->getF32("Delta", "Pitch", pitch);
+	msg->getF32("Delta", "Yaw", yaw);
+
+	LLViewerRemoteControl::getInstance()->Update(delta, pitch, yaw);
+}
+
+void process_clear_remote_control(LLMessageSystem *mesgys, void **user_data) {
+	LLViewerRemoteControl::getInstance()->Reset();
 }
 
 // Culled from newsim lltask.cpp

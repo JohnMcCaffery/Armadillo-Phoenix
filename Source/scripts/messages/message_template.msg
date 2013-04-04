@@ -9051,8 +9051,8 @@ version 2.0
 { 
 	RemoteControl		Low	429 Trusted Unencoded
 	{
-		Window Single
-		{ 	Delta 			LLVector3 }
+		Deltas Single
+		{ 	Position 		LLVector3 }
 		{ 	Pitch 			F32 }
 		{ 	Yaw 			F32 }
 	}
