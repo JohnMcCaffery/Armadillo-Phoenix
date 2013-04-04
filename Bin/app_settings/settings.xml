@@ -2,6 +2,18 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="llsd.xsd">
 	<map>
+    <key>PitchDelta</key>
+    <map>
+      <key>Comment</key>
+      <string>The delta value remote control is supplying for camera pitch to move the avatar.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.0</real>
+    </map>    <key>YawDelta</key>    <map>      <key>Comment</key>      <string>The delta value remote control is supplying for camera yaw to move the avatar.</string>      <key>Persist</key>      <integer>0</integer>      <key>Type</key>      <string>F32</string>      <key>Value</key>      <real>0.0</real>    </map>    <key>PositionDelta</key>    <map>      <key>Comment</key>      <string>The delta value remote control is supplying for position to move the avatar.</string>      <key>Persist</key>      <integer>0</integer>      <key>Type</key>      <string>Vector3</string>      <key>Value</key>      <array>        <real>0.0</real>        <real>0.0</real>        <real>0.0</real>      </array>    </map>
+
     <key>RemoteControlScaleSpeed</key>
     <map>
       <key>Comment</key>
@@ -24,50 +36,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>ControlRenderFrustum</key>
-		<map>
-			<key>Comment</key>
-			<string>Whether to use the alternative view frustum when getting the projection matrix in the render method.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>1</integer>
-		</map>		
-		<key>ControlSpotLightFrustum</key>
-		<map>
-			<key>Comment</key>
-			<string>Whether to use the alternative view frustum when getting the projection matrix in the spot light method.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>0</integer>
-		</map>		
-		<key>ControlShadowFrustum</key>
-		<map>
-			<key>Comment</key>
-			<string>Whether to use the alternative view frustum when getting the projection matrix in the shadow method.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>0</integer>
-		</map>		
-		<key>ControlImposterFrustum</key>
-		<map>
-			<key>Comment</key>
-			<string>Whether to use the alternative view frustum when getting the projection matrix in the imposter method.</string>
-			<key>Persist</key>
-			<integer>1</integer>
-			<key>Type</key>
-			<string>Boolean</string>
-			<key>Value</key>
-			<integer>0</integer>
-		</map>		
     
 		<key>InterpolateScriptFollowCam</key>
 		<map>
