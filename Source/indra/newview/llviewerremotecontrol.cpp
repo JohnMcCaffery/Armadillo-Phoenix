@@ -85,7 +85,7 @@ void LLViewerRemoteControl::Update(LLVector3 deltas, F32 pitch, F32 yaw) {
 	mPitch = pitch;
 	mYaw = yaw;
 
-	if (gSavedSettings.getBOOL("ScaleSpeed"))
+	if (gSavedSettings.getBOOL("RemoteControlScaleSpeed"))
 		mDelta = deltas;
 	else {
 		if (deltas[0] == 0.f) mDelta[0] = 0.f;

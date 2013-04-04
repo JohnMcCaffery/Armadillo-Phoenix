@@ -2,7 +2,29 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="llsd.xsd">
 	<map>
-		<key>ControlRenderFrustum</key>
+    <key>RemoteControlScaleSpeed</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether to allow the scale how far the avatar moves with the deltas or just use unit values when moving the avatar via remote control packets.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>EnableRemoteControl</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether to allow the LLViewerRemoteControl class to control the position of the avatar.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>ControlRenderFrustum</key>
 		<map>
 			<key>Comment</key>
 			<string>Whether to use the alternative view frustum when getting the projection matrix in the render method.</string>
