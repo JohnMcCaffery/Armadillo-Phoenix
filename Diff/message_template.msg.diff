@@ -1,8 +1,8 @@
 diff --git a/Source/scripts/messages/message_template.msg b/Source/scripts/messages/message_template.msg
-index c2df9ad..accfb0f 100644
+index c2df9ad..1a8aafb 100644
 --- a/Source/scripts/messages/message_template.msg
 +++ b/Source/scripts/messages/message_template.msg
-@@ -9020,3 +9020,29 @@ version 2.0
+@@ -9020,3 +9020,49 @@ version 2.0
  	}
  }
  
@@ -27,6 +27,26 @@ index c2df9ad..accfb0f 100644
 +// ClearWindow
 +{ 
 +	ClearWindow		Low	428 Trusted Unencoded
++	{
++		ObjectData			Single
++		{	ObjectID				LLUUID	}
++	}
++}
++
++// RemoteControl
++{ 
++	RemoteControl		Low	429 Trusted Unencoded
++	{
++		Window Single
++		{ 	Delta 			LLVector3 }
++		{ 	Pitch 			F32 }
++		{ 	Yaw 			F32 }
++	}
++}
++
++// ClearRemoteControl
++{ 
++	ClearRemoteControl		Low	430 Trusted Unencoded
 +	{
 +		ObjectData			Single
 +		{	ObjectID				LLUUID	}
