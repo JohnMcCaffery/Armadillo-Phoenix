@@ -32,7 +32,9 @@
 
 class LLViewerRemoteControl : public LLSingleton<LLViewerRemoteControl>
 {
-	LLVector3 mDelta;
+	S32 mForward;
+	S32 mSlide;
+	S32 mFly;
 	F32 mYaw;
 	F32 mPitch;
 

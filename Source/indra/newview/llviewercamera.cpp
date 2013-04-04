@@ -81,9 +81,9 @@ glh::matrix4f gl_pick_matrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height
 	return glh::matrix4f(m);
 }
 
-glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar, bool render)
+glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
 {
-	if (render && gSavedSettings.getBOOL("AllowOverrideProjectionMatrix") && lManualProjectionMatrixSet) {
+	if (gSavedSettings.getBOOL("AllowOverrideProjectionMatrix") && lManualProjectionMatrixSet) {
 		LLVector3 diag = gSavedSettings.getVector3("PerspectiveMatrixDiagonal");
 		LLVector3 other = gSavedSettings.getVector3("PerspectiveMatrixOther");
 		return glh::matrix4f(
@@ -420,7 +420,7 @@ void LLViewerCamera::setPerspective(BOOL for_selection,
 
 	calcProjection(z_far); // Update the projection matrix cache
 
-	proj_mat *= gl_perspective(fov_y,aspect,z_near,z_far, gSavedSettings.getBOOL("ControlRenderFrustum"));
+	proj_mat *= gl_perspective(fov_y,aspect,z_near,z_far);
 
 	gGL.loadMatrix(proj_mat.m);
 
