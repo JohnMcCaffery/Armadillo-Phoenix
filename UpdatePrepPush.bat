@@ -9,7 +9,7 @@ git checkout %head% PrepPush.bat
 git add .
 git commit -m "Updated PrepPush."
 
-git checkout FirestormHead
+git checkout WorkingHead
 git checkout %head% PrepPush.bat
 git add .
 git commit -m "Updated PrepPush."
