@@ -1,6 +1,6 @@
 diff --git a/Source/indra/newview/llviewerremotecontrol.cpp b/Source/indra/newview/llviewerremotecontrol.cpp
 new file mode 100644
-index 0000000..7bbe595
+index 0000000..deba83e
 --- /dev/null
 +++ b/Source/indra/newview/llviewerremotecontrol.cpp
 @@ -0,0 +1,109 @@
@@ -30,7 +30,7 @@ index 0000000..7bbe595
 + * $/LicenseInfo$
 + */
 +
-+//#include "llviewerprecompiledheaders.h"
++#include "llviewerprecompiledheaders.h"
 +
 +#include "llviewerremotecontrol.h"
 +
