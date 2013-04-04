@@ -22,6 +22,7 @@ xcopy /d /y %original%%messages%*.msg Source%messages%
 git add Source/*
 git commit -m "Latest from Firestorm Trunk"
 
+git checkout WorkingHead
 xcopy /y ..%src%*.cpp Source%src%
 xcopy /y ..%src%*.h Source%src%
 xcopy /y ..%settings%*.xml Source%settings%
