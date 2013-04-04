@@ -24,7 +24,7 @@
  * $/LicenseInfo$
  */
 
-//#include "llviewerprecompiledheaders.h"
+#include "llviewerprecompiledheaders.h"
 
 #include "llviewerremotecontrol.h"
 
