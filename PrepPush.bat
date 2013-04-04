@@ -8,6 +8,8 @@ set workingDir=%CD%
 for /f "delims=" %%a in ('git symbolic-ref HEAD') do set head=%%a
 set head=%head:~11%
 
+git commit -m "Saving state before pulling changes."
+
 cd ..\..\phoenix-firestorm-release
 REM hg pull -insecure -u
 cd %workingDir%
@@ -22,6 +24,7 @@ xcopy /d /y %original%%messages%*.msg Source%messages%
 git add Source/*
 git commit -m "Latest from Firestorm Trunk"
 
+git checkout WorkingHead
 xcopy /y ..%src%*.cpp Source%src%
 xcopy /y ..%src%*.h Source%src%
 xcopy /y ..%settings%*.xml Source%settings%
