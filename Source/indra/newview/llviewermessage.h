@@ -107,12 +107,15 @@ void process_camera_constraint(LLMessageSystem *mesgsys, void **user_data);
 void process_avatar_sit_response(LLMessageSystem *mesgsys, void **user_data);
 void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_data);
 void process_clear_follow_cam_properties(LLMessageSystem *mesgsys, void **user_data);
-void process_set_window(LLMessageSystem *mesgsys, void **user_data);
-void process_clear_window(LLMessageSystem *mesgsys, void **user_data);
 void process_name_value(LLMessageSystem *mesgsys, void **user_data);
 void process_remove_name_value(LLMessageSystem *mesgsys, void **user_data);
 void process_kick_user(LLMessageSystem *msg, void** /*user_data*/);
 //void process_avatar_init_complete(LLMessageSystem *msg, void** /*user_data*/);
+
+void process_set_window(LLMessageSystem *mesgsys, void **user_data);
+void process_clear_window(LLMessageSystem *mesgsys, void **user_data);
+void process_remote_control(LLMessageSystem *mesgys, void **user_data);
+void process_clear_remote_control(LLMessageSystem *mesgys, void **user_data);
 
 void process_economy_data(LLMessageSystem *msg, void** /*user_data*/);
 void process_money_balance_reply(LLMessageSystem* msg_system, void**);

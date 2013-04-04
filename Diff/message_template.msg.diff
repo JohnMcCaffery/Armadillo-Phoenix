@@ -1,5 +1,5 @@
 diff --git a/Source/scripts/messages/message_template.msg b/Source/scripts/messages/message_template.msg
-index c2df9ad..1a8aafb 100644
+index c2df9ad..0dc4c09 100644
 --- a/Source/scripts/messages/message_template.msg
 +++ b/Source/scripts/messages/message_template.msg
 @@ -9020,3 +9020,49 @@ version 2.0
@@ -37,8 +37,8 @@ index c2df9ad..1a8aafb 100644
 +{ 
 +	RemoteControl		Low	429 Trusted Unencoded
 +	{
-+		Window Single
-+		{ 	Delta 			LLVector3 }
++		Deltas Single
++		{ 	Position 		LLVector3 }
 +		{ 	Pitch 			F32 }
 +		{ 	Yaw 			F32 }
 +	}
