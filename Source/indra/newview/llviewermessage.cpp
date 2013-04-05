@@ -6147,6 +6147,40 @@ void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_dat
 //end Ventrella 
 
 
+void process_set_camera(LLMessageSystem *msg, void ** window)
+{
+	LLVector3 position;
+	LLVector3 positionDelta;
+	LLVector3 lookAt;
+	LLVector3 lookAtDelta;
+	msg->getVector3("Camera", "Position", position);
+	msg->getVector3("Camera", "PositionDelta", positionDelta);
+	msg->getVector3("Camera", "LookAt", lookAt);
+	msg->getVector3("Camera", "LookAtDelta", lookAtDelta);
+
+	U32 tickLength;
+	msg->getU32("Camera", "TickLength", tickLength);
+
+	LLUUID		source_id;
+	msg->getUUID("Camera", "Source", source_id);
+
+	LLViewerObject* objectp = gObjectList.findObject(source_id);
+	if (objectp)
+	{
+		objectp->setFlagsWithoutUpdate(FLAGS_CAMERA_SOURCE, TRUE);
+	}
+	LLFollowCamMgr::setWindow(source_id, position, positionDelta, lookAt, lookAtDelta, tickLength);
+}
+
+void process_clear_camera(LLMessageSystem *mesgsys, void **user_data)
+{
+	LLUUID		source_id;
+
+	mesgsys->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, source_id);
+
+	LLFollowCamMgr::removeScriptFollowCam(source_id);
+}
+
 void process_set_window(LLMessageSystem *msg, void ** window)
 {
 	LLMatrix4 mat;
@@ -6166,40 +6200,13 @@ void process_set_window(LLMessageSystem *msg, void ** window)
 
 	gSavedSettings.setVector3("PerspectiveMatrixDiagonal", diag);
 	gSavedSettings.setVector3("PerspectiveMatrixOther", other);
-
-	LLVector3 position;
-	LLVector3 positionDelta;
-	LLVector3 lookAt;
-	LLVector3 lookAtDelta;
-	msg->getVector3("Window", "Position", position);
-	msg->getVector3("Window", "PositionDelta", positionDelta);
-	msg->getVector3("Window", "LookAt", lookAt);
-	msg->getVector3("Window", "LookAtDelta", lookAtDelta);
-
-	U32 tickLength;
-	msg->getU32("Window", "TickLength", tickLength);
-
-	LLUUID		source_id;
-	msg->getUUID("Window", "Source", source_id);
 	
 	LLViewerCamera::setManualProjectionMatrixSet(true);
 	LLViewerCamera::setManualProjectionMatrix(mat);
-
-	LLViewerObject* objectp = gObjectList.findObject(source_id);
-	if (objectp)
-	{
-		objectp->setFlagsWithoutUpdate(FLAGS_CAMERA_SOURCE, TRUE);
-	}
-	LLFollowCamMgr::setWindow(source_id, position, positionDelta, lookAt, lookAtDelta, tickLength);
 }
 
 void process_clear_window(LLMessageSystem *mesgsys, void **user_data)
 {
-	LLUUID		source_id;
-
-	mesgsys->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, source_id);
-
-	LLFollowCamMgr::removeScriptFollowCam(source_id);
 	LLViewerCamera::setManualProjectionMatrixSet(false);
 }
 
