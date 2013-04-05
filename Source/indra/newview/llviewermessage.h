@@ -112,9 +112,11 @@ void process_remove_name_value(LLMessageSystem *mesgsys, void **user_data);
 void process_kick_user(LLMessageSystem *msg, void** /*user_data*/);
 //void process_avatar_init_complete(LLMessageSystem *msg, void** /*user_data*/);
 
+void process_set_camera(LLMessageSystem *mesgsys, void **user_data);
 void process_set_window(LLMessageSystem *mesgsys, void **user_data);
-void process_clear_window(LLMessageSystem *mesgsys, void **user_data);
 void process_remote_control(LLMessageSystem *mesgys, void **user_data);
+void process_clear_camera(LLMessageSystem *mesgsys, void **user_data);
+void process_clear_window(LLMessageSystem *mesgsys, void **user_data);
 void process_clear_remote_control(LLMessageSystem *mesgys, void **user_data);
 
 void process_economy_data(LLMessageSystem *msg, void** /*user_data*/);

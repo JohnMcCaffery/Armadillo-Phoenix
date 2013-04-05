@@ -2,28 +2,16 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="llsd.xsd">
 	<map>
-    <key>PitchDelta</key>
+    <key>RemoteControlRunThreshold</key>
     <map>
       <key>Comment</key>
-      <string>The delta value remote control is supplying for camera pitch to move the avatar.</string>
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>0.0</real>
-    </map>    <key>YawDelta</key>    <map>      <key>Comment</key>      <string>The delta value remote control is supplying for camera yaw to move the avatar.</string>      <key>Persist</key>      <integer>0</integer>      <key>Type</key>      <string>F32</string>      <key>Value</key>      <real>0.0</real>    </map>    <key>PositionDelta</key>    <map>      <key>Comment</key>      <string>The delta value remote control is supplying for position to move the avatar.</string>      <key>Persist</key>      <integer>0</integer>      <key>Type</key>      <string>Vector3</string>      <key>Value</key>      <array>        <real>0.0</real>        <real>0.0</real>        <real>0.0</real>      </array>    </map>
-
-    <key>RemoteControlScaleSpeed</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether to allow the scale how far the avatar moves with the deltas or just use unit values when moving the avatar via remote control packets.</string>
+      <string>The threshold for running. If the forward delta is greater than this the avatar is set to run.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>Boolean</string>
+      <string>F32</string>
       <key>Value</key>
-      <integer>0</integer>
+      <real>.25</real>
     </map>
     <key>EnableRemoteControl</key>
     <map>
