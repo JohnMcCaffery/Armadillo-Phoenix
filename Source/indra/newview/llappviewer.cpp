@@ -55,7 +55,6 @@
 #include "llstartup.h"
 #include "llfocusmgr.h"
 #include "llviewerjoystick.h"
-#include "llviewerremotecontrol.h"
 #include "llallocator.h"
 #include "llares.h" 
 #include "llcurl.h"
@@ -1336,7 +1335,6 @@ bool LLAppViewer::mainLoop()
 	LLTimer frameTimer,idleTimer;
 	LLTimer debugTime;
 	LLViewerJoystick* joystick(LLViewerJoystick::getInstance());
-	LLViewerRemoteControl* remoteControl(LLViewerRemoteControl::getInstance());
 	joystick->setNeedsReset(true);
 
     LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
@@ -1420,7 +1418,6 @@ bool LLAppViewer::mainLoop()
 				{
 					LLMemType mjk(LLMemType::MTYPE_JOY_KEY);
 					joystick->scanJoystick();
-					remoteControl->Tick();
 					// <FS:Ansariel> Chalice Yao's crouch toggle
 					static LLCachedControl<bool> fsCrouchToggle(gSavedSettings, "FSCrouchToggle");
 					static LLCachedControl<bool> fsCrouchToggleStatus(gSavedSettings, "FSCrouchToggleStatus");

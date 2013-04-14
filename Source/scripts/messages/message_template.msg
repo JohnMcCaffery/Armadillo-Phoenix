@@ -9020,11 +9020,15 @@ version 2.0
 	}
 }
 
-// SetCamera
+// SetWindow
 { 
-	SetCamera		Low	427 Trusted Unencoded
+	SetWindow		Low	427 Trusted Unencoded
 	{
-		Camera Single
+		Window Single
+		{ 	MatR1 			LLVector4 }
+		{ 	MatR2 			LLVector4 }
+		{ 	MatR3 			LLVector4 }
+		{ 	MatR4 			LLVector4 }
 		{ 	Position 		LLVector3 }
 		{ 	PositionDelta 	LLVector3 }
 		{ 	LookAt 			LLVector3 }
@@ -9034,49 +9038,9 @@ version 2.0
 	}
 }
 
-// ClearCamera
-{ 
-	ClearCamera		Low	428 Trusted Unencoded
-	{
-		ObjectData			Single
-		{	ObjectID				LLUUID	}
-	}
-}
-// SetWindow
-{ 
-	SetWindow		Low	429 Trusted Unencoded
-	{
-		Window Single
-		{ 	MatR1 			LLVector4 }
-		{ 	MatR2 			LLVector4 }
-		{ 	MatR3 			LLVector4 }
-		{ 	MatR4 			LLVector4 }
-	}
-}
-
 // ClearWindow
 { 
-	ClearWindow		Low	430 Trusted Unencoded
-	{
-		ObjectData			Single
-		{	ObjectID				LLUUID	}
-	}
-}
-
-// RemoteControl
-{ 
-	RemoteControl		Low	431 Trusted Unencoded
-	{
-		Delta Single
-		{ 	Position 		LLVector3 }
-		{ 	Pitch 			F32 }
-		{ 	Yaw 			F32 }
-	}
-}
-
-// ClearRemoteControl
-{ 
-	ClearRemoteControl		Low	432 Trusted Unencoded
+	ClearWindow		Low	428 Trusted Unencoded
 	{
 		ObjectData			Single
 		{	ObjectID				LLUUID	}

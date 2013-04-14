@@ -56,8 +56,8 @@
 #include <iomanip> // for setprecision
 
 U32 LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
-bool		lManualProjectionMatrixSet; //Whether to set the projection matrix from manually set values.
-LLMatrix4 	lManualProjectionMatrix; //The projection matrix set manually from external values
+bool			lManualProjectionMatrixSet; //Whether to set the projection matrix from manually set values.
+glh::matrix4f 	lManualProjectionMatrix; //The projection matrix set manually from external values
 
 //glu pick matrix implementation borrowed from Mesa3D
 glh::matrix4f gl_pick_matrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLint* viewport)
@@ -84,19 +84,7 @@ glh::matrix4f gl_pick_matrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height
 glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
 {
 	if (gSavedSettings.getBOOL("AllowOverrideProjectionMatrix") && lManualProjectionMatrixSet) {
-		LLVector3 diag = gSavedSettings.getVector3("PerspectiveMatrixDiagonal");
-		LLVector3 other = gSavedSettings.getVector3("PerspectiveMatrixOther");
-		return glh::matrix4f(
-			diag.mV[0], 0.0,		other.mV[0], 0.0,
-			0.0,		diag.mV[1],	other.mV[1], 0.0,
-			0.0,		0.0,		diag.mV[2], other.mV[2],
-			0.0,		0.0,		-1.0,		0.0);
-		//return glh::matrix4f(lManualProjectionMatrix);
-		//return glh::matrix4f(
-			//lManualProjectionMatrix.mMatrix[0][0], lManualProjectionMatrix.mMatrix[0][1], lManualProjectionMatrix.mMatrix[0][2], lManualProjectionMatrix.mMatrix[0][3], 
-			//lManualProjectionMatrix.mMatrix[1][0], lManualProjectionMatrix.mMatrix[1][1], lManualProjectionMatrix.mMatrix[1][2], lManualProjectionMatrix.mMatrix[1][3], 
-			//lManualProjectionMatrix.mMatrix[2][0], lManualProjectionMatrix.mMatrix[2][1], lManualProjectionMatrix.mMatrix[2][2], lManualProjectionMatrix.mMatrix[2][3], 
-			//lManualProjectionMatrix.mMatrix[3][0], lManualProjectionMatrix.mMatrix[3][1], lManualProjectionMatrix.mMatrix[3][2], lManualProjectionMatrix.mMatrix[3][3]);
+		return lManualProjectionMatrix;
 	} else {
 		GLfloat f = 1.f/tanf(DEG_TO_RAD*fovy/2.f);
 
@@ -920,16 +908,17 @@ void LLViewerCamera::updateCameraAngle( void* user_data, const LLSD& value)
 	self->setDefaultFOV(value.asReal());	
 }
 
+bool			LLViewerCamera::sManualProjectionMatrixSet; //Whether to set the projection matrix from manually set values.
+glh::matrix4f 	LLViewerCamera::sManualProjectionMatrix; //The projection matrix set manually from external values
+
+
 void LLViewerCamera::setManualProjectionMatrix(LLMatrix4 mat) 
 {
-	lManualProjectionMatrix = mat;
-	/*
 	lManualProjectionMatrix = glh::matrix4f(
-		glh::ns_float::real(mat.mMatrix[0][0]), glh::ns_float::real(mat.mMatrix[0][1]), glh::ns_float::real(mat.mMatrix[0][2]), glh::ns_float::real(mat.mMatrix[0][3]), 
-		glh::ns_float::real(mat.mMatrix[1][0]), glh::ns_float::real(mat.mMatrix[1][1]), glh::ns_float::real(mat.mMatrix[1][2]), glh::ns_float::real(mat.mMatrix[1][3]), 
-		glh::ns_float::real(mat.mMatrix[2][0]), glh::ns_float::real(mat.mMatrix[2][1]), glh::ns_float::real(mat.mMatrix[2][2]), glh::ns_float::real(mat.mMatrix[2][3]), 
-		glh::ns_float::real(mat.mMatrix[3][0]), glh::ns_float::real(mat.mMatrix[3][1]), glh::ns_float::real(mat.mMatrix[3][2]), glh::ns_float::real(mat.mMatrix[3][3]));
-		*/
+		glh::ns_float::real(mat.mMatrix[0][0]), glh::ns_float::real(mat.mMatrix[1][0]), glh::ns_float::real(mat.mMatrix[2][0]), glh::ns_float::real(mat.mMatrix[3][0]), 
+		glh::ns_float::real(mat.mMatrix[0][1]), glh::ns_float::real(mat.mMatrix[1][1]), glh::ns_float::real(mat.mMatrix[2][1]), glh::ns_float::real(mat.mMatrix[3][1]), 
+		glh::ns_float::real(mat.mMatrix[0][2]), glh::ns_float::real(mat.mMatrix[1][2]), glh::ns_float::real(mat.mMatrix[2][2]), glh::ns_float::real(mat.mMatrix[3][2]), 
+		glh::ns_float::real(mat.mMatrix[0][3]), glh::ns_float::real(mat.mMatrix[1][3]), glh::ns_float::real(mat.mMatrix[2][3]), glh::ns_float::real(mat.mMatrix[3][3]));
 }
 
 void LLViewerCamera::setManualProjectionMatrixSet(bool set) 
