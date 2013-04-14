@@ -149,6 +149,8 @@ protected:
 	S32					mScreenPixelArea; // Pixel area of entire window
 	F32					mZoomFactor;
 	S16					mZoomSubregion;
+	static bool				sManualProjectionMatrixSet; //Whether to set the projection matrix from manually set values.
+	static glh::matrix4f 	sManualProjectionMatrix; //The projection matrix set manually from external values
 
 public:
 } LL_ALIGN_POSTFIX(16);
