@@ -94,6 +94,7 @@
 #include "llviewermenu.h"
 #include "llviewerinventory.h"
 #include "llviewerjoystick.h"
+#include "llviewerremotecontrol.h"
 #include "llviewernetwork.h" // <FS:AW opensim currency support>
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
@@ -6146,6 +6147,40 @@ void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_dat
 //end Ventrella 
 
 
+void process_set_camera(LLMessageSystem *msg, void ** window)
+{
+	LLVector3 position;
+	LLVector3 positionDelta;
+	LLVector3 lookAt;
+	LLVector3 lookAtDelta;
+	msg->getVector3("Camera", "Position", position);
+	msg->getVector3("Camera", "PositionDelta", positionDelta);
+	msg->getVector3("Camera", "LookAt", lookAt);
+	msg->getVector3("Camera", "LookAtDelta", lookAtDelta);
+
+	U32 tickLength;
+	msg->getU32("Camera", "TickLength", tickLength);
+
+	LLUUID		source_id;
+	msg->getUUID("Camera", "Source", source_id);
+
+	LLViewerObject* objectp = gObjectList.findObject(source_id);
+	if (objectp)
+	{
+		objectp->setFlagsWithoutUpdate(FLAGS_CAMERA_SOURCE, TRUE);
+	}
+	LLFollowCamMgr::setWindow(source_id, position, positionDelta, lookAt, lookAtDelta, tickLength);
+}
+
+void process_clear_camera(LLMessageSystem *mesgsys, void **user_data)
+{
+	LLUUID		source_id;
+
+	mesgsys->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, source_id);
+
+	LLFollowCamMgr::removeScriptFollowCam(source_id);
+}
+
 void process_set_window(LLMessageSystem *msg, void ** window)
 {
 	LLMatrix4 mat;
@@ -6160,40 +6195,39 @@ void process_set_window(LLMessageSystem *msg, void ** window)
 	msg->getVector4("Window", "MatR4", r4);
 	mat.initRows(r1, r2, r3, r4);
 
-	LLVector3 position;
-	LLVector3 positionDelta;
-	LLVector3 lookAt;
-	LLVector3 lookAtDelta;
-	msg->getVector3("Window", "Position", position);
-	msg->getVector3("Window", "PositionDelta", positionDelta);
-	msg->getVector3("Window", "LookAt", lookAt);
-	msg->getVector3("Window", "LookAtDelta", lookAtDelta);
+	LLVector3 diag(r1.mV[0], r2.mV[1], r3.mV[2]);
+	LLVector3 other(r1.mV[2], r2.mV[2], r3.mV[3]);
 
-	U32 tickLength;
-	msg->getU32("Window", "TickLength", tickLength);
-
-	LLUUID		source_id;
-	msg->getUUID("Window", "Source", source_id);
+	gSavedSettings.setVector3("PerspectiveMatrixDiagonal", diag);
+	gSavedSettings.setVector3("PerspectiveMatrixOther", other);
 	
 	LLViewerCamera::setManualProjectionMatrixSet(true);
 	LLViewerCamera::setManualProjectionMatrix(mat);
-
-	LLViewerObject* objectp = gObjectList.findObject(source_id);
-	if (objectp)
-	{
-		objectp->setFlagsWithoutUpdate(FLAGS_CAMERA_SOURCE, TRUE);
-	}
-	LLFollowCamMgr::setWindow(source_id, position, positionDelta, lookAt, lookAtDelta, tickLength);
 }
 
 void process_clear_window(LLMessageSystem *mesgsys, void **user_data)
 {
-	LLUUID		source_id;
-
-	mesgsys->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, source_id);
-
-	LLFollowCamMgr::removeScriptFollowCam(source_id);
 	LLViewerCamera::setManualProjectionMatrixSet(false);
+}
+
+void process_remote_control(LLMessageSystem *msg, void **user_data) {
+	LLVector3 delta;
+	F32 pitch;
+	F32 yaw;
+
+	msg->getVector3("Delta", "Position", delta);
+	msg->getF32("Delta", "Pitch", pitch);
+	msg->getF32("Delta", "Yaw", yaw);
+
+	LLViewerRemoteControl::getInstance()->Update(delta, pitch, yaw);
+
+	gSavedSettings.setVector3("PositionDelta", delta);
+	gSavedSettings.setF32("PitchDelta", pitch);
+	gSavedSettings.setF32("YawDelta", yaw);
+}
+
+void process_clear_remote_control(LLMessageSystem *mesgys, void **user_data) {
+	LLViewerRemoteControl::getInstance()->Reset();
 }
 
 // Culled from newsim lltask.cpp

@@ -1,20 +1,16 @@
 diff --git a/Source/scripts/messages/message_template.msg b/Source/scripts/messages/message_template.msg
-index c2df9ad..accfb0f 100644
+index c2df9ad..4220abd 100644
 --- a/Source/scripts/messages/message_template.msg
 +++ b/Source/scripts/messages/message_template.msg
-@@ -9020,3 +9020,29 @@ version 2.0
+@@ -9020,3 +9020,66 @@ version 2.0
  	}
  }
  
-+// SetWindow
++// SetCamera
 +{ 
-+	SetWindow		Low	427 Trusted Unencoded
++	SetCamera		Low	427 Trusted Unencoded
 +	{
-+		Window Single
-+		{ 	MatR1 			LLVector4 }
-+		{ 	MatR2 			LLVector4 }
-+		{ 	MatR3 			LLVector4 }
-+		{ 	MatR4 			LLVector4 }
++		Camera Single
 +		{ 	Position 		LLVector3 }
 +		{ 	PositionDelta 	LLVector3 }
 +		{ 	LookAt 			LLVector3 }
@@ -24,9 +20,50 @@ index c2df9ad..accfb0f 100644
 +	}
 +}
 +
++// ClearCamera
++{ 
++	ClearCamera		Low	428 Trusted Unencoded
++	{
++		ObjectData			Single
++		{	ObjectID				LLUUID	}
++	}
++}
++
++// SetWindow
++{ 
++	SetWindow		Low	429 Trusted Unencoded
++	{
++		Window Single
++		{ 	MatR1 			LLVector4 }
++		{ 	MatR2 			LLVector4 }
++		{ 	MatR3 			LLVector4 }
++		{ 	MatR4 			LLVector4 }
++	}
++}
++
 +// ClearWindow
 +{ 
-+	ClearWindow		Low	428 Trusted Unencoded
++	ClearWindow		Low	430 Trusted Unencoded
++	{
++		ObjectData			Single
++		{	ObjectID				LLUUID	}
++	}
++}
++
++// RemoteControl
++{ 
++	RemoteControl		Low	431 Trusted Unencoded
++	{
++		Delta Single
++		{ 	Position 		LLVector3 }
++		{ 	Pitch 			F32 }
++		{ 	Yaw 			F32 }
++	}
++}
++
++// ClearRemoteControl
++{ 
++	ClearRemoteControl		Low	432 Trusted Unencoded
 +	{
 +		ObjectData			Single
 +		{	ObjectID				LLUUID	}
