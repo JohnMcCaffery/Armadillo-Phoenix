@@ -1,5 +1,5 @@
 diff --git a/Source/indra/newview/llviewercamera.h b/Source/indra/newview/llviewercamera.h
-index b857c7f..b53cd51 100644
+index b857c7f..61e1632 100644
 --- a/Source/indra/newview/llviewercamera.h
 +++ b/Source/indra/newview/llviewercamera.h
 @@ -33,6 +33,7 @@
@@ -20,12 +20,3 @@ index b857c7f..b53cd51 100644
  protected:
  	void calcProjection(const F32 far_distance) const;
  
-@@ -145,6 +149,8 @@ protected:
- 	S32					mScreenPixelArea; // Pixel area of entire window
- 	F32					mZoomFactor;
- 	S16					mZoomSubregion;
-+	static bool				sManualProjectionMatrixSet; //Whether to set the projection matrix from manually set values.
-+	static glh::matrix4f 	sManualProjectionMatrix; //The projection matrix set manually from external values
- 
- public:
- } LL_ALIGN_POSTFIX(16);

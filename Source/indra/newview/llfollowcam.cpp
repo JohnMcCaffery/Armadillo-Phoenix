@@ -259,7 +259,7 @@ void		LLFollowCamParams::setWindow(LLVector3 position, LLVector3 positionDelta, 
 	setFocus(position + lookAt);
 
 	mLastPosition = position;
-	mLastLookAt = position;
+	mLastLookAt = lookAt;
 
 	mPositionDelta = positionDelta;
 	mLookAtDelta = lookAtDelta;
@@ -279,9 +279,6 @@ void LLFollowCamParams::interpolate()
 		//Get how long it has been since the last update
 		U64 microseconds = current - mLastUpdate;
 		double scale = double(microseconds) / double(mLastUpdate);
-		double microsecondsd = double(current - mLastUpdate);
-		double scaled = microseconds / double(mLastUpdate);
-		printf("Scale: %d Ms: %i ScaleD: %d MicrosecondsD: %d Crt: %i LastUp: %i Thresh: %i TickLength: %i", scale, microseconds, scaled, microsecondsd, current, mLastUpdate, mThreshold, mTickLength);
 		if (microseconds < mThreshold) { //If it hasn't been too long since the last position update interpolate a new position
 			mPosition = mLastPosition + (mPositionDelta * scale);
 			LLVector3 lookAt = mLastLookAt + (mLookAtDelta * scale);
@@ -963,10 +960,10 @@ void LLFollowCamMgr::setWindow( const LLUUID& source, LLVector3 position, LLVect
 void LLFollowCamMgr::removeScriptFollowCam( const LLUUID& source)
 {
 	LLFollowCamParams* params =	getParamsForID(source);
-	param_stack_t::iterator found_it = std::find(sParamStack.begin(), sParamStack.end(), params);
-	if (found_it != sParamStack.end())
+	param_stack_t::iterator found_it = std::find(sScriptParamStack.begin(), sScriptParamStack.end(), params);
+	if (found_it != sScriptParamStack.end())
 	{
-		sParamStack.erase(found_it);
+		sScriptParamStack.erase(found_it);
 	}
 	removeFollowCamParams(source);
 }

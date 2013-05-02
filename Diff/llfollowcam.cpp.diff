@@ -1,5 +1,5 @@
 diff --git a/Source/indra/newview/llfollowcam.cpp b/Source/indra/newview/llfollowcam.cpp
-index b670af1..9e47a47 100644
+index b670af1..e1d8341 100644
 --- a/Source/indra/newview/llfollowcam.cpp
 +++ b/Source/indra/newview/llfollowcam.cpp
 @@ -28,12 +28,14 @@
@@ -25,7 +25,7 @@ index b670af1..9e47a47 100644
  	mPosition = p;
  }
  
-@@ -249,6 +252,44 @@ LLVector3	LLFollowCamParams::getFocus				() const { return mFocus;				}
+@@ -249,6 +252,41 @@ LLVector3	LLFollowCamParams::getFocus				() const { return mFocus;				}
  bool		LLFollowCamParams::getPositionLocked	() const { return mPositionLocked;		}
  bool		LLFollowCamParams::getFocusLocked		() const { return mFocusLocked;			}
  
@@ -36,7 +36,7 @@ index b670af1..9e47a47 100644
 +	setFocus(position + lookAt);
 +
 +	mLastPosition = position;
-+	mLastLookAt = position;
++	mLastLookAt = lookAt;
 +
 +	mPositionDelta = positionDelta;
 +	mLookAtDelta = lookAtDelta;
@@ -56,9 +56,6 @@ index b670af1..9e47a47 100644
 +		//Get how long it has been since the last update
 +		U64 microseconds = current - mLastUpdate;
 +		double scale = double(microseconds) / double(mLastUpdate);
-+		double microsecondsd = double(current - mLastUpdate);
-+		double scaled = microseconds / double(mLastUpdate);
-+		printf("Scale: %d Ms: %i ScaleD: %d MicrosecondsD: %d Crt: %i LastUp: %i Thresh: %i TickLength: %i", scale, microseconds, scaled, microsecondsd, current, mLastUpdate, mThreshold, mTickLength);
 +		if (microseconds < mThreshold) { //If it hasn't been too long since the last position update interpolate a new position
 +			mPosition = mLastPosition + (mPositionDelta * scale);
 +			LLVector3 lookAt = mLastLookAt + (mLookAtDelta * scale);
@@ -70,7 +67,7 @@ index b670af1..9e47a47 100644
  //------------------------------------
  // Constructor
  //------------------------------------
-@@ -448,7 +489,6 @@ void LLFollowCam::update()
+@@ -448,7 +486,6 @@ void LLFollowCam::update()
  }
  
  
@@ -78,7 +75,7 @@ index b670af1..9e47a47 100644
  //-------------------------------------------------------------------------------------
  BOOL LLFollowCam::updateBehindnessConstraint(LLVector3 focus, LLVector3& cam_position)
  {
-@@ -657,7 +697,6 @@ LLVector3	LLFollowCam::getUpVector()
+@@ -657,7 +694,6 @@ LLVector3	LLFollowCam::getUpVector()
  	return mUpVector;			
  }
  
@@ -86,7 +83,7 @@ index b670af1..9e47a47 100644
  //------------------------------------
  // Destructor
  //------------------------------------
-@@ -899,3 +938,43 @@ void LLFollowCamMgr::dump()
+@@ -899,3 +935,43 @@ void LLFollowCamMgr::dump()
  	}
  }
  
@@ -115,10 +112,10 @@ index b670af1..9e47a47 100644
 +void LLFollowCamMgr::removeScriptFollowCam( const LLUUID& source)
 +{
 +	LLFollowCamParams* params =	getParamsForID(source);
-+	param_stack_t::iterator found_it = std::find(sParamStack.begin(), sParamStack.end(), params);
-+	if (found_it != sParamStack.end())
++	param_stack_t::iterator found_it = std::find(sScriptParamStack.begin(), sScriptParamStack.end(), params);
++	if (found_it != sScriptParamStack.end())
 +	{
-+		sParamStack.erase(found_it);
++		sScriptParamStack.erase(found_it);
 +	}
 +	removeFollowCamParams(source);
 +}
