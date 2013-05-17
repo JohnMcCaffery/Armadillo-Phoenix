@@ -1,6 +1,6 @@
 diff --git a/Source/indra/newview/llviewerremotecontrol.cpp b/Source/indra/newview/llviewerremotecontrol.cpp
 new file mode 100644
-index 0000000..dbbcd81
+index 0000000..9739937
 --- /dev/null
 +++ b/Source/indra/newview/llviewerremotecontrol.cpp
 @@ -0,0 +1,118 @@
