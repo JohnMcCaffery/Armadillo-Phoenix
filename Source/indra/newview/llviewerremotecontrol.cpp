@@ -48,13 +48,16 @@ LLViewerRemoteControl::LLViewerRemoteControl()
 :	mForward(0),
 	mSlide(0),
 	mFly(0),
-	mYaw(0.f),
+	mYaw(0.F),
 	mPitch(0.F)
 { }
 
 LLViewerRemoteControl::~LLViewerRemoteControl() { }
 
 void LLViewerRemoteControl::Tick() { 
+	if (mForward == 0 && mSlide == 0 && mFly == 0 && mYaw == 0.F && mPitch == 0.F)
+		return;
+
 	if (gSavedSettings.getBOOL("EnableRemoteControl")) {
 		if (mPitch != 0.f) {
 			if (mPitch < 0.f) 
@@ -75,12 +78,11 @@ void LLViewerRemoteControl::Tick() {
 		if (mFly > 0 && !(gAgent.getFlying() || !gAgent.canFly() || gAgent.upGrabbed() || !gSavedSettings.getBOOL("AutomaticFly")) )
 			gAgent.setFlying(true);
 
-		gAgent.moveAt(mForward, false);
-		gAgent.moveLeft(mSlide);
-		gAgent.moveUp(mFly);
-		gAgent.yaw(mYaw);
-		if (mPitch != 0)
-			gAgent.pitch(mPitch);
+		if (mForward != 0) 	gAgent.moveAt(mForward, false);
+		if (mSlide != 0) 	gAgent.moveLeft(mSlide);
+		if (mFly != 0)		gAgent.moveUp(mFly);
+		if (mYaw != 0.F)	gAgent.yaw(mYaw);
+		if (mPitch != 0)	gAgent.pitch(mPitch);
 	}
 }
 

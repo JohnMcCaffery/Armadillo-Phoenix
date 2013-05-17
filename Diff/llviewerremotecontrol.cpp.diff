@@ -1,9 +1,9 @@
 diff --git a/Source/indra/newview/llviewerremotecontrol.cpp b/Source/indra/newview/llviewerremotecontrol.cpp
 new file mode 100644
-index 0000000..9739937
+index 0000000..15a7896
 --- /dev/null
 +++ b/Source/indra/newview/llviewerremotecontrol.cpp
-@@ -0,0 +1,118 @@
+@@ -0,0 +1,120 @@
 +/** 
 + * @file llviewerjoystick.cpp
 + * @brief Remote Control functionality.
@@ -54,13 +54,16 @@ index 0000000..9739937
 +:	mForward(0),
 +	mSlide(0),
 +	mFly(0),
-+	mYaw(0.f),
++	mYaw(0.F),
 +	mPitch(0.F)
 +{ }
 +
 +LLViewerRemoteControl::~LLViewerRemoteControl() { }
 +
 +void LLViewerRemoteControl::Tick() { 
++	if (mForward == 0 && mSlide == 0 && mFly == 0 && mYaw == 0.F && mPitch == 0.F)
++		return;
++
 +	if (gSavedSettings.getBOOL("EnableRemoteControl")) {
 +		if (mPitch != 0.f) {
 +			if (mPitch < 0.f) 
@@ -81,12 +84,11 @@ index 0000000..9739937
 +		if (mFly > 0 && !(gAgent.getFlying() || !gAgent.canFly() || gAgent.upGrabbed() || !gSavedSettings.getBOOL("AutomaticFly")) )
 +			gAgent.setFlying(true);
 +
-+		gAgent.moveAt(mForward, false);
-+		gAgent.moveLeft(mSlide);
-+		gAgent.moveUp(mFly);
-+		gAgent.yaw(mYaw);
-+		if (mPitch != 0)
-+			gAgent.pitch(mPitch);
++		if (mForward != 0) 	gAgent.moveAt(mForward, false);
++		if (mSlide != 0) 	gAgent.moveLeft(mSlide);
++		if (mFly != 0)		gAgent.moveUp(mFly);
++		if (mYaw != 0.F)	gAgent.yaw(mYaw);
++		if (mPitch != 0)	gAgent.pitch(mPitch);
 +	}
 +}
 +
