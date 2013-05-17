@@ -6181,7 +6181,7 @@ void process_clear_camera(LLMessageSystem *mesgsys, void **user_data)
 	LLFollowCamMgr::removeScriptFollowCam(source_id);
 }
 
-void process_set_window(LLMessageSystem *msg, void ** window)
+void process_set_frustum(LLMessageSystem *msg, void ** window)
 {
 	LLMatrix4 mat;
 	LLVector4 r1;
@@ -6189,10 +6189,10 @@ void process_set_window(LLMessageSystem *msg, void ** window)
 	LLVector4 r3;
 	LLVector4 r4;
 
-	msg->getVector4("Window", "MatR1", r1);
-	msg->getVector4("Window", "MatR2", r2);
-	msg->getVector4("Window", "MatR3", r3);
-	msg->getVector4("Window", "MatR4", r4);
+	msg->getVector4("Frustum", "MatR1", r1);
+	msg->getVector4("Frustum", "MatR2", r2);
+	msg->getVector4("Frustum", "MatR3", r3);
+	msg->getVector4("Frustum", "MatR4", r4);
 	mat.initRows(r1, r2, r3, r4);
 
 	LLVector3 diag(r1.mV[0], r2.mV[1], r3.mV[2]);
@@ -6203,11 +6203,16 @@ void process_set_window(LLMessageSystem *msg, void ** window)
 	
 	LLViewerCamera::setManualProjectionMatrixSet(true);
 	LLViewerCamera::setManualProjectionMatrix(mat);
-}
-
-void process_clear_window(LLMessageSystem *mesgsys, void **user_data)
+}
+void process_clear_frustum(LLMessageSystem *mesgsys, void **user_data)
 {
 	LLViewerCamera::setManualProjectionMatrixSet(false);
+}
+
+void process_set_window(LLMessageSystem *msg, void ** window)
+{
+	process_set_frustum(msg, window);
+	process_set_camera(msg, window);
 }
 
 void process_remote_control(LLMessageSystem *msg, void **user_data) {
