@@ -8,6 +8,8 @@ set workingDir=%CD%
 for /f "delims=" %%a in ('git symbolic-ref HEAD') do set head=%%a
 set head=%head:~11%
 
+git add .
+git add -u
 git commit -m "Saving state before pulling changes."
 
 cd ..\..\phoenix-firestorm-release
@@ -38,10 +40,7 @@ for /f "delims=" %%l in ('git diff --name-only FirestormHead WorkingHead') do (
 	call:subroutine "%%l"
 )
 
-xcopy /s /c /e /h /i /r /y /exclude:.copyignore ..%messages%*.msg ..\build-vc100\newview\Release\app_settings\
-xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..\build-vc100\newview\Release\* Bin\
-xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..%src%* Bin\
-xcopy /s /c /d /e /h /i /r /y /exclude:.copyignore ..%settings%* Bin\app_settings\
+UpdateBin.bat
 
 goto:eof
 :subroutine
