@@ -2,6 +2,40 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="llsd.xsd">
 	<map>
+    <key>FailSilently</key>
+    <map>
+      <key>Comment</key>
+      <string>Control whether the viewer will bring up a popup box when something has gone wrong and the viewer is being closed down. If true the viewer will just exit.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <real>0</real>
+    </map>
+    <key>RemoteControlRunThreshold</key>
+    <map>
+      <key>Comment</key>
+      <string>The threshold for running. If the forward delta is greater than this the avatar is set to run.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>.25</real>
+    </map>
+    <key>EnableRemoteControl</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether to allow the LLViewerRemoteControl class to control the position of the avatar.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    
 		<key>InterpolateScriptFollowCam</key>
 		<map>
 			<key>Comment</key>

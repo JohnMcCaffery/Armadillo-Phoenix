@@ -1,13 +1,19 @@
 diff --git a/Source/indra/newview/llviewermessage.h b/Source/indra/newview/llviewermessage.h
-index ae0d5a0..64d794e 100644
+index ae0d5a0..3b4a438 100644
 --- a/Source/indra/newview/llviewermessage.h
 +++ b/Source/indra/newview/llviewermessage.h
-@@ -107,6 +107,8 @@ void process_camera_constraint(LLMessageSystem *mesgsys, void **user_data);
- void process_avatar_sit_response(LLMessageSystem *mesgsys, void **user_data);
- void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_data);
- void process_clear_follow_cam_properties(LLMessageSystem *mesgsys, void **user_data);
-+void process_set_window(LLMessageSystem *mesgsys, void **user_data);
-+void process_clear_window(LLMessageSystem *mesgsys, void **user_data);
- void process_name_value(LLMessageSystem *mesgsys, void **user_data);
- void process_remove_name_value(LLMessageSystem *mesgsys, void **user_data);
+@@ -112,6 +112,14 @@ void process_remove_name_value(LLMessageSystem *mesgsys, void **user_data);
  void process_kick_user(LLMessageSystem *msg, void** /*user_data*/);
+ //void process_avatar_init_complete(LLMessageSystem *msg, void** /*user_data*/);
+ 
++void process_set_camera(LLMessageSystem *mesgsys, void **user_data);
++void process_set_frustum(LLMessageSystem *mesgsys, void **user_data);
++void process_set_window(LLMessageSystem *mesgsys, void **user_data);
++void process_remote_control(LLMessageSystem *mesgys, void **user_data);
++void process_clear_camera(LLMessageSystem *mesgsys, void **user_data);
++void process_clear_frustum(LLMessageSystem *mesgsys, void **user_data);
++void process_clear_remote_control(LLMessageSystem *mesgys, void **user_data);
++
+ void process_economy_data(LLMessageSystem *msg, void** /*user_data*/);
+ void process_money_balance_reply(LLMessageSystem* msg_system, void**);
+ void process_adjust_balance(LLMessageSystem* msg_system, void**);

@@ -9020,15 +9020,11 @@ version 2.0
 	}
 }
 
-// SetWindow
+// SetCamera
 { 
-	SetWindow		Low	427 Trusted Unencoded
+	SetCamera		Low	427 Trusted Unencoded
 	{
-		Window Single
-		{ 	MatR1 			LLVector4 }
-		{ 	MatR2 			LLVector4 }
-		{ 	MatR3 			LLVector4 }
-		{ 	MatR4 			LLVector4 }
+		Camera Single
 		{ 	Position 		LLVector3 }
 		{ 	PositionDelta 	LLVector3 }
 		{ 	LookAt 			LLVector3 }
@@ -9038,9 +9034,68 @@ version 2.0
 	}
 }
 
-// ClearWindow
+// ClearCamera
 { 
-	ClearWindow		Low	428 Trusted Unencoded
+	ClearCamera		Low	428 Trusted Unencoded
+	{
+		ObjectData			Single
+		{	ObjectID				LLUUID	}
+	}
+}
+
+// SetFrustum
+{ 
+	SetFrustum		Low	429 Trusted Unencoded
+	{
+		Frustum Single
+		{ 	MatR1 			LLVector4 }
+		{ 	MatR2 			LLVector4 }
+		{ 	MatR3 			LLVector4 }
+		{ 	MatR4 			LLVector4 }	}
+}
+// ClearFrustum
+{ 
+	ClearFrustum		Low	430 Trusted Unencoded
+	{
+		ObjectData			Single
+		{	ObjectID				LLUUID	}
+	}
+}
+// SetWindow
+{ 
+	SetWindow		Low	431 Trusted Unencoded
+	{
+		Frustum Single
+		{ 	MatR1 			LLVector4 }
+		{ 	MatR2 			LLVector4 }
+		{ 	MatR3 			LLVector4 }
+		{ 	MatR4 			LLVector4 }
+	}
+	{
+		Camera Single
+		{ 	Position 		LLVector3 }
+		{ 	PositionDelta 	LLVector3 }
+		{ 	LookAt 			LLVector3 }
+		{ 	LookAtDelta 	LLVector3 }
+		{ 	TickLength 		U32 }
+		{ 	Source 			LLUUID }
+	}
+}
+
+// RemoteControl
+{ 
+	RemoteControl		Low	432 Trusted Unencoded
+	{
+		Delta Single
+		{ 	Position 		LLVector3 }
+		{ 	Pitch 			F32 }
+		{ 	Yaw 			F32 }
+	}
+}
+
+// ClearRemoteControl
+{ 
+	ClearRemoteControl		Low	433 Trusted Unencoded
 	{
 		ObjectData			Single
 		{	ObjectID				LLUUID	}
