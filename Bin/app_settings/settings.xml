@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="llsd.xsd">
-	<map>    <key>FailSilently</key>
+	<map>
+    <key>FailSilently</key>
     <map>
       <key>Comment</key>
       <string>Control whether the viewer will bring up a popup box when something has gone wrong and the viewer is being closed down. If true the viewer will just exit.</string>
