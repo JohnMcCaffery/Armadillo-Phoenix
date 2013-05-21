@@ -1,5 +1,5 @@
 diff --git a/Source/indra/newview/llappviewer.cpp b/Source/indra/newview/llappviewer.cpp
-index 91bfa4a..0493457 100644
+index 91bfa4a..3daf1da 100644
 --- a/Source/indra/newview/llappviewer.cpp
 +++ b/Source/indra/newview/llappviewer.cpp
 @@ -55,6 +55,7 @@
@@ -38,7 +38,7 @@ index 91bfa4a..0493457 100644
  
  void LLAppViewer::forceDisconnect(const std::string& mesg)
  {
-+	if (gSavedSettings.getBOOL("FailSilently")) {
++	if (gSavedSettings.getBOOL("EnableFailSilently")) {
 +		LLAppViewer::instance()->forceQuit();
 +		return;
 +	}
