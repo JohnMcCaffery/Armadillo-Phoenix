@@ -1,8 +1,8 @@
 diff --git a/Source/indra/newview/app_settings/settings.xml b/Source/indra/newview/app_settings/settings.xml
-index 0b1ba83..50f3a3d 100644
+index 0b1ba83..a475947 100644
 --- a/Source/indra/newview/app_settings/settings.xml
 +++ b/Source/indra/newview/app_settings/settings.xml
-@@ -1,19089 +1,19197 @@
+@@ -1,19089 +1,19202 @@
 -<?xml version="1.0" ?>
 -<llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 -  xsi:noNamespaceSchemaLocation="llsd.xsd">
@@ -19096,28 +19096,6 @@ index 0b1ba83..50f3a3d 100644
 +<llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 +	xsi:noNamespaceSchemaLocation="llsd.xsd">
 +	<map>
-+    <key>FailSilently</key>
-+    <map>
-+      <key>Comment</key>
-+      <string>Control whether the viewer will bring up a popup box when something has gone wrong and the viewer is being closed down. If true the viewer will just exit.</string>
-+      <key>Persist</key>
-+      <integer>1</integer>
-+      <key>Type</key>
-+      <string>Boolean</string>
-+      <key>Value</key>
-+      <real>0</real>
-+    </map>
-+    <key>RemoteControlRunThreshold</key>
-+    <map>
-+      <key>Comment</key>
-+      <string>The threshold for running. If the forward delta is greater than this the avatar is set to run.</string>
-+      <key>Persist</key>
-+      <integer>1</integer>
-+      <key>Type</key>
-+      <string>F32</string>
-+      <key>Value</key>
-+      <real>.25</real>
-+    </map>
 +    <key>EnableRemoteControl</key>
 +    <map>
 +      <key>Comment</key>
@@ -19128,6 +19106,64 @@ index 0b1ba83..50f3a3d 100644
 +      <string>Boolean</string>
 +      <key>Value</key>
 +      <integer>0</integer>
++    </map>
++    <key>EnableSetFollowCamProperties</key>
++    <map>
++      <key>Comment</key>
++      <string>Whether to allow SetFollowCam packets to control the camera.</string>
++      <key>Persist</key>
++      <integer>1</integer>
++      <key>Type</key>
++      <string>Boolean</string>
++      <key>Value</key>
++      <integer>1</integer>
++    </map>
++    <key>EnableSetCamera</key>
++    <map>
++      <key>Comment</key>
++      <string>Whether to allow SetCamera and SetWindow packets to control the camera.</string>
++      <key>Persist</key>
++      <integer>1</integer>
++      <key>Type</key>
++      <string>Boolean</string>
++      <key>Value</key>
++      <integer>0</integer>
++    </map>
++		<key>EnableRemoteFrustum</key>
++		<map>
++			<key>Comment</key>
++			<string>Whether to set the projection directly from values received in SetFrustum packets.</string>
++			<key>Persist</key>
++			<integer>1</integer>
++			<key>Type</key>
++			<string>Boolean</string>
++			<key>Value</key>
++			<integer>1</integer>
++		</map>		
++    <key>EnableFailSilently</key>
++    <map>
++      <key>Comment</key>
++      <string>Control whether the viewer will bring up a popup box when something has gone wrong and the viewer is being closed down. If true the viewer will just exit.</string>
++      <key>Persist</key>
++      <integer>1</integer>
++      <key>Type</key>
++      <string>Boolean</string>
++      <key>Value</key>
++      <real>0</real>
++    </map>
++
++
++    
++    <key>RemoteControlRunThreshold</key>
++    <map>
++      <key>Comment</key>
++      <string>The threshold for running. If the forward delta is greater than this the avatar is set to run.</string>
++      <key>Persist</key>
++      <integer>1</integer>
++      <key>Type</key>
++      <string>F32</string>
++      <key>Value</key>
++      <real>.25</real>
 +    </map>
 +    
 +		<key>InterpolateScriptFollowCam</key>
@@ -19141,17 +19177,7 @@ index 0b1ba83..50f3a3d 100644
 +			<key>Value</key>
 +			<integer>1</integer>
 +		</map>		
-+		<key>AllowOverrideProjectionMatrix</key>
-+		<map>
-+			<key>Comment</key>
-+			<string>Whether to set the projection directly from values received in SetWindow packets.</string>
-+			<key>Persist</key>
-+			<integer>1</integer>
-+			<key>Type</key>
-+			<string>Boolean</string>
-+			<key>Value</key>
-+			<integer>1</integer>
-+		</map>		
++
 +		<key>PerspectiveMatrixDiagonal</key>
 +    <map>
 +      <key>Comment</key>
@@ -19182,28 +19208,7 @@ index 0b1ba83..50f3a3d 100644
 +        <real>-.202066913</real>
 +      </array>
 +    </map>
-+    <key>FrustumOffsetH</key>
-+    <map>
-+      <key>Comment</key>
-+      <string>Offset the view frustum left or right.</string>
-+      <key>Persist</key>
-+      <integer>0</integer>
-+      <key>Type</key>
-+      <string>F32</string>
-+      <key>Value</key>
-+      <real>0.0</real>
-+    </map>
-+    <key>FrustumOffsetV</key>
-+    <map>
-+      <key>Comment</key>
-+      <string>Offset the view frustum up or down.</string>
-+      <key>Persist</key>
-+      <integer>0</integer>
-+      <key>Type</key>
-+      <string>F32</string>
-+      <key>Value</key>
-+      <real>0.0</real>
-+    </map>
++
 +    <key>FSFloaterBlacklistSortColumn</key>
 +    <map>
 +      <key>Comment</key>
