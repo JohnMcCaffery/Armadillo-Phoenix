@@ -6029,6 +6029,8 @@ void process_clear_follow_cam_properties(LLMessageSystem *mesgsys, void **user_d
 
 void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_data)
 {
+	if (!gSavedSettings.getBOOL("EnableSetFollowCamProperties"))
+		return;
 	S32			type;
 	F32			value;
 	bool		settingPosition = false;
@@ -6149,27 +6151,39 @@ void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_dat
 
 void process_set_camera(LLMessageSystem *msg, void ** window)
 {
-	LLVector3 position;
-	LLVector3 positionDelta;
-	LLVector3 lookAt;
-	LLVector3 lookAtDelta;
-	msg->getVector3("Camera", "Position", position);
-	msg->getVector3("Camera", "PositionDelta", positionDelta);
-	msg->getVector3("Camera", "LookAt", lookAt);
-	msg->getVector3("Camera", "LookAtDelta", lookAtDelta);
+	if (gSavedSettings.getBOOL("EnableSetCamera")) {
+		LLUUID		source_id;
+		msg->getUUID("Camera", "Source", source_id);
 
-	U32 tickLength;
-	msg->getU32("Camera", "TickLength", tickLength);
+		LLVector3 position;
+		LLVector3 lookAt;
+		msg->getVector3("Camera", "Position", position);
+		msg->getVector3("Camera", "LookAt", lookAt);
 
-	LLUUID		source_id;
-	msg->getUUID("Camera", "Source", source_id);
+		if (gSavedSettings.getBOOL("InterpolateScriptFollowCam")) {
+			U32 tickLength;
+			LLVector3 positionDelta;
+			LLVector3 lookAtDelta;
 
-	LLViewerObject* objectp = gObjectList.findObject(source_id);
-	if (objectp)
-	{
-		objectp->setFlagsWithoutUpdate(FLAGS_CAMERA_SOURCE, TRUE);
+			msg->getVector3("Camera", "PositionDelta", positionDelta);
+			msg->getVector3("Camera", "LookAtDelta", lookAtDelta);
+			msg->getU32("Camera", "TickLength", tickLength);
+
+			LLViewerObject* objectp = gObjectList.findObject(source_id);
+			if (objectp)
+			{
+				objectp->setFlagsWithoutUpdate(FLAGS_CAMERA_SOURCE, TRUE);
+			}
+			LLFollowCamMgr::setWindow(source_id, position, positionDelta, lookAt, lookAtDelta, tickLength);
+		}
+		else {
+			LLFollowCamMgr::setCameraActive(source_id, true);
+			LLFollowCamMgr::setPositionLocked(source_id, true);
+			LLFollowCamMgr::setFocusLocked(source_id, true);
+			LLFollowCamMgr::setPosition(source_id, position);
+			LLFollowCamMgr::setFocus(source_id, position + lookAt);
+		}
 	}
-	LLFollowCamMgr::setWindow(source_id, position, positionDelta, lookAt, lookAtDelta, tickLength);
 }
 
 void process_clear_camera(LLMessageSystem *mesgsys, void **user_data)
@@ -6178,11 +6192,15 @@ void process_clear_camera(LLMessageSystem *mesgsys, void **user_data)
 
 	mesgsys->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, source_id);
 
-	LLFollowCamMgr::removeScriptFollowCam(source_id);
+	LLFollowCamMgr::removeScriptFollowCam(source_id);	LLFollowCamMgr::setCameraActive(source_id, false);
+	LLFollowCamMgr::setPositionLocked(source_id, false);
+	LLFollowCamMgr::setFocusLocked(source_id, false);
 }
 
 void process_set_frustum(LLMessageSystem *msg, void ** window)
 {
+	if (!gSavedSettings.getBOOL("EnableRemoteFrustum"))
+		return;
 	LLMatrix4 mat;
 	LLVector4 r1;
 	LLVector4 r2;
@@ -6203,7 +6221,8 @@ void process_set_frustum(LLMessageSystem *msg, void ** window)
 	
 	LLViewerCamera::setManualProjectionMatrixSet(true);
 	LLViewerCamera::setManualProjectionMatrix(mat);
-}
+}
+
 void process_clear_frustum(LLMessageSystem *mesgsys, void **user_data)
 {
 	LLViewerCamera::setManualProjectionMatrixSet(false);
@@ -6216,6 +6235,8 @@ void process_set_window(LLMessageSystem *msg, void ** window)
 }
 
 void process_remote_control(LLMessageSystem *msg, void **user_data) {
+	if (!gSavedSettings.getBOOL("EnableRemoteControl"))
+		return;
 	LLVector3 delta;
 	F32 pitch;
 	F32 yaw;

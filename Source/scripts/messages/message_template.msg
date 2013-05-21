@@ -9051,8 +9051,10 @@ version 2.0
 		{ 	MatR1 			LLVector4 }
 		{ 	MatR2 			LLVector4 }
 		{ 	MatR3 			LLVector4 }
-		{ 	MatR4 			LLVector4 }	}
-}
+		{ 	MatR4 			LLVector4 }
+	}
+}
+
 // ClearFrustum
 { 
 	ClearFrustum		Low	430 Trusted Unencoded

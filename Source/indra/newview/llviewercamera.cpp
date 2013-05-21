@@ -83,7 +83,7 @@ glh::matrix4f gl_pick_matrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height
 
 glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
 {
-	if (gSavedSettings.getBOOL("AllowOverrideProjectionMatrix") && lManualProjectionMatrixSet) {
+	if (gSavedSettings.getBOOL("EnableRemoteFrustum") && lManualProjectionMatrixSet) {
 		LLVector3 diag = gSavedSettings.getVector3("PerspectiveMatrixDiagonal");
 		LLVector3 other = gSavedSettings.getVector3("PerspectiveMatrixOther");
 		return glh::matrix4f(
@@ -101,8 +101,8 @@ glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloa
 		GLfloat f = 1.f/tanf(DEG_TO_RAD*fovy/2.f);
 
 		return glh::matrix4f(
-			f/aspect, 0, gSavedSettings.getF32("FrustumOffsetH"), 0,
-			0, f, gSavedSettings.getF32("FrustumOffsetV"), 0,
+			f/aspect, 0, 0, 0,
+			0, f, 0, 0,
 			0, 0, (zFar+zNear)/(zNear-zFar), (2.f*zFar*zNear)/(zNear-zFar),
 			0, 0, -1.f, 0);
 	}

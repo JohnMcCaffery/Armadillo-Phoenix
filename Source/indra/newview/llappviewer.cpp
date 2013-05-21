@@ -4349,7 +4349,7 @@ bool finish_forced_disconnect(const LLSD& notification, const LLSD& response)
 
 void LLAppViewer::forceDisconnect(const std::string& mesg)
 {
-	if (gSavedSettings.getBOOL("FailSilently")) {
+	if (gSavedSettings.getBOOL("EnableFailSilently")) {
 		LLAppViewer::instance()->forceQuit();
 		return;
 	}

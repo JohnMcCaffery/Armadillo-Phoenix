@@ -1,8 +1,8 @@
 diff --git a/Source/scripts/messages/message_template.msg b/Source/scripts/messages/message_template.msg
-index c2df9ad..82522dc 100644
+index c2df9ad..b669111 100644
 --- a/Source/scripts/messages/message_template.msg
 +++ b/Source/scripts/messages/message_template.msg
-@@ -1,9022 +1,9103 @@
+@@ -1,9022 +1,9105 @@
 -// Linden Lab development message templates
 -
 -version 2.0
@@ -18078,8 +18078,10 @@ index c2df9ad..82522dc 100644
 +		{ 	MatR1 			LLVector4 }
 +		{ 	MatR2 			LLVector4 }
 +		{ 	MatR3 			LLVector4 }
-+		{ 	MatR4 			LLVector4 }	}
-+}
++		{ 	MatR4 			LLVector4 }
++	}
++}
++
 +// ClearFrustum
 +{ 
 +	ClearFrustum		Low	430 Trusted Unencoded
