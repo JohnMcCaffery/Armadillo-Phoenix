@@ -1,8 +1,8 @@
 diff --git a/Source/scripts/messages/message_template.msg b/Source/scripts/messages/message_template.msg
-index c2df9ad..b669111 100644
+index c2df9ad..2a2acf9 100644
 --- a/Source/scripts/messages/message_template.msg
 +++ b/Source/scripts/messages/message_template.msg
-@@ -1,9022 +1,9105 @@
+@@ -1,9022 +1,9107 @@
 -// Linden Lab development message templates
 -
 -version 2.0
@@ -18056,6 +18056,7 @@ index c2df9ad..b669111 100644
 +		{ 	PositionDelta 	LLVector3 }
 +		{ 	LookAt 			LLVector3 }
 +		{ 	LookAtDelta 	LLVector3 }
++		{ 	Up 				LLVector3 }
 +		{ 	TickLength 		U32 }
 +		{ 	Source 			LLUUID }
 +	}
@@ -18106,6 +18107,7 @@ index c2df9ad..b669111 100644
 +		{ 	PositionDelta 	LLVector3 }
 +		{ 	LookAt 			LLVector3 }
 +		{ 	LookAtDelta 	LLVector3 }
++		{ 	Up 				LLVector3 }
 +		{ 	TickLength 		U32 }
 +		{ 	Source 			LLUUID }
 +	}

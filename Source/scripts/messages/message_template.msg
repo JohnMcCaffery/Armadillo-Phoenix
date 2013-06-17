@@ -9029,6 +9029,7 @@ version 2.0
 		{ 	PositionDelta 	LLVector3 }
 		{ 	LookAt 			LLVector3 }
 		{ 	LookAtDelta 	LLVector3 }
+		{ 	Up 				LLVector3 }
 		{ 	TickLength 		U32 }
 		{ 	Source 			LLUUID }
 	}
@@ -9079,6 +9080,7 @@ version 2.0
 		{ 	PositionDelta 	LLVector3 }
 		{ 	LookAt 			LLVector3 }
 		{ 	LookAtDelta 	LLVector3 }
+		{ 	Up 				LLVector3 }
 		{ 	TickLength 		U32 }
 		{ 	Source 			LLUUID }
 	}
