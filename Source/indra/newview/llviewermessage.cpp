@@ -6158,8 +6158,10 @@ void process_set_camera(LLMessageSystem *msg, void ** window)
 
 		LLVector3 position;
 		LLVector3 lookAt;
+		LLVector3 up;
 		msg->getVector3("Camera", "Position", position);
 		msg->getVector3("Camera", "LookAt", lookAt);
+		msg->getVector3("Camera", "Up", up);
 
 		if (gSavedSettings.getBOOL("InterpolateScriptFollowCam")) {
 			U32 tickLength;
@@ -6182,6 +6184,7 @@ void process_set_camera(LLMessageSystem *msg, void ** window)
 			LLFollowCamMgr::setPositionLocked(source_id, true);
 			LLFollowCamMgr::setFocusLocked(source_id, true);
 			LLFollowCamMgr::setPosition(source_id, position);
+			LLFollowCamMgr::setUpVector(source_id, up);
 			LLFollowCamMgr::setFocus(source_id, position + lookAt);
 		}
 	}

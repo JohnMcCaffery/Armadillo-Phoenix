@@ -228,6 +228,11 @@ void LLFollowCamParams::setPosition( const LLVector3& p )
 	mPosition = p;
 }
 
+void LLFollowCamParams::setUpVector( const LLVector3& u ) 
+{ 
+	mUpVector = u;
+}
+
 //---------------------------------------------------------
 void LLFollowCamParams::setFocus( const LLVector3& f ) 
 { 
@@ -482,7 +487,7 @@ void LLFollowCam::update()
 	//####################################################################################
 	// this just points upward for now, but I anticipate future effects requiring 
 	// some rolling ("banking" effects for fun, swoopy vehicles, etc.)
-	mUpVector = LLVector3::z_axis;
+	//mUpVector = LLVector3::z_axis;
 }
 
 
@@ -640,6 +645,14 @@ void LLFollowCam::setPosition( const LLVector3& p )
 		{
 			mRelativePos = (mPosition - mSubjectPosition) * ~mSubjectRotation;
 		}
+	}
+}
+
+void LLFollowCam::setUpVector( const LLVector3& u ) 
+{ 
+	if (u != mUpVector)
+	{
+		LLFollowCamParams::setUpVector(u);
 	}
 }
 
@@ -814,6 +827,15 @@ void LLFollowCamMgr::setPosition( const LLUUID& source, const LLVector3 position
 	if (paramsp)
 	{
 		paramsp->setPosition(position);
+	}
+}
+//static
+void LLFollowCamMgr::setUpVector( const LLUUID& source, const LLVector3 up)
+{
+	LLFollowCamParams* paramsp = getParamsForID(source);
+	if (paramsp)
+	{
+		paramsp->setUpVector(up);
 	}
 }
 
