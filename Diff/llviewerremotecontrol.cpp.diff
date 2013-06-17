@@ -1,9 +1,9 @@
 diff --git a/Source/indra/newview/llviewerremotecontrol.cpp b/Source/indra/newview/llviewerremotecontrol.cpp
 new file mode 100644
-index 0000000..d2c9089
+index 0000000..8226844
 --- /dev/null
 +++ b/Source/indra/newview/llviewerremotecontrol.cpp
-@@ -0,0 +1,118 @@
+@@ -0,0 +1,119 @@
 +/** 
 + * @file llviewerjoystick.cpp
 + * @brief Remote Control functionality.
@@ -85,9 +85,10 @@ index 0000000..d2c9089
 +
 +	if (mForward != 0) 	gAgent.moveAt(mForward, false);
 +	if (mSlide != 0) 	gAgent.moveLeft(mSlide);
-+	if (mFly != 0)		gAgent.moveUp(mFly);
 +	if (mYaw != 0.F)	gAgent.yaw(mYaw);
 +	if (mPitch != 0)	gAgent.pitch(mPitch);
++	if (mFly != 0 && (mFly > 0 || gAgent.getFlying()))
++		gAgent.moveUp(mFly);
 +}
 +
 +void LLViewerRemoteControl::Update(LLVector3 deltas, F32 pitch, F32 yaw) {

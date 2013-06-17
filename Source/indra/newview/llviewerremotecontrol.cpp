@@ -79,9 +79,10 @@ void LLViewerRemoteControl::Tick() {
 
 	if (mForward != 0) 	gAgent.moveAt(mForward, false);
 	if (mSlide != 0) 	gAgent.moveLeft(mSlide);
-	if (mFly != 0)		gAgent.moveUp(mFly);
 	if (mYaw != 0.F)	gAgent.yaw(mYaw);
 	if (mPitch != 0)	gAgent.pitch(mPitch);
+	if (mFly != 0 && (mFly > 0 || gAgent.getFlying()))
+		gAgent.moveUp(mFly);
 }
 
 void LLViewerRemoteControl::Update(LLVector3 deltas, F32 pitch, F32 yaw) {

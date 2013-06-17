@@ -6151,7 +6151,8 @@ void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_dat
 
 void process_set_camera(LLMessageSystem *msg, void ** window)
 {
-	if (gSavedSettings.getBOOL("EnableSetCamera")) {
+	if (gSavedSettings.getBOOL("EnableSetCamera")) {
+
 		LLUUID		source_id;
 		msg->getUUID("Camera", "Source", source_id);
 
@@ -6192,7 +6193,8 @@ void process_clear_camera(LLMessageSystem *mesgsys, void **user_data)
 
 	mesgsys->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, source_id);
 
-	LLFollowCamMgr::removeScriptFollowCam(source_id);	LLFollowCamMgr::setCameraActive(source_id, false);
+	LLFollowCamMgr::removeScriptFollowCam(source_id);
+	LLFollowCamMgr::setCameraActive(source_id, false);
 	LLFollowCamMgr::setPositionLocked(source_id, false);
 	LLFollowCamMgr::setFocusLocked(source_id, false);
 }

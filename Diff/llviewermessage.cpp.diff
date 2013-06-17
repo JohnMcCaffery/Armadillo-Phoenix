@@ -1,8 +1,8 @@
 diff --git a/Source/indra/newview/llviewermessage.cpp b/Source/indra/newview/llviewermessage.cpp
-index 0f4fa06..9e1f732 100644
+index 0f4fa06..c1a5bbe 100644
 --- a/Source/indra/newview/llviewermessage.cpp
 +++ b/Source/indra/newview/llviewermessage.cpp
-@@ -1,8719 +1,8829 @@
+@@ -1,8719 +1,8831 @@
 -/** 
 - * @file llviewermessage.cpp
 - * @brief Dumping ground for viewer-side message system callbacks.
@@ -14875,7 +14875,8 @@ index 0f4fa06..9e1f732 100644
 +
 +void process_set_camera(LLMessageSystem *msg, void ** window)
 +{
-+	if (gSavedSettings.getBOOL("EnableSetCamera")) {
++	if (gSavedSettings.getBOOL("EnableSetCamera")) {
++
 +		LLUUID		source_id;
 +		msg->getUUID("Camera", "Source", source_id);
 +
@@ -14916,7 +14917,8 @@ index 0f4fa06..9e1f732 100644
 +
 +	mesgsys->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, source_id);
 +
-+	LLFollowCamMgr::removeScriptFollowCam(source_id);	LLFollowCamMgr::setCameraActive(source_id, false);
++	LLFollowCamMgr::removeScriptFollowCam(source_id);
++	LLFollowCamMgr::setCameraActive(source_id, false);
 +	LLFollowCamMgr::setPositionLocked(source_id, false);
 +	LLFollowCamMgr::setFocusLocked(source_id, false);
 +}
