@@ -1,8 +1,8 @@
 diff --git a/Source/indra/newview/app_settings/settings.xml b/Source/indra/newview/app_settings/settings.xml
-index 0b1ba83..a475947 100644
+index 0b1ba83..d79db5c 100644
 --- a/Source/indra/newview/app_settings/settings.xml
 +++ b/Source/indra/newview/app_settings/settings.xml
-@@ -1,19089 +1,19202 @@
+@@ -1,19089 +1,19217 @@
 -<?xml version="1.0" ?>
 -<llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 -  xsi:noNamespaceSchemaLocation="llsd.xsd">
@@ -94,7 +94,24 @@ index 0b1ba83..a475947 100644
 -        <string>Boolean</string>
 -        <key>Value</key>
 -        <integer>0</integer>
--    </map>
++<?xml version="1.0" ?>
++<llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++	xsi:noNamespaceSchemaLocation="llsd.xsd">
++	<map>		<key>UpVector</key>
++    <map>
++      <key>Comment</key>
++      <string>The up vector, as set by llagentcamera.</string>
++      <key>Persist</key>
++      <integer>0</integer>
++      <key>Type</key>
++      <string>Vector3</string>
++      <key>Value</key>
++      <array>
++        <real>-2.0</real>
++        <real>-2.0</real>
++        <real>-2.0</real>
++      </array>
+     </map>
 -	<key>FSIMChatHistoryFade</key>
 -	<map>
 -		<key>Comment</key>
@@ -191,7 +208,7 @@ index 0b1ba83..a475947 100644
 -    <key>Value</key>
 -    <string/>
 -  </map>
--
+ 
 -  <key>ShowMutedAvatarsAsCloud</key>
 -  <map>
 -    <key>Comment</key>
@@ -19092,10 +19109,6 @@ index 0b1ba83..a475947 100644
 -    </map>
 -</map>
 -</llsd>
-+<?xml version="1.0" ?>
-+<llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-+	xsi:noNamespaceSchemaLocation="llsd.xsd">
-+	<map>
 +    <key>EnableRemoteControl</key>
 +    <map>
 +      <key>Comment</key>
