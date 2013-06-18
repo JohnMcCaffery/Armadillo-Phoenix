@@ -828,7 +828,8 @@ void LLFollowCamMgr::setPosition( const LLUUID& source, const LLVector3 position
 	{
 		paramsp->setPosition(position);
 	}
-}
+}
+
 //static
 void LLFollowCamMgr::setUpVector( const LLUUID& source, const LLVector3 up)
 {

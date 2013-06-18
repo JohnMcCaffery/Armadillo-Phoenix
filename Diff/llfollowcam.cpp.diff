@@ -1,8 +1,8 @@
 diff --git a/Source/indra/newview/llfollowcam.cpp b/Source/indra/newview/llfollowcam.cpp
-index b670af1..e9d3401 100644
+index b670af1..ea365b9 100644
 --- a/Source/indra/newview/llfollowcam.cpp
 +++ b/Source/indra/newview/llfollowcam.cpp
-@@ -1,901 +1,999 @@
+@@ -1,901 +1,1000 @@
 -/** 
 - * @file llfollowcam.cpp
 - * @author Jeffrey Ventrella
@@ -1734,7 +1734,8 @@ index b670af1..e9d3401 100644
 +	{
 +		paramsp->setPosition(position);
 +	}
-+}
++}
++
 +//static
 +void LLFollowCamMgr::setUpVector( const LLUUID& source, const LLVector3 up)
 +{
