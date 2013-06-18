@@ -1201,6 +1201,7 @@ void LLAgentCamera::updateCamera()
 	if ( camera_mode == CAMERA_MODE_FOLLOW )
 	{
 		mCameraUpVector = mFollowCam.getUpVector();
+		gSavedSettings.setVector3("UpVector", mCameraUpVector);
 	}
 
 	if (mSitCameraEnabled)
