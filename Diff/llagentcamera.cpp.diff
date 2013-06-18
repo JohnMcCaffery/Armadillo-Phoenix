@@ -1,0 +1,14 @@
+diff --git a/Source/indra/newview/llagentcamera.cpp b/Source/indra/newview/llagentcamera.cpp
+index eafbd91..473e6f6 100644
+--- a/Source/indra/newview/llagentcamera.cpp
++++ b/Source/indra/newview/llagentcamera.cpp
+@@ -1197,7 +1197,8 @@ void LLAgentCamera::updateCamera()
+ 	}
+ 
+ 	//NOTE - this needs to be integrated into a general upVector system here within llAgent. 
+-	if ( camera_mode == CAMERA_MODE_FOLLOW && mFocusOnAvatar )
++	//if ( camera_mode == CAMERA_MODE_FOLLOW && mFocusOnAvatar )
++	if ( camera_mode == CAMERA_MODE_FOLLOW )
+ 	{
+ 		mCameraUpVector = mFollowCam.getUpVector();
+ 	}
