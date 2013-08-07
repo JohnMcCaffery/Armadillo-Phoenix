@@ -25,6 +25,7 @@ ShowNavbarFavoritesPanel = 0
 ShowSearchTopBar = 0
 ShowMenuBarLocation = 0
 CameraOffsetRearView = -1.0, 0.0, 0.0
+BackgroundYieldTime = 0
 //Don't do this for multiple viewers - FullScreen = 1
 
 skins\defaults\toolbars:
