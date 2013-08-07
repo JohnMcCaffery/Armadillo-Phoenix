@@ -24,8 +24,8 @@ AvatarNameTagMode = 0
 ShowNavbarFavoritesPanel = 0
 ShowSearchTopBar = 0
 ShowMenuBarLocation = 0
-FullScreen = 1
 CameraOffsetRearView = -1.0, 0.0, 0.0
+//Don't do this for multiple viewers - FullScreen = 1
 
 skins\defaults\toolbars:
 Removed all <command> nodes
