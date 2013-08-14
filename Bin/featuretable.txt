@@ -146,7 +146,7 @@ RenderAvatarLODFactor		1	0.5
 RenderAvatarPhysicsLODFactor 1	0.75
 RenderAvatarMaxVisible		1	6
 RenderAvatarVP				1	1
-RenderFarClip				1	96
+RenderFarClip				1	1024
 RenderFlexTimeFactor		1	1.0
 RenderGlowResolutionPow		1	8
 RenderMaxPartCount			1	2048
@@ -207,7 +207,7 @@ RenderAvatarCloth			1	1
 RenderAvatarLODFactor		1	1.0
 RenderAvatarMaxVisible		1	24
 RenderAvatarVP				1	1
-RenderFarClip				1	256
+RenderFarClip				1	1024
 RenderFlexTimeFactor		1	1.0
 RenderGlowResolutionPow		1	9
 RenderMaxPartCount			1	8192

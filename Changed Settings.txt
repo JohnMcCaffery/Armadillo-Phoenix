@@ -38,4 +38,7 @@ RenderVolumeLODFactory = 4.0
 RenderTerrainLODFactor = 4.0
 RenderReflectionDetail = 0 0
 
+featuretable.txt and featuretable_xp - all settings
+RenderFarClip = 1024
+
 Set Low, and LowFixed to be the same as high settings.
