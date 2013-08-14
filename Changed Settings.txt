@@ -37,3 +37,5 @@ RenderFarClip = 1024
 RenderVolumeLODFactory = 4.0
 RenderTerrainLODFactor = 4.0
 RenderReflectionDetail = 0 0
+
+Set Low, and LowFixed to be the same as high settings.
