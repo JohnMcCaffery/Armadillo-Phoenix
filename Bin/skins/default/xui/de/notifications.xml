@@ -153,12 +153,6 @@ Wählen Sie ein einzelnes Objekt aus und versuchen Sie es erneut.
 		Hinweis: Bei Aktivierung dieser Option sehen alle Personen, die diesen Computer benutzen, Ihre Lieblingsorte.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="GrowlNotInstalled">
-		WARNUNG: Wenn diese Funktion aktiviert wird, ohne dass Growl installiert ist, kann dieses zu kleinen Rucklern führen, wenn sich Freunde ein- oder ausloggen.
-Für weitere Informationen siehe http://wiki.phoenixviewer.com/fs_growl
-Soll diese Funktion dennoch aktiviert werden?
-		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
-	</notification>
 	<notification name="GrantModifyRights">
 		Wenn Sie einem anderen Einwohner Änderungsrechte gewähren, dann kann dieser JEDES Objekt, das Sie inworld besitzen, ändern, löschen oder an sich nehmen. Seien Sie daher beim Gewähren dieser Rechte sehr vorsichtig!
 Möchten Sie [NAME] Änderungsrechte gewähren?
@@ -379,7 +373,7 @@ Sie müssen den Benutzernamen Ihres Avatars eingeben.
 
 Sie benötigen ein Konto, um [CURRENT_GRID] betreten zu können. Möchten Sie jetzt ein Konto erstellen?
 		<url name="url">
-			https://join.secondlife.com/index.php?lang=de-DE
+			[create_account_url]
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Erneut versuchen" yestext="Neues Benutzerkonto anlegen"/>
 	</notification>
@@ -529,6 +523,24 @@ Weitere Informationen finden Sie auf [_URL].
     Unter [_URL] nach aktualisierten Treibern suchen?
 		<url name="url">
 			http://www.intel.com/p/de_DE/support/detect/graphics
+		</url>
+		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
+	</notification>
+	<notification name="AMDOldDriver">
+		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
+
+    Unter [_URL] nach aktualisierten Treibern suchen?
+		<url name="url">
+			http://support.amd.com/de/Pages/AMDSupportHub.aspx
+		</url>
+		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
+	</notification>
+	<notification name="NVIDIAOldDriver">
+		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
+
+    Unter [_URL] nach aktualisierten Treibern suchen?
+		<url name="url">
+			http://www.nvidia.com/Download/index.aspx?lang=de
 		</url>
 		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
@@ -1254,7 +1266,6 @@ Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dar
 		Installation von [APP_NAME] vollständig abgeschlossen.
 
 Falls Sie [CURRENT_GRID] zum ersten Mal verwenden, müssen Sie zuerst ein Konto erstellen, bevor Sie sich anmelden können.
-Zurück zu [http://join.secondlife.com secondlife.com], um ein neues Konto zu erstellen?
 		<usetemplate name="okcancelbuttons" notext="Weiter" yestext="Konto erstellen..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
@@ -1783,8 +1794,35 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		<usetemplate canceltext="Abbrechen" name="yesnocancelbuttons" notext="Alle Grundbesitze" yestext="Diesen Grundbesitz"/>
 	</notification>
 	<notification label="Rauswurf bestätigen" name="EstateKickUser">
-		Benutzer [EVIL_USER] von diesem Grundbesitz werfen?
+		Einwohner [EVIL_USER] von diesem Grundbesitz werfen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification label="Rauswurf bestätigen" name="EstateKickMultiple">
+		Die folgenden Einwohner von diesem Grundbesitz werfen?
+
+[RESIDENTS]
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	
+	<notification label="Nach Hause teleportieren bestätigen" name="EstateTeleportHomeUser">
+		[AVATAR_NAME] nach Hause teleportieren?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification label="Nach Hause teleportieren bestätigen" name="EstateTeleportHomeMultiple">
+		Die folgenden Einwohnern nach Hause teleportieren?
+
+[RESIDENTS]
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification label="Verbannen bestätigen" name="EstateBanUser">
+		Zugang für [EVIL_USER] nur für diesen Grundbesitz oder für [ALL_ESTATES] verweigern?
+		<usetemplate name="yesnocancelbuttons" canceltext="Abbrechen" notext="Alle Grundbesitze" yestext="Diesen Grundbesitz"/>
+	</notification>
+	<notification label="Verbannen bestätigen" name="EstateBanUserMultiple">
+		Zugang für folgende Einwohner nur für diesen Grundbesitz oder für [ALL_ESTATES] verweigern?
+
+[RESIDENTS]
+		<usetemplate name="yesnocancelbuttons" canceltext="Abbrechen" notext="Alle Grundbesitze" yestext="Diesen Grundbesitz"/>
 	</notification>
 	<notification name="EstateChangeCovenant">
 		Möchten Sie den Grundbesitzvertrag wirklich ändern?
@@ -2534,13 +2572,6 @@ Fliegen ist hier nicht möglich.
 	<notification name="DynamicPathfindingDisabled">
 		Dynamisches Pathfinding ist in dieser Region nicht aktiviert. Geskriptete Objekte, die Pathfinding-LSL-Aufrufe verwenden, funktionieren in dieser Region u. U. nicht wie erwartet.
 	</notification>
-	<notification name="PathfindingRebakeNavmesh">
-		Wenn Sie bestimmte Objekte in dieser Region ändern, verhalten sich andere bewegliche Objekte u. U. inkorrekt. Um dieses Problem zu beheben, muss die Region neu geformt werden. Um weitere Informationen zu erhalten, klicken Sie auf „Hilfe“.
-		<url name="url">
-			http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
-		</url>
-		<usetemplate helptext="Hilfe" ignoretext="Wenn Sie bestimmte Objekte in dieser Region ändern, verhalten sich andere bewegliche Objekte u. U. inkorrekt." name="okhelpignore" yestext="OK"/>
-	</notification>
 	<notification name="PathfindingCannotRebakeNavmesh">
 		Es ist ein Fehler aufgetreten. Möglicherweise ist ein Netzwerk- oder Serverproblem aufgetreten oder Sie haben nicht die erforderlichen Baurechte. Dieses Problem lässt sich manchmal durch Ab- und Anmelden lösen.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -2681,7 +2712,7 @@ Versuchen Sie es in einigen Minuten erneut.
 		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort angeboten:
 
 „[MESSAGE]“
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; – [MATURITY_STR]
 		<form name="form">
 			<button name="Teleport" text="Teleportieren"/>
 			<button name="Cancel" text="Abbrechen"/>
@@ -2703,7 +2734,7 @@ Diese Region enthält [REGION_CONTENT_MATURITY]-Inhalte, doch aufgrund Ihrer akt
 		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort angeboten:
 
 „[MESSAGE]“
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; – [MATURITY_STR]
 
 Diese Region enthält jedoch Inhalte, die nur für Erwachsene zugänglich sind.
 	</notification>
@@ -3329,7 +3360,7 @@ Einige der ausgewählten Linksets können nicht auf „[REQUESTED_TYPE]“ geset
 
 Möchten Sie fortfahren?
  		<usetemplate ignoretext="Einige der ausgewählten Linksets können nicht gesetzt werden, da die Berechtigungen eingeschränkt sind und die Form nicht konvex ist." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
- 	</notification>
+	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume">
 		Bei einigen ausgewählten Linksets wird die Phantom-Markierung umgeschaltet.
 
@@ -3339,7 +3370,7 @@ Einige der ausgewählten Linksets können nicht auf „[REQUESTED_TYPE]“ geset
 
 Möchten Sie fortfahren?
 		<usetemplate ignoretext="Bei einigen ausgewählten Linksets wird die Phantom-Markierung umgeschaltet und andere können nicht gesetzt werden, da die Berechtigungen für das Linkset eingeschränkt sind und die Form nicht konvex ist." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
-	</notification>
+ 	</notification>
 	<notification name="PathfindingLinksets_ChangeToFlexiblePath">
 		Das ausgewählte Objekt wirkt sich auf das Navmesh aus. Wenn Sie es in einen flexiblen Pfad ändern, wird es aus dem Navmesh entfernt.
 		<usetemplate ignoretext="Das ausgewählte Objekt wirkt sich auf das Navmesh aus. Wenn Sie es in einen flexiblen Pfad ändern, wird es aus dem Navmesh entfernt." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
@@ -3379,6 +3410,14 @@ Zukünftige Aktualisierungen dieser Datei werden deaktiviert.
 	<notification name="LocalBitmapsVerifyFail">
 		Versuch, eine ungültige oder nicht lesbare Bilddatei ([FNAME]) hinzuzufügen, die nicht geöffnet oder decodiert werden konnte.
 Versuch abgebrochen.
+	</notification>
+	<notification name="PathfindingReturnMultipleItems">
+		Sie sind dabei, [NUM_ITEMS] Objekte zurückzugeben. Möchten Sie diesen Vorgang wirklich fortsetzen?
+		<usetemplate ignoretext="Möchten Sie wirklich mehrere Objekte zurückgeben?" name="okcancelignore" notext="Nein" yestext="Ja"/>
+	</notification>
+	<notification name="PathfindingDeleteMultipleItems">
+		Sie sind dabei, [NUM_ITEMS] Objekte zu löschen. Möchten Sie diesen Vorgang wirklich fortsetzen?
+		<usetemplate ignoretext="Möchten Sie wirklich mehrere Objekte löschen?" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
 	
   <notification name="PhoenixWL">
@@ -3728,38 +3767,15 @@ Sollen die Skripte in den ausgewählten Objekten wirklich modifiziert werden?
 			notext="Abbrechen"
 			yestext="OK"/>
 	</notification>
-	
-	<notification name="LocalBitmapsUpdateFileNotFound">
-[FNAME] konnte nicht aktualisiert werden, da die Datei nicht mehr gefunden wurde.
-Zukünftige Aktualisierungen für diese Datei wurden deaktiviert.
-	</notification>
 
-	<notification name="LocalBitmapsUpdateFailedFinal">
-[FNAME] konnte in [NRETRIES] Versuchen nicht geöffnet oder dekodiert werden und wird daher als defekt erachtet.
-Zukünftige Aktualisierungen für diese Datei wurden deaktiviert.
-	</notification>
-
-	<notification name="LocalBitmapsVerifyFail">
-Es wurde versucht eine ungültige oder unlesbare Grafikdatei [FNAME] hinzuzufügen, die nicht geöffnet oder dekodiert werden konnte.
-Hinzufügen wurde abgebrochen.
-	</notification>
-	<notification name="PathfindingReturnMultipleItems">
-		Sie sind dabei, [NUM_ITEMS] Objekte zurückzugeben. Möchten Sie diesen Vorgang wirklich fortsetzen?
-		<usetemplate ignoretext="Möchten Sie wirklich mehrere Objekte zurückgeben?" name="okcancelignore" notext="Nein" yestext="Ja"/>
-	</notification>
-	<notification name="PathfindingDeleteMultipleItems">
-		Sie sind dabei, [NUM_ITEMS] Objekte zu löschen. Möchten Sie diesen Vorgang wirklich fortsetzen?
-		<usetemplate ignoretext="Möchten Sie wirklich mehrere Objekte löschen?" name="okcancelignore" notext="Nein" yestext="Ja"/>
-	</notification>
-
-  <!-- <FS:Zi> Add float LSL color entry widgets -->
-  <notification name="LSLColorCopiedToClipboard">
+<!-- <FS:Zi> Add float LSL color entry widgets -->
+	<notification name="LSLColorCopiedToClipboard">
 Der LSL-Farbcode wurde in die Zwischenablage kopiert. Er kann jetzt in LSL-Skripte eingefügt und genutzt werden.
-   <form name="form">
-      <ignore name="ignore" text="Ein LSL-Farbcode wurde in die Zwischenablage kopiert."/>
-    </form>
-  </notification>
-  <!-- <FS:Zi> Add float LSL color entry widgets -->
+		<form name="form">
+			<ignore name="ignore" text="Ein LSL-Farbcode wurde in die Zwischenablage kopiert."/>
+		</form>
+	</notification>
+<!-- <FS:Zi> Add float LSL color entry widgets -->
 
 	<notification name="FSBWTooHigh">
 Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen! Bei einer höheren Bandbreite kann es zu Problemen kommen und die Leistung wird dadurch nicht verbessert.
@@ -3786,71 +3802,120 @@ Soll [REMOVE_GRID] wirklich aus der Grid-Liste entfernt werden?
 	</notification>
 <!-- </FS:AW  grid management-->
 
-  <!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
-  <notification name="ExodusFlickrVerificationExplanation">
+<!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
+	<notification name="ExodusFlickrVerificationExplanation">
 Um die Flickr-Uploadfunktion nutzen zu können, muss [APP_NAME] Zugriff auf deinen Account gewährt werden. Beim Fortfahren wird die Flickr-Website im Webbrowser geöffnet, wo du dich einloggen und den Zugriff durch [APP_NAME] autorisieren musst. Der daraufhin angezeigte Code muss in [APP_NAME] eingetragen werden.
 
 Soll [APP_NAME] autorisiert werden, Fotos unter deinem Flickr-Konto zu posten?
-    <usetemplate
-     name="okcancelbuttons"
-     notext="Nein"
-     yestext="Ja"/>
-  </notification>
+		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
+	</notification>
 
-  <notification name="ExodusFlickrVerificationPrompt">
+	<notification name="ExodusFlickrVerificationPrompt">
 Bitte den Flickr-Zugriff im Webbrowser autorisieren und den angezeigen Code eingeben:
-    <form name="form">
-      <button
-       name="OK"
-       text="OK"/>
-      <button
-       name="Cancel"
-       text="Abbrechen"/>
-    </form>
-  </notification>
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 
-  <notification name="ExodusFlickrVerificationFailed">
+	<notification name="ExodusFlickrVerificationFailed">
 Flickr-Verifikation fehlgeschlagen. Bitte erneut versuchen sowie den eingegebenen Code überprüfen.
-    <usetemplate
-     name="okbutton"
-     yestext="OK"/>
-  </notification>
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 
-  <notification name="ExodusFlickrUploadComplete">
+	<notification name="ExodusFlickrUploadComplete">
 Das Foto kann jetzt [http://www.flickr.com/photos/upload/edit/?ids=[ID] hier] betrachtet werden.
-  </notification>
-  <!-- </FS:TS> FIRE-5453 -->
+	</notification>
+<!-- </FS:TS> FIRE-5453 -->
 
-  <notification name="FirstUseFlyOverride">
+	<notification name="FirstUseFlyOverride">
 Warnung: Bitte verwende die Funktion zur Aufhebung der Flugbeschränkung verantwortungsvoll! Die Verwendung ohne die Zustimmung des Landeigentümers kann dazu führen, dass du von dem entsprechenden Land verbannt wirst.
-  </notification>
+	</notification>
 
-  <notification name="ServerVersionChanged">
+	<notification name="ServerVersionChanged">
 Die betretene Region verwendet eine andere Simulator-Version.
 Aktueller Simulator: [NEWVERSION]
 Vorheriger Simulator: [OLDVERSION]
-  </notification>
+	</notification>
 
-  <notification name="VintageLoginInfo">
-Wussten Sie schon, dass Sie die klassische Benutzeroberläche im Stil des Phoenix Viewers verwenden können? Wählen Sie den Phoenix-Modus in der „Modus“-Auswahlbox neben dem Anmelden-Button aus.
-	<usetemplate name="okbutton" yestext="OK"/>
-  </notification>
+	<notification name="VintageLoginInfo">
+Wussten Sie schon, dass Sie die klassische Benutzeroberläche im Stil des Phoenix Viewers verwenden können? Wählen Sie den Phoenix-Modus in der „Modus“-Auswahlbox auf der rechten Seite aus.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 
-  <notification name="CannotSaveSnapshot">
+	<notification name="CannotSaveSnapshot">
 Foto konnte nicht gespeichert werden.
-  </notification>
+	</notification>
 
-  <notification name="RegExFail">
+	<notification name="RegExFail">
 Fehler im Regulären Ausdruck:
 [EWHAT]
-  </notification>
+	</notification>
 
-  <notification name="NoHavok">
+	<notification name="NoHavok">
 Einige Funktionen wie [FEATURE] sind nicht in [APP_NAME] für OpenSimulator enthalten. Falls Sie [FEATURE] nutzen möchten, laden Sie sich bitte [APP_NAME] für Second Life hier herunter:
 [DOWNLOAD_URL]
-    <form name="form">
-      <ignore name="ignore" text="Kein-Havok-Warnung"/>
-    </form>
-  </notification>
+		<form name="form">
+			<ignore name="ignore" text="Kein-Havok-Warnung"/>
+		</form>
+	</notification>
+
+	<notification name="DumpArchetypeSuccess">
+Aussehen erfolgreich als XML nach [FILENAME] exportiert.
+	</notification>
+
+	<notification name="StreamListExportSuccess">
+Stream-Liste erfolgreich als XML nach [FILENAME] exportiert.
+	</notification>
+
+	<notification name="StreamListImportSuccess">
+Stream-Liste erfolgreich aus XML importiert.
+	</notification>
+	
+	<notification name="StreamMetadata">
+		♫ Aktueller Titel:
+       [TITLE]
+       [ARTIST]♫
+	</notification>
+	<notification name="StreamMetadataNoArtist">
+		♫ Aktueller Titel:
+       [TITLE]♫
+	</notification>
+
+	<notification name="RadarAlert">
+		[NAME] [MESSAGE]
+	</notification>
+
+	<notification name="BackupFinished">
+Einstellungen wurden gesichert.
+	</notification>
+
+	<notification name="BackupFinished">
+Sicherungspfad ist nicht gesetzt. Bitte zunächst einen Ort festlegen, an dem die Einstellungen gesichert sind und von wo sie wiederhergestellt werden sollen.
+	</notification>
+
+	<notification name="BackupPathDoesNotExistOrCreateFailed">
+Der Sicherungspfad konnte nicht gefunden oder erstellt werden.
+	</notification>
+
+	<notification name="BackupPathDoesNotExist">
+Der Sicherungspfad konnte nicht gefunden werden.
+	</notification>
+
+	<notification name="SettingsRestoreNeedsLogout">
+Das Wiederherstellen von Einstellungen erfordert einen Neustart des Viewers. Sollen die Einstellungen jetzt wiederhergestellt und der Viewer beendet werden?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Wiederherstellen und beenden"/>
+	</notification>
+
+	<notification name="SettingsRestoreNeedsLogout">
+Wiederherstellen abgeschlossen! Bitte den Viewer neu starten!
+		<usetemplate name="okbutton" yestext="Beenden"/>
+	</notification>
+	<notification name="ConfirmRestoreQuickPrefsDefaults">
+Diese Aktion setzt die Schnelleinstellungen direkt auf die Standardkonfiguration zurück.
+
+Diese Aktion kann nicht rückgängig gemacht werden.
+		<usetemplate ignoretext="Bestätigen, wenn Schnelleinstellungen zurückgesetzt werden sollen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+	</notification>
 
 </notifications>

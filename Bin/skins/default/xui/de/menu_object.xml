@@ -38,10 +38,12 @@
 	</context_menu>
 	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh"/>
 	<menu_item_call label="Nicht anzeigen" name="Derender"/>
+	<menu_item_call label="Nicht anzeigen + Blacklist" name="DerenderPermanent"/>
 	<menu_item_call label="Zurückgeben" name="Return..."/>
 	<menu_item_call label="Nehmen" name="Pie Object Take"/>
 	<menu_item_call label="Kopie nehmen" name="Take Copy"/>
 	<menu_item_call label="Bezahlen" name="Pay..."/>
 	<menu_item_call label="Kaufen" name="Buy..."/>
+	<menu_item_call label="Exportieren" name="Export"/>
 	<menu_item_call label="Löschen" name="Delete"/>
 </context_menu>

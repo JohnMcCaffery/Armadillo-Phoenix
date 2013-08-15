@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_about" title="Info über [CAPITALIZED_APP_NAME]">
+<floater name="floater_about" title="Info über [APP_NAME]">
 	<floater.string name="AboutHeader">
 		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] Versionshinweise]
@@ -15,7 +15,7 @@
 	<floater.string name="AboutSystem">
 		CPU: [CPU]
 Speicher: [MEMORY_MB] MB
-Betriebssystem, Version: [OS_VERSION]
+Betriebssystem: [OS_VERSION]
 Grafikkarten-Hersteller: [GRAPHICS_CARD_VENDOR]
 Grafikkarte: [GRAPHICS_CARD]
 	</floater.string>
@@ -32,6 +32,16 @@ Audio-Treiberversion: [AUDIO_DRIVER_VERSION]
 Qt Webkit-Version: [QT_WEBKIT_VERSION]
 Voice-Serverversion: [VOICE_VERSION]
 	</floater.string>
+  <floater.string
+     name="AboutSettings">
+Modus: [MODE]
+Oberflächendesign: [SKIN] ([THEME])
+Schriftart: [FONT] ([FONT_SCREEN_DPI])
+Draw Distance: [DRAW_DISTANCE]
+Bandbreite: [BANDWIDTH]
+LOD-Faktor: [LOD]
+Darstellungsqualität: [RENDERQUALITY]
+</floater.string>
 	<floater.string name="none">
 		(keiner)
 	</floater.string>
@@ -45,7 +55,7 @@ Voice-Serverversion: [VOICE_VERSION]
 		<panel label="Info" name="support_panel">
     <text name="support_intro">    
 Aktuelle Informationen über Firestorm finden Sie unter
-    http://www.phoenixviewer.com
+http://www.firestormviewer.org
     </text>
 			<button label="In Zwischenablage kopieren" name="copy_btn"/>
 		</panel>
@@ -71,7 +81,7 @@ Second Life wird präsentiert von den Lindens:
 <!-- Firestorm Credits -->
       <panel label="Firestorm" name="fs_credits_panel">      
 <text name="firestorm_intro" height="100">
-Firestorm ist ein Community-Projekt, um das SecondLife(tm)-Viewer-Erlebnis zu verbessern. Wir verbinden Beiträge von Community-Entwicklern mit Code von Linden Lab sowie eigenen Erweiterungen, um ein qualitativ hochwertiges und funktionsreiches Viewer-Erlebnis zu bieten. Wir werden durch ein großes, freiwilliges Support-Team unterstützt. Firestorm wird Ihnen präsentiert von The Phoenix Viewer Project, Inc., einer gemeinnützigen Organisation.
+Firestorm ist ein Community-Projekt, um das SecondLife(tm)-Viewer-Erlebnis zu verbessern. Wir verbinden Beiträge von Community-Entwicklern mit Code von Linden Lab sowie eigenen Erweiterungen, um ein qualitativ hochwertiges und funktionsreiches Viewer-Erlebnis zu bieten. Wir werden durch ein großes, freiwilliges Support-Team unterstützt. Firestorm wird Ihnen präsentiert von The Phoenix Firestorm Project, Inc., einer gemeinnützigen Organisation.
 
 Das Firestorm Entwickler-Team:
       </text>

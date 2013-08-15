@@ -44,12 +44,9 @@ RenderFarClip = 1024
 Set Low, and LowFixed to be the same as high settings.
 
 
-Branches from:
-changeset:   31155:d1723a46b247
-branch:      Firestorm_4.3.1
-tag:         tip
-parent:      31153:faa1ef52396b
+changeset:   34166:3f303c53ab1f
+branch:      Firestorm_4.4.2
 user:        Nicky
-date:        Thu Nov 29 21:59:38 2012 +0100
-summary:     Resetting Version to 4.3.1 as it got changed by merge.
+date:        Mon Jul 01 21:42:31 2013 +0200
+summary:     Backout 're-enabled SSA logging for LL SSA test'
 

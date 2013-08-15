@@ -366,7 +366,7 @@
          height="16"
          width="230"
          tool_tip="This settings allows / disallows scripted prims from controlling your media connections"
-         label="Allow resident scripts to play media"
+         label="Allow inworld scripts to play media"
          top_pad="1"
          left="25"/>
         <check_box
@@ -405,16 +405,51 @@
              parameter="media_lists" />
         </button>
         
-        <check_box
-         control_name="ShowStreamMetadata"
-         name="ShowStreamMetadata"
-         label="Show stream title in nearby chat"
-         follows="left|top"
-         layout="topleft"
-         top_pad="-2"
-         left="25"
-         height="18"
-         width="200" />
+		<text
+			type="string"
+			length="1"
+			follows="left|top"
+			height="20"
+			layout="topleft"
+			left="26"
+			name="show_stream_metadata_text"
+			top_pad="2"
+			width="200">
+			Show stream title notifications:
+        </text>
+		<radio_group
+			control_name="ShowStreamMetadata"
+			height="20"
+			width="300"
+			layout="topleft"
+			left_pad="0"
+			name="show_stream_metadata">
+            <radio_item
+				label="Off"
+				name="radio_off"
+				top="0"
+				layout="topleft"
+				height="16"
+				left="0"
+				value="0"
+				width="90" />
+            <radio_item
+				label="Toasts"
+				left_pad="1"
+				layout="topleft"
+				height="16"
+				name="radio_toasts"
+				value="1"
+				width="90" />
+            <radio_item
+				label="Nearby Chat"
+				left_pad="1"
+				layout="topleft"
+				height="16"
+				name="radio_chat"
+				value="2"
+				width="90" />
+        </radio_group>
         <check_box
          top_pad="1"
          left="45"
@@ -524,9 +559,9 @@
          left="25"
          name="Media Rolloff"
          mouse_opaque="false"
-         top_delta="20"
-         width="155">
-            Media audio rolloff distance:
+         top_delta="18"
+         width="250">
+            Sound source rolloff distance:
         </text>
         <slider
          can_edit_text="true"
@@ -538,7 +573,7 @@
          increment="1"
          initial_value="5"
          layout="topleft"
-         left="25"
+         left="45"
          max_val="512"
          min_val="1"
          name="MediaRollOffMin"
@@ -569,7 +604,7 @@
          increment="1"
          initial_value="30"
          layout="topleft"
-         left="25"
+         left="45"
          max_val="512"
          min_val="1"
          name="MediaRollOffMax"
@@ -601,7 +636,7 @@
          name="money_change_threshold_label"
          tool_tip="Plays a sound when money is spent or received higher then the amount set here."
          mouse_opaque="false"
-         top_delta="22"
+         top_delta="18"
          width="117">
             L$ change threshold:
         </text>
@@ -1563,6 +1598,10 @@ Hover your mouse cursor over UUID field to show its default value.
              name="2"
              value="2"/>
            <combo_box.item
+             label="Play only if not in focus"
+             name="3"
+             value="3"/>
+           <combo_box.item
              label="Mute this sound"
              name="0"
              value="0"/>
@@ -1630,6 +1669,10 @@ Hover your mouse cursor over UUID field to show its default value.
              label="Play on every message"
              name="2"
              value="2"/>
+           <combo_box.item
+             label="Play only if not in focus"
+             name="3"
+             value="3"/>
            <combo_box.item
              label="Mute this sound"
              name="0"
@@ -1748,7 +1791,6 @@ Hover your mouse cursor over UUID field to show its default value.
          left_pad="1"
          width="120" />
 
-		<!-- Note: This sound is unused in Firestorm at the moment -->
         <text
          layout="topleft"
          follows="left|top"
@@ -1756,7 +1798,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played on object deletion. Note: This sound is unused in Firestorm at the moment."
+         tool_tip="Sound UUID played on object deletion."
          name="textFSObjectDelete">
             Object deletion:
         </text>
@@ -1804,7 +1846,6 @@ Hover your mouse cursor over UUID field to show its default value.
          name="PlayModeUISndObjectDelete"
          left_pad="1"
          width="120" />
-		<!-- End of unused sound here -->
 
         <text
          layout="topleft"
@@ -2947,6 +2988,310 @@ Hover your mouse cursor over UUID field to show its default value.
          label="Play this sound"
          layout="topleft"
          name="PlayModeUISndFriendOffline"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played on friendship offer."
+         name="textFSFriendshipOffer">
+            Friendship offer:
+        </text>
+        <line_editor
+         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndFriendshipOffer"
+         control_name="UISndFriendshipOffer"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndFriendshipOffer"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+           <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndFriendshipOffer"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndFriendshipOffer"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+           <button.commit_callback
+             function="ResetControl"
+             parameter="UISndFriendshipOffer"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndFriendshipOffer"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndFriendshipOffer"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played on teleport offer."
+         name="textFSTeleportOffer">
+            Teleport offer:
+        </text>
+        <line_editor
+         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndTeleportOffer"
+         control_name="UISndTeleportOffer"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndTeleportOffer"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+           <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndTeleportOffer"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndTeleportOffer"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+           <button.commit_callback
+             function="ResetControl"
+             parameter="UISndTeleportOffer"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndTeleportOffer"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndTeleportOffer"
+         left_pad="1"
+         width="120" />
+
+    </panel>
+
+    <!-- UI Sounds 3 -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="UI Sounds 3"
+     name="UI Sounds tab 3">
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="10"
+         left="5"
+         height="14"
+         width="520"
+         name="textFSExplanation_tab3">
+            Here you can change (by providing sound UUIDs), enable or disable default interface sounds.
+Hover your mouse cursor over UUID field to show its default value.
+        </text>
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="25"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played on default footsteps. Change requires restart to take effect."
+         name="textFSFootsteps">
+            Default footsteps:
+        </text>
+        <line_editor
+         tool_tip="e8af4a28-aa83-4310-a7c4-c047e15ea0df"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndFootsteps"
+         control_name="UISndFootsteps"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndFootsteps"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+           <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndFootsteps"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndFootsteps"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+           <button.commit_callback
+             function="ResetControl"
+             parameter="UISndFootsteps"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndFootsteps"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndFootsteps"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played on group invitation."
+         name="textFSGroupInvitation">
+            Group invitation:
+        </text>
+        <line_editor
+         tool_tip="c825dfbc-9827-7e02-6507-3713d18916c1"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndGroupInvitation"
+         control_name="UISndGroupInvitation"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndGroupInvitation"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+           <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndGroupInvitation"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndGroupInvitation"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+           <button.commit_callback
+             function="ResetControl"
+             parameter="UISndGroupInvitation"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndGroupInvitation"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndGroupInvitation"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played on group notice."
+         name="textFSGroupNotice">
+            Group notice:
+        </text>
+        <line_editor
+         tool_tip="c825dfbc-9827-7e02-6507-3713d18916c1"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndGroupNotice"
+         control_name="UISndGroupNotice"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndGroupNotice"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+           <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndGroupNotice"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndGroupNotice"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+           <button.commit_callback
+             function="ResetControl"
+             parameter="UISndGroupNotice"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndGroupNotice"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndGroupNotice"
          left_pad="1"
          width="120" />
 

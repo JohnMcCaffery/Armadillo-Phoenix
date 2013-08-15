@@ -128,7 +128,7 @@
 		Beenden
 	</string>
 	<string name="create_account_url">
-		http://join.secondlife.com/index.php?lang=de-DE
+		http://join.secondlife.com/index.php?lang=de-DE&amp;sourceid=[sourceid]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Mit dem von Ihnen verwendeten Viewer ist der Zugriff auf Second Life nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
@@ -970,6 +970,18 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TeleportYourAgent">
 		Sie teleportieren
 	</string>
+	<string name="JoinAnExperience">
+		Einem Erlebnis beiwohnen
+	</string>
+	<string name="SilentlyManageEstateAccess">
+		Benachrichtigungen über Änderungen am Grundbesitzzugang stummschalten
+	</string>
+	<string name="OverrideYourAnimations">
+		Ihre Avatar-Animationen übersteuern
+	</string>
+	<string name="ScriptReturnObjects">
+		Objekte in deinem Auftrag zurückgeben
+	</string>
 	<string name="NotConnected">
 		Nicht verbunden
 	</string>
@@ -1053,6 +1065,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="dictionary_files">
 		Wörterbücher
+	</string>
+	<string name="backup_files">
+		Objekt-Sicherungen
 	</string>
 	<string name="AvatarSetNotAway">
 		Nicht abwesend
@@ -1477,6 +1492,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InvFolder favorites">
 		Favoriten
 	</string>
+	<string name="InvFolder Favorites">
+		Meine Favoriten
+	</string>
+	<string name="InvFolder favorites">
+		Meine Favoriten
+	</string>
 	<string name="InvFolder Current Outfit">
 		Aktuelles Outfit
 	</string>
@@ -1836,9 +1857,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		(unbekannt)
 	</string>
 	<string name="SummaryForTheWeek" value="Zusammenfassung für diese Woche, beginnend am "/>
-	<string name="NextStipendDay" value=". Der nächste Stipendium-Tag ist "/>
+	<string name="NextStipendDay" value="Der nächste Stipendium-Tag ist "/>
 	<string name="GroupPlanningDate">
-		[mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc]
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
 	</string>
 	<string name="GroupIndividualShare" value="                      Gruppenanteil       Einzelanteil"/>
 	<string name="GroupColumn" value="Gruppe"/>
@@ -2054,6 +2075,15 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ATTACH_HUD_BOTTOM_RIGHT">
 		HUD unten rechts
 	</string>
+	<string name="ATTACH_NECK">
+		Hals
+	</string>
+	<string name="ATTACH_AVATAR_CENTER">
+		Avatar-Mitte
+	</string>
+	<string name="ATTACH_BRIDGE">
+		Brücke
+	</string>
 	<string name="CursorPos">
 		Zeile [LINE], Spalte [COLUMN]
 	</string>
@@ -2196,7 +2226,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Soll
 	</string>
 	<string name="GroupMoneyDate">
-		[weekday,datetime,utc] [mth,datetime,utc] [day,datetime,utc], [year,datetime,utc]
+		[weekday,datetime,utc], [day,datetime,utc]. [mth,datetime,utc] [year,datetime,utc]
 	</string>
 	<string name="ViewerObjectContents">
 		Inhalte
@@ -3104,6 +3134,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="Hip Width">
 		Breite der Hüfte
 	</string>
+	<string name="Hover">
+		Schweben
+	</string>
 	<string name="In">
 		In
 	</string>
@@ -3978,7 +4011,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Generelle Region
 	</string>
 	<string name="LocationCtrlSeeAVsTooltip">
-		Avatare sichtbar; Chat außerhalb dieser Parzelle gestattet
+		Avatare innerhalb dieser Parzelle können nicht von Avataren außerhalb der Parzelle gesehen oder gehört werden.
 	</string>
 	<string name="LocationCtrlPathfindingDirtyTooltip">
 		Bewegliche Objekte verhalten sich in dieser Region u. U. erst dann korrekt, wenn die Region neu geformt wird.
@@ -4514,7 +4547,7 @@ Missbrauchsbericht
 		Tanzen8
 	</string>
 	<string name="AvatarBirthDateFormat">
-		[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
 	</string>
 	<string name="DefaultMimeType">
 		Keine/Keiner
@@ -4526,7 +4559,8 @@ Missbrauchsbericht
 	<string name="server_is_down">
 		Trotz all unserer Bemühungen ist ein unerwarteter Fehler aufgetreten.
 
-Bitte überprüfen Sie status.secondlifegrid.net um festzustellen, ob ein Problem besteht. Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und Firewalleinstellungen.
+Bitte überprüfen Sie status.secondlifegrid.net um festzustellen, ob ein bekanntes Problem besteht.
+Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und Firewalleinstellungen.
 	</string>
 	<string name="dateTimeWeekdaysNames">
 		Sonntag:Montag:Dienstag:Mittwoch:Donnerstag:Freitag:Samstag
@@ -5082,8 +5116,20 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Mouselook_Label">
 		Mouselook-Modus
 	</string>
-	<string name="Command_Legacy_Search_Label">
-		Klassische Suche
+	<string name="Command_Landmark_Here_Label">
+		Landmarke erstellen
+	</string>
+	<string name="Command_Teleport_History_Label">
+		Teleport-Liste
+	</string>
+	<string name="Command_Pose_Stand_Label">
+		Pose-Stand
+	</string>
+	<string name="Command_Snapshot_To_Disk_Label">
+		Foto auf Datenträger
+	</string>
+	<string name="Command_Radar_Label">
+		Radar
 	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
@@ -5208,8 +5254,20 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Mouselook_Tooltip">
 		Mouselook-Modus aktivieren (M)
 	</string>
-	<string name="Command_Legacy_Search_Tooltip">
-		Orte, Gruppen und Leute mit der klassischen Suche finden
+	<string name="Command_Landmark_Here_Tooltip">
+		Erstellt eine Landmarke an der aktuellen Position
+	</string>
+	<string name="Command_Teleport_History_Tooltip">
+		Öffnet die Teleport-Liste
+	</string>
+	<string name="Command_Pose_Stand_Tooltip">
+		Startet den Pose-Stand für den Avatar zum Justieren von Anhängen
+	</string>
+	<string name="Command_Snapshot_To_Disk_Tooltip">
+		Macht ein Foto und speichert es auf der Festplatte
+	</string>
+	<string name="Command_Radar_Tooltip">
+		Öffnet das Radar für Avatare in der Nähe
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
@@ -5438,5 +5496,216 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="FSWithOpensim">
 		mit OpenSimulator-Unterstützung
+	</string>
+
+	<!-- Firestorm search -->
+	<string name="not_found">
+		„[TEXT]“ nicht gefunden.
+	</string>
+	<string name="no_results">
+		Keine Treffer
+	</string>
+	<string name="searching">
+		Suche läuft...
+	</string>
+	<string name="all_categories">
+		Alle Kategorien
+	</string>
+	<string name="search_banned">
+		Einige Begriffe der Suchabfrage wurden aufgrund von Einschränkungen, die in den Community Standards festgelegt wurden, von der Suche ausgeschlossen.
+	</string>
+	<string name="search_short">
+		Die eingebenen Suchbegriffe waren zu kurz, so dass keine Suche durchgeführt wurde.
+	</string>
+	<string name="search_disabled">
+		Die klassische Suche wurde in dieser Region deaktiviert.
+	</string>
+	<string name="render_quality_low">
+		Niedrig
+	</string>
+	<string name="render_quality_mediumlow">
+		Mittel-Niedrig
+	</string>
+	<string name="render_quality_medium">
+		Mittel
+	</string>
+	<string name="render_quality_mediumhigh">
+		Mittel-Hoch
+	</string>
+	<string name="render_quality_high">
+		Hoch
+	</string>
+	<string name="render_quality_highultra">
+		Hoch-Ultra
+	</string>
+	<string name="render_quality_ultra">
+		Ultra
+	</string>
+	<string name="render_quality_unknown">
+		Unbekannt; Bitte die Debugeinstellung RenderQualityPerformance prüfen!
+	</string>
+	<string name="qtool_busy">
+		Bitte warten, das Ausrichtungstool ist aktiv.
+	</string>
+	<string name="qtool_still_busy">
+		Bitte warten, das Ausrichtungstool ist weiterhin aktiv.
+	</string>
+	<string name="qtool_done">
+		Die Ausrichtung ist beendet.
+	</string>
+	<string name="fsbridge_no_library">
+		Firestorm konnte die LSL-Brücke nicht erstellen. Bitte die Bibliothek aktivieren und neu einloggen.
+	</string>
+	<string name="fsbridge_already_creating">
+		LSL-Brücke wird bereits erstellt. Bitte einige Minuten vor einem erneuten Versuch warten.
+	</string>
+	<string name="fsbridge_creating">
+		LSL-Brücke wird erstellt. Dies kann einen Moment dauern. Bitte warten...
+	</string>
+	<string name="fsbridge_failure_creation_bad_name">
+		LSL-Brücke nicht erstellt. Der Name der Brücke ist inkorrekt. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_creation_null">
+		LSL-Brücke nicht erstellt. Die Brücke konnte nicht im Inventar gefunden werden. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_attach_wrong_object">
+		LSL-Brücke konnte nicht hinzugefügt werden. Die Version der Brücke ist falsch. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_attach_wrong_location">
+		LSL-Brücke konnte nicht hinzugefügt werden. Die Brücke wurde nicht am korrekten Ort im Inventar gefunden. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_attach_point_in_use">
+		LSL-Brücke konnte nicht hinzugefügt werden. Der Anhängepunkt war bereits durch ein anderes Objekt belegt. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_not_found">
+		Das Objekt für die LSL-Brücke konnte nicht gefunden werden. Mit der Erstellung kann nicht fortgefahren werden.
+	</string>
+	<string name="fsbridge_warning_unexpected_items">
+		Die LSL-Brücke enthält unerwartete Objekte.
+	</string>
+	<string name="fsbridge_warning_not_finished">
+		Die LSL-Brücke wurde noch nicht vollständig erstellt, sie muss eventuell über die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ neu erstellt werden, um genutzt werden zu können.
+	</string>
+	<string name="fsbridge_detached">
+		LSL-Brücke abgenommen.
+	</string>
+	<string name="fsbridge_created">
+		LSL-Brücke erstellt.
+	</string>
+
+	<string name="QP Draw Distance">
+		Draw Distance
+	</string>
+	<string name="QP Max Particles">
+		Max. Partikel
+	</string>
+	<string name="QP Avatar Physics LOD">
+		Avatar-Physik LOD
+	</string>
+	<string name="QP LOD Factor">
+		LOD-Faktor
+	</string>
+	<string name="QP Max Avatars">
+		Max. Avatare
+	</string>
+	<string name="QP Tags Offset">
+		Tag-Höhenabstand
+	</string>
+	<string name="QP Name Tags">
+		Avatarnamen
+	</string>
+	<string name="QP LookAt Target">
+		Kamerafokus
+	</string>
+	<string name="QP Color Under Cursor">
+		Farbe unter Cursor
+	</string>
+	
+	<!-- <FS:Ansariel> Posestand animation names -->
+	<string name="PS_T_Pose">
+		T-Pose
+	</string>
+	<string name="PS_Arms_Down_Legs_together">
+		Arme unten, Beine zusammen
+	</string>
+	<string name="PS_Arms_down_sitting">
+		Arme unten, sitzend
+	</string>
+	<string name="PS_Arms_downward_Legs_together">
+		Arme abwärts, Beine zusammen
+	</string>
+	<string name="PS_Arms_downward_Legs_apart">
+		Arme abwärts, Beine auseinander
+	</string>
+	<string name="PS_Arms_forward_Legs_apart">
+		Arme nach vorn, Beine auseinander
+	</string>
+	<string name="PS_Arms_forward_Legs_together">
+		Arme nach vorn, Beine zusammen
+	</string>
+	<string name="PS_Arms_straight_Legs_apart">
+		Arme gerade, Beine auseinander
+	</string>
+	<string name="PS_Arms_straight_sitting">
+		Arme gerade, sitzend
+	</string>
+	<string name="PS_Arms_upward_Legs_apart">
+		Arme aufwärts, Beine auseinander
+	</string>
+	<string name="PS_Arms_upward_Legs_together">
+		Arme aufwärts, Beine zusammen
+	</string>
+
+	<string name="QP_WL_Region_Default">
+		Regionsstandard
+	</string>
+	<string name="QP_WL_Day_Cycle_Based">
+		Tageszyklus-basiert
+	</string>
+	<string name="QP_WL_None">
+		Keiner
+	</string>
+
+	<string name="GroupChatMuteNotice">
+		Ignoriere Gruppenchat von [NAME].
+	</string>
+	
+	<!-- <FS:Ansariel> Radar notifications -->
+	<string name="camera_no_focus">
+		Die Kamera kann nicht auf [AVATARNAME] fokussiert werden, da er/sie sich außerhalb der Draw Distance befindet.
+	</string>
+	<string name="entering_draw_distance">
+		kommt in Draw Distance ([DISTANCE] m).
+	</string>
+	<string name="leaving_draw_distance">
+		hat die Draw Distance verlassen.
+	</string>
+	<string name="entering_chat_range">
+		kommt in Chat-Reichweite ([DISTANCE] m).
+	</string>
+	<string name="leaving_chat_range">
+		hat die Chat-Reichweite verlassen.
+	</string>
+	<string name="entering_region">
+		hat die Region betreten.
+	</string>
+	<string name="entering_region_distance">
+		hat die Region betreten ([DISTANCE] m).
+	</string>
+	<string	name="leaving_region">
+		hat die Region verlassen.
+	</string>
+
+	<string name="export_fail_no_mesh">
+		Der Export von Mesh wird derzeit nicht unterstützt. Export abgebrochen.
+	</string>
+	<string name="TotalScriptCountChangeIncrease">
+		Skriptanzahl in Region hat sich von [OLD_VALUE] auf [NEW_VALUE] erhöht ([DIFFERENCE]).
+	</string>
+	<string name="TotalScriptCountChangeDecrease">
+		Skriptanzahl in Region hat sich von [OLD_VALUE] auf [NEW_VALUE] verringert ([DIFFERENCE]).
+	</string>
+	<string name="preproc_toggle_warning">
+		Umschalten des Präprozessors wird erst vollständig wirksam, nachdem der Editor geschlossen und neu geöffnet wurde.
 	</string>
 </strings>

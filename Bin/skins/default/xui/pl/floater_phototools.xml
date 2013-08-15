@@ -10,6 +10,7 @@
 			<panel name="P_WL_Settings">
 				<check_box label="Podstawowe shadery - włącz! (chmurka)" name="BasicShaders" tool_tip="Ta opcja powinna być ZAWSZE włączona. Jeśli zmienisz ustawienia rozdzielczości znajdujące się powyżej musisz wyłączyć i włączyć tą opcję, aby zmiany odniosły skutek."/>
 				<check_box label="Włącz shadery atmosfery (Windlight)" name="WindLightUseAtmosShaders" tool_tip="Ta opcja włącza pełną funkcjonalność systemu Windlight (shadery atmosfery). Jeśli nie można włączyć tej funkcji to należy upewnić się, że są zaznaczone 'podstawowe shadery' powyżej."/>
+				<check_box label="Używaj Windlight regionu" name="UseRegionWindlight"/>
 			</panel>
 			<panel name="P_WL_Sky_Water">
 				<text name="WL Sky" tool_tip="Zapisane ustawienia systemu Windlight dla nieba.">
@@ -18,11 +19,14 @@
 				<text name="WL Water" tool_tip="Zapisane ustawienia systemu Windlight dla wody.">
 					Woda WL
 				</text>
+				<text name="Day Cycle" tool_tip="Zapisane ustawienia systemu Windlight dla cyklów dnia.">
+					Cykl dnia
+				</text>
 			</panel>
 			<panel name="P_Sun">
 				<icon name="SkyDayCycle" tool_tip="Zmień porę dnia. UWAGA: TA OPCJA ZAZWYCZAJ RESETUJE USTAWIENIA SYSTEMU Windlight DO DOMYŚLNYCH! Aby zmienić pozycję Słońca zgodnie z wcześniej zapisanym ustawieniem wybierz 'Nowe ustawienie nieba' lub 'Edytuj ustawienie nieba' z menu poniżej."/>
 				<multi_slider name="WLSunPos" tool_tip="Ten suwak może nie działać poprawnie. Użyj 'Nowe ustawienie nieba' lub 'Edytuj ustawienie nieba', jeśli napotkasz jakieś trudności."/>
-				<button name="UseRegionWL" tool_tip="Zresetuj ustawienia systemu Windlight do domyślnych regionu."/>
+				<button name="ResetToRegionDefault" tool_tip="Zresetuj ustawienia systemu Windlight do domyślnych regionu."/>
 			</panel>
 			<panel name="P_Q_Windlights">
 				<text name="T_Q_Windlights">
@@ -61,16 +65,16 @@
 				</combo_box>
 			</panel>
 			<panel name="P_R_Res">		
-				<text name="T_R_Res" tool_tip="Określa rozdzielczość/jakość odbić w wodzie. Aby zmiany odniosły skutek musisz wyłączyć i włączyć 'podstawowe shadery'. Poza tym, gdy ustawienia rozdzielczości są w trybie 'bardzo dobrym' lub wyższym musisz także włączyć 'Światła i cienie' w karcie 'Światła'.">
+				<text name="T_R_Res" tool_tip="Określa rozdzielczość/jakość odbić w wodzie. Aby zmiany odniosły skutek musisz wyłączyć i włączyć 'podstawowe shadery'. Poza tym, gdy ustawienia rozdzielczości są w trybie 'bardzo dobrym' lub wyższym musisz także włączyć 'Zaawansowane oświetlenie' w karcie 'Światła'.">
 					Rozdzielczość
 				</text>
 				<combo_box name="ReflectionRescombo">
 					<combo_box.item label="Przyzwoita" name="0"/>
 					<combo_box.item label="Dobra" name="1"/>
-					<combo_box.item label="Bardzo dobra - UWAGA: Musisz także włączyć 'Światła i cienie' (karta Światła)" name="2"/>
-					<combo_box.item label="Świetna - UWAGA: Musisz także włączyć 'Światła i cienie' (karta Światła)" name="3"/>
-					<combo_box.item label="Znakomita - UWAGA: Musisz także włączyć 'Światła i cienie' (karta Światła)" name="4"/>
-					<combo_box.item label="Jak żywa - UWAGA: Musisz także włączyć 'Światła i cienie' (karta Światła)" name="5"/>
+					<combo_box.item label="Bardzo dobra - UWAGA: Musisz także włączyć 'Zaawansowane oświetlenie' (karta Światła)" name="2"/>
+					<combo_box.item label="Świetna - UWAGA: Musisz także włączyć 'Zaawansowane oświetlenie' (karta Światła)" name="3"/>
+					<combo_box.item label="Znakomita - UWAGA: Musisz także włączyć 'Zaawansowane oświetlenie' (karta Światła)" name="4"/>
+					<combo_box.item label="Jak żywa - UWAGA: Musisz także włączyć 'Zaawansowane oświetlenie' (karta Światła)" name="5"/>
 				</combo_box>
 				<check_box label="Przezroczysta woda" name="TransparentWater" tool_tip="Renderuj wodę jako powierzchnię przezroczystą. Wyłączenie tej opcji pokryje wodę nieprzejrzystą, prostą teksturą."/>
 			</panel>
@@ -82,7 +86,7 @@
 				</text>
 			</panel>
 			<panel name="P_L_S_Settings">
-				<check_box label="Włącz światła i cienie" name="RenderDeferred" tool_tip="Ta opcja włącza oświetlenie i cienie od Słońca i Księżyca oraz innych źródeł światła w świecie, pozwala również na włączenie głębi ostrości i innych funkcji graficznych. Zasadniczo należy zaznaczyć to pole, żeby zobaczyć większość 'fajerwerek graficznych' w świecie. Jeśli nie możesz włączyć tej opcji lub zobaczyć żadnego jej efektu upewnij się najpierw, że zarówno podstawowe, jak i atmosferyczne shadery są włączone w karcie 'WL'."/>
+				<check_box label="Włącz zaawansowane oświetlenie" name="RenderDeferred" tool_tip="Ta opcja włącza oświetlenie i cienie od Słońca i Księżyca oraz innych źródeł światła w świecie, pozwala również na włączenie głębi ostrości i innych funkcji graficznych. Zasadniczo należy zaznaczyć to pole, żeby zobaczyć większość 'fajerwerek graficznych' w świecie. Jeśli nie możesz włączyć tej opcji lub zobaczyć żadnego jej efektu upewnij się najpierw, że zarówno podstawowe, jak i atmosferyczne shadery są włączone w karcie 'WL'."/>
 				<check_box label="Wszystkie lokalne światła" name="LocalLights" tool_tip="Ta opcja włącza wszystkie światła w świecie. Jeśli ją wyłączysz, to światło pochodzące od Słońca i Księżyca ciągle będzie widoczne. Przydatne, gdy chcesz wyeliminować oświetlenie pochodzące z regionu i użyć tylko światła słonecznego/księżycowego."/>
 				<check_box label="Włącz doczepiane światła (np. twarzy)" name="Render Attached Lights" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy."/>
 			</panel>
@@ -163,7 +167,7 @@
 				</text>
 			</panel>
 			<panel name="P_DoF_Settings">
-				<check_box label="Włącz głębię ostrości" name="UseDepthofField" tool_tip="Ta opcja włączy głębię ostrości, która służy do 'określania zakresu odległości, w którym obiekty obserwowane przez urządzenie optyczne sprawiają wrażenie ostrych' (Wikipedia). Jeśli nie korzystasz z tej funkcji - wyłącz ją, przyspieszy to wyświetlanie obrazu. Jeśli nie możesz włączyć tej funkcji lub zobaczyć żadnego z jej efektów włącz 'cienie i dynamiczne oświetlenie' w karcie 'Światła'."/>
+				<check_box label="Włącz głębię ostrości" name="UseDepthofField" tool_tip="Ta opcja włączy głębię ostrości, która służy do 'określania zakresu odległości, w którym obiekty obserwowane przez urządzenie optyczne sprawiają wrażenie ostrych' (Wikipedia). Jeśli nie korzystasz z tej funkcji - wyłącz ją, przyspieszy to wyświetlanie obrazu. Jeśli nie możesz włączyć tej funkcji lub zobaczyć żadnego z jej efektów włącz 'Zaawansowane oświetlenie' w karcie 'Światła'."/>
 				<check_box label="Pokazuj pole widzenia w przeglądarce" name="MIC_Show_FOV" tool_tip="Ta opcja pokazuje pionowe pole widzenia kamery. W SL jest możliwe, aby zmienić długość ogniskowej tak, jak w realnym życiu - im mniejsze pole widzenia, tym większa ogniskowa obiektywu. Ogniskowa 50mm ma pole widzenia 27.0 stopni. Aby ustawić pole widzenia użyj suwaka poniżej. Zobacz: 'pl.wikipedia.org/wiki/Kąt_widzenia', aby wyświetlić tabelkę prezentującą stosunek pomiędzy polem widzenia, a ogniskową (mm). WYŁĄCZ TĘ FUNKCJĘ PRZED ROBIENIEM ZDJĘĆ, ALBO BĘDZIE ONA WIDOCZNA NA OBRAZIE!"/>
 			</panel>
 			<panel name="P_Zoom">
@@ -289,10 +293,20 @@
 					Det. nieba
 				</text>
 				<button name="Reset_Sky_Detail" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Av_Floor_Offset" tool_tip="Kontroluje jak bardzo nad lub pod podłogą stoi Twój awatar. Przydatne, gdy nagle znajdziesz się w niepasującej pozycji.">
-					Przesun. od podłogi
+			</panel>
+			<panel name="P_Vignetting">
+				<text name="T_VignetteX">
+					Vig. ilość
 				</text>
-				<button name="Reset_Av_Floor_Offset" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
+				<button name="Reset_VignetteX" tool_tip="Kliknij tutaj, aby zresetować ustawienia Vignette do domyślnych."/>
+				<text name="T_VignetteY">
+					Vig. moc
+				</text>
+				<button name="Reset_VignetteY" tool_tip="Kliknij tutaj, aby zresetować ustawienia Vignette do domyślnych."/>
+				<text name="T_VignetteZ">
+					Vig. mnożnik
+				</text>
+				<button name="Reset_VignetteZ" tool_tip="Kliknij tutaj, aby zresetować ustawienia Vignette do domyślnych."/>
 			</panel>
 			<panel name="P_Render">
 				<check_box label="Renderuj poza polem widzenia" name="UseFarClip" tool_tip="Jeśli wyłączysz tą opcję przeglądarka będzie renderować obiekty poza ustawionym polem widzenia / zasięgiem rysowania."/>
@@ -312,8 +326,6 @@
 					<combo_box.item label="8x (jeszcze gładsze)" name="8x"/>
 					<combo_box.item label="16x (najgładsze)" name="16x"/>
 				</combo_box>
-			</panel>
-			<panel name="P_Texture_Bumpiness">	
 				<text name="T_Texture_Bumpiness" tool_tip="Mapowanie wypukłości tekstur: Kontroluje siłę i rozdzielczość normalnych oraz mapowanych wypukłościowo tekstur.">
 					Wypukłości tekstur
 				</text>
@@ -460,6 +472,7 @@
 							<check_box label="Resetuj pozycję kamery po teleportacji" name="FSResetCameraOnTP" tool_tip="Normalnie pozycja kamery ulega zresetowaniu po teleportacji. Ta opcja zapobiega temu zachowaniu."/>
 							<check_box label="Wyłącz minimalną odl. przybliżenia" name="disableminzoomdist" tool_tip="Wyłącz ograniczenie w przybliżaniu obiektów."/>
 							<check_box label="Przenikaj przez primy bez ograniczeń" name="ignorecameraconstraints" tool_tip="Ignoruje 'pchnięcie' stosowane przez symulator, aby utrzymać kamerę na zewnątrz obiektów. WYMAGA RESTARTU!"/>
+							<check_box label="Resetuj pozycję kamery przy poruszaniu się" name="resetcamerapositiononmovement" tool_tip="Resetuje pozycję kamery do domyślnej pozycji, gdy poruszysz awatarem."/>
 						</panel>
 					</panel>
 				</tab_container>

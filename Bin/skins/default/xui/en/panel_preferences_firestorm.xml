@@ -43,8 +43,6 @@
          label="Allow Remote Scripted Viewer Controls  (RLVa)" >
             <check_box.commit_callback
              function="RLV.ToggleEnabled" />
-            <check_box.enabled_callback
-             function="RLV.CheckEnabled" />
         </check_box>
         <text
          layout="topleft"
@@ -67,22 +65,11 @@
          width="270"
          control_name="FSWorldMapDoubleclickTeleport"
          tool_tip="Enables teleporting via double click to a destination on the world map."/>
-        <check_box
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         label="Disable Teleport Screens"
-         left="15"
-         name="tp_screen_toggle"
-         width="270"
-         control_name="FSDisableTeleportScreens"
-         tool_tip="Disables the black teleport screen during all teleports."/>
-        <check_box
+		<check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Disable Teleport Beacons"
-         left="15"
          name="tp_beam_toggle"
          width="270"
          control_name="FSDisableBeaconAfterTeleport"
@@ -91,8 +78,16 @@
          top_pad="5"
          follows="left|top"
          height="16"
+         label="Disable Teleport Screens"
+         name="tp_screen_toggle"
+         width="270"
+         control_name="FSDisableTeleportScreens"
+         tool_tip="Disables the black teleport screen during all teleports."/>
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
          label="Disable Login Progress Screen"
-         left_delta="0"
          name="login_screen_toggle"
          width="270"
          control_name="FSDisableLoginScreens"
@@ -102,7 +97,6 @@
          follows="left|top"
          height="16"
          label="Disable Logout Progress Screen"
-         left_delta="0"
          name="logout_screen_toggle"
          width="270"
          control_name="FSDisableLogoutScreens"
@@ -112,18 +106,15 @@
          follows="left|top"
          height="16"
          label="Always rez objects under the land group if possible"
-         left="15"
          name="grouplandrez"
          width="270"
          control_name="RezUnderLandGroup"
          tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Sort contact lists by username even when display names are shown"
-         left="15"
          name="sortcontactsbyun"
          width="270"
          control_name="FSSortContactsByUserName"
@@ -131,84 +122,70 @@
             <check_box.commit_callback
              function="FS.ToggleSortContacts" />
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Render blocked avatars as particle cloud"
-         left="15"
          name="ShowMutedAvatarsAsCloud"
          width="270"
          control_name="ShowMutedAvatarsAsCloud"
          tool_tip="Blocked avatars will be rendered as a particle cloud in special color.">
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Hide empty system folders from inventory"
-         left="15"
          name="DebugHideEmptySystemFolders"
          width="270"
          control_name="DebugHideEmptySystemFolders"
          tool_tip="If enabled, the inventory windows will hide all empty system folders like Favorites, Landmarks etc.">
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Show the Received Items folder in normal inventory"
-         left="15"
          name="FSShowInboxFolder"
          width="270"
          control_name="FSShowInboxFolder"
          tool_tip="If enabled, the inventory windows will also show the Received Items folder">
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Allow separate search terms on each tab in inventory"
-         left="15"
          name="FSSplitInventorySearchOverTabs"
          width="270"
          control_name="FSSplitInventorySearchOverTabs"
          tool_tip="If enabled, it is possible to enter a different search term for each tab in inventory.">
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Deactivate tracking beacon when reaching the targeted avatar (&lt;= 3m)"
-         left="15"
          name="FSDisableAvatarTrackerAtCloseIn"
          width="270"
          control_name="FSDisableAvatarTrackerAtCloseIn"
          tool_tip="If enabled, the tracking beacon will be disabled automatically, if the distance to the targeted avatar is less than 3m. (Default)"/>
-
 		<check_box
 		 control_name="EffectScriptChatParticles"
 		 height="16"
 		 label="Create particle effects when scripts communicate"
 		 layout="topleft"
-		 left="15"
 		 name="EffectScriptChatParticles"
 		 tool_tip="If enabled scripted objects display swirling particle lights when the scripts communicate"
 		 initial_value="true"
 		 top_pad="5"
 		 width="350" />
-
 		<check_box
 		 control_name="FSRenderFarClipStepping"
 		 height="16"
 		 label="Enable progressive draw distance stepping"
 		 layout="topleft"
-		 left="15"
 		 name="FSRenderFarClipStepping"
 		 tool_tip="If enabled, Firestorm will use a progressive draw distance stepping after teleporting."
 		 initial_value="true"
@@ -231,7 +208,7 @@
 		 tool_tip="Interval in seconds between each draw distance increment"/>
 
         <check_box
-         top_pad="15"
+         top_pad="5"
          control_name="UseLSLBridge"
          follows="left|top"
          height="16"
@@ -265,7 +242,7 @@
      label="Protection"
      name="ProtectionTab">
         <check_box
-         top_pad="12"
+         top_pad="10"
          left="10"
          label="Block left-click sitting on objects"
          control_name="FSBlockClickSit"
@@ -274,7 +251,7 @@
          name="FSBlockClickSit"
          width="256" />
         <check_box
-         top_pad="5"
+         top_pad="4"
          label="Allow scripts to show map UI (llMapDestination)"
          control_name="ScriptsCanShowUI"
          follows="left|top"
@@ -283,7 +260,7 @@
          width="256" />
 
         <text
-         top_pad="10"
+         top_pad="5"
          follows="left|top"
          height="12"
          name="revokepermissions_txt"
@@ -297,7 +274,7 @@
          layout="topleft"
          control_name="FSRevokePerms"
          name="FSRevokePerms"
-         tool_tip="FSRevokePerms"
+         tool_tip=""
          width="331">
             <radio_item
              height="16"
@@ -334,16 +311,16 @@
         </radio_group>
 
         <text
-         left="5"
-         top_pad="10"
+         left="10"
+         top_pad="5"
          follows="left|top"
          height="12"
          name="SurfaceAreaThreshholdLabel"
          width="360">
          Texture Lag Protection (may break some objects):
          </text>
-         <check_box
-         top_pad="10"
+        <check_box
+         top_pad="8"
          left="20"
          label="Automatically hide large objects with high texture area. Threshold: "
          control_name="RenderVolumeSAProtection"
@@ -368,7 +345,7 @@
          width="90" />
 
         <check_box
-         top_pad="15"
+         top_pad="10"
          left="10"
          label="Enable Spam Protection"
          control_name="UseAntiSpam"
@@ -498,6 +475,15 @@
         <check_box
          top_pad="10"
          left="10"
+         label="Remove &quot;Block&quot; button from script dialogs"
+         control_name="FSRemoveScriptBlockButton"
+         follows="left|top"
+         height="16"
+         name="FSRemoveScriptBlockButton"
+         width="200" />
+        <check_box
+         top_pad="4"
+         left="10"
          label="Notify about items from objects coming in too fast"
          control_name="FSNotifyIncomingObjectSpam"
          follows="left|top"
@@ -505,7 +491,7 @@
          name="FSNotifyIncomingObjectSpam"
          width="200" />
         <check_box
-         top_pad="5"
+         top_pad="4"
          left="10"
          label="Notify about items from other residents coming in too fast"
          control_name="FSNotifyIncomingObjectSpamFrom"
@@ -746,9 +732,10 @@
          follows="left|top"
          height="16"
          initial_value="true"
-         label="SL Particle Chat"
+         label="Send selection data to chat"
          left="15"
          name="FSParticleChat"
+         tool_tip="Sends selection data (selection start/stop and global position) to chat channel 9000."
          width="250"
          control_name="FSParticleChat" />
 
@@ -856,6 +843,7 @@
       left="5"
       name="chat_cmd_toggle"
       width="270"
+      tool_tip=""
       control_name="FSCmdLine"/>.
     <!--calc-->
     <text
@@ -1067,6 +1055,7 @@
       left="5"
       name="chat_cmd_toggle2"
       width="270"
+      tool_tip=""
       control_name="FSCmdLine"/>
     <!--gtp-->
     <text
@@ -1282,12 +1271,13 @@
          height="12"
          name="FSWLshare_txt"
          width="250">
-          Phoenix WL Share (Experimental)
+          Firestorm WL Share
         </text>
         <check_box
          top_pad="8"
-         label="Use Phoenix Parcel Windlight Sharing (Experimental)"
+         label="Use Firestorm Parcel Windlight Sharing"
          control_name="FSWLParcelEnabled"
+         enabled_control="UseEnvironmentFromRegionAlways"
          follows="left|top"
          height="16"
          name="FSWLParcelEnabled"
@@ -1297,6 +1287,7 @@
          left="15"
          label="Auto apply WL settings from friend's land"
          control_name="FSWLWhitelistFriends"
+         enabled_control="UseEnvironmentFromRegionAlways"
          follows="left|top"
          height="16"
          name="FSWLWhitelistFriends"
@@ -1305,6 +1296,7 @@
          top_pad="5"
          label="Auto apply WL settings from my groups' land"
          control_name="FSWLWhitelistGroups"
+         enabled_control="UseEnvironmentFromRegionAlways"
          follows="left|top"
          height="16"
          name="FSWLWhitelistGroups"
@@ -1313,6 +1305,7 @@
          top_pad="5"
          label="Auto apply WL settings from any parcel"
          control_name="FSWLWhitelistAll"
+         enabled_control="UseEnvironmentFromRegionAlways"
          follows="left|top"
          height="16"
          name="FSWLWhitelistAll"
@@ -1321,6 +1314,7 @@
          top_pad="5"
          label="Crossfade region environment changes for Parcel WL"
          control_name="FSInterpolateParcelWL"
+         enabled_control="UseEnvironmentFromRegionAlways"
          follows="left|top"
          height="16"
          name="FSInterpolateParcelWL"
@@ -1354,7 +1348,27 @@
          name="FSWindlightInterpolateTime"
          width="50"
          tool_tip="The duration for crossfading from one preset to another [Default: 3]"/>
-		 
+        <text
+         top_pad="10"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="10"
+         name="could_texture_text"
+         width="220">
+           Cloud texture (restart recommended):
+        </text>
+        <combo_box
+         allow_text_entry="false"
+         left_pad="5"
+         follows="left|top"
+         height="20"
+         name="cloud_combo"
+         width="130"
+         control_name="FSCloudTexture"
+         tool_tip="Select the cloud texture you would like to use."/>
     </panel>
 
     <!--Build-->
@@ -1366,29 +1380,65 @@
      follows="all"
      label="Build"
      name="BuildTab">
-
+     
         <text
-         top="10"
+         top="5"
          follows="left|top|right"
          height="10"
-         left="10"
+         left="20"
          name="text_box_objprams"
          width="175">
-         Default Object Parameters
-         </text>
+         Default Object Size
+        </text>
+        <text
+         top="5"
+         follows="left|top|right"
+         height="10"
+         left="180"
+         name="text_box_objprams2"
+         width="175">
+         Settings
+        </text>
+        <text
+         top="5"
+         follows="left|top|right"
+         height="10"
+         left="350"
+         name="text_box_objprams3"
+         width="175">
+         Texture
+        </text>
         <view_border
          top_pad="5"
-         left="10"
-         right="-270"
-         height="85"
-         follows="left|top|right"
+         left="5"
+         height="90"
+         follows="top|left"
          bevel_style="none"
          border_thickness="1"
          name="SizeBorder"
-         width="100"/>
+         width="140"/>
+        <view_border
+         top_delta="0"
+         left_delta="140"
+         height="90"
+         follows="top|left"
+         bevel_style="none"
+         border_thickness="1"
+         name="SettingBorder"
+         width="120"/>
+        <view_border
+         top_delta="0"
+         left_delta="120"
+         height="90"
+         follows="top|left"
+         bevel_style="none"
+         border_thickness="1"
+         name="TextureBorder"
+         width="255"/>
+         
         <spinner
-         top_delta="10"
-         left_delta="5"
+         top_pad="-77"
+         left="15"
          decimal_digits="5"
          follows="left|top"
          height="16"
@@ -1426,23 +1476,59 @@
          name="Z size"
          width="120"
          control_name="FSBuildPrefs_Zsize"/>
-        <text
-         top="40"
-         left_pad="15"
+
+        <check_box
+         top_delta="-50"
+         enabled="true"
          follows="left|top"
-         height="15"
-         name="text_box_objmaterial"
-         width="50">
-         Material:
-         </text>
+         font="SansSerifSmall"
+         height="16"
+         label="Phantom"
+         left="155"
+         mouse_opaque="true"
+         name="FSBuildPrefs_PhantomToggle"
+         radio_style="false"
+         width="100"
+         control_name="FSBuildPrefs_Phantom"/>
+        <check_box
+         top_delta="20"
+         enabled="true"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         label="Physical"
+         left_delta="0"
+         mouse_opaque="true"
+         name="FSBuildPrefs_PhysicalToggle"
+         radio_style="false"
+         width="100"
+         control_name="FSBuildPrefs_Physical"/>
+        <check_box
+         top_delta="20"
+         enabled="true"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         label="Temporary"
+         left_delta="0"
+         mouse_opaque="true"
+         name="FSBuildPrefs_TemporaryToggle"
+         radio_style="false"
+         width="100"
+         control_name="FSBuildPrefs_Temporary"/>
         <combo_box
-         left="150"
-         height="18"
-         width="80"
          allow_text_entry="false"
+         top_delta="20"
+         left_delta="1"
          follows="left|top"
+         height="18"
+         left="10"
+         max_chars="20"
+         mouse_opaque="true"
          name="material"
-         control_name="FSBuildPrefs_Material">
+         width="87"
+         control_name="FSBuildPrefs_Material"
+         tool_tip="">
              <combo_item name="Stone" value="Stone" label="Stone"/>
              <combo_item name="Metal" value="Metal" label="Metal"/>
              <combo_item name="Glass" value="Glass" label="Glass"/>
@@ -1452,9 +1538,265 @@
              <combo_item name="Rubber" value="Rubber" label="Rubber"/>
         </combo_box>
 
+        <texture_picker
+         allow_no_texture="false"
+         top_delta="-60"
+         can_apply_immediately="true"
+         default_image_name="Default"
+         follows="left|top"
+         height="80"
+         label="Texture"
+         left="275"
+         mouse_opaque="true"
+         name="texture control"
+         control_name="FSDefaultObjectTexture"
+         tool_tip="Click to choose a picture"
+         width="64"/>
+        <color_swatch
+         border_color="0.45098, 0.517647, 0.607843, 1"
+         top_delta="0"
+         can_apply_immediately="true"
+         color="1, 1, 1, 1"
+         follows="left|top"
+         height="80"
+         label="Color"
+         left_delta="75"
+         mouse_opaque="true"
+         name="colorswatch"
+         tool_tip="Click to open Color Picker"
+         width="64"
+         control_name="FSBuildPrefs_Color"/>
+        <spinner
+         top_delta="0"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="Alpha"
+         label_width="40"
+         left_delta="70"
+         max_val="100"
+         min_val="0"
+         mouse_opaque="true"
+         name="alpha"
+         width="90"
+         control_name="FSBuildPrefs_Alpha"/>
+        <spinner
+         top_delta="20"
+         enabled="true"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Glow"
+         label_width="40"
+         left_delta="0"
+         max_val="1"
+         min_val="0"
+         mouse_opaque="true"
+         name="glow"
+         width="90"
+         control_name="FSBuildPrefs_Glow"/>
+        <check_box
+         top_delta="22"
+         enabled="true"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         label="Full Bright"
+         left_delta="0"
+         mouse_opaque="true"
+         name="EmFBToggle"
+         radio_style="false"
+         width="100"
+         control_name="FSBuildPrefs_FullBright"/>
+        <combo_box
+         allow_text_entry="false"
+         top_delta="18"
+         follows="left|top"
+         height="18"
+         left_delta="0"
+         max_chars="20"
+         mouse_opaque="true"
+         name="combobox shininess"
+         tool_tip="Set the amount of shine for the object"
+         width="90"
+         control_name="FSBuildPrefs_Shiny">
+          <combo_item name="None" value="None" label="None"/>
+          <combo_item name="Low" value="Low" label="Low"/>
+          <combo_item name="Medium" value="Medium" label="Medium"/>
+          <combo_item name="High" value="High" label="High"/>
+        </combo_box>
+<!--
+TODO: add the code to enable drag and drop support for items
+For now, just make the UI elements invisiable but still have the debug settings to play with.
+-->
+        <check_box
+	visible="false"
+         name="FSBuildPrefs_EmbedItem"
+         top="120"
+         enabled="false"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         initial_value="false"
+         label="Embed an item into new prims"
+         left="10"
+         mouse_opaque="true"
+         control_name="FSBuildPrefs_EmbedItem"
+         radio_style="false"
+         width="270"/>
+        <view_border
+	visible="false"
+	enabled="false"
+         bevel_style="in"
+         top_delta="20"
+         follows="left|top"
+         height="16"
+         left_delta="0"
+         mouse_opaque="false"
+         name="im_give_drop_target_rect"
+         width="220"/>
         <text
-         top="10"
-         left="280"
+	visible="false"
+	enabled="false"
+         bg_visible="false"
+         border_drop_shadow_visible="false"
+         border_visible="false"
+         top_delta="0"
+         drop_shadow_visible="true"
+         follows="left|top"
+         font="SansSerifSmall"
+         h_pad="0"
+         halign="center"
+         height="16"
+         left_delta="0"
+         mouse_opaque="true"
+         name="Give inventory"
+         tool_tip="Drop an inventory item here."
+         v_pad="2"
+         width="220">
+         Drop an inventory item here.
+        </text>
+        <view_border
+	visible="false"
+	enabled="false"
+         bevel_style="in"
+         top_delta="18"
+         follows="left|top"
+         height="16"
+         left_delta="0"
+         mouse_opaque="false"
+         name="build_item_add_disp_rect"
+         width="220"/>
+        <text
+	visible="false"
+	enabled="false"
+         bg_visible="false"
+         border_drop_shadow_visible="false"
+         border_visible="false"
+         top_delta="0"
+         drop_shadow_visible="true"
+         follows="left|top"
+         font="SansSerifSmall"
+         h_pad="0"
+         halign="center"
+         height="16"
+         left_delta="0"
+         mouse_opaque="true"
+         name="build_item_add_disp_rect_txt"
+         tool_tip=""
+         v_pad="2"
+         width="220">
+         Currently set to: [ITEM]
+        </text>
+<!-- end drag and drop UI -->
+        <text
+         top_pad="-60"
+         left_pad="20"
+         follows="left|top"
+         height="10"
+         name="text_box_permissions"
+         width="135">
+          Permissions
+        </text>
+        <view_border
+         top_pad="4"
+         bevel_style="none"
+         border_thickness="1"
+         follows="top|left"
+         height="120"
+         name="PermissionsBorder"
+         width="135"/>
+        <text
+         top_pad="-110"
+         left_delta="10"
+         follows="left|top"
+         height="10"
+         name="text_box_permnextowner"
+         width="135">
+          Next Owner:
+        </text>
+        <check_box
+         control_name="NextOwnerModify"
+         top_pad="10"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         label="Modify permission"
+         left_delta="-7"
+         tool_tip="Modify permissions"
+         name="next_owner_modify"
+         width="270"/>
+        <check_box
+         control_name="NextOwnerCopy"
+         top_pad="0"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         label="Copy permission"
+         left_delta="0"
+         tool_tip="Copy permissions"
+         name="next_owner_copy"
+         width="270">
+            <check_box.commit_callback
+			function="Perms.Copy" />
+        </check_box>
+        <check_box
+         control_name="NextOwnerTransfer"
+         top_pad="0"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
+         label="Transfer permission"
+         left_delta="0"
+         tool_tip="Transfer permissions"
+         name="next_owner_transfer"
+         width="270">
+			<check_box.commit_callback
+			function="Perms.Trans" />
+		</check_box>
+        <text
+         top_pad="5"
+         left_delta="5"
+         follows="left|top"
+         height="10"
+         name="text_box_permnote1"
+         width="135">
+          This will also apply
+        </text>
+        <text
+         top_pad="5"
+         follows="left|top"
+         height="10"
+         name="text_box_permnote2"
+         width="135">
+          to new uploads.
+        </text>
+
+        <text
+         top_pad="-123"
+         left_pad="-5"
          follows="left|top"
          height="10"
          name="text_box_pivotpoint"
@@ -1468,14 +1810,14 @@
          follows="top|left"
          height="120"
          name="PivotBorder"
-         width="250"/>
+         width="135"/>
         <check_box
-         top_delta="10"
+         top_delta="13"
          left_delta="3"
          follows="left|top"
-         label="Show axis arrow on root prim position"
+         label="Axis on root prim"
          tool_tip="Default behaviour is to show the axis on the center of mass of a linkset. If enabled, the axis will be shown on the root prim of the linkset instead."
-         name="EmBuildPrefsActualRoot_toggle"
+         name="FSBuildPrefsActualRoot_toggle"
          control_name="FSBuildPrefs_ActualRoot"/>
         <spinner
          top_pad="5"
@@ -1525,29 +1867,54 @@
          height="16"
          label="Values are percent"
          tool_tip="Default settings are Percentages and every axis set at 50"
-         name="EmPivotPercToggle"
+         name="FSPivotPercToggle"
          width="100"
          control_name="FSBuildPrefs_PivotIsPercent"/>
 
         <check_box
-         top="140"
+         top_pad="-30"
          follows="left|top"
          height="16"
-		 left="10"
+		 left="3"
          label="Enable highlighting of selected prims"
          tool_tip="When unchecked, the yellow/blue outline effects are not rendered, improving performance when large numbers of prims are selected."
-         name="EmBuildPrefsRenderHighlight_toggle"
+         name="FSBuildPrefsRenderHighlight_toggle"
          control_name="RenderHighlightSelections"/>
-		 
+
         <check_box
+         top_pad="2"
+         follows="left|top"
+         height="16"
+         label="Use old &quot;Set Object For Sale&quot; behavior"
+         tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
+         name="FSCommitForSaleOnChange_toggle"
+         control_name="FSCommitForSaleOnChange"/>
+        <check_box
+         top_pad="3"
+         follows="left|top"
+         height="16"
+         label="Save scripts edited from inventory as Mono"
+         tool_tip="When checked, editing a script directly from inventory and then saving it saves as Mono instead of LSL."
+         name="FSSaveInventoryScriptsAsMono_toggle"
+         control_name="FSSaveInventoryScriptsAsMono"/>
+        <check_box
+         top_pad="0"
+         follows="left|top"
+         height="16"
+         label="Save textures from inventory to disk as PNG instead of TGA by default"
+         tool_tip="Used in the texture preview floater and context menu in inventory."
+         name="FSTextureDefaultSaveAsFormat"
+         control_name="FSTextureDefaultSaveAsFormat"/>
+        <check_box
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Use Ctrl+mouse to grab and manipulate objects"
          tool_tip="When checked, you will be able to grab and move objects with your mouse and CTRL key."
          name="FSEnableGrab"
          control_name="EnableGrab"/>
-		 
         <check_box
+         top_pad="0"
          follows="left|top"
          height="16"
 		 initial_value="false"
@@ -1556,450 +1923,90 @@
          name="FSExperimentalDragTexture"
          control_name="FSExperimentalDragTexture"/>
 
-        <check_box
-         follows="left|top"
-         height="16"
-         label="Use old &quot;Set Object For Sale&quot; behavior"
-         tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
-         name="FSCommitForSaleOnChange_toggle"
-         control_name="FSCommitForSaleOnChange"/>
 
         <check_box
          follows="left|top"
          height="16"
-         label="Save scripts edited from inventory as Mono"
-         tool_tip="When checked, editing a script directly from inventory and then saving it saves as Mono instead of LSL."
-         name="FSSaveInventoryScriptsAsMono_toggle"
-         control_name="FSSaveInventoryScriptsAsMono"/>
-
-	<check_box
-   follows="left|top"
-	 height="16"
-	 top="300"
-	 label="Enable LSL preprocessor"
-	 tool_tip="When checked, the LSL preprocessor is enabled."
-	 name="preproc_checkbox"
-	 control_name="_NACL_LSLPreprocessor" />
-	<check_box
-   follows="left|top"
-	 height="16"
-	 left="20"
-	 enabled_control="_NACL_LSLPreprocessor"
-	 label="Script optimizer"
-	 tool_tip="When checked, the LSL preprocessor will optimize space used by scripts at the cost of readability."
-	 name="preprocoptimizer_checkbox"
-	 control_name="_NACL_PreProcLSLOptimizer" />
-	<check_box
-   follows="left|top"
-	 height="16"
-	 top_delta="0"
-	 left_delta="120"
-	 enabled_control="_NACL_LSLPreprocessor"
-	 label="switch() statement"
-	 tool_tip="When checked, the LSL preprocessor will allow the use of the switch() statement for script flow control."
-	 name="preprocswitch_checkbox"
-	 control_name="_NACL_PreProcLSLSwitch" />
-	<check_box
-   follows="left|top"
-	 height="16"
-	 top_delta="0"
-	 left_delta="130"
-	 enabled_control="_NACL_LSLPreprocessor"
-	 label="Lazy lists"
-	 tool_tip="When checked, the LSL preprocessor will allow the use of syntax extensions for list handling."
-	 name="preproclazy_checkbox"
-	 control_name="_NACL_PreProcLSLLazyLists" />
-	<check_box
-   follows="left|top"
-	 top_delta="0"
-	 left_delta="80"
-	 height="16"
-	 enabled_control="_NACL_LSLPreprocessor"
-	 label="#includes from local disk"
-	 tool_tip="When checked, the LSL preprocessor will allow #include statements to reference files on your local disk."
-	 name="preprocinclude_checkbox"
-	 control_name="_NACL_PreProcEnableHDDInclude" />
-	<text
-   follows="left|top"
-	 height="16"
-	 type="string"
-	 length="1"
-	 layout="topleft"
-	 enabled_control="_NACL_PreProcEnableHDDInclude"
-	 name="lslpreprocinclude_textbox"
-	 left="10"
-	 width="256">
-    Preprocessor include path:
-  </text>
-	<line_editor
-	 control_name="_NACL_PreProcHDDIncludeLocation"
-	 border_style="line"
-	 border_thickness="1"
-	 follows="left|top"
-	 font="SansSerif"
-	 height="23"
-	 enabled_control="_NACL_PreProcEnableHDDInclude"
-	 max_length_chars="4096"
-	 name="preprocinclude_location"
-	 width="310" />
-	<button
-	 follows="left|top"
-	 height="23"
-	 enabled_control="_NACL_PreProcEnableHDDInclude"
-	 label="Browse"
-	 label_selected="Browse"
-	 left_pad="5"
-	 name="SetPreprocInclude"
-	 top_delta="0"
-	 width="100">
-	 <button.commit_callback
-	  function="NACL.SetPreprocInclude" />
-	 </button>
+         top="320"
+         label="Enable LSL preprocessor"
+         tool_tip="When checked, the LSL preprocessor is enabled."
+         name="preproc_checkbox"
+         control_name="_NACL_LSLPreprocessor" />
+        <check_box
+         follows="left|top"
+         height="16"
+         left="20"
+         enabled_control="_NACL_LSLPreprocessor"
+         label="Script optimizer"
+         tool_tip="When checked, the LSL preprocessor will optimize space used by scripts at the cost of readability."
+         name="preprocoptimizer_checkbox"
+         control_name="_NACL_PreProcLSLOptimizer" />
+        <check_box
+         follows="left|top"
+         height="16"
+         top_delta="0"
+         left_delta="120"
+         enabled_control="_NACL_LSLPreprocessor"
+         label="switch() statement"
+         tool_tip="When checked, the LSL preprocessor will allow the use of the switch() statement for script flow control."
+         name="preprocswitch_checkbox"
+         control_name="_NACL_PreProcLSLSwitch" />
+        <check_box
+         follows="left|top"
+         height="16"
+         top_delta="0"
+         left_delta="130"
+         enabled_control="_NACL_LSLPreprocessor"
+         label="Lazy lists"
+         tool_tip="When checked, the LSL preprocessor will allow the use of syntax extensions for list handling."
+         name="preproclazy_checkbox"
+         control_name="_NACL_PreProcLSLLazyLists" />
+        <check_box
+         follows="left|top"
+         top_delta="0"
+         left_delta="80"
+         height="16"
+         enabled_control="_NACL_LSLPreprocessor"
+         label="#includes from local disk"
+         tool_tip="When checked, the LSL preprocessor will allow #include statements to reference files on your local disk."
+         name="preprocinclude_checkbox"
+         control_name="_NACL_PreProcEnableHDDInclude" />
+        <text
+         follows="left|top"
+         height="16"
+         type="string"
+         length="1"
+         layout="topleft"
+         enabled_control="_NACL_PreProcEnableHDDInclude"
+         name="lslpreprocinclude_textbox"
+         left="10"
+         width="256">
+          Preprocessor include path:
+        </text>
+        <line_editor
+         control_name="_NACL_PreProcHDDIncludeLocation"
+         border_style="line"
+         border_thickness="1"
+         follows="left|top"
+         font="SansSerif"
+         height="23"
+         enabled_control="_NACL_PreProcEnableHDDInclude"
+         max_length_chars="4096"
+         name="preprocinclude_location"
+         width="310" />
+        <button
+         follows="left|top"
+         height="23"
+         enabled_control="_NACL_PreProcEnableHDDInclude"
+         label="Browse"
+         label_selected="Browse"
+         left_pad="5"
+         name="SetPreprocInclude"
+         top_delta="0"
+         width="100">
+         <button.commit_callback
+          function="NACL.SetPreprocInclude" />
+        </button>
   </panel>
-
-
-    <!--Tags-->
-    <panel
-     top_pad="5"
-     bottom="-1"
-     left="1"
-     right="-1"
-     follows="all"
-     label="Tags"
-     name="TagTab">
-
-      <text
-       type="string"
-       length="1"
-       follows="left|top"
-       height="15"
-       layout="topleft"
-       left="5"
-       name="SL-Tags-Notice"
-       top_pad="10"
-       width="512">
-        Note: Due to changes Linden Lab has made, viewer tags will not work in Second Life.
-      </text>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="15"
-         layout="topleft"
-         left="20"
-         name="whattagstoshow"
-         top_pad="20"
-         width="220">
-          What tags do you want to see?
-        </text>
-
-        <combo_box
-         follows="left|top"
-         height="23"
-         layout="topleft"
-         left_pad="2"
-         max_chars="135"
-         width="220"
-         allow_text_entry="false"
-         name="ClientTagsVisibility">
-          <combo_item name="No Viewertags" value="0">No Viewertags</combo_item>
-          <combo_item name="TPVD Viewer" value="1">TPVD Viewers (using a list)</combo_item>
-          <combo_item name="All known Viewers" value="2">All known Viewers (using a list)</combo_item>
-          <combo_item name="All Viewers" value="3">All Viewers</combo_item>
-        </combo_box>
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="15"
-         layout="topleft"
-         left="20"
-         name="colorbasedonviewer"
-         top_pad="10"
-         width="220">
-          Tag Color based on Viewer?
-        </text>
-
-        <combo_box
-         follows="left|top"
-         height="23"
-         layout="topleft"
-         left_pad="2"
-         max_chars="135"
-         width="220"
-         allow_text_entry="false"
-         name="ColorClienttags">
-          <combo_item name="Color not based on Viewer" value="0">Color not based on Viewer</combo_item>
-          <combo_item name="Single color per Viewer" value="1">Single color per Viewer</combo_item>
-          <combo_item name="Multiple colors per Viewer" value="2">Multiple colors per Viewer</combo_item>
-          <combo_item name="Userdefined color" value="3">Userdefined Color</combo_item>
-        </combo_box>
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="15"
-         layout="topleft"
-         left="20"
-         name="listtodisplayviewertags_txt"
-         top_pad="10"
-         width="220">
-          Use a list to display Viewertags?
-        </text>
-
-        <combo_box
-         follows="left|top"
-         height="23"
-         layout="topleft"
-         left_pad="2"
-         max_chars="135"
-         width="220"
-         allow_text_entry="false"
-         name="UseLegacyClienttags">
-          <combo_item name="Don't use a list" value="0">Don't use a list</combo_item>
-          <combo_item name="Local Clienttags" value="1">Local Tag List</combo_item>
-          <combo_item name="Download Clienttags" value="2">Download Tag List at Viewer Start</combo_item>
-        </combo_box>
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="15"
-         layout="topleft"
-         left="20"
-         name="chooseyourcolor_txt"
-         top_pad="10"
-         width="220">
-          Choose your color:
-        </text>
-
-        <combo_box
-         height="23"
-         layout="topleft"
-         follows="left|top"
-         left_pad="2"
-         max_chars="135"
-         width="220"
-         allow_text_entry="false"
-         name="ClientTagColor">
-          <combo_item name="red" value="red" label="Red"/>
-          <combo_item name="blue" value="blue" label="Blue"/>
-          <combo_item name="yellow" value="yellow" label="Yellow"/>
-          <combo_item name="purple" value="purple" label="Purple"/>
-          <combo_item name="pink" value="pink" label="Pink"/>
-          <combo_item name="white" value="white" label="White"/>
-          <combo_item name="orange" value="orange" label="Orange"/>
-          <combo_item name="green" value="green" label="Green"/>
-        </combo_box>
-
-        <check_box
-         left="20"
-         top_pad="10"
-         follows="left|top"
-         height="16"
-         width="220"
-         label="Show your own color"
-         name="FSShowOwnTagColor_toggle"
-         tool_tip="When checked, your Tag will be shown in the given color." />
-
-        <check_box
-         top_pad="10"
-         follows="left|top"
-         height="16"
-         width="220"
-         label="Color usernames differently"
-         name="FSColorUsername_toggle"
-         tool_tip="Displays usernames in a different color (this overrides client tag colors for usernames)" />
-
-        <color_swatch
-         border.border_thickness="0"
-         label_height="0"
-         layout="topleft"
-         follows="left|top"
-         top_delta="0"
-         left_pad="2"
-         height="15"
-         width="15"
-         name="usernamecolorswatch"
-         tool_tip="Click to open color picker"/>
-
-        <check_box
-         left="20"
-         top_pad="10"
-         follows="left|top"
-         height="16"
-         width="250"
-         label="Color nametags based on distance"
-         name="FSTagShowDistanceColors"
-		 control_name="FSTagShowDistanceColors"
-         tool_tip="When checked, the tag color of other avatars show if they are in chat range, shout range or beyond shout range. This overrides viewer tag colors, but not friend or contact set colors." />
-		 
-        <check_box
-         left="260"
-         top_delta="0"
-         follows="left|top"
-         height="16"
-         width="200"
-         label="Show distance in tag"
-         name="FSTagShowDistance"
-		 control_name="FSTagShowDistance"
-         tool_tip="When checked, the tag of other avatars shows their distance, using the colors set below." />
-
-        <color_swatch
-            can_apply_immediately="true"
-            follows="left|top"
-            height="15"
-            label_height="0"
-            layout="topleft"
-            top_pad="5"
-            left="40"
-            name="NameTagWhisperDistanceColor_Color_Swatch"
-            tool_tip="Click to open color picker"
-            width="15">
-            <color_swatch.init_callback
-            function="Pref.getUIColor"
-            parameter="NameTagWhisperDistanceColor" />
-            <color_swatch.commit_callback
-            function="Pref.applyUIColor"
-            parameter="NameTagWhisperDistanceColor" />
-            <color_swatch.caption_text
-            height="0" />
-        </color_swatch>
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left_pad="5"
-            mouse_opaque="false"
-            name="NameTagWhisperDistanceColor_Label"
-            top_delta="3"
-            width="200">
-            Whisper range
-        </text>
-        <color_swatch
-         can_apply_immediately="true"
-         follows="left|top"
-         height="15"
-         label_height="0"
-         layout="topleft"
-         top_delta="-3"
-         left="250"
-         name="NameTagChatDistanceColor_Color_Swatch"
-         tool_tip="Click to open color picker"
-         width="15">
-            <color_swatch.init_callback
-             function="Pref.getUIColor"
-             parameter="NameTagChatDistanceColor" />
-            <color_swatch.commit_callback
-             function="Pref.applyUIColor"
-             parameter="NameTagChatDistanceColor" />
-            <color_swatch.caption_text
-             height="0" />
-        </color_swatch>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left_pad="5"
-         mouse_opaque="false"
-         name="NameTagChatDistanceColor_Label"
-         top_delta="3"
-         width="200">
-            Chat range
-        </text>
-        <color_swatch
-         can_apply_immediately="true"
-         follows="left|top"
-         height="15"
-         label_height="0"
-         layout="topleft"
-         left="40"
-         name="NameTagShoutDistanceColor_Color_Swatch"
-         tool_tip="Click to open color picker"
-         width="15"
-		 top_pad="10">
-            <color_swatch.init_callback
-             function="Pref.getUIColor"
-             parameter="NameTagShoutDistanceColor" />
-            <color_swatch.commit_callback
-             function="Pref.applyUIColor"
-             parameter="NameTagShoutDistanceColor" />
-            <color_swatch.caption_text
-             height="0" />
-        </color_swatch>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left_pad="5"
-         mouse_opaque="false"
-         name="NameTagShoutDistanceColor_Label"
-         top_delta="3"
-         width="200">
-            Shout range
-        </text>
-        <color_swatch
-         can_apply_immediately="true"
-         follows="left|top"
-         height="15"
-         label_height="0"
-         layout="topleft"
-         left="250"
-         name="NameTagBeyondShoutDistanceColor_Color_Swatch"
-         tool_tip="Click to open color picker"
-         width="15"
-		 top_delta="-3">
-            <color_swatch.init_callback
-             function="Pref.getUIColor"
-             parameter="NameTagBeyondShoutDistanceColor" />
-            <color_swatch.commit_callback
-             function="Pref.applyUIColor"
-             parameter="NameTagBeyondShoutDistanceColor" />
-            <color_swatch.caption_text
-             height="0" />
-        </color_swatch>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left_pad="5"
-         mouse_opaque="false"
-         name="NameTagBeyondShoutDistanceColor_Label"
-         top_delta="3"
-         width="200">
-            Beyond Shout range
-        </text>
-		 
-        <slider
-         left="20"
-         top_pad="15"
-         name="FSNameTagZOffsetCorrection"
-         control_name="FSNameTagZOffsetCorrection"
-         decimal_digits="0"
-         enabled="true"
-         follows="left|top"
-         height="18"
-         increment="1"
-         initial_value="0"
-         label="Z-offset correction:"
-         label_width="110"
-         max_val="5"
-         min_val="-5"
-         show_text="true"
-         width="250"
-         tool_tip="Changes the Z-offset for avatar name tags. Default 0" />
-
-    </panel>
 </tab_container>
 </panel>

@@ -26,9 +26,10 @@
 			<check_box label="Dźwięk pisania, gdy inne osoby piszą w czacie lokalnym" name="play_typing_sound"/>
 			<check_box label="Powiadomienia o pisaniu do innych awatarów podczas sesji IM" name="FSSendTypingState"/>
 			<check_box label="Włącz autouzupełnianie gestów w pasku czatu lokalnego" name="FSChatbarGestureAutoCompleteEnable"/>
+			<check_box label="Włącz automatyczne odgadywanie imion w pasku czatu lokalnego" name="FSChatbarNamePrediction"/>
 			<check_box label="Ślij IM-y na mój e-mail, gdy jestem offline ([EMAIL])" name="send_im_to_email"/>
-			<check_box label="Usuń nagłówki czatów (powrót do stylu V1)" name="plain_text_chat_history"/>
-			<check_box label="Podczas używania nagłówków czatów pokazuj małe ikony" name="ShowChatMiniIcons"/>
+			<check_box label="Używaj nagłówków czatów stylu V1" name="plain_text_chat_history"/>
+			<check_box label="Podczas używania nagłówków w stylu V2/3 pokazuj małe ikony" name="ShowChatMiniIcons"/>
 			<check_box label="Pokaż czat w chmurkach ponad awatarami" name="bubble_text_chat"/>
 			<check_box label="Pokaż wskaźnik pisania w chmurkach ponad awatarami" name="bubble_text_typing"/>	 
 			<text name="inworld_typing_rg_label">
@@ -58,7 +59,15 @@
 			<text name="req_restart_chattabs">
 				(wymaga restartu)
 			</text>
-			<button label="Tłumaczenie..." name="translation_settings_btn"/>
+			<text name="FSIMTabNameFormat_label">
+				Format imion dla kart IM:
+			</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item label="Wyświetlane" name="display_name"/>
+				<combo_box.item label="Nazwa konta" name="user_name"/>
+				<combo_box.item label="Wyświetlane (Nazwa konta)" name="display_user_name"/>
+				<combo_box.item label="Nazwa konta (Wyświetlane)" name="user_display_name"/>
+			</combo_box>
 		</panel>
 		<panel label="Powiadomienia" name="ChatNotifications">
 			<text name="disable_toast_label">
@@ -67,7 +76,8 @@
 			<check_box label="Czaty grupowe" name="EnableGroupChatPopups" tool_tip="Zaznacz opcję, aby widzieć wyskakujące okienko, kiedy pojawia się wiadomość w którymś czacie grupy"/>
 			<check_box label="Czaty IM" name="EnableIMChatPopups" tool_tip="Zaznacz opcję, aby widzieć wyskakujące okienko, kiedy pojawia się nowa wiadomość prywatna IM (Instant Message)"/>
 			<check_box name="FSUseNearbyChatConsole" label="Używaj konsoli dla wyskakujących okienek zamiast Tostów (styl Viewera 1.x)"/>
-			<check_box name="FSLogImToChatConsole" label="Pokazuj IM i czaty grupowe w konsoli Czatu"/>
+			<check_box name="FSLogImToChatConsole" label="Pokazuj wiadomości IM w konsoli Czatu"/>
+			<check_box name="FSLogGroupImToChatConsole" label="Pokazuj czaty grupowe w konsoli Czatu"/>
 			<text name="FSShowGroupNameLength_label">
 				Długość nazwy grupy wyświetlanej w historii czatu
 			</text>
@@ -83,12 +93,14 @@
 			<spinner tool_tip="0.25-1.0, 0.25 dla silnego wygaszania, 1 dla braku wygaszania" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Powiadamiaj o nowej IM, gdy tylko nadawca zacznie pisać"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Mrugaj kartami IM, gdy znajomi się logują/wylogowywują"/>
+			<check_box name="FSReportMutedGroupChat" label="Zgłaszaj wyciszenie czatu grupowego w czacie lokalnym"/>
 			<text name="WhenPlayIMLabel">
 				Gdy nadchodzi wiadomość IM:
 			</text>
 			<combo_box name="WhenPlayIM">
 				<combo_box.item label="Odtwarzaj dźwięk tylko na rozpoczęciu nowej sesji IM" name="1"/>
 				<combo_box.item label="Odtwarzaj dźwięk przy każdej otrzymanej wiadomości" name="2"/>
+				<combo_box.item label="Odtwarzaj dźwięk tylko gdy okno jest nieaktywne w tle" name="3"/>
 				<combo_box.item label="Nie odtwarzaj żadnego dźwięku powiadomienia" name="0"/>
 			</combo_box>
 			<text name="WhenPlayGroupIMLabel">
@@ -97,6 +109,7 @@
 			<combo_box name="WhenPlayGroupIM">
 				<combo_box.item label="Odtwarzaj dźwięk tylko na rozpoczęciu nowej sesji IM" name="1"/>
 				<combo_box.item label="Odtwarzaj dźwięk przy każdej otrzymanej wiadomości" name="2"/>
+				<combo_box.item label="Odtwarzaj dźwięk tylko gdy okno jest nieaktywne w tle" name="3"/>
 				<combo_box.item label="Nie odtwarzaj żadnego dźwięku powiadomienia" name="0"/>
 			</combo_box>
 		</panel>
@@ -203,10 +216,13 @@
 			<text name="textFSKeywordSound">
 				UUID dźwięku alertu:
 			</text>
+			<button name="Prev_UISndFSKeywordSound" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndFSKeywordSound" tool_tip="Resetuj do domyślnego UUID."/>
 		</panel>
 		<panel label="Wprowadzanie tekstu" name="ChatTextInput">
 			<button name="autoreplace_showgui" label="Autokorekta"/>
 			<button name="spellcheck_showgui" label="Sprawdzanie pisowni"/>
+			<button label="Tłumaczenie..." name="translation_settings_btn"/>
 		</panel>
 	</tab_container>
 </panel>

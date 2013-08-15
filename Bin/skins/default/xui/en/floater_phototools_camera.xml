@@ -336,7 +336,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -580,7 +580,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -676,7 +676,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -746,6 +746,17 @@
 				 width="250"
 				 control_name="FSIgnoreSimulatorCameraConstraints"
 				 tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects. REQUIRES RESTART!"/>
+				<check_box
+				 top_pad="2"
+				 follows="left|top"
+				 height="16"
+				 label="Reset camera position on avatar movement"
+				 layout="topleft"
+				 left="5"
+				 name="resetcameraonmovement"
+				 width="250"
+				 control_name="FSResetCameraOnMovement"
+				 tool_tip="Resets the camera to its default position when you move the avatar"/>
 			</panel>
 		</panel>
 

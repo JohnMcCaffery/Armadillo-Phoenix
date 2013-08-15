@@ -7,11 +7,11 @@
             (wymaga restartu)
         </text>
         <check_box label="Włącz teleport przez dwuklik na mapie świata" name="FSWorldMapDoubleclickTeleport" tool_tip="Włącza teleportację do punktu docelowego przez podwójne kliknięcie klawiszem myszki na mapie świata."/>
-        <check_box label="Wyłącz czarne ekrany teleportów" name="tp_screen_toggle" tool_tip="Wyłącza czarne ekrany podczas teleportowania się." />
         <check_box label="Wyłącz znaki świetlne (czerwone strzałki) po teleportowaniu się" name="tp_beam_toggle" tool_tip="Wyłącza znaki świetlne wskazujące cel lądowania podczas teleportowania się." />
+        <check_box label="Wyłącz czarne ekrany teleportów" name="tp_screen_toggle" tool_tip="Wyłącza czarne ekrany podczas teleportowania się." />
         <check_box label="Wyłącz ekran postępu logowania się" name="login_screen_toggle" tool_tip="Wyłącza czarny ekran postępu logowania się" />
         <check_box label="Wyłącz ekran postępu wylogowywania się" name="logout_screen_toggle" tool_tip="Wyłącza czarny ekran postępu wylogowywania się." />
-        <check_box label="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej Posiadłością" name="grouplandrez" tool_tip="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej Posiadłością niezależnie od tego, czy masz ją akurat aktywną, czy nie." />
+        <check_box label="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej działką" name="grouplandrez" tool_tip="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej działką niezależnie od tego, czy masz ją akurat aktywną, czy nie." />
         <check_box label="Porządkuj listę kontaktów ZAWSZE według nazw kont" name="sortcontactsbyun" tool_tip="Nie zwracaj uwagi na Imiona Wyświetlane" />
         <check_box label="Zablokowane awatary jako chmury cząsteczek" name="ShowMutedAvatarsAsCloud" tool_tip="Zablokowane awatary będą renderowane jako chmury cząsteczek o specjalnym kolorze." />
         <check_box label="Ukryj puste foldery systemowe w Szafie" name="DebugHideEmptySystemFolders" tool_tip="Gdy ta opcja jest włączona, to wszystkie puste foldery systemowe - takie jak Ulubione czy Landmarki - są ukrywane" />
@@ -58,11 +58,12 @@
         </text>
         <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Mnożnik dla zdarzeń buforowania dźwięku [domyślnie: 4]" />
         <button name="AntiSpamUnblock" label="Odblokuj wszystkie źródła spamu" />
+        <check_box label="Usuń przycisk &quot;Blokuj&quot; z okien dialogowych skryptów" name="FSRemoveScriptBlockButton" />
         <check_box label="Powiadom o zbyt szybkim słaniu przedmiotów przez obiekty" name="FSNotifyIncomingObjectSpam" />
         <check_box label="Powiadom o zbyt szybkim słaniu przedmiotów przez innych Rezydentów" name="FSNotifyIncomingObjectSpamFrom" />
         <slider name="FSOfferThrottleMaxCount" label="Limit ofert przychodzących obiektów:" tool_tip="Ustaw limit dla ofert przychodzących obiektów, w ciągu 10 sekund zanim zostaną one ograniczone. Domyślnie 5" />
-	</panel>
-	<panel label="Awatar" name="firestorm_avatar">
+    </panel>
+    <panel label="Awatar" name="firestorm_avatar">
         <text name="HeadMovement">
             Ustaw, jak mocno głowa Awatara śledzi myszkę ('0' oznacza brak ruchu):
         </text>
@@ -87,7 +88,7 @@
         <button name="BeamColor_refresh" label="Odśwież listę" tool_tip="Odśwież listę Ustawień" />
         <slider name="FSMaxBeamsPerSecond" label="Aktualizacje/sek:" tool_tip="Ile aktualizacji wiązki wysyłać w ciągu sekundy. Domyślnie 40" />
         <check_box label="Włącz wiązkę wyboru" name="SLPartBeam" />
-        <check_box label="Czat cząsteczkowy" name="FSParticleChat" tool_tip="Wysyła informacje na kanał 9000" />
+        <check_box label="Wysyłaj dane selekcji na czat" name="FSParticleChat" tool_tip="Wysyła dane selekcji (rozpoczęcie jej lub zakończenie plus pozycję globalną) na kanał czatu 9000" />
         <combo_box name="FSBeamShape_combo" tool_tip="Wybierz kształt wiązki cząsteczek" />
         <button name="delete_beam" label="Usuń" tool_tip="Usuń tą wiązkę" />
         <button name="custom_beam_btn" label="Utwórz nowy" tool_tip="Dopasuj kształt wiązki" />
@@ -158,32 +159,42 @@
         </text>
     </panel>
     <panel label="System Windlight" name="WindlightTab">
-        <check_box label="Automatycznie zmieniaj środowisko na ustawione w regionie/parceli" name="UseEnvironmentFromRegionAlways" />
+        <check_box label="Automatycznie zmieniaj środowisko na ustawione w regionie/działce" name="UseEnvironmentFromRegionAlways" />
         <check_box label="Płynne przenikanie ustawień regionu i moich Szybkich Preferencji" name="FSInterpolateSky" tool_tip="Opcja kontroluje płynne mieszanie się z sobą ustawień WL regionu i Szybkich Preferencji. Ten efekt może spowodować, że wolniejsze komputery mogą zwalniać na kilka sekund podczas zmiany otoczenia. Wyłącz te dwie opcje, aby pominąć efekt i stosować ustawienia natychmiast." />
         <check_box label="Płynne przenikanie ustawień wody i moich Szybkich Preferencji" name="FSInterpolateWater" tool_tip="To samo co powyżej, ale dla wody." />
         <text name="FSWLshare_txt" width="350">
-          Dzielenie się WL Phoenixa dla parcel (eksperymentalne)
+          Dzielenie się WL Firestorma dla działek
         </text>
-        <check_box label="Używaj dzielenia się WL Phoenixa dla parcel (eksperymentalne)" name="FSWLParcelEnabled" />
-        <check_box label="Automatycznie stosuj ustawienia WL na parcelach znajomych" name="FSWLWhitelistFriends" />
-        <check_box label="Automatycznie stosuj ustawienia WL na parcelach moich grup" name="FSWLWhitelistGroups" />
-        <check_box label="Automatycznie stosuj ustawienia WL na wszystkich parcelach" name="FSWLWhitelistAll" />
-        <check_box label="Automatycznie zmieniaj środowisko dla WL parcel" name="FSInterpolateParcelWL" tool_tip="To samo, co dla opcji przenikania powyżej, ale dla WL parcel." />
+        <check_box label="Używaj dzielenia się WL Firestorma dla działek" name="FSWLParcelEnabled" />
+        <check_box label="Automatycznie stosuj ustawienia WL na działkach znajomych" name="FSWLWhitelistFriends" />
+        <check_box label="Automatycznie stosuj ustawienia WL na działkach moich grup" name="FSWLWhitelistGroups" />
+        <check_box label="Automatycznie stosuj ustawienia WL na wszystkich działkach" name="FSWLWhitelistAll" />
+        <check_box label="Automatycznie zmieniaj środowisko dla WL działek" name="FSInterpolateParcelWL" tool_tip="To samo, co dla opcji przenikania powyżej, ale dla WL działek." />
         <text name="wl_crossfade_label">
          Czas przenikania (w sekundach):
          </text>
         <spinner tool_tip="Czas przenikania z jednego zestawu ustawień w inny [Domyślnie: 3]" name="FSWindlightInterpolateTime" />
+        <text name="could_texture_text">
+         Tekstura chmur (restart zalecany):
+        </text>
+        <combo_box name="cloud_combo" tool_tip="Wybierz teksturę chmur, jakiej chcesz użyć." />
     </panel>
     <panel label="Budowanie" name="BuildTab">
         <text name="text_box_objprams">
-         Domyślne parametry obiektów
-         </text>
+         Domyślny rozmiar
+        </text>
+        <text name="text_box_objprams2">
+         Właściwości
+        </text>
+        <text name="text_box_objprams3">
+         Tekstura
+        </text>
         <spinner label="Roz. X" name="X size" />
         <spinner label="Roz. Y" name="Y size" />
         <spinner label="Roz. Z" name="Z size" />
-        <text name="text_box_objmaterial">
-         Materiał:
-         </text>
+        <check_box label="Widmowy" name="FSBuildPrefs_PhantomToggle"/>
+        <check_box label="Fizyczny" name="FSBuildPrefs_PhysicalToggle"/>
+        <check_box label="Tymczasowy" name="FSBuildPrefs_TemporaryToggle"/>
         <combo_box name="material">
              <combo_item name="Stone" label="Kamień"/>
              <combo_item name="Glass" label="Szkło"/>
@@ -192,19 +203,53 @@
              <combo_item name="Plastic" label="Plastik"/>
              <combo_item name="Rubber" label="Guma"/>
         </combo_box>
+        <texture_picker label="Tekstura" name="texture control" tool_tip="Kliknij, aby wybrać obraz"/>
+        <color_swatch label="Kolor" name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
+        <spinner label="Przezr." name="alpha"/>
+        <spinner label="Blask" name="glow"/>
+        <check_box label="Pełna jasność" name="EmFBToggle"/>
+        <combo_box name="combobox shininess" tool_tip="Określ, jak mocny połysk ma mieć obiekt">
+          <combo_item name="None" label="Żadny"/>
+          <combo_item name="Low" label="Niski"/>
+          <combo_item name="Medium" label="Średni"/>
+          <combo_item name="High" label="Wysoki"/>
+        </combo_box>
+        <check_box name="FSBuildPrefs_EmbedItem" label="Umieszczaj obiekt w nowych primach"/>
+        <text name="Give inventory" tool_tip="Upuść przedmiot w tym miejscu.">
+         Upuść przedmiot w tym miejscu.
+        </text>
+        <text name="build_item_add_disp_rect_txt">
+         Obecnie ustawiono na: [ITEM]
+        </text>
+        <text name="text_box_permissions">
+          Zezwolenia
+        </text>
+        <text name="text_box_permnextowner">
+          Nast. właściciel:
+        </text>
+        <check_box label="Modyfikowanie" tool_tip="Zezwolenie na modyfikowanie" name="next_owner_modify"/>
+        <check_box label="Kopiowanie" tool_tip="Zezwolenie na kopiowanie" name="next_owner_copy"/>
+        <check_box label="Transferowanie" tool_tip="Zezwolenie na transferowanie" name="next_owner_transfer"/>
+        <text name="text_box_permnote1">
+		  To się także odnosi
+        </text>
+        <text name="text_box_permnote2">
+          do nowych importów.
+        </text>
         <text name="text_box_pivotpoint">
           Punkt obracania osi
         </text>
-        <check_box label="Pokaż strzałkę osi na pozycji gł. primy" tool_tip="Domyślne zachowanie to pokazywanie osi na środku masy zbioru części. Gdy włączysz tą opcję, to będzie ona pokazywana zamiast tego na głównej primie." name="EmBuildPrefsActualRoot_toggle" />
+        <check_box label="Oś na poz. gł. primy" tool_tip="Domyślne zachowanie to pokazywanie osi na środku masy zbioru części. Gdy włączysz tą opcję, to będzie ona pokazywana zamiast tego na głównej primie." name="FSBuildPrefsActualRoot_toggle" />
         <spinner label="Poz. X" name="X pos" />
         <spinner label="Poz. Y" name="Y pos" />
         <spinner label="Poz. Z" name="Z pos" />
-        <check_box label="Wartości w procentach" tool_tip="Domyślne ustawienie jako procenty, a każda oś na 50" name="EmPivotPercToggle" />
-        <check_box label="Podświetlanie wybranych primów" tool_tip="Gdy odznaczysz tą opcję, to żółte/niebieskie podświetlenia krawędzi nie są renderowane - zwiększa wydajność, gdy zaznaczonych jest wiele primów." name="EmBuildPrefsRenderHighlight_toggle" />
+        <check_box label="Wart. procentowo" tool_tip="Domyślne ustawienie jako procenty, a każda oś na 50" name="FSPivotPercToggle" />
+        <check_box label="Podświetlanie wybranych primów" tool_tip="Gdy odznaczysz tą opcję, to żółte/niebieskie podświetlenia krawędzi nie są renderowane - zwiększa wydajność, gdy zaznaczonych jest wiele primów." name="FSBuildPrefsRenderHighlight_toggle" />
+        <check_box label="Stare zachowanie &quot;Ustaw na sprzedaż&quot;" tool_tip="Gdy zaznaczone, to informacja o tym, że obiekt jest na sprzedaż zapisywana jest już po zmianie, nie wymagając potwierdzenia." name="FSCommitForSaleOnChange_toggle" />
+        <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
+        <check_box label="Zapisuj tekstury z Szafy na dysk domyślnie jako PNG zamiast TGA" tool_tip="Używane w oknie podglądu tekstur oraz menu kontekstowym Szafy." name="FSTextureDefaultSaveAsFormat" />
         <check_box label="Używaj CTRL+myszki, aby chwytać obiekty i manipulować nimi" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie chwytać i przesuwać obiekty za pomocą myszki oraz klawisza CTRL." name="FSEnableGrab" />
         <check_box label="Przesuwaj / skaluj tekstury budując, gdy trzymany jest przycisk myszy oraz klawisz caps-lock" tool_tip="Gdy zaznaczysz tą opcję, to będziesz mógł/mogła przesuwać lub skalować strony tekstur trzymając przycisk myszy (wraz z klawiszem caps-lock) w trybie budowania. Ta funkcja jest eksperymentalna i powinna być używana ostrożnie." name="FSExperimentalDragTexture" />
-        <check_box label="Użyj starego zachowania &quot;Ustaw obiekt na sprzedaż&quot;" tool_tip="Gdy zaznaczone, to informacja o tym, że obiekt jest na sprzedaż zapsisywana jest już po zmianie, nie wymagając potwierdzenia." name="FSCommitForSaleOnChange_toggle" />
-        <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
         <check_box label="Włącz preprocesor LSL" tool_tip="Preprocesor LSL będzie aktywny, gdy ta opcja zostanie zaznaczona." name="preproc_checkbox" />
         <check_box label="Optymalizator" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty kosztem ich czytelności." name="preprocoptimizer_checkbox" />
         <check_box label="Instrukcja switch()" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z instrukcji switch() do sterowania przepływem skryptu." name="preprocswitch_checkbox" />
@@ -214,72 +259,6 @@
           Ścieżka dołączania preprocesora:
         </text>
         <button label="Przeglądaj" label_selected="Przeglądaj" name="SetPreprocInclude" />
-    </panel>
-    <panel label="Tagi" name="TagTab">
-        <text name="SL-Tags-Notice">
-          Uwaga: ze względu na zmiany wprowadzone przez Linden Lab tagi nie działają już w SL.
-        </text>
-        <text name="whattagstoshow">
-          Które tagi chcesz widzieć?
-        </text>
-        <combo_box name="ClientTagsVisibility">
-          <combo_item name="No Viewertags">Bez rozpoznawania Przeglądarek</combo_item>
-          <combo_item name="TPVD Viewer">Przeglądarki z Third Party Viewer Directory (lista)</combo_item>
-          <combo_item name="All known Viewers">Wszystkie znane Przeglądarki (lista)</combo_item>
-          <combo_item name="All Viewers">Wszystkie Przeglądarki</combo_item>
-        </combo_box>
-        <text name="colorbasedonviewer">
-          Kolor taga zależny od Przeglądarki?
-        </text>
-        <combo_box name="ColorClienttags">
-          <combo_item name="Color not based on Viewer">Kolor nie jest zależny od Przeglądarki</combo_item>
-          <combo_item name="Single color per Viewer">Jeden kolor na każdą Przeglądarkę</combo_item>
-          <combo_item name="Multiple colors per Viewer">Wiele kolorów na każdą Przeglądarkę</combo_item>
-          <combo_item name="Userdefined color">Kolor określony przez użytkownika</combo_item>
-        </combo_box>
-        <text name="listtodisplayviewertags_txt">
-          Uzyć listy do rozpoznawania?
-        </text>
-        <combo_box name="UseLegacyClienttags">
-          <combo_item name="Don't use a list">Nie używaj listy</combo_item>
-          <combo_item name="Local Clienttags">Lokalna lista tagów</combo_item>
-          <combo_item name="Download Clienttags">Pobieraj listę tagów podczas uruchamiania Przeglądarki</combo_item>
-        </combo_box>
-        <text name="chooseyourcolor_txt">
-          Wybierz swój kolor:
-        </text>
-        <combo_box name="ClientTagColor">
-          <combo_item name="red" label="Czerwony" />
-          <combo_item name="blue" label="Niebieski" />
-          <combo_item name="yellow" label="Żółty" />
-          <combo_item name="purple" label="Purpurowy" />
-          <combo_item name="pink" label="Różowy" />
-          <combo_item name="white" label="Biały" />
-          <combo_item name="orange" label="Pomarańczowy" />
-          <combo_item name="green" label="Zielony" />
-        </combo_box>
-        <check_box label="Pokazuj swój kolor" name="FSShowOwnTagColor_toggle" tool_tip="Gdy zaznaczysz tą opcję, to Twój tag będzie pokazywany w wybranym przez Ciebie kolorze." />
-        <check_box label="Koloruj nazwy kont odmiennie" name="FSColorUsername_toggle" tool_tip="Koloruje nazwy kont odmiennie (zastępuje kolory tagów dla nazw kont)" />
-        <color_swatch name="usernamecolorswatch" tool_tip="Kliknij, aby otworzyć paletę kolorów" />
-        <check_box label="Koloruj tagi na podstawie odległości" name="FSTagShowDistanceColors" tool_tip="Koloruje tagi w zależności od tego, czy awatary są w zasięgu czatu, krzyku lub poza zasięgiem krzyku. Zastępuje kolory tagów przeglądarek, ale nie znajomych lub z Zestawów Kontaktów." />
-        <check_box label="Pokazuj odległość w tagach" name="FSTagShowDistance" tool_tip="W tagach awatarów będzie widoczny dystans po zaznaczeniu tej opcji, zgodnie z kolorami ustawionymi poniżej."/>
-        <color_swatch name="NameTagWhisperDistanceColor_Color_Swatch" tool_tip="Kliknij, aby otworzyć paletę kolorów"/>
-        <text name="NameTagWhisperDistanceColor_Label">
-          Zasięg szeptu
-        </text>
-        <color_swatch name="NameTagChatDistanceColor_Color_Swatch" tool_tip="Kliknij, aby otworzyć paletę kolorów"/>
-        <text name="NameTagChatDistanceColor_Label">
-          Zasięg czatu
-        </text>
-        <color_swatch name="NameTagShoutDistanceColor_Color_Swatch" tool_tip="Kliknij, aby otworzyć paletę kolorów"/>
-        <text name="NameTagShoutDistanceColor_Label">
-          Zasięg krzyku
-        </text>
-        <color_swatch name="NameTagBeyondShoutDistanceColor_Color_Swatch" tool_tip="Kliknij, aby otworzyć paletę kolorów"/>
-        <text name="NameTagBeyondShoutDistanceColor_Label">
-          Poza zasięgiem krzyku
-        </text>
-        <slider name="FSNameTagZOffsetCorrection" label="Przesuń w pionie:" tool_tip="Zmienia przesunięcie w pionie dla tagów imion. Domyślnie 0" />
     </panel>
 </tab_container>
 </panel>

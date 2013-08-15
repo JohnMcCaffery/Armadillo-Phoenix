@@ -253,12 +253,22 @@
 	<color
 		name="MediaListItemColor"
 		reference="ScrollUnselectedColor" />
-    <!-- Groups visible in profiles -->
-    <color
-     name="GroupHiddenInProfile"
-     reference="OldGray_63" />
-    <!-- Balance at the top -->
-    <color
-     name="CurrencyColor"
-     reference="Green" />
+	<!-- Groups visible in profiles -->
+	<color
+		name="GroupHiddenInProfile"
+		reference="OldGray_63" />
+	<!-- Balance at the top -->
+	<color
+		name="CurrencyColor"
+		reference="Green" />
+	<!-- Parcel info hovering and normal colors -->
+	<color
+		name="ParcelNormalColor"
+		reference="LabelTextColor" />
+	<color
+		name="ParcelHoverColor"
+		reference="White" />
+  <color
+      name="Phototools_Header"
+      reference="EmphasisColor" />
 </colors>

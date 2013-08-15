@@ -7,7 +7,7 @@
  name="floater_about"
  help_topic="floater_about"
  save_rect="true"
- title="About [CAPITALIZED_APP_NAME]"
+ title="About [APP_NAME]"
  width="470">
   <floater.string
      name="AboutHeader">
@@ -61,6 +61,7 @@ Font Used: [FONT] ([FONT_SCREEN_DPI])
 Draw distance: [DRAW_DISTANCE]
 Bandwidth: [BANDWIDTH]
 LOD factor: [LOD]
+Render quality: [RENDERQUALITY]
 </floater.string>
   <floater.string
      name="none">
@@ -98,7 +99,7 @@ Error fetching server release notes URL.
           width="435"
           wrap="true">
 For the latest information about Firestorm, visit 
-http://www.phoenixviewer.com
+http://www.firestormviewer.org
     
     </text>
       <text_editor
@@ -219,7 +220,7 @@ Dummy Name replaced at run time
           top="10"
           width="435"
           wrap="true">
-Firestorm is a community development project to improve the SecondLife(tm) Viewer experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Viewer Project, Inc., a non-profit organization.          
+Firestorm is a community development project to improve the SecondLife(tm) Viewer experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Firestorm Project, Inc., a non-profit organization.
 
 The Firestorm Development Team:
       </text>
@@ -235,7 +236,7 @@ The Firestorm Development Team:
        top_pad="10"
        width="435"
        word_wrap="true">
-Ansariel Hiller, ArminWeatherHax, Arrehn Oberlander, Cinder Roxley, Holy Gavenkrantz, Jessica Lyon, Kadah Coba, Kitty Barnett, Liny Odell, LordGregGreg Back, Mobius Ryba, Nicky Dasmijn, Selo Jacobus, Tankmaster Finesmith, Techwolf Lupindo, Tonya Souther, Tozh Taurog, Vortex Saito, WoLf Loonie, Wolfspirit Magic and Zi Ree.
+Ansariel Hiller, ArminWeatherHax, Arrehn Oberlander, Cinder Roxley, Holy Gavenkrantz, Jessica Lyon, Kadah Coba, Kitty Barnett, Liny Odell, LordGregGreg Back, Mobius Ryba, Nicky Dasmijn, PanteraPolnocy, Selo Jacobus, Tankmaster Finesmith, Techwolf Lupindo, Tonya Souther, Tozh Taurog, Vortex Saito, WoLf Loonie, Wolfspirit Magic and Zi Ree.
       </text_editor>
       <text
           follows="top|left"
@@ -260,7 +261,7 @@ Additional code generously contributed to Firestorm by:
        top_pad="10"
        width="435"
        word_wrap="true">
-Albatroz Hird, Alexie Birman, Andromeda Rage, Armin Weatherwax, Casper Warden, Chalice Yao, Cron Stardust, Damian Zhaoying, Dawa Gurbux, Felyza Wishbringer, f0rbidden, Fractured Crystal, Hitomi Tiponi, Katharine Berry, Kittin Ninetails, Kool Koolhoven, Lance Corrimal, Magus Freston, MartinRJ Fayray, Melancholy Lemon, Miguael Liamano, Mimika Oh, Mister Acacia, Mysty Saunders, Nagi Michinaga, nhede Core, NiranV Dean, Nogardrevlis Lectar, paperwork, Peyton Menges, programmtest, Qwerty Venom, Revolution Smythe, Sahkolihaa Contepomi, Satomi Ahn, Shin Wasp, Shyotl Kuhr, Sione Lomu, Sunset Faulkes, Thickbrick Sleaford, Vaalith Jinn, Whirly Fizzle, Zwagoth Klaar and others.
+Albatroz Hird, Alexie Birman, Andromeda Rage, Armin Weatherwax, Casper Warden, Chalice Yao, Cron Stardust, Damian Zhaoying, Dawa Gurbux, Felyza Wishbringer, f0rbidden, Fractured Crystal, Geenz Spad, Hitomi Tiponi, Katharine Berry, Kittin Ninetails, Kool Koolhoven, Lance Corrimal, Magne Metaverse LLC, Magus Freston, MartinRJ Fayray, Melancholy Lemon, Miguael Liamano, Mimika Oh, Mister Acacia, Mysty Saunders, Nagi Michinaga, Name Short, nhede Core, NiranV Dean, Nogardrevlis Lectar, paperwork, Peyton Menges, programmtest, Qwerty Venom, Revolution Smythe, Sahkolihaa Contepomi, sal Kaligawa, Satomi Ahn, Sei Lisa, Shin Wasp, Shyotl Kuhr, Sione Lomu, Skills Hak, Sunset Faulkes, Thickbrick Sleaford, Vaalith Jinn, Whirly Fizzle, Zwagoth Klaar and others.
       </text_editor>
 
       <text
@@ -313,7 +314,7 @@ UI Artists and Designers:
        top_pad="10"
        width="435"
        word_wrap="true">
-Alexandrea Fride, DarkAgent Baphomet, Digital Scribe, Hitomi Tiponi, Hugh Helendale, KirstenLee Cinquetti, Mobius Ryba, Nadin, Naomah Beaumont, psi Merlin, samm florian and Sammie Benoir.
+Alexandrea Fride, DarkAgent Baphomet, Digital Scribe, Hitomi Tiponi, Hugh Helendale, KirstenLee Cinquetti, Mobius Ryba, Nadin, Naomah Beaumont, psi Merlin, samm florian, Sammie Benoir, Tommi Waydelich, and Vincent Nacon.
       </text_editor>
     </panel>
     <panel

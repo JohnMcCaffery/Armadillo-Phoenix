@@ -37,9 +37,10 @@
 			<check_box label="Tipp-Sound abspielen wenn Personen im Chat in der Nähe tippen" name="play_typing_sound"/> 
 			<check_box label="Andere Avatare während IM-Sitzungen benachrichtigen, wenn ich schreibe" name="FSSendTypingState"/>
 			<check_box label="Auto-Vervollständigen für Gesten im Chat in der Nähe aktivieren" name="FSChatbarGestureAutoCompleteEnable"/>
+			<check_box label="Automatische Namensvorhersage in „Chat in der Nähe“-Eingabezeile aktivieren" name="FSChatbarNamePrediction"/>
 			<check_box label="IMs per Email zuschicken, wenn ich offline bin ([EMAIL])" name="send_im_to_email"/>
-			<check_box label="Kompakten IM- und Text-Chatverlauf aktivieren" name="plain_text_chat_history"/>
-			<check_box label="Miniaturicons anzeigen, falls Chat-Überschriften verwendet werden" name="ShowChatMiniIcons"/>	
+			<check_box label="V1-Stil für IM- und Text-Chatverlauf verwenden" name="plain_text_chat_history"/>
+			<check_box label="Miniaturicons anzeigen, falls V2/3-Chat-Stil verwendet word" name="ShowChatMiniIcons"/>	
 			<check_box label="Zeitstempel im lokalen Chat verbergen" name="hide_timestamps_nearby_chat"/>
 			<check_box label="Zeitstempel in IM's verbergen" name="hide_timestamps_im"/>
 			<check_box label="Blasen-Chat" name="bubble_text_chat"/>
@@ -76,7 +77,15 @@
              name="req_restart_chattabs">
                  (Erfordert Neustart)
             </text>
-			<button label="Einstellungen Chat-Übersetzung" name="translation_settings_btn" width="190"/>
+			<text name="FSIMTabNameFormat_label">
+				Namensformat für IM-Tabs:
+			</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item label="Anzeigename" name="display_name"/>
+				<combo_box.item label="Benutzername" name="user_name"/>
+				<combo_box.item label="Anzeigename (Benutzername)" name="display_user_name"/>
+				<combo_box.item label="Benutzername (Anzeigename)" name="user_display_name"/>
+			</combo_box>
 		</panel>
 		
         <!-- Chat: Notifications -->
@@ -88,7 +97,8 @@
             <check_box name="EnableGroupChatPopups" label="Gruppenchats" tool_tip="Aktivieren um Popups anzuzeigen, wenn neue Gruppennachrichten eintreffen"/>
             <check_box name="EnableIMChatPopups" label="IM-Chats" tool_tip="Aktivieren um Popups anzuzeigen, wenn Instant Messages eintreffen"/>
             <check_box name="FSUseNearbyChatConsole" label="Chat-Konsole anstelle von Toasts für Chat-Popups verwenden (Viewer 1.x-Stil)"/>
-            <check_box name="FSLogImToChatConsole" label="Instant Messages und Gruppenchats in Chat-Konsole anzeigen"/>
+            <check_box name="FSLogImToChatConsole" label="Instant Messages in Chat-Konsole anzeigen"/>
+            <check_box name="FSLogGroupImToChatConsole" label="Gruppenchats in Chat-Konsole anzeigen"/>
 			<text name="FSShowGroupNameLength_label" width="365">
 				Länge des Gruppennamens, der in der Chathistorie angezeigt wird
 			</text>
@@ -104,12 +114,14 @@
 			<spinner tool_tip="0.25-1.0, 0.25 für maximales Ausblenden für 1 für kein Ausblenden" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Eingehende Instant Messages ankünden sobald Sender zu schreiben beginnt"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Blinkende IM-Reiter, wenn Freunde sich an- oder abmelden"/>
+			<check_box name="FSReportMutedGroupChat" label="Stummgeschalteten Gruppenchat im lokalen Chat melden"/>
 			<text name="WhenPlayIMLabel" width="205">
 				Beim Eintreffen von Instant Messages:
 			</text>
 			<combo_box name="WhenPlayIM" width="265">
 				<combo_box.item label="Klang nur bei neuer IM-Sitzung abspielen" name="1"/>
 				<combo_box.item label="Klang bei jeder IM abspielen" name="2"/>
+				<combo_box.item label="Klang nur abspielen, wenn nicht im Fokus" name="3"/>
 				<combo_box.item label="Keinen Klang abspielen" name="0"/>
 			</combo_box>
 			<text name="WhenPlayGroupIMLabel" width="205">
@@ -118,6 +130,7 @@
 			<combo_box name="WhenPlayGroupIM" width="265">
 				<combo_box.item label="Klang nur bei neuer Sitzung abspielen" name="1"/>
 				<combo_box.item label="Klang bei jeder Nachricht abspielen" name="2"/>
+				<combo_box.item label="Klang nur abspielen, wenn nicht im Fokus" name="3"/>
 				<combo_box.item label="Keinen Klang abspielen" name="0"/>
 			</combo_box>
         </panel>
@@ -242,12 +255,15 @@
             <text name="textFSKeywordSound" width="200">
               UUID für Soundbenachrichtigung:
             </text>
+            <button label="V" name="Prev_UISndFSKeywordSound" tool_tip="Vorschau zu diesem Sound."/>
+            <button label="S" name="Def_UISndFSKeywordSound" tool_tip="Auf Standardwert zurücksetzen."/>
         </panel>
 
         <!-- Chat: Text Input -->
         <panel label="Texteingabe" name="ChatTextInput">
 			<button name="autoreplace_showgui" label="Automatische Ersetzung..."/>
-			<button name="spellcheck_showgui" label="Rechtschreibprüfung..."/>
+			<button name="spellcheck_showgui" label="Rechtschreibprüfung..." width="145"/>
+			<button label="Einstellungen Chat-Übersetzung" name="translation_settings_btn" width="190"/>
         </panel>
 
 	</tab_container>
