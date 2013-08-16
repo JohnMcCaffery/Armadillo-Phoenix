@@ -28,12 +28,14 @@
 #include "llviewerprecompiledheaders.h"
 #include "llfollowcam.h"
 #include "llagent.h"
+#include "llviewercontrol.h"
 
 //-------------------------------------------------------
 // class statics
 //-------------------------------------------------------
 std::map<LLUUID, LLFollowCamParams*> LLFollowCamMgr::sParamMap;
 std::vector<LLFollowCamParams*> LLFollowCamMgr::sParamStack;
+std::vector<LLFollowCamParams*> LLFollowCamMgr::sScriptParamStack;
 
 //-------------------------------------------------------
 // constants
@@ -222,7 +224,13 @@ void LLFollowCamParams::setFocusOffset( const LLVector3& v )
 void LLFollowCamParams::setPosition( const LLVector3& p ) 
 { 
 	mUsePosition = true;
+
 	mPosition = p;
+}
+
+void LLFollowCamParams::setUpVector( const LLVector3& u ) 
+{ 
+	mUpVector = u;
 }
 
 //---------------------------------------------------------
@@ -248,6 +256,41 @@ LLVector3	LLFollowCamParams::getPosition			() const { return mPosition;			}
 LLVector3	LLFollowCamParams::getFocus				() const { return mFocus;				}
 bool		LLFollowCamParams::getPositionLocked	() const { return mPositionLocked;		}
 bool		LLFollowCamParams::getFocusLocked		() const { return mFocusLocked;			}
+
+//-------------------------------------------------------------------------------------
+void		LLFollowCamParams::setWindow(LLVector3 position, LLVector3 positionDelta, LLVector3 lookAt, LLVector3 lookAtDelta, int tickLength)
+{
+	setPosition(position);
+	setFocus(position + lookAt);
+
+	mLastPosition = position;
+	mLastLookAt = lookAt;
+
+	mPositionDelta = positionDelta;
+	mLookAtDelta = lookAtDelta;
+
+	mTickLength = tickLength;
+	mThreshold = tickLength * 4;
+
+	mLastUpdate = LLTimer::getTotalTime();
+}
+
+//-------------------------------------------------------------------------------------
+void LLFollowCamParams::interpolate() 
+{
+	if (gSavedSettings.getBOOL("InterpolateScriptFollowCam")) {
+		//Get the current time
+		U64 current = LLTimer::getTotalTime();
+		//Get how long it has been since the last update
+		U64 microseconds = current - mLastUpdate;
+		double scale = double(microseconds) / double(mLastUpdate);
+		if (microseconds < mThreshold) { //If it hasn't been too long since the last position update interpolate a new position
+			mPosition = mLastPosition + (mPositionDelta * scale);
+			LLVector3 lookAt = mLastLookAt + (mLookAtDelta * scale);
+			mFocus = mPosition + lookAt;
+		}
+	}
+}
 
 //------------------------------------
 // Constructor
@@ -444,9 +487,8 @@ void LLFollowCam::update()
 	//####################################################################################
 	// this just points upward for now, but I anticipate future effects requiring 
 	// some rolling ("banking" effects for fun, swoopy vehicles, etc.)
-	mUpVector = LLVector3::z_axis;
+	//mUpVector = LLVector3::z_axis;
 }
-
 
 
 //-------------------------------------------------------------------------------------
@@ -606,6 +648,14 @@ void LLFollowCam::setPosition( const LLVector3& p )
 	}
 }
 
+void LLFollowCam::setUpVector( const LLVector3& u ) 
+{ 
+	if (u != mUpVector)
+	{
+		LLFollowCamParams::setUpVector(u);
+	}
+}
+
 void LLFollowCam::setFocus( const LLVector3& f ) 
 { 
 	if (f != mFocus)
@@ -656,7 +706,6 @@ LLVector3	LLFollowCam::getUpVector()
 { 
 	return mUpVector;			
 }
-
 
 //------------------------------------
 // Destructor
@@ -782,6 +831,16 @@ void LLFollowCamMgr::setPosition( const LLUUID& source, const LLVector3 position
 }
 
 //static
+void LLFollowCamMgr::setUpVector( const LLUUID& source, const LLVector3 up)
+{
+	LLFollowCamParams* paramsp = getParamsForID(source);
+	if (paramsp)
+	{
+		paramsp->setUpVector(up);
+	}
+}
+
+//static
 void LLFollowCamMgr::setFocus( const LLUUID& source, const LLVector3 focus)
 {
 	LLFollowCamParams* paramsp = getParamsForID(source);
@@ -899,3 +958,43 @@ void LLFollowCamMgr::dump()
 	}
 }
 
+//static
+void LLFollowCamMgr::setWindow( const LLUUID& source, LLVector3 position, LLVector3 positionDelta, LLVector3 lookAt, LLVector3 lookAtDelta, int tickLength)
+{
+	LLFollowCamParams* paramsp = getParamsForID(source);
+	if (paramsp)
+	{
+		bool found = false;
+		auto found_it = sScriptParamStack.begin();
+		while (!found && found_it != sScriptParamStack.end())
+		{
+			found = (*found_it) == paramsp;
+		}
+		if (!found)
+			sScriptParamStack.push_back(paramsp);
+
+		setCameraActive(source, true);
+		setPositionLocked(source, true);
+		setFocusLocked(source, true);
+		paramsp->setWindow(position, positionDelta, lookAt, lookAtDelta, tickLength);
+	}
+}
+
+void LLFollowCamMgr::removeScriptFollowCam( const LLUUID& source)
+{
+	LLFollowCamParams* params =	getParamsForID(source);
+	param_stack_t::iterator found_it = std::find(sScriptParamStack.begin(), sScriptParamStack.end(), params);
+	if (found_it != sScriptParamStack.end())
+	{
+		sScriptParamStack.erase(found_it);
+	}
+	removeFollowCamParams(source);
+}
+
+//static
+void LLFollowCamMgr::updateScriptFollowCams()
+{
+	for (auto it = sScriptParamStack.begin(); it != sScriptParamStack.end(); it++) {
+		(*it)->interpolate();
+	}
+}
