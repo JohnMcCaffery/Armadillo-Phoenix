@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="llsd.xsd">
-	<map>		<key>UpVector</key>
+
+		<key>UpVector</key>
     <map>
       <key>Comment</key>
       <string>The up vector, as set by llagentcamera.</string>
@@ -11,9 +12,9 @@
       <string>Vector3</string>
       <key>Value</key>
       <array>
-        <real>-2.0</real>
-        <real>-2.0</real>
-        <real>-2.0</real>
+        <real>0.0</real>
+        <real>0.0</real>
+        <real>1.0</real>
       </array>
     </map>
 
@@ -26,7 +27,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>EnableSetFollowCamProperties</key>
     <map>
@@ -37,7 +38,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>EnableSetCamera</key>
     <map>
@@ -48,7 +49,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
 		<key>EnableRemoteFrustum</key>
 		<map>
@@ -96,7 +97,7 @@
 			<key>Type</key>
 			<string>Boolean</string>
 			<key>Value</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</map>		
 
 		<key>PerspectiveMatrixDiagonal</key>
@@ -1209,7 +1210,7 @@
 			<key>Type</key>
 			<string>Boolean</string>
 			<key>Value</key>
-			<integer>1</integer>   
+			<integer>0</integer>   
 		</map>
 
 		<key>ChatTabDirection</key>
@@ -2441,7 +2442,7 @@
 			<key>Type</key>
 			<string>S32</string>
 			<key>Value</key>
-			<integer>40</integer>
+			<integer>0</integer>
 		</map>
 		<key>BottomPanelNew</key>
 		<map>
@@ -3073,9 +3074,9 @@
 			<string>Vector3</string>
 			<key>Value</key>
 			<array>
-				<real>-3.0</real>
+				<real>-1.0</real>
 				<real>0.0</real>
-				<real>0.75</real>
+				<real>0.0</real>
 			</array>
 		</map>
 		<key>CameraOffsetFrontView</key>
@@ -4672,7 +4673,7 @@
 			<key>Type</key>
 			<string>Boolean</string>
 			<key>Value</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</map>
 		<key>DisableMouseWarp</key>
 		<map>
@@ -11902,7 +11903,7 @@
 	    <key>Type</key>
 	    <string>S32</string>
 	    <key>Value</key>
-	    <integer>1</integer>
+	    <integer>0</integer>
     </map>
     <key>ShowAxes</key>
     <map>
@@ -12287,7 +12288,7 @@
 	    <key>Type</key>
 	    <string>Boolean</string>
 	    <key>Value</key>
-	    <integer>1</integer>   
+	    <integer>0</integer>   
     </map>
     <key>ShowNavbarNavigationPanel</key>        
     <map>
@@ -16445,7 +16446,7 @@
 	    <key>Type</key>
 	    <string>Boolean</string>
 	    <key>Value</key>
-	    <integer>1</integer>
+	    <integer>0</integer>
     </map>
     <key>UseLegacyCursors</key>
     <map>
