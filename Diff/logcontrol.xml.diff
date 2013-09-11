@@ -1,0 +1,24 @@
+diff --git a/Source/indra/newview/app_settings/logcontrol.xml b/Source/indra/newview/app_settings/logcontrol.xml
+index 35c65b4..ca56585 100644
+--- a/Source/indra/newview/app_settings/logcontrol.xml
++++ b/Source/indra/newview/app_settings/logcontrol.xml
+@@ -42,12 +42,15 @@
+ 						</array>
+ 					<key>tags</key>
+ 						<array>
+-						<!-- sample entry for debugging specific items	
+-						     <string>Avatar</string>
+-						     <string>Voice</string> -->
++						<!-- sample entry for debugging specific items
++							 <string>Voice</string>
++							 <string>Avatar</string>							
++						-->
+ 						     <string>parseFile</string>
++						     <string>import</string>
++						     <string>export</string>
+ 						</array>
+ 				</map>
+-			</array>
++      </array>
+ 	</map>
+ </llsd>

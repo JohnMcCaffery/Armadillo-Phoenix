@@ -1,0 +1,14 @@
+diff --git a/Source/indra/newview/llfloaterspellchecksettings.h b/Source/indra/newview/llfloaterspellchecksettings.h
+index eded3a9..3b198dd 100644
+--- a/Source/indra/newview/llfloaterspellchecksettings.h
++++ b/Source/indra/newview/llfloaterspellchecksettings.h
+@@ -45,6 +45,9 @@ protected:
+ 	void onBtnRemove();
+ 	void onSpellCheckSettingsChange();
+ 	void refreshDictionaries(bool from_settings);
++
++private:
++	void commitChanges();
+ };
+ 
+ class LLFloaterSpellCheckerImport : public LLFloater

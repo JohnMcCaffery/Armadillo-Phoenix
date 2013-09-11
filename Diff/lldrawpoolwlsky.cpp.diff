@@ -1,0 +1,51 @@
+diff --git a/Source/indra/newview/lldrawpoolwlsky.cpp b/Source/indra/newview/lldrawpoolwlsky.cpp
+index 1d0566b..9e6813f 100644
+--- a/Source/indra/newview/lldrawpoolwlsky.cpp
++++ b/Source/indra/newview/lldrawpoolwlsky.cpp
+@@ -41,6 +41,7 @@
+ #include "llviewerregion.h"
+ #include "llface.h"
+ #include "llrender.h"
++#include "llviewercontrol.h"	// <FS:CR> Cloud noise selection
+ 
+ LLPointer<LLViewerTexture> LLDrawPoolWLSky::sCloudNoiseTexture = NULL;
+ 
+@@ -53,7 +54,11 @@ static LLGLSLShader* sky_shader = NULL;
+ LLDrawPoolWLSky::LLDrawPoolWLSky(void) :
+ 	LLDrawPool(POOL_WL_SKY)
+ {
+-	const std::string cloudNoiseFilename(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "clouds2.tga"));
++// <FS:CR> Cloud noise selection
++	//const std::string cloudNoiseFilename(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "clouds2.tga"));
++	static LLCachedControl<std::string> cloud_texture(gSavedSettings, "FSCloudTexture", "Default.tga");
++	const std::string cloudNoiseFilename(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight" + gDirUtilp->getDirDelimiter() + "clouds", cloud_texture));
++// </FS:CR>
+ 	llinfos << "loading WindLight cloud noise from " << cloudNoiseFilename << llendl;
+ 
+ 	LLPointer<LLImageFormatted> cloudNoiseFile(LLImageFormatted::createFromExtension(cloudNoiseFilename));
+@@ -193,24 +198,17 @@ void LLDrawPoolWLSky::renderStars(void) const
+ 	LLColor4 star_alpha(LLColor4::black);
+ 	star_alpha.mV[3] = LLWLParamManager::getInstance()->mCurParams.getFloat("star_brightness", error) / 2.f;
+ 
+-	// <FS:ND> If case start_brightness is not set, don't crash but exit gracefully
+-
+-	//	llassert_always(!error);
++	// If start_brightness is not set, exit
+ 	if( error )
+ 	{
+ 		llwarns << "star_brightness missing in mCurParams" << llendl;
+ 		return;
+ 	}
+ 
+-	// </FS:ND>
+-
+-
+ 	gGL.getTexUnit(0)->bind(gSky.mVOSkyp->getBloomTex());
+ 
+ 	gGL.pushMatrix();
+ 	gGL.rotatef(gFrameTimeSeconds*0.01f, 0.f, 0.f, 1.f);
+-	// gl_FragColor.rgb = gl_Color.rgb;
+-	// gl_FragColor.a = gl_Color.a * star_alpha.a;
+ 	if (LLGLSLShader::sNoFixedFunction)
+ 	{
+ 		gCustomAlphaProgram.bind();

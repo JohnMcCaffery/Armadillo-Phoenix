@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
-background_visible="true"
+background_visible="false"
  follows="all"
- height="480"
+ height="473"
  label="Group Profile"
  layout="topleft"
  min_height="350"
  left="0"
  top="20"
  name="GroupInfo"
- width="500">
+ width="495">
     <panel.string
      name="default_needs_apply_text">
         There are unsaved changes
@@ -26,6 +26,26 @@ background_visible="true"
      name="group_join_free">
         Free
     </panel.string>
+
+	<layout_stack
+		name="group_info_sidetray_main"
+		layout="topleft"
+		follows="all"
+		top="-475"
+		left="0"
+		width="498"
+		height="475"
+		border_size="0"
+		orientation="vertical">
+	<layout_panel
+		name="header_container"
+		auto_resize="false"
+		height="30"
+		width="498"
+		layout="topleft"
+		visible="true"
+		follows="top|left|right">
+
     <panel
       name="group_info_top"
       follows="top|left"
@@ -79,11 +99,21 @@ background_visible="true"
      height="20"
      visible="false" />
     </panel>
+
+	</layout_panel>
+	<layout_panel
+		name="group_info_content"
+		auto_resize="true"
+		height="450"
+		width="498"
+		layout="topleft"
+		follows="all">
+
    <layout_stack
      name="layout"
      orientation="vertical"
       follows="all"
-     left="8"
+     left="0"
      top_pad="0"
      height="415"
      right="-1"
@@ -91,8 +121,8 @@ background_visible="true"
    <layout_panel
        bg_alpha_color="SL-Background_66"
        bg_opaque_color="SL-Background_66"
-       background_visible="true"
-       background_opaque="true"
+       background_visible="false"
+       background_opaque="false"
        name="group_accordions"
        follows="all"
        layout="topleft"
@@ -156,7 +186,7 @@ background_visible="true"
 		     image_overlay="Refresh_Off"
 		     layout="topleft"
 		     left="6"
-		     top_pad="5"
+		     top_pad="8"
 		     name="btn_refresh"
 		     width="23" />
 				     
@@ -167,7 +197,7 @@ background_visible="true"
 			name="button_row_ls"
 			left_pad="0"
 			orientation="horizontal"
-			top_delta="2"
+			top_delta="0"
 			width="445">
 				<layout_panel
 				follows="bottom|left|right"
@@ -240,5 +270,8 @@ background_visible="true"
                  	 width="90" />
 				</layout_panel>
 		   </layout_stack>
+
+	</layout_panel>
+	</layout_stack> 
 
 </panel>

@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llavatariconctrl.cpp b/Source/indra/newview/llavatariconctrl.cpp
+index ce626a3..eea9bec 100644
+--- a/Source/indra/newview/llavatariconctrl.cpp
++++ b/Source/indra/newview/llavatariconctrl.cpp
+@@ -37,6 +37,8 @@
+ #include "lluictrlfactory.h"
+ #include "llagentdata.h"
+ #include "llimfloater.h"
++#include "llviewertexture.h"
++#include "llavatarappearancedefines.h"
+ 
+ // library includes
+ #include "llavatarnamecache.h"

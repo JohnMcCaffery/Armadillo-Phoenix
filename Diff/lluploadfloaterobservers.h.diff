@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/lluploadfloaterobservers.h b/Source/indra/newview/lluploadfloaterobservers.h
+index 79aad28..b43ddb4 100644
+--- a/Source/indra/newview/lluploadfloaterobservers.h
++++ b/Source/indra/newview/lluploadfloaterobservers.h
+@@ -86,7 +86,7 @@ public:
+ 
+ 	LLUploadModelPremissionsResponder(const LLHandle<LLUploadPermissionsObserver>& observer);
+ 
+-	void error(U32 status, const std::string& reason);
++	void errorWithContent(U32 status, const std::string& reason, const LLSD& content);
+ 
+ 	void result(const LLSD& content);
+ 

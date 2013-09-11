@@ -1,0 +1,30 @@
+diff --git a/Source/indra/newview/rlvdefines.h b/Source/indra/newview/rlvdefines.h
+index 3ce9495..d116e24 100644
+--- a/Source/indra/newview/rlvdefines.h
++++ b/Source/indra/newview/rlvdefines.h
+@@ -1,5 +1,5 @@
+ /** 
+- *
++ * @file rlvdefines.h
+  * Copyright (c) 2009-2011, Kitty Barnett
+  * 
+  * The source code in this file is provided to you under the terms of the 
+@@ -66,7 +66,7 @@ const S32 RLV_VERSION_BUILD = 0;
+ // Implementation version
+ const S32 RLVa_VERSION_MAJOR = 1;
+ const S32 RLVa_VERSION_MINOR = 4;
+-const S32 RLVa_VERSION_PATCH = 7;
++const S32 RLVa_VERSION_PATCH = 8;
+ const S32 RLVa_VERSION_BUILD = 0;
+ 
+ // Uncomment before a final release
+@@ -295,7 +295,8 @@ enum ERlvAttachGroupType
+ 
+ #define RLV_SETTING_MAIN				"RestrainedLove"
+ #define RLV_SETTING_DEBUG				"RestrainedLoveDebug"
+-#define RLV_SETTING_AVATAROFFSET_Z		"AvatarZOffset"
++// <FS:CR> FIRE-9759 - Temporarily remove setting AvatarZOffset
++//#define RLV_SETTING_AVATAROFFSET_Z		"AvatarZOffset"
+ #define RLV_SETTING_CANOOC				"RestrainedLoveCanOOC"
+ #define RLV_SETTING_FORBIDGIVETORLV		"RestrainedLoveForbidGiveToRLV"
+ #define RLV_SETTING_NOSETENV			"RestrainedLoveNoSetEnv"

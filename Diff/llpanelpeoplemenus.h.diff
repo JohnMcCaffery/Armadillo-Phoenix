@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llpanelpeoplemenus.h b/Source/indra/newview/llpanelpeoplemenus.h
+index 6bdff42..d51eaec 100644
+--- a/Source/indra/newview/llpanelpeoplemenus.h
++++ b/Source/indra/newview/llpanelpeoplemenus.h
+@@ -43,8 +43,6 @@ private:
+ 	bool enableContextMenuItem(const LLSD& userdata);
+ 	bool checkContextMenuItem(const LLSD& userdata);
+ 	void offerTeleport();
+-	void teleportToAvatar();
+-	void onTrackAvatarMenuItemClick();
+ };
+ 
+ extern NearbyMenu gNearbyMenu;

@@ -1,0 +1,27 @@
+diff --git a/Source/indra/newview/lltoast.cpp b/Source/indra/newview/lltoast.cpp
+index 6267a0f..bd8d5da 100644
+--- a/Source/indra/newview/lltoast.cpp
++++ b/Source/indra/newview/lltoast.cpp
+@@ -121,7 +121,7 @@ LLToast::LLToast(const LLToast::Params& p)
+ {
+ 	mTimer.reset(new LLToastLifeTimer(this, p.lifetime_secs));
+ 
+-	buildFromFile("panel_toast.xml", NULL);
++	buildFromFile("panel_toast.xml");
+ 
+ 	setCanDrag(FALSE);
+ 
+@@ -582,7 +582,12 @@ S32	LLToast::notifyParent(const LLSD& info)
+ //static
+ void LLToast::updateClass()
+ {
+-	for (LLInstanceTracker<LLToast>::instance_iter iter = LLInstanceTracker<LLToast>::beginInstances(); iter != LLInstanceTracker<LLToast>::endInstances(); ) 
++	// <FS:ND> Minimize calls to getInstances per frame
++	// for (LLInstanceTracker<LLToast>::instance_iter iter = LLInstanceTracker<LLToast>::beginInstances(); iter != LLInstanceTracker<LLToast>::endInstances(); ) 
++
++	LLInstanceTracker<LLToast>::instance_iter end = LLInstanceTracker<LLToast>::endInstances();
++	for (LLInstanceTracker<LLToast>::instance_iter iter = LLInstanceTracker<LLToast>::beginInstances(); iter != end; ) 
++	// </FS:ND>	
+ 	{
+ 		LLToast& toast = *iter++;
+ 		

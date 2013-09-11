@@ -27,11 +27,11 @@
         parameter="LimitRadarByRange" />
   </menu_item_check>
   
-  <menu
+  <context_menu
     label="Radar Name Format"
     name="radarNameFormat">
    	<menu_item_check
-    	label="DisplayName"
+    	label="Display Name"
      	name="radarFmtDN"
      	enabled_control="UseDisplayNames">
     	<menu_item_check.on_check
@@ -52,7 +52,7 @@
         	parameter="UN"/>
     </menu_item_check>
    	<menu_item_check
-    	label="DisplayName (UserName)"
+    	label="Display Name (Username)"
      	name="radarFmtDNUN"
      	enabled_control="UseDisplayNames">
     	<menu_item_check.on_check
@@ -63,7 +63,7 @@
         	parameter="DNUN"/>
     </menu_item_check>
    	<menu_item_check
-    	label="Username (DisplayName)"
+    	label="Username (Display Name)"
      	name="radarFmtUNDN"
      	enabled_control="UseDisplayNames">
     	<menu_item_check.on_check
@@ -73,11 +73,35 @@
         	function="Radar.NameFmt" 
         	parameter="UNDN"/>
     </menu_item_check>
-   </menu>
-  
+   </context_menu>
   
   <menu_item_separator layout="topleft" />
 
+  <context_menu
+    label="Report To"
+    name="report_to_menu">
+    <menu_item_check
+    	label="Nearby Chat"
+     	name="radar_nearby_chat">
+    	<menu_item_check.on_check
+      function="Radar.ReportToCheck"
+      parameter="radar_nearby_chat" />
+    	<menu_item_check.on_click
+      function="Radar.ReportTo"
+      parameter="radar_nearby_chat" />
+    </menu_item_check>
+    <menu_item_check
+    	label="Notification Toasts"
+     	name="radar_nearby_chat">
+    	<menu_item_check.on_check
+        function="Radar.ReportToCheck"
+        parameter="radar_toasts" />
+    	<menu_item_check.on_click
+        function="Radar.ReportTo"
+        parameter="radar_toasts" />
+    </menu_item_check>
+  </context_menu>
+    
   <menu_item_check
    label="Local chat distance ring in Minimap"
    name="MiniMapChatRing">

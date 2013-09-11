@@ -1,0 +1,83 @@
+diff --git a/Source/indra/newview/llvograss.cpp b/Source/indra/newview/llvograss.cpp
+index 5ad9ccc..43a919a 100644
+--- a/Source/indra/newview/llvograss.cpp
++++ b/Source/indra/newview/llvograss.cpp
+@@ -102,7 +102,7 @@ void LLVOGrass::updateSpecies()
+ 		SpeciesMap::const_iterator it = sSpeciesTable.begin();
+ 		mSpecies = (*it).first;
+ 	}
+-	setTEImage(0, LLViewerTextureManager::getFetchedTexture(sSpeciesTable[mSpecies]->mTextureID, TRUE, LLViewerTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE));
++	setTEImage(0, LLViewerTextureManager::getFetchedTexture(sSpeciesTable[mSpecies]->mTextureID, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE));
+ }
+ 
+ 
+@@ -277,17 +277,17 @@ BOOL LLVOGrass::isActive() const
+ 	return TRUE;
+ }
+ 
+-BOOL LLVOGrass::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
++void LLVOGrass::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
+ {
+  	if (mDead || !(gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_GRASS)))
+ 	{
+-		return TRUE;
++		return;
+ 	}
+ 	
+ 	if (!mDrawable)
+ 	{
+ 		// So drones work.
+-		return TRUE;
++		return;
+ 	}
+ 
+ 	if(LLVOTree::isTreeRenderingStopped()) //stop rendering grass
+@@ -297,14 +297,14 @@ BOOL LLVOGrass::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
+ 			mNumBlades = 0 ;
+ 			gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_ALL, TRUE);
+ 		}
+-		return TRUE ;
++		return;
+ 	}
+ 	else if(!mNumBlades)//restart grass rendering
+ 	{
+ 		mNumBlades = GRASS_MAX_BLADES ;
+ 		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_ALL, TRUE);
+ 		
+-		return TRUE ;
++		return;
+ 	}
+ 
+ 	if (mPatch && (mLastPatchUpdateTime != mPatch->getLastUpdateTime()))
+@@ -312,7 +312,7 @@ BOOL LLVOGrass::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
+ 		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, TRUE);
+ 	}
+ 
+-	return TRUE;
++	return;
+ }
+ 
+ 
+@@ -675,7 +675,6 @@ static LLFastTimer::DeclareTimer FTM_REBUILD_GRASS_VB("Grass VB");
+ 
+ void LLGrassPartition::getGeometry(LLSpatialGroup* group)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	LLFastTimer ftm(FTM_REBUILD_GRASS_VB);
+ 
+ 	std::sort(mFaceList.begin(), mFaceList.end(), LLFace::CompareDistanceGreater());
+@@ -765,9 +764,12 @@ void LLVOGrass::updateDrawable(BOOL force_damped)
+ }
+ 
+ // virtual 
+-BOOL LLVOGrass::lineSegmentIntersect(const LLVector3& start, const LLVector3& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
++//BOOL LLVOGrass::lineSegmentIntersect(const LLVector3& start, const LLVector3& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
++//									  LLVector3* intersection,LLVector2* tex_coord, LLVector3* normal, LLVector3* bi_normal)
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++BOOL LLVOGrass::lineSegmentIntersect(const LLVector3& start, const LLVector3& end, S32 face, BOOL pick_transparent, BOOL pick_rigged, S32 *face_hitp,
+ 									  LLVector3* intersection,LLVector2* tex_coord, LLVector3* normal, LLVector3* bi_normal)
+-	
++// [/SL:KB]
+ {
+ 	BOOL ret = FALSE;
+ 	if (!mbCanSelect ||

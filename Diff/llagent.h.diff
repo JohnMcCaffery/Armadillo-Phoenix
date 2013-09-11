@@ -1,0 +1,40 @@
+diff --git a/Source/indra/newview/llagent.h b/Source/indra/newview/llagent.h
+index c3b16b5..efc6d6e 100644
+--- a/Source/indra/newview/llagent.h
++++ b/Source/indra/newview/llagent.h
+@@ -33,7 +33,9 @@
+ #include "llagentdata.h" 			// gAgentID, gAgentSessionID
+ #include "llcharacter.h"
+ #include "llcoordframe.h"			// for mFrameAgent
+-#include "llvoavatardefines.h"
++#include "llavatarappearancedefines.h"
++#include "llpermissionsflags.h"
++#include "llviewerinventory.h"	// <FS:CR> Needed for LLViewerInventoryItem
+ 
+ #include <boost/function.hpp>
+ #include <boost/shared_ptr.hpp>
+@@ -657,6 +659,7 @@ private:
+ 
+ 	void            handleTeleportFinished();
+ 	void            handleTeleportFailed();
++	void			handleServerBakeRegionTransition(const LLUUID& region_id);
+ 
+ 	//--------------------------------------------------------------------
+ 	// Teleport State
+@@ -891,6 +894,7 @@ private:
+ public:
+ 	void			sendMessage(); // Send message to this agent's region
+ 	void			sendReliableMessage();
++	void 			dumpSentAppearance(const std::string& dump_prefix);
+ 	void			sendAgentSetAppearance();
+ 	void 			sendAgentDataUpdateRequest();
+ 	void 			sendAgentUserInfoRequest();
+@@ -963,7 +967,7 @@ private:
+ 	S32				mNumPendingQueries;
+ 	S32				mWearablesCacheQueryID;
+ 	U32				mUpdateSerialNum;
+-	S32		    	mActiveCacheQueries[LLVOAvatarDefines::BAKED_NUM_INDICES];
++	S32		    	mActiveCacheQueries[LLAvatarAppearanceDefines::BAKED_NUM_INDICES];
+ };
+ 
+ extern LLAgentQueryManager gAgentQueryManager;

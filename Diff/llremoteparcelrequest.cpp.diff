@@ -1,0 +1,18 @@
+diff --git a/Source/indra/newview/llremoteparcelrequest.cpp b/Source/indra/newview/llremoteparcelrequest.cpp
+index 3862dac..500dec7 100644
+--- a/Source/indra/newview/llremoteparcelrequest.cpp
++++ b/Source/indra/newview/llremoteparcelrequest.cpp
+@@ -62,10 +62,10 @@ void LLRemoteParcelRequestResponder::result(const LLSD& content)
+ 
+ //If we get back an error (not found, etc...), handle it here
+ //virtual
+-void LLRemoteParcelRequestResponder::error(U32 status, const std::string& reason)
++void LLRemoteParcelRequestResponder::errorWithContent(U32 status, const std::string& reason, const LLSD& content)
+ {
+-	llinfos << "LLRemoteParcelRequest::error("
+-		<< status << ": " << reason << ")" << llendl;
++	llwarns << "LLRemoteParcelRequest error [status:"
++			<< status << "]: " << content << llendl;
+ 
+ 	// Panel inspecting the information may be closed and destroyed
+ 	// before this response is received.

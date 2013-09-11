@@ -1,0 +1,51 @@
+diff --git a/Source/indra/newview/llpanelvolume.cpp b/Source/indra/newview/llpanelvolume.cpp
+index 13b746d..5c4a9ab 100644
+--- a/Source/indra/newview/llpanelvolume.cpp
++++ b/Source/indra/newview/llpanelvolume.cpp
+@@ -252,10 +252,9 @@ void LLPanelVolume::getState( )
+ 		return;
+ 	}
+ 
+-	BOOL owners_identical;
+ 	LLUUID owner_id;
+ 	std::string owner_name;
+-	owners_identical = LLSelectMgr::getInstance()->selectGetOwner(owner_id, owner_name);
++	LLSelectMgr::getInstance()->selectGetOwner(owner_id, owner_name);
+ 
+ 	// BUG? Check for all objects being editable?
+ 	BOOL editable = root_objectp->permModify() && !root_objectp->isPermanentEnforced();
+@@ -283,7 +282,9 @@ void LLPanelVolume::getState( )
+ 	
+ 	if (is_light && editable && single_volume)
+ 	{
+-		getChildView("label color")->setEnabled(true);
++		// <FS:Ansariel> We don't have that one in Firestorm (2013-04-28)
++		//getChildView("label color")->setEnabled(true);
++		// </FS:Ansariel>
+ 		//mLabelColor		 ->setEnabled( TRUE );
+ 		LLColorSwatchCtrl* LightColorSwatch = getChild<LLColorSwatchCtrl>("colorswatch");
+ 		if(LightColorSwatch)
+@@ -326,7 +327,9 @@ void LLPanelVolume::getState( )
+ 		getChild<LLSpinCtrl>("Light Radius", true)->clear();
+ 		getChild<LLSpinCtrl>("Light Falloff", true)->clear();
+ 
+-		getChildView("label color")->setEnabled(false);	
++		// <FS:Ansariel> We don't have that one in Firestorm (2013-04-28)
++		//getChildView("label color")->setEnabled(false);	
++		// </FS:Ansariel>
+ 		LLColorSwatchCtrl* LightColorSwatch = getChild<LLColorSwatchCtrl>("colorswatch");
+ 		if(LightColorSwatch)
+ 		{
+@@ -569,8 +572,10 @@ void LLPanelVolume::clearCtrls()
+ 	getChildView("edit_object")->setEnabled(false);
+ 	getChildView("edit_object")->setVisible(false);
+ 	getChildView("Light Checkbox Ctrl")->setEnabled(false);
+-	getChildView("label color")->setEnabled(false);
+-	getChildView("label color")->setEnabled(false);
++	// <FS:Ansariel> We don't have that one in Firestorm (2013-04-28)
++	//getChildView("label color")->setEnabled(false);
++	//getChildView("label color")->setEnabled(false);
++	// </FS:Ansariel>
+ 	LLColorSwatchCtrl* LightColorSwatch = getChild<LLColorSwatchCtrl>("colorswatch");
+ 	if(LightColorSwatch)
+ 	{

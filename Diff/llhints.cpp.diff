@@ -1,0 +1,19 @@
+diff --git a/Source/indra/newview/llhints.cpp b/Source/indra/newview/llhints.cpp
+index e15862e..197408b 100644
+--- a/Source/indra/newview/llhints.cpp
++++ b/Source/indra/newview/llhints.cpp
+@@ -171,12 +171,12 @@ LLHintPopup::LLHintPopup(const LLHintPopup::Params& p)
+ 	}
+ 	if (p.hint_image.isProvided())
+ 	{
+-		buildFromFile("panel_hint_image.xml", NULL, p);
++		buildFromFile("panel_hint_image.xml", p);
+ 		getChild<LLIconCtrl>("hint_image")->setImage(p.hint_image());
+ 	}
+ 	else
+ 	{
+-		buildFromFile( "panel_hint.xml", NULL, p);
++		buildFromFile( "panel_hint.xml", p);
+ 	}
+ }
+ 

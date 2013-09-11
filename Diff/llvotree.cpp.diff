@@ -1,0 +1,52 @@
+diff --git a/Source/indra/newview/llvotree.cpp b/Source/indra/newview/llvotree.cpp
+index 337ddfb..81ee498 100644
+--- a/Source/indra/newview/llvotree.cpp
++++ b/Source/indra/newview/llvotree.cpp
+@@ -316,7 +316,7 @@ U32 LLVOTree::processUpdateMessage(LLMessageSystem *mesgsys,
+ 	//  Load Species-Specific data 
+ 	//
+ 	static const S32 MAX_TREE_TEXTURE_VIRTURE_SIZE_RESET_INTERVAL = 32 ; //frames.
+-	mTreeImagep = LLViewerTextureManager::getFetchedTexture(sSpeciesTable[mSpecies]->mTextureID, TRUE, LLViewerTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
++	mTreeImagep = LLViewerTextureManager::getFetchedTexture(sSpeciesTable[mSpecies]->mTextureID, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+ 	mTreeImagep->setMaxVirtualSizeResetInterval(MAX_TREE_TEXTURE_VIRTURE_SIZE_RESET_INTERVAL); //allow to wait for at most 16 frames to reset virtual size.
+ 
+ 	mBranchLength = sSpeciesTable[mSpecies]->mBranchLength;
+@@ -339,11 +339,11 @@ U32 LLVOTree::processUpdateMessage(LLMessageSystem *mesgsys,
+ 	return retval;
+ }
+ 
+-BOOL LLVOTree::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
++void LLVOTree::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
+ {
+  	if (mDead || !(gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_TREE)))
+ 	{
+-		return TRUE;
++		return;
+ 	}
+ 	
+ 	S32 trunk_LOD = sMAX_NUM_TREE_LOD_LEVELS ;
+@@ -393,8 +393,6 @@ BOOL LLVOTree::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
+ 	}
+ 
+ 	mTrunkLOD = trunk_LOD;
+-
+-	return TRUE;
+ }
+ 
+ const F32 TREE_BLEND_MIN = 1.f;
+@@ -1240,9 +1238,13 @@ void LLVOTree::updateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
+ 	mDrawable->setPositionGroup(pos);
+ }
+ 
+-BOOL LLVOTree::lineSegmentIntersect(const LLVector3& start, const LLVector3& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
++//BOOL LLVOTree::lineSegmentIntersect(const LLVector3& start, const LLVector3& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
++//									  LLVector3* intersection,LLVector2* tex_coord, LLVector3* normal, LLVector3* bi_normal)
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++BOOL LLVOTree::lineSegmentIntersect(const LLVector3& start, const LLVector3& end, S32 face, BOOL pick_transparent, BOOL pick_rigged, S32 *face_hitp,
+ 									  LLVector3* intersection,LLVector2* tex_coord, LLVector3* normal, LLVector3* bi_normal)
+-	
++									  
++// [/SL:KB]
+ {
+ 
+ 	if (!lineSegmentBoundingBox(start, end))

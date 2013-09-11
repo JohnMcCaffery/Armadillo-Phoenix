@@ -1,0 +1,11 @@
+diff --git a/Source/indra/newview/rlvinventory.cpp b/Source/indra/newview/rlvinventory.cpp
+index 5bf0d5f..8126c90 100644
+--- a/Source/indra/newview/rlvinventory.cpp
++++ b/Source/indra/newview/rlvinventory.cpp
+@@ -1,5 +1,5 @@
+ /** 
+- *
++ * @file rlvinventory.cpp
+  * Copyright (c) 2009-2011, Kitty Barnett
+  * 
+  * The source code in this file is provided to you under the terms of the 

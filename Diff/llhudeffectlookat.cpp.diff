@@ -1,0 +1,26 @@
+diff --git a/Source/indra/newview/llhudeffectlookat.cpp b/Source/indra/newview/llhudeffectlookat.cpp
+index bce72e3..4fd006e 100644
+--- a/Source/indra/newview/llhudeffectlookat.cpp
++++ b/Source/indra/newview/llhudeffectlookat.cpp
+@@ -592,10 +592,9 @@ void LLHUDEffectLookAt::render()
+ 					break;
+ 			}
+ 
+-			gViewerWindow->setup3DRender();
++			gGL.pushMatrix();
+ 			hud_render_utf8text(name,position,*fontp,LLFontGL::NORMAL,LLFontGL::DROP_SHADOW,-0.5*fontp->getWidthF32(name),3.0,lookAtColor,FALSE);
+-			gGL.end();
+-			glPopMatrix();
++			gGL.popMatrix();
+ 		}
+ 
+ 		// render crosshair
+@@ -739,7 +738,7 @@ bool LLHUDEffectLookAt::calcTargetPosition()
+ 			}
+ 			else
+ 			{
+-				target_rot = target_av->mRoot.getWorldRotation();
++				target_rot = target_av->mRoot->getWorldRotation();
+ 			}
+ 		}
+ 		else // target obj is not an avatar

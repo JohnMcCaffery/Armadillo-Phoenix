@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llvowlsky.h b/Source/indra/newview/llvowlsky.h
+index 825e13a..729dced 100644
+--- a/Source/indra/newview/llvowlsky.h
++++ b/Source/indra/newview/llvowlsky.h
+@@ -53,7 +53,7 @@ public:
+ 	void initSunDirection(LLVector3 const & sun_direction,
+ 		LLVector3 const & sun_angular_velocity);
+ 
+-	/*virtual*/ BOOL		 idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
++	/*virtual*/ void		 idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
+ 	/*virtual*/ BOOL		 isActive(void) const;
+ 	/*virtual*/ LLDrawable * createDrawable(LLPipeline *pipeline);
+ 	/*virtual*/ BOOL		 updateGeometry(LLDrawable *drawable);

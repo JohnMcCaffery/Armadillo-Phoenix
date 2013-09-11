@@ -1,0 +1,54 @@
+diff --git a/Source/indra/newview/fscontactsfloater.h b/Source/indra/newview/fscontactsfloater.h
+index 5ab3c60..ac439ac 100644
+--- a/Source/indra/newview/fscontactsfloater.h
++++ b/Source/indra/newview/fscontactsfloater.h
+@@ -1,10 +1,10 @@
+ /** 
+  * @file fscontactsfloater.h
+- * @brief 
++ * @brief Legacy contacts floater header file
+  *
+  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
+  * Phoenix Firestorm Viewer Source Code
+- * Copyright (C) 2011, The Phoenix Viewer Project, Inc.
++ * Copyright (C) 2013, The Phoenix Firestorm Project, Inc.
+  * 
+  * This library is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU Lesser General Public
+@@ -20,16 +20,14 @@
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+  * 
+- * The Phoenix Viewer Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * http://www.firestormviewer.org
+  * $/LicenseInfo$
+  */
+  
+  
+-#ifndef LL_FSCONTACTSFLOATER_H
+-#define LL_FSCONTACTSFLOATER_H
+-
+-#include <map>
+-#include <vector>
++#ifndef FS_CONTACTSFLOATER_H
++#define FS_CONTACTSFLOATER_H
+ 
+ #include "llfloater.h"
+ #include "lleventtimer.h"
+@@ -131,7 +129,8 @@ private:
+ 	void					onGroupCreateButtonClicked();
+ 	void					onGroupSearchButtonClicked();
+ 	void					onGroupTitlesButtonClicked();
+-	void					updateButtons();
++	void					onGroupInviteButtonClicked();
++	void					updateGroupButtons();
+ 
+ 	LLTabContainer*			mTabContainer;
+ 
+@@ -142,4 +141,4 @@ private:
+ };
+ 
+ 
+-#endif // LL_FSCONTACTSFLOATER_H
++#endif // FS_CONTACTSFLOATER_H

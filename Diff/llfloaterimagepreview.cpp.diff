@@ -1,0 +1,96 @@
+diff --git a/Source/indra/newview/llfloaterimagepreview.cpp b/Source/indra/newview/llfloaterimagepreview.cpp
+index d6245c5..27507ce 100644
+--- a/Source/indra/newview/llfloaterimagepreview.cpp
++++ b/Source/indra/newview/llfloaterimagepreview.cpp
+@@ -61,6 +61,8 @@
+ #include "llviewercontrol.h"
+ #include "lltrans.h"
+ #include "llimagedimensionsinfo.h"
++#include "llviewerregion.h" // <FS:CR> getCentralBakeVersion()
++#include "llcheckboxctrl.h"
+ 
+ const S32 PREVIEW_BORDER_WIDTH = 2;
+ const S32 PREVIEW_RESIZE_HANDLE_SIZE = S32(RESIZE_HANDLE_WIDTH * OO_SQRT2) + PREVIEW_BORDER_WIDTH;
+@@ -119,12 +121,15 @@ BOOL LLFloaterImagePreview::postBuild()
+ 
+ 		if (mRawImagep->getWidth() * mRawImagep->getHeight () <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF)
+ 			getChildView("lossless_check")->setEnabled(TRUE);
+-
+-		gSavedSettings.setBOOL("TemporaryUpload", FALSE);
+-		if (LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() == 0)
++		
++// <FS:CR> Temporary texture uploads
++		if (LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() == 0
++			|| gAgent.getRegion()->getCentralBakeVersion() > 0)
+ 		{
+-			childHide("temp_check");
++			gSavedSettings.setBOOL("TemporaryUpload", FALSE);
++			getChild<LLCheckBoxCtrl>("temp_check")->setVisible(FALSE);
+ 		}
++// </FS:CR>
+ 	}
+ 	else
+ 	{
+@@ -601,7 +606,7 @@ S8 LLImagePreviewAvatar::getType() const
+ 
+ void LLImagePreviewAvatar::setPreviewTarget(const std::string& joint_name, const std::string& mesh_name, LLImageRaw* imagep, F32 distance, BOOL male) 
+ { 
+-	mTargetJoint = mDummyAvatar->mRoot.findJoint(joint_name);
++	mTargetJoint = mDummyAvatar->mRoot->findJoint(joint_name);
+ 	// clear out existing test mesh
+ 	if (mTargetMesh)
+ 	{
+@@ -620,9 +625,9 @@ void LLImagePreviewAvatar::setPreviewTarget(const std::string& joint_name, const
+ 		mDummyAvatar->updateVisualParams();
+ 		mDummyAvatar->updateGeometry(mDummyAvatar->mDrawable);
+ 	}
+-	mDummyAvatar->mRoot.setVisible(FALSE, TRUE);
++	mDummyAvatar->mRoot->setVisible(FALSE, TRUE);
+ 
+-	mTargetMesh = (LLViewerJointMesh*)mDummyAvatar->mRoot.findJoint(mesh_name);
++	mTargetMesh = dynamic_cast<LLViewerJointMesh*>(mDummyAvatar->mRoot->findJoint(mesh_name));
+ 	mTargetMesh->setTestTexture(mTextureName);
+ 	mTargetMesh->setVisible(TRUE, FALSE);
+ 	mCameraDistance = distance;
+@@ -639,7 +644,7 @@ void LLImagePreviewAvatar::clearPreviewTexture(const std::string& mesh_name)
+ {
+ 	if (mDummyAvatar)
+ 	{
+-		LLViewerJointMesh *mesh = (LLViewerJointMesh*)mDummyAvatar->mRoot.findJoint(mesh_name);
++		LLViewerJointMesh *mesh = dynamic_cast<LLViewerJointMesh*>(mDummyAvatar->mRoot->findJoint(mesh_name));
+ 		// clear out existing test mesh
+ 		if (mesh)
+ 		{
+@@ -829,6 +834,12 @@ void LLImagePreviewSculpted::setPreviewTarget(LLImageRaw* imagep, F32 distance)
+ 	LLStrider<LLVector2> tc;
+ 	tc = (LLVector2*) vf.mTexCoords; tc.setStride(8);
+ 
++	#ifdef OPENSIM // <FS:ND> protect against buffer overflows
++	pos.setCount( vf.mNumVertices );
++	norm.setCount( vf.mNumVertices );
++	tc.setCount( vf.mNumVertices );
++	#endif // </FS:ND>
++
+ 	for (U32 i = 0; i < num_vertices; i++)
+ 	{
+ 		*(vertex_strider++) = *pos++;
+@@ -909,16 +920,13 @@ BOOL LLImagePreviewSculpted::render()
+ 	{
+ 		gObjectPreviewProgram.bind();
+ 	}
++	gPipeline.enableLightsPreview();
++
+ 	gGL.pushMatrix();
+ 	const F32 SCALE = 1.25f;
+ 	gGL.scalef(SCALE, SCALE, SCALE);
+ 	const F32 BRIGHTNESS = 0.9f;
+-	gGL.color3f(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS);
+-
+-	// <FS:ND> FIRE-3661; set color to 1/1/1/1, this is the value that was 
+-	// previously hard coded in previewV.glsl
+-	gGL.diffuseColor4f( 1., 1., 1., 1. );
+-	// </FS:ND>
++	gGL.diffuseColor3f(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS);
+ 
+ 	mVertexBuffer->setBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0);
+ 	mVertexBuffer->draw(LLRender::TRIANGLES, num_indices, 0);

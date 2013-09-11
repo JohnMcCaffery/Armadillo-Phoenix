@@ -70,7 +70,10 @@
 #include "llinventorypanel.h"
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychat.h"
-#include "llfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
 // </FS:Zi>
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
@@ -150,6 +153,8 @@ const static boost::regex NEWLINES("\\n{1}");
 // [/AO]
 #include "tea.h" // <FS:AW opensim currency support>
 #include "fscommon.h"
+#include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
+#include "fsradar.h"
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -196,7 +201,11 @@ const std::string SCRIPT_QUESTIONS[SCRIPT_PERMISSION_EOF] =
 		"ChangePermissions",
 		"TrackYourCamera",
 		"ControlYourCamera",
-		"TeleportYourAgent"
+		"TeleportYourAgent",
+		"JoinAnExperience",
+		"SilentlyManageEstateAccess",
+		"OverrideYourAnimations",
+		"ScriptReturnObjects"
 	};
 
 const BOOL SCRIPT_QUESTION_IS_CAUTION[SCRIPT_PERMISSION_EOF] = 
@@ -212,7 +221,11 @@ const BOOL SCRIPT_QUESTION_IS_CAUTION[SCRIPT_PERMISSION_EOF] =
 	FALSE,	// ChangePermissions
 	FALSE,	// TrackYourCamera,
 	FALSE,	// ControlYourCamera
-	FALSE	// TeleportYourAgent
+	FALSE,	// TeleportYourAgent
+	FALSE,	// JoinAnExperience
+	FALSE,	// SilentlyManageEstateAccess
+	FALSE,	// OverrideYourAnimations
+	FALSE,	// ScriptReturnObjects
 };
 
 bool friendship_offer_callback(const LLSD& notification, const LLSD& response)
@@ -662,7 +675,6 @@ void send_sound_trigger(const LLUUID& sound_id, F32 gain)
 bool join_group_response(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	BOOL delete_context_data = TRUE;
 	bool accept_invite = false;
 
 	LLUUID group_id = notification["payload"]["group_id"].asUUID();
@@ -673,11 +685,7 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 
 	if (option == 2 && !group_id.isNull())
 	{
-		//<FS:LO> Dont break the info button
-		// AO: Don't assume we want to popup/change windows on join
-		//LLGroupActions::show(group_id);  
 		LLGroupActions::show(group_id);
-		//</FS:LO>
 		LLSD args;
 		args["MESSAGE"] = message;
 		LLNotificationsUtil::add("JoinGroup", args, notification["payload"]);
@@ -695,7 +703,6 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 		}
 		else
 		{
-			delete_context_data = FALSE;
 			LLSD args;
 			args["NAME"] = name;
 			LLNotificationsUtil::add("JoinedTooManyGroupsMember", args, notification["payload"]);
@@ -708,7 +715,6 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 		// sure the user is sure they want to join.
 		if (fee > 0)
 		{
-			delete_context_data = FALSE;
 			LLSD args;
 			args["COST"] = llformat("%d", fee);
 			// Set the fee for next time to 0, so that we don't keep
@@ -1265,7 +1271,17 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 						LLInventoryCategory* parent_folder = gInventory.getCategory(item->getParentUUID());
 						if ("inventory_handler" == from_name)
 						{
-							LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id", item->getUUID()));
+							// <FS:Ansariel> FIRE-817: Separate place details floater
+							//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id", item->getUUID()));
+							if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+							{
+								LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "landmark").with("id", item->getUUID()));
+							}
+							else
+							{
+								LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id", item->getUUID()));
+							}
+							// </FS:Ansariel>
 						}
 						else if("group_offer" == from_name)
 						{
@@ -1274,7 +1290,18 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 							LLSD args;
 							args["type"] = "landmark";
 							args["id"] = obj_id;
-							LLFloaterSidePanelContainer::showPanel("places", args);
+
+							// <FS:Ansariel> FIRE-817: Separate place details floater
+							//LLFloaterSidePanelContainer::showPanel("places", args);
+							if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+							{
+								LLFloaterReg::showInstance("fs_placedetails", args);
+							}
+							else
+							{
+								LLFloaterSidePanelContainer::showPanel("places", args);
+							}
+							// </FS:Ansariel>
 
 							continue;
 						}
@@ -1999,7 +2026,10 @@ void LLOfferInfo::initRespondFunctionMap()
 void inventory_offer_handler(LLOfferInfo* info)
 {
 	// NaCl - Antispam Registry
-	if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_INVENTORY,info->mFromID)) return;
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_INVENTORY, info->mFromID))
+	{
+		return;
+	}
 	// NaCl End
 	
 	// If muted, don't even go through the messaging stuff.  Just curtail the offer here.
@@ -2490,7 +2520,10 @@ void god_message_name_cb(const LLAvatarName& av_name, LLChat chat, std::string m
 	// Treat like a system message and put in chat history.
 	chat.mText = av_name.getCompleteName() + ": " + message;
 
-	LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+	FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+	// </FS:Ansariel> [FS communication UI]
 	if(nearby_chat)
 	{
 		nearby_chat->addMessage(chat);
@@ -2528,31 +2561,41 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	//msg->getData("MessageBlock", "Count",		&count);
 	msg->getStringFast(_PREHASH_MessageBlock, _PREHASH_FromAgentName, name);
 	msg->getStringFast(_PREHASH_MessageBlock, _PREHASH_Message,		message);
+
 	// NaCl - Newline flood protection
-	LLViewerObject* obj=gObjectList.findObject(from_id);
-	bool doCheck=true;
-	if(from_id.isNull())
-		doCheck=false;
-	if(gAgent.getID() == from_id)
-		doCheck=false;
-	if(obj)
-		if(obj->permYouOwner())
-			doCheck=false;
-	if(doCheck)
+	static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
+	if (useAntiSpam)
 	{
-		static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings,"_NACL_AntiSpamNewlines");
-		boost::sregex_iterator iter(message.begin(), message.end(), NEWLINES);
-		if((std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines) && gSavedSettings.getBOOL("UseAntiSpam"))
+		bool doCheck = true;
+		if (from_id.isNull() || gAgentID == from_id)
 		{
-			NACLAntiSpamRegistry::blockOnQueue((U32)NACLAntiSpamRegistry::QUEUE_IM,from_id);
-			LLSD args;
-			llinfos << "[antispam] blocked owner due to too many newlines: " << from_id << llendl;
-			args["MESSAGE"] = llformat("AntiSpam: Blocked %s for sending message with %ud lines.",from_id.asString().c_str(),(U32)_NACL_AntiSpamNewlines);
-			LLNotificationsUtil::add("SystemMessageTip", args);
-			return;
+			doCheck = false;
+		}
+		if (doCheck)
+		{
+			LLViewerObject* obj = gObjectList.findObject(from_id);
+			if (obj && obj->permYouOwner())
+			{
+				doCheck = false;
+			}
+		}
+		if (doCheck)
+		{
+			static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings, "_NACL_AntiSpamNewlines");
+			boost::sregex_iterator iter(message.begin(), message.end(), NEWLINES);
+			if ((std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines))
+			{
+				NACLAntiSpamRegistry::instance().blockOnQueue(ANTISPAM_QUEUE_IM, from_id);
+				LLSD args;
+				llinfos << "[antispam] blocked owner due to too many newlines: " << from_id << llendl;
+				args["MESSAGE"] = llformat("AntiSpam: Blocked %s for sending message with %ud lines.", from_id.asString().c_str(), (U32)_NACL_AntiSpamNewlines);
+				LLNotificationsUtil::add("SystemMessageTip", args);
+				return;
+			}
 		}
 	}
 	// NaCl End
+
 	msg->getU32Fast(_PREHASH_MessageBlock, _PREHASH_ParentEstateID, parent_estate_id);
 	msg->getUUIDFast(_PREHASH_MessageBlock, _PREHASH_RegionID, region_id);
 	msg->getVector3Fast(_PREHASH_MessageBlock, _PREHASH_Position, position);
@@ -2560,9 +2603,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	binary_bucket_size = msg->getSizeFast(_PREHASH_MessageBlock, _PREHASH_BinaryBucket);
 	EInstantMessage dialog = (EInstantMessage)d;
 	// NaCl - Antispam Registry
-	if(dialog != IM_TYPING_START && dialog != IM_TYPING_STOP)
+	if (dialog != IM_TYPING_START && dialog != IM_TYPING_STOP)
 	{
-		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_IM,from_id)) return;
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_IM, from_id))
+		{
+			return;
+		}
 	}
 	// NaCl End
 
@@ -2650,10 +2696,16 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			(gRlvHandler.canReceiveIM(from_id)) )
 // [/RLVa:KB]
 		{
+			// <FS:Ansariel> Log autoresponse notification after initial message
+			bool has_session = true;
+
 			// return a standard "busy" message, but only do it to online IM 
 			// (i.e. not other auto responses and not store-and-forward IM)
 			if (!gIMMgr->hasSession(session_id))
 			{
+				// <FS:Ansariel> Log autoresponse notification after initial message
+				has_session = false;
+
 				// if there is not a panel for this conversation (i.e. it is a new IM conversation
 				// initiated by the other party) then...
 				std::string my_name;
@@ -2683,25 +2735,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					IM_BUSY_AUTO_RESPONSE,
 					session_id);
 				gAgent.sendReliableMessage();
-				// <FS:LO> Fire-5389 - "Autoresponse Sent" message added to Firestorm as was in Phoenix
-				gIMMgr->addMessage(
-					session_id,
-					from_id,
-					LLStringUtil::null, // Pass null value so no name gets prepended
-					LLTrans::getString("IM_autoresponse_sent"),
-					my_name,
-					IM_NOTHING_SPECIAL,
-					parent_estate_id,
-					region_id,
-					position,
-					false, // <-- Wow! This parameter is never handled!!!
-					TRUE
-					);
-				// </FS:LO>
 			}
 
 			// <FS:Ansariel> checkfor and process reqinfo
-			if (gIMMgr->hasSession(session_id))
+			if (has_session)
 			{
 				message = FSData::getInstance()->processRequestForInfo(from_id,message,name,session_id);
 			}
@@ -2725,6 +2762,25 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				region_id,
 				position,
 				true);
+
+			if (!has_session)
+			{
+				// <FS:LO> Fire-5389 - "Autoresponse Sent" message added to Firestorm as was in Phoenix
+				gIMMgr->addMessage(
+					session_id,
+					from_id,
+					LLStringUtil::null, // Pass null value so no name gets prepended
+					LLTrans::getString("IM_autoresponse_sent"),
+					name,
+					IM_NOTHING_SPECIAL,
+					parent_estate_id,
+					region_id,
+					position,
+					false, // <-- Wow! This parameter is never handled!!!
+					TRUE
+					);
+				// </FS:LO>
+			}
 		}
 		else if (from_id.isNull())
 		{
@@ -2974,6 +3030,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["SUBJECT"] = subj;
 				args["MESSAGE"] = mes;
 				LLNotifications::instance().add(LLNotification::Params("GroupNotice").substitutions(args).payload(payload).time_stamp(timestamp));
+				make_ui_sound("UISndGroupNotice"); // <FS:PP> Group notice sound
 			}
 
 			// Also send down the old path for now.
@@ -3027,6 +3084,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["MESSAGE"] = message;
 				// we shouldn't pass callback functor since it is registered in LLFunctorRegistration
 				LLNotificationsUtil::add("JoinGroup", args, payload);
+				make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
 			}
 		}
 		break;
@@ -3191,11 +3249,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			saved = llformat("(Saved %s) ", formatted_time(timestamp).c_str());
 		}
 		buffer = saved + message;
-		BOOL is_this_agent = FALSE;
-		if(from_id == gAgentID)
-		{
-			is_this_agent = TRUE;
-		}
 		gIMMgr->addMessage(
 			session_id,
 			from_id,
@@ -3287,7 +3340,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// Note: lie to Nearby Chat, pretending that this is NOT an IM, because
 			// IMs from obejcts don't open IM sessions.
-			LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			// <FS:Ansariel> [FS communication UI]
+			//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+			// </FS:Ansariel> [FS communication UI]
 			if(!chat_from_system && nearby_chat)
 			{
 				chat.mOwnerID = from_id;
@@ -3478,6 +3534,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
 					send_simple_im(from_id, LLTrans::getString("TeleportMaturityExceeded"), IM_NOTHING_SPECIAL, session_id);
 					send_simple_im(from_id, LLStringUtil::null, IM_LURE_DECLINED, session_id);
+					make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 				}
 				else if (doesUserRequireMaturityIncrease)
 				{
@@ -3485,6 +3542,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					params.substitutions = args;
 					params.payload = payload;
 					LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
+					make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 				}
 				else
 				{
@@ -3503,6 +3561,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					else
 					{
 						LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
+						make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 					}
 // [/RLVa:KB]
 //					LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
@@ -3586,6 +3645,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
 				send_simple_im(from_id, LLTrans::getString("TeleportMaturityExceeded"), IM_NOTHING_SPECIAL, session_id);
 				send_simple_im(from_id, LLStringUtil::null, IM_LURE_DECLINED, session_id);
+				make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 			}
 			else if (doesUserRequireMaturityIncrease)
 			{
@@ -3593,13 +3653,14 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				params.substitutions = args;
 				params.payload = payload;
 				LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
+				make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 			}
 			else
 			{
-				// do not show a message box, because you're about to be
-				// teleported.
-				LLNotifications::instance().forceResponse(LLNotification::Params("TeleportOffered").payload(payload), 0);
-			}
+			// do not show a message box, because you're about to be
+			// teleported.
+			LLNotifications::instance().forceResponse(LLNotification::Params("TeleportOffered").payload(payload), 0);
+		}
 		}
 		break;
 
@@ -3654,6 +3715,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				{
 					//support for frienship offers from clients before July 2008
 				        LLNotificationsUtil::add("OfferFriendshipNoMessage", args, payload);
+				        make_ui_sound("UISndFriendshipOffer"); // <FS:PP> Friendship offer sound
 				}
 				else
 				{
@@ -3662,6 +3724,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				    params.substitutions = args;
 				    params.payload = payload;
 				    LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
+				    make_ui_sound("UISndFriendshipOffer"); // <FS:PP> Friendship offer sound
 				}
 			}
 		}
@@ -3774,7 +3837,10 @@ void process_offer_callingcard(LLMessageSystem* msg, void**)
 	LLUUID source_id;
 	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, source_id);
 	// NaCl - Antispam Registry
-	if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_CALLING_CARD,source_id)) return;
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CALLING_CARD, source_id))
+	{
+		return;
+	}
 	// NaCl End
 	LLUUID tid;
 	msg->getUUIDFast(_PREHASH_AgentBlock, _PREHASH_TransactionID, tid);
@@ -3890,7 +3956,6 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	LLColor4	color(1.0f, 1.0f, 1.0f, 1.0f);
 	LLUUID		from_id;
 	LLUUID		owner_id;
-	BOOL		is_owned_by_me = FALSE;
 	LLViewerObject*	chatter;
 
 	msg->getString("ChatData", "FromName", from_name);
@@ -3908,15 +3973,21 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	chat.mChatType = (EChatType)type_temp;
 	
 	// NaCL - Antispam Registry
-	if(chat.mChatType != CHAT_TYPE_START && chat.mChatType != CHAT_TYPE_STOP)
+	if (chat.mChatType != CHAT_TYPE_START && chat.mChatType != CHAT_TYPE_STOP)
 	{
-		if(owner_id.isNull())
+		if (owner_id.isNull())
 		{
-			if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_CHAT,from_id)) return;
+			if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, from_id))
+			{
+				return;
+			}
 		}
 		else
 		{
-			if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_CHAT,owner_id)) return;
+			if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, owner_id))
+			{
+				return;
+			}
 		}
 	}
 	// NaCl End
@@ -3944,8 +4015,8 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	}
 	else
 	{
+		// <FS:KC> Objects with no name get renamed to NO_NAME_OBJECT so the object profile is still accessable
 		//chat.mFromName = from_name;
-		// objects with no name get renamed to NO_NAME_OBJECT so the object profile is still accessable - KC
 		static const boost::regex whitespace_exp("^\\s*$");
 		if (chat.mSourceType == CHAT_SOURCE_OBJECT && boost::regex_search(from_name, whitespace_exp))
 		{
@@ -3964,6 +4035,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		{
 			chat.mFromName = from_name;
 		}
+		// </FS:KC>
 	}
 
 	BOOL is_busy = gAgent.getBusy();
@@ -4013,38 +4085,45 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				gAgent.heardChat(chat.mFromID);
 			}
 		}
-
-		is_owned_by_me = chatter->permYouOwner();
 	}
 
 	if (is_audible)
 	{
-		BOOL visible_in_chat_bubble = FALSE;
+		//BOOL visible_in_chat_bubble = FALSE;
 		std::string verb;
 
 		color.setVec(1.f,1.f,1.f,1.f);
 		msg->getStringFast(_PREHASH_ChatData, _PREHASH_Message, mesg);
-		// NaCl - Newline flood protection
-		LLViewerObject* obj=gObjectList.findObject(from_id);
-		bool doCheck=true;
-		if(from_id.isNull())
-			doCheck=false;
-		if(gAgent.getID() == from_id)
-			doCheck=false;
-		if(obj)
-			if(obj->permYouOwner())
-				doCheck=false;
-		if(doCheck)
+
+		// NaCl - Newline flood protection		
+		static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
+		if (useAntiSpam)
 		{
-			static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings,"_NACL_AntiSpamNewlines");
-			boost::sregex_iterator iter(mesg.begin(), mesg.end(), NEWLINES);
-			if(std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines)
+			bool doCheck = true;
+			if (from_id.isNull() || gAgentID == from_id)
 			{
-				NACLAntiSpamRegistry::blockOnQueue((U32)NACLAntiSpamRegistry::QUEUE_CHAT,owner_id);
-				LLSD args;
-				args["MESSAGE"] = "Chat: Blocked newline flood from "+owner_id.asString();
-				LLNotificationsUtil::add("SystemMessageTip", args);
-				return;
+				doCheck = false;
+			}
+			if (doCheck)
+			{
+				LLViewerObject* obj = gObjectList.findObject(from_id);
+				if (obj && obj->permYouOwner())
+				{
+					doCheck = false;
+				}
+			}
+			if (doCheck)
+			{
+				static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings, "_NACL_AntiSpamNewlines");
+				boost::sregex_iterator iter(mesg.begin(), mesg.end(), NEWLINES);
+				if (std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines)
+				{
+					NACLAntiSpamRegistry::instance().blockOnQueue(ANTISPAM_QUEUE_CHAT, owner_id);
+					LLSD args;
+					args["MESSAGE"] = "Chat: Blocked newline flood from "+owner_id.asString();
+					LLNotificationsUtil::add("SystemMessageTip", args);
+					return;
+				}
 			}
 		}
 		// NaCl End
@@ -4054,6 +4133,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		{
 			// NOTE: chatter can be NULL (may not have rezzed yet, or could be another avie's HUD attachment)
 			BOOL is_attachment = (chatter) ? chatter->isAttachment() : FALSE;
+			BOOL is_owned_by_me = (chatter) ? chatter->permYouOwner() : FALSE;
 
 			// Filtering "rules":
 			//   avatar  => filter all avie text (unless it's this avie or they're an exemption)
@@ -4172,16 +4252,16 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				chat.mText = LLTrans::getString("whisper") + " ";
 				break;
 			case CHAT_TYPE_OWNER:
-//-TT Client LSL Bridge
+				// <FS:TT> Client LSL Bridge
 				{
 					static LLCachedControl<bool> sUseLSLBridge(gSavedSettings, "UseLSLBridge");
-					if (sUseLSLBridge)
+					if (sUseLSLBridge && FSLSLBridge::instance().lslToViewer(mesg, from_id, owner_id))
 					{
-						if(FSLSLBridge::instance().lslToViewer(mesg, from_id, owner_id))
-							return;
+						return;
 					}
 				}
-//-TT
+				// </FS:TT>
+
 // [RLVa:KB] - Checked: 2010-02-XX (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
 				// TODO-RLVa: [RLVa-1.2.0] consider rewriting this before a RLVa-1.2.0 release
 				if ( (rlv_handler_t::isEnabled()) && (mesg.length() > 3) && (RLV_CMD_PREFIX == mesg[0]) && (CHAT_TYPE_OWNER == chat.mChatType) )
@@ -4313,7 +4393,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			
 			if (!is_muted && !is_busy)
 			{
-				visible_in_chat_bubble = gSavedSettings.getBOOL("UseChatBubbles");
+				//visible_in_chat_bubble = gSavedSettings.getBOOL("UseChatBubbles");
 				std::string formated_msg = "";
 				LLViewerChat::formatChatMsg(chat, formated_msg);
 				LLChat chat_bubble = chat;
@@ -4655,6 +4735,9 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 		LLWorldMap::getInstance()->cancelTracking();
 	}
 
+	// <FS:CR> FIRE-5118 - Lightshare support
+	FSLightshare::getInstance()->processLightshareRefresh();
+	// </FS:CR>
 /*
 	// send camera update to new region
 	gAgentCamera.updateCamera();
@@ -5115,7 +5198,7 @@ void send_agent_update(BOOL force_send, BOOL send_reliable)
 		msg_number += 1;
 		if (head_rot_chg < THRESHOLD_HEAD_ROT_QDOT)
 		{
-			//LL_INFOS("Messaging") << " head rot " << head_rotation << LL_ENDL;
+			//LL_INFOS("Messaging") << "head rot " << head_rotation << LL_ENDL;
 			LL_INFOS("Messaging") << "msg " << msg_number << ", frame " << LLFrameTimer::getFrameCount() << ", head_rot_chg " << head_rot_chg << LL_ENDL;
 		}
 		if (cam_rot_chg.magVec() > ROTATION_THRESHOLD) 
@@ -5134,7 +5217,7 @@ void send_agent_update(BOOL force_send, BOOL send_reliable)
 		{
 			LL_INFOS("Messaging") << "msg " << msg_number << ", frame " << LLFrameTimer::getFrameCount() << ", dcf = " << control_flag_change << LL_ENDL;
 		}
-		*/
+*/
 
 		duplicate_count = 0;
 	}
@@ -5259,7 +5342,6 @@ extern U32 gObjectBits;
 
 void process_object_update(LLMessageSystem *mesgsys, void **user_data)
 {	
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
 	// Update the data counters
 	if (mesgsys->getReceiveCompressedSize())
 	{
@@ -5276,7 +5358,6 @@ void process_object_update(LLMessageSystem *mesgsys, void **user_data)
 
 void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
 	// Update the data counters
 	if (mesgsys->getReceiveCompressedSize())
 	{
@@ -5293,7 +5374,6 @@ void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data
 
 void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
 	// Update the data counters
 	if (mesgsys->getReceiveCompressedSize())
 	{
@@ -5311,7 +5391,6 @@ void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data)
 
 void process_terse_object_update_improved(LLMessageSystem *mesgsys, void **user_data)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
 	if (mesgsys->getReceiveCompressedSize())
 	{
 		gObjectBits += mesgsys->getReceiveCompressedSize() * 8;
@@ -5324,7 +5403,7 @@ void process_terse_object_update_improved(LLMessageSystem *mesgsys, void **user_
 	gObjectList.processCompressedObjectUpdate(mesgsys, user_data, OUT_TERSE_IMPROVED);
 }
 
-static LLFastTimer::DeclareTimer FTM_PROCESS_OBJECTS("Process Objects");
+static LLFastTimer::DeclareTimer FTM_PROCESS_OBJECTS("Process Kill Objects");
 
 
 void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
@@ -5450,30 +5529,34 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_OwnerID, owner_id);
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_ObjectID, object_id);
 
+	// <FS:ND> Protect against corrupted sounds
+	if( gAudiop->isCorruptSound( sound_id ) )
+		return;
+	// </FS:ND>
+
 	if(FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id,LLAssetType::AT_SOUND)){
 		return;
 	}
 
 	// NaCl - Antispam Registry
-	bool bDoSpamCheck=1;
-	std::string sSound=sound_id.asString();
- 	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings,"_NACL_AntiSpamSoundMulti");
+ 	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings, "_NACL_AntiSpamSoundMulti");
 	static LLCachedControl<bool> FSPlayCollisionSounds(gSavedSettings, "FSPlayCollisionSounds");
-	for(int i=0;i< COLLISION_SOUNDS_SIZE;i++) //AO: Should probably do this as a hashmap O(1) instead of O(n)
+	if (NACLAntiSpamRegistry::instance().isCollisionSound(sound_id))
 	{
-		if(COLLISION_SOUNDS[i] == sSound)
+		if (!FSPlayCollisionSounds)
 		{
-			if(!FSPlayCollisionSounds)
-			{
-				return;
-			}
-			bDoSpamCheck=0;
+			return;
 		}
 	}
-	if(bDoSpamCheck)
-		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti)) 
+	else
+	{
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, object_id, _NACL_AntiSpamSoundMulti))
+		{
 			return;
+		}
+	}
 	// NaCl End
+
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_ParentID, parent_id);
 	msg->getU64Fast(_PREHASH_SoundData, _PREHASH_Handle, region_handle);
 	msg->getVector3Fast(_PREHASH_SoundData, _PREHASH_Position, pos_local);
@@ -5511,10 +5594,12 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	// AO: Hack for legacy radar script interface compatibility. Interpret certain
 	// sound assets as a request for a full radar update to a channel
 	if ((owner_id == gAgent.getID()) && (sound_id.asString() == gSavedSettings.getString("RadarLegacyChannelAlertRefreshUUID")))
-        {
-	        LLPanelPeople* pPeoplePanel = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("people", "panel_people"));
-                if (pPeoplePanel)
-                        pPeoplePanel->requestRadarChannelAlertSync();
+	{
+		FSRadar* radar = FSRadar::getInstance();
+		if (radar)
+		{
+			radar->requestRadarChannelAlertSync();
+		}
 		return;
 	}
 		
@@ -5546,22 +5631,33 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_ObjectID, object_id);
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
 
-	if(FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id,LLAssetType::AT_SOUND)){
+	if (FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id, LLAssetType::AT_SOUND))
+	{
 		return;
 	}
 
-
 	// NaCl - Antispam Registry
-	static LLCachedControl<U32> _NACL_AntiSpamSoundPreloadMulti(gSavedSettings,"_NACL_AntiSpamSoundPreloadMulti");
-	if(owner_id.isNull())
+	static LLCachedControl<U32> _NACL_AntiSpamSoundPreloadMulti(gSavedSettings, "_NACL_AntiSpamSoundPreloadMulti");
+	if (owner_id.isNull())
 	{
-		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND_PRELOAD,object_id,_NACL_AntiSpamSoundPreloadMulti)) 
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND_PRELOAD, object_id, _NACL_AntiSpamSoundPreloadMulti))
+		{
 			return;
+		}
 	}
 	else
-		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND_PRELOAD,owner_id,_NACL_AntiSpamSoundPreloadMulti)) 
+	{
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND_PRELOAD, owner_id, _NACL_AntiSpamSoundPreloadMulti))
+		{
 			return;
+		}
+	}
 	// NaCl End
+
+	// <FS:ND> Protect against corrupted sounds
+	if( gAudiop->isCorruptSound( sound_id ) )
+		return;
+	// </FS:ND>
 
 	LLViewerObject *objectp = gObjectList.findObject(object_id);
 	if (!objectp) return;
@@ -5604,10 +5700,13 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
 	}
 
 	// NaCl - Antispam Registry
-	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings,"_NACL_AntiSpamSoundMulti");
-		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti)) 
-			return;
+	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings, "_NACL_AntiSpamSoundMulti");
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, object_id, _NACL_AntiSpamSoundMulti))
+	{
+		return;
+	}
 	// NaCl End
+
 	msg->getF32Fast(_PREHASH_DataBlock, _PREHASH_Gain, gain);
 	msg->getU8Fast(_PREHASH_DataBlock, _PREHASH_Flags, flags);
 
@@ -5725,6 +5824,38 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 			break;
 		case LL_SIM_STAT_NUMSCRIPTSACTIVE:
 			LLViewerStats::getInstance()->mSimActiveScripts.addValue(stat_value);
+			// <FS:Ansariel> Report script count changes
+			{
+				static LLCachedControl<bool> fsReportTotalScriptCountChanges(gSavedSettings, "FSReportTotalScriptCountChanges");
+				static LLCachedControl<U32> fsReportTotalScriptCountChangesThreshold(gSavedSettings, "FSReportTotalScriptCountChangesThreshold");
+				static const std::string increase_message = LLTrans::getString("TotalScriptCountChangeIncrease");
+				static const std::string decrease_message = LLTrans::getString("TotalScriptCountChangeDecrease");
+				static S32 prev_total_scripts = -1;
+
+				if (fsReportTotalScriptCountChanges)
+				{
+					S32 new_val = (S32)stat_value;
+					S32 change_count = new_val - prev_total_scripts;
+					if (llabs(change_count) >= fsReportTotalScriptCountChangesThreshold && prev_total_scripts > -1)
+					{
+						LLStringUtil::format_map_t args;
+						args["NEW_VALUE"] = llformat("%d", new_val);
+						args["OLD_VALUE"] = llformat("%d", prev_total_scripts);
+						args["DIFFERENCE"] = llformat("%+d", change_count);
+
+						if (change_count > 0)
+						{
+							reportToNearbyChat(formatString(increase_message, args));
+						}
+						else if (change_count < 0)
+						{
+							reportToNearbyChat(formatString(decrease_message, args));
+						}
+					}
+				}
+				prev_total_scripts = (S32)stat_value;
+			}
+			// </FS:Ansariel>
 			break;
 		case LL_SIM_STAT_SCRIPT_EPS:
 			LLViewerStats::getInstance()->mSimScriptEPS.addValue(stat_value);
@@ -5819,9 +5950,19 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 	// Various hacks that aren't statistics, but are being handled here.
 	//
 	U32 max_tasks_per_region;
-	U32 region_flags;
+	U64 region_flags;
 	msg->getU32("Region", "ObjectCapacity", max_tasks_per_region);
-	msg->getU32("Region", "RegionFlags", region_flags);
+
+	if (msg->has(_PREHASH_RegionInfo))
+	{
+		msg->getU64("RegionInfo", "RegionFlagsExtended", region_flags);
+	}
+	else
+	{
+		U32 flags = 0;
+		msg->getU32("Region", "RegionFlags", flags);
+		region_flags = flags;
+	}
 
 	LLViewerRegion* regionp = gAgent.getRegion();
 	if (regionp)
@@ -6003,7 +6144,7 @@ void process_avatar_sit_response(LLMessageSystem *mesgsys, void **user_data)
 	if (object)
 	{
 		LLVector3 sit_spot = object->getPositionAgent() + (sitPosition * object->getRotation());
-		if (!use_autopilot || isAgentAvatarValid() && gAgentAvatarp->isSitting() && gAgentAvatarp->getRoot() == object->getRoot())
+		if (!use_autopilot || (isAgentAvatarValid() && gAgentAvatarp->isSitting() && gAgentAvatarp->getRoot() == object->getRoot()))
 		{
 			//we're already sitting on this object, so don't autopilot
 		}
@@ -6768,14 +6909,14 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 bool handle_prompt_for_maturity_level_change_callback(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	
+
 	if (0 == option)
 	{
 		// set the preference to the maturity of the region we're calling
 		U8 preferredMaturity = static_cast<U8>(notification["payload"]["_region_access"].asInteger());
 		gSavedSettings.setU32("PreferredMaturity", static_cast<U32>(preferredMaturity));
 	}
-	
+
 	return false;
 }
 
@@ -6838,7 +6979,7 @@ bool handle_special_notification(std::string notificationID, LLSD& llsdBlock)
 			gAgent.clearTeleportRequest();
 			maturityLevelNotification = LLNotificationsUtil::add(notificationID+"_AdultsOnlyContent", llsdBlock);
 			returnValue = true;
-
+	
 			notifySuffix = "_NotifyAdultsOnly";
 		}
 		else if (gAgent.prefersPG() || gAgent.prefersMature())
@@ -6935,7 +7076,7 @@ bool handle_teleport_access_blocked(LLSD& llsdBlock)
 			maturityLevelNotification = LLNotificationsUtil::add(notificationID+"_PreferencesOutOfSync", llsdBlock, llsdBlock, handle_prompt_for_maturity_level_change_callback);
 			returnValue = true;
 		}
-	}
+		}
 
 	if ((maturityLevelNotification == NULL) || maturityLevelNotification->isIgnored())
 	{
@@ -6961,7 +7102,8 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 
 		std::string llsdRaw;
 		LLSD llsdBlock;
-		msgsystem->getStringFast(_PREHASH_AlertInfo, _PREHASH_Message, notificationID);
+		// <FS:Ansariel> Remove dupe call
+		//msgsystem->getStringFast(_PREHASH_AlertInfo, _PREHASH_Message, notificationID);
 		msgsystem->getStringFast(_PREHASH_AlertInfo, _PREHASH_ExtraParams, llsdRaw);
 		if (llsdRaw.length())
 		{
@@ -7008,6 +7150,30 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 				return true;
 			}
 		}
+
+		// <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
+		if (notificationID == "AutopilotCanceled")
+		{
+			return true;
+		}
+		// </FS:Ansariel>
+// <FS:CR> FIRE-9696 - Moved detection of HomePositionSet Alert hack to here where it's actually found now
+		if (notificationID == "HomePositionSet")
+		{
+			// save the home location image to disk
+			std::string snap_filename = gDirUtilp->getLindenUserDir();
+			snap_filename += gDirUtilp->getDirDelimiter();
+			snap_filename += SCREEN_HOME_FILENAME;
+			if (gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE))
+			{
+				llinfos << SCREEN_HOME_FILENAME << " saved successfully." << llendl;
+			}
+			else
+			{
+				llwarns << SCREEN_HOME_FILENAME << " could not be saved." << llendl;
+			}
+		}
+// </FS:CR>
 		
 		LLNotificationsUtil::add(notificationID, llsdBlock);
 		return true;
@@ -7083,14 +7249,16 @@ void process_alert_core(const std::string& message, BOOL modal)
 	{
 		LLViewerStats::getInstance()->incStat(LLViewerStats::ST_KILLED_COUNT);
 	}
-	else if( message == "Home position set." )
-	{
+// <FS:CR> FIRE-9696 - The viewer isn't ever seeing the alert here moved below and detect by name
+	//else if( message == "Home Position Set." )
+	//{
 		// save the home location image to disk
-		std::string snap_filename = gDirUtilp->getLindenUserDir();
-		snap_filename += gDirUtilp->getDirDelimiter();
-		snap_filename += SCREEN_HOME_FILENAME;
-		gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
-	}
+	//	std::string snap_filename = gDirUtilp->getLindenUserDir();
+	//	snap_filename += gDirUtilp->getDirDelimiter();
+	//	snap_filename += SCREEN_HOME_FILENAME;
+	//	gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
+	//}
+// </FS:CR>
 
 	std::string processed_message = message;
 	const std::string ALERT_PREFIX("ALERT: ");
@@ -7102,9 +7270,9 @@ void process_alert_core(const std::string& message, BOOL modal)
 		std::string alert_name(message.substr(ALERT_PREFIX.length()));
 		if (!handle_special_alerts(alert_name))
 		{
-			LLNotificationsUtil::add(alert_name);
+		LLNotificationsUtil::add(alert_name);
 			processed_message = alert_name; // <FS:PP> FIRE-317, region restart alert
-		}
+	}
 	}
 	else if (message.find(NOTIFY_PREFIX) == 0)
 	{
@@ -7375,14 +7543,14 @@ void process_economy_data(LLMessageSystem *msg, void** /*user_data*/)
 	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
 	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 	std::string upload_cost;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
 	if(in_opensim)
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 	}
@@ -7401,7 +7569,10 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 {
 	// NaCl - Antispam Registry
 	LLUUID task_id = notification["payload"]["task_id"].asUUID();
-	if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,task_id)) return;
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, task_id))
+	{
+		return;
+	}
 	// NaCl End
 	// only continue if at least some permissions were requested
 	if (orig_questions)
@@ -7493,7 +7664,10 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 		if (caution)
 		{
-			LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			// <FS:Ansariel> [FS communication UI]
+			//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+			// </FS:Ansariel> [FS communication UI]
 			if(nearby_chat)
 			{
 				LLChat chat_msg(notice.getString());
@@ -7617,14 +7791,24 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_Data, _PREHASH_TaskID, taskid );
 	// itemid -> script asset key of script requesting permissions
 	msg->getUUIDFast(_PREHASH_Data, _PREHASH_ItemID, itemid );
+
 	// NaCl - Antispam Registry
-	if(taskid.isNull())
+	if (taskid.isNull())
 	{
-		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,itemid)) return;
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, itemid))
+		{
+			return;
+		}
 	}
 	else
-		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,taskid)) return;
+	{
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, taskid))
+		{
+			return;
+		}
+	}
 	// NaCl End
+
 	msg->getStringFast(_PREHASH_Data, _PREHASH_ObjectName, object_name);
 	msg->getStringFast(_PREHASH_Data, _PREHASH_ObjectOwner, owner_name);
 	msg->getS32Fast(_PREHASH_Data, _PREHASH_Questions, questions );
@@ -8382,7 +8566,10 @@ void process_script_dialog(LLMessageSystem* msg, void**)
 	LLUUID object_id;
 	msg->getUUID("Data", "ObjectID", object_id);
 	// NaCl - Antispam Registry
-	if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,object_id)) return;
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, object_id))
+	{
+		return;
+	}
 	// NaCl End
 
 //	For compability with OS grids first check for presence of extended packet before fetching data.
@@ -8391,7 +8578,10 @@ void process_script_dialog(LLMessageSystem* msg, void**)
 	{
     msg->getUUID("OwnerData", "OwnerID", owner_id);
 	// NaCl - Antispam Registry
-	if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,owner_id)) return;
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, owner_id))
+	{
+		return;
+	}
 	// NaCl End
 	}
 
@@ -8529,12 +8719,20 @@ void process_load_url(LLMessageSystem* msg, void**)
 	msg->getUUID(  "Data", "ObjectID", object_id);
 	msg->getUUID(  "Data", "OwnerID", owner_id);
 	// NaCl - Antispam Registry
-	if(owner_id.isNull())
+	if (owner_id.isNull())
 	{
-		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,object_id)) return;
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, object_id))
+		{
+			return;
+		}
 	}
 	else
-		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SCRIPT_DIALOG,owner_id)) return;
+	{
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, owner_id))
+		{
+			return;
+		}
+	}
 	// NaCl End
 	msg->getBOOL(  "Data", "OwnerIsGroup", owner_is_group);
 	msg->getString("Data", "Message", 256, message);

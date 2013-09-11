@@ -103,12 +103,12 @@
     </menu_item_call>
    </context_menu>	
     <menu_item_call
-         label="Debug Textures"
-         name="Debug...">
+		 label="Dump XML"
+         name="Dump XML">
             <menu_item_call.on_click
-             function="Avatar.Debug" />
+             function="Advanced.AppearanceToXML" />
             <menu_item_call.on_visible
-             function="IsGodCustomerService"/>
+             function="Advanced.EnableAppearanceToXML"/>
     </menu_item_call>
 	    <menu_item_call
          label="Zoom In"
@@ -149,11 +149,32 @@
     <menu_item_call.on_click
        function="Object.Derender" />
     </menu_item_call>
+   <menu_item_call
+      enabled="true"
+      label="Derender + Blacklist"
+      name="DerenderPermanent">
+    <menu_item_call.on_click
+      function="Object.DerenderPermanent" />
+   </menu_item_call>
+    <menu_item_call
+         label="Show Textures"
+         name="Debug...">
+            <menu_item_call.on_click
+             function="Avatar.Debug" />
+    </menu_item_call>
     <menu_item_call 
     enabled="true"
     label="Texture Refresh"
     name="Texture Refresh">
   <menu_item_call.on_click
        function="Object.TexRefresh" />
+    </menu_item_call>
+    <menu_item_call
+     label="Export"
+     name="Export">
+        <menu_item_call.on_click
+         function="Object.Export" />
+        <menu_item_call.on_enable
+         function="Object.EnableExport" />
     </menu_item_call>
 </context_menu>

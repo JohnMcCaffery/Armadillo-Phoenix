@@ -1,0 +1,46 @@
+diff --git a/Source/indra/newview/llnotificationhandler.h b/Source/indra/newview/llnotificationhandler.h
+index d51f6cd..cdc9b9b 100644
+--- a/Source/indra/newview/llnotificationhandler.h
++++ b/Source/indra/newview/llnotificationhandler.h
+@@ -38,7 +38,10 @@
+ 
+ #include "llavatarname.h"
+ 
+-class LLIMFloater;
++// <FS:Ansariel> [FS communication UI]
++//class LLIMFloater;
++class FSFloaterIM;
++// </FS:Ansariel> [FS communication UI]
+ 
+ namespace LLNotificationsUI
+ {
+@@ -158,17 +161,10 @@ public:
+ 
+ 	// base interface functions
+ 	virtual bool processNotification(const LLSD& notify);
+-	
+-	void updateFSLogImToChatConsole(const LLSD &data);
+ 
+ protected:
+ 	virtual void onDeleteToast(LLToast* toast);
+ 	virtual void initChannel();
+-
+-	//void onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str);
+-	void onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str, const std::string& group); // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+-
+-	BOOL FSLogImToChatConsole;
+ };
+ 
+ /**
+@@ -422,7 +418,10 @@ private:
+ 	/**
+ 	 * Find IM floater based on "from_id"
+ 	 */
+-	static LLIMFloater* findIMFloater(const LLNotificationPtr& notification);
++	// <FS:Ansariel> [FS communication UI]
++	//static LLIMFloater* findIMFloater(const LLNotificationPtr& notification);
++	static FSFloaterIM* findIMFloater(const LLNotificationPtr& notification);
++	// </FS:Ansariel> [FS communication UI]
+ 
+ // [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+ 	/**

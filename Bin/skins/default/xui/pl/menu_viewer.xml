@@ -24,6 +24,7 @@
 		<menu_item_check label="Ustawienia kamery" name="Camera Controls"/>
 		<menu label="Naprawa awatara" name="avhealth">
 			<menu_item_call label="Zatrzymaj animacje" name="Stop Animating My Avatar"/>
+			<menu_item_call label="Usuń deformacje awatara" name="undeform_avatar"/>
 			<menu_item_call label="Wymuś aktualizację wyglądu (rebake)" name="Rebake Texture"/>
 			<menu_item_call label="Resetuj do domyślnego męskiego awatara (Character Test)" name="ResetDefaultAvM"/>
 			<menu_item_call label="Resetuj do domyślnego żeńskiego awatara (Character Test)" name="ResetDefaultAvF"/>
@@ -32,6 +33,7 @@
 			<menu_item_call label="Stwórz na nowo Most LSL" name="Recreate LSL Bridge"/>
 		</menu>
 		<menu_item_call label="Śledzenie napiwków" name="money_tracker"/>
+		<menu_item_call label="Podest do pozowania" name="pose_stand"/>
 		<menu label="Załaduj" name="Upload">
 			<menu_item_call label="Teksturę ([COST])..." name="Upload Image"/>
 			<menu_item_call label="Dźwięk ([COST])..." name="Upload Sound"/>
@@ -39,6 +41,7 @@
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
 			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
 			<menu_item_call label="Ustaw domyślne uprawnienia dla ładowania" name="perm prefs"/>
+			<menu_item_call label="Importuj zbiór części" name="import linkset"/>
 		</menu>
 		<menu_item_call label="Uzyskaj status administratora" name="Request Admin Options"/>
 		<menu_item_call label="Porzuć status administratora" name="Leave Admin Options"/>
@@ -65,24 +68,26 @@
 		<menu_item_call label="Lista zablokowanych" name="Block List"/>
 	</menu>
 	<menu label="Świat" name="World">
+		<menu_item_call label="Synchronizuj animacje" name="Resync Animations"/>
 		<menu_item_call label="Osoby w pobliżu" name="Active Speakers"/>
+		<menu_item_check label="Radar" name="Radar"/>
 		<menu_item_call label="Historia teleportacji" name="Teleport History"/>
-		<menu_item_check label="Miejsca / historia TP" name="Places"/>
+		<menu_item_check label="Miejsca" name="Places"/>
 		<menu_item_check label="Minimapa" name="Mini-Map"/>
 		<menu_item_check label="Mapa Świata" name="World Map"/>
 		<menu_item_call label="Zapamiętaj to miejsce (LM)" name="Create Landmark Here"/>
 		<menu_item_call label="Profil miejsca" name="Place Profile"/>
-		<menu_item_call label="O posiadłości" name="About Land"/>
+		<menu_item_call label="O działce" name="About Land"/>
 		<menu_item_call label="Region/Majątek" name="Region/Estate"/>
-		<menu_item_call label="Kup posiadłość" name="Buy Land"/>
-		<menu_item_call label="Moje posiadłości" name="My Land"/>
+		<menu_item_call label="Kup działkę" name="Buy Land"/>
+		<menu_item_call label="Moje działki" name="My Land"/>
 		<menu label="Pokaż więcej" name="LandShow">
 			<menu_item_check label="Linie zakazu" name="Ban Lines"/>
 			<menu_item_check label="Emitery" name="beacons"/>
-			<menu_item_check label="Granice posiadłości" name="Property Lines"/>
-			<menu_item_check label="Właściciele posiadłości" name="Land Owners"/>
+			<menu_item_check label="Granice działek" name="Property Lines"/>
+			<menu_item_check label="Właściciele działek" name="Land Owners" shortcut="control|alt|W"/>
 			<menu_item_check label="Współrzędne" name="Coordinates"/>
-			<menu_item_check label="Zezwolenia posiadłości" name="Parcel Properties"/>
+			<menu_item_check label="Zezwolenia działek" name="Parcel Properties"/>
 			<menu_item_check label="Menu Zaawansowane" name="Show Advanced Menu"/>
 		</menu>
 		<menu_item_call label="Teleportuj do Miejsca Startu" name="Teleport Home"/>
@@ -146,11 +151,13 @@
 			<menu_item_call label="Weź kopię" name="Take Copy"/>
 			<menu_item_call label="Duplikuj" name="Duplicate"/>
 			<menu_item_call label="Edytor cząsteczek" name="Menu Object Edit Particles"/>
+			<menu_item_call label="Zabierz z powrotem do Szafy" name="Save Object Back to My Inventory"/>
 			<menu_item_call label="Zapisz obiekt do Szafy" name="Save Object Back to My Inventory"/>
 			<menu_item_call label="Zapisz do zawartości obiektu" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Zwróć obiekt" name="Return Object back to Owner"/>
 		</menu>
 		<menu label="Skrypty" name="Scripts">
+			<menu_item_call label="Ostrzeżenia/błędy skryptów" name="Script Debug"/>
 			<menu_item_call label="Info o skryptach (Licznik)" name="Script Info"/>
 			<menu_item_call label="Zrekompiluj skrypty (Mono)" name="Mono"/>
 			<menu_item_call label="Zrekompiluj skrypty (LSL)" name="LSL"/>
@@ -163,7 +170,7 @@
 			<menu_item_call label="Zbiory części (linków)..." name="pathfinding_linksets_menu_item"/>
 			<menu_item_call label="Postacie..." name="pathfinding_characters_menu_item"/>
 			<menu_item_call label="Pokaż / testuj..." name="pathfinding_console_menu_item"/>
-			<menu_item_call label="Odśwież Navmesh w regionie" name="rebake_region_navmesh"/>
+			<menu_item_call label="Odśwież region" name="pathfinding_rebake_navmesh_item"/>
 		</menu>
 		<menu label="Opcje" name="Options">
 			<menu_item_check label="Pokaż zaawansowane uprawnienia" name="DebugPermissions"/>
@@ -187,13 +194,13 @@
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
 			<menu_item_call label="Zbiór wielu plików ([COST] za plik)..." name="Bulk Upload"/>
 			<menu_item_call label="Ustaw domyślne uprawnienia dla ładowania" name="perm prefs"/>
+			<menu_item_call label="Importuj zbiór części" name="import linkset"/>
 		</menu>
 		<menu_item_call label="Cofnij" name="Undo"/>
 		<menu_item_call label="Ponów" name="Redo"/>
 	</menu>
 	<menu label="Zawartość" name="Content">
 		<menu_item_check label="Wyszukiwarka" name="Search"/>
-		<menu_item_check label="Klasyczne szukanie" name="Legacy Search"/>
 		<menu_item_call label="Marketplace Second Life" name="SL Marketplace"/>
 		<menu_item_call label="Dane z rynku L$" name="LindenXchange"/>
 		<menu_item_call label="Biblioteka skryptów" name="Script Library"/>
@@ -201,6 +208,7 @@
 	<menu label="Pomoc" name="Help">
 		<menu_item_check label="Włącz podpowiedzi" name="Enable Hints"/>
 		<menu_item_call label="Wiki Firestorma" name="Firestorm Wiki"/>
+		<menu_item_call label="Rozwiązywanie problemów" name="Troubleshooting"/>
 		<menu_item_call label="Dołącz do Grupy Wsparcia Firestorma" name="firestorm_support_group"/>
 		<menu_item_call label="Na temat [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Sprawdź stan świata (Siatki)" name="Grid Status"/>
@@ -279,6 +287,10 @@
 			<menu_item_check label="Mgła" name="Fog"/>
 			<menu_item_check label="Obiekty elastyczne" name="Flexible Objects"/>
 		</menu>
+		<menu label="Kopia zapasowa strumieni mediów" name="media_stream_import_export">
+			<menu_item_call label="Importuj XML z listą strumieni..." name="media_stream_import"/>
+			<menu_item_call label="Eksportuj XML z listą strumieni..." name="media_stream_export"/>
+		</menu>
 		<menu_item_check label="Użyj plugin Read Thread" name="Use Plugin Read Thread"/>
 		<menu_item_call label="Wyczyść bufor danych grup" name="ClearGroupCache"/>
 		<menu_item_check label="Wygładzanie ruchu myszki" name="Mouse Smoothing"/>
@@ -323,7 +335,8 @@
 			<menu_item_check label="Kamera" name="Camera"/>
 			<menu_item_check label="Wiatr" name="Wind"/>
 			<menu_item_check label="Pole widzenia" name="FOV"/>
-			<menu_item_check label="Znak" name="Badge"/>
+			<menu_item_check label="Hipcie!" name="Badge"/>
+			<menu_item_check label="Ciasteczka!" name="Cookies"/>
 		</menu>
 		<menu label="Pokaż informacje" name="Display Info">
 			<menu_item_check label="Pokaż czas" name="Show Time"/>
@@ -388,13 +401,13 @@
 			<menu_item_check label="Bazowe informacje wybranych tekstur" name="Selected Texture Info Basis"/>
 			<menu_item_check label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<menu_item_check label="Okluzja obiektu do obiektu" name="Object-Object Occlusion"/>
-			<menu_item_check label="Oświetlenie i cienie" name="Lighting and Shadows"/>
+			<menu_item_check label="Zaawansowane oświetlenie" name="Lighting and Shadows"/>
 			<menu_item_check label="Cienie Słońca, Księżyca i innych źródeł" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO i wygładzanie cieni" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Debugowanie GL" name="Debug GL"/>
 			<menu_item_check label="Debugowanie potoków" name="Debug Pipeline"/>
-			<menu_item_check label="Automatyczne maski alpha (z opóźnieniem)" name="Automatic Alpha Masks (deferred)"/>
-			<menu_item_check label="Automatyczne maski alpha (bez opóźnienia)" name="Automatic Alpha Masks (non-deferred)"/>
+			<menu_item_check label="Automatyczne maski alpha (z opóźnianiem)" name="Automatic Alpha Masks (deferred)"/>
+			<menu_item_check label="Automatyczne maski alpha (bez opóźniania)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Tekstury animacji" name="Animation Textures"/>
 			<menu_item_check label="Wyłącz tekstury" name="Disable Textures"/>
 			<menu_item_check label="Maksymalna rozdzielczość tekstur (niebezpieczne)" name="Full Res Textures"/>
@@ -433,7 +446,6 @@
 			<menu_item_call label="Zrzut punktu skupienia" name="Dump Focus Holder"/>
 			<menu_item_call label="Listuj informacje o zaznaczonym obiekcie" name="Print Selected Object Info"/>
 			<menu_item_call label="Listuj informacje o Agencie" name="Print Agent Info"/>
-			<menu_item_call label="Statystyki pamięci" name="Memory Stats"/>
 			<menu_item_check label="Klik-klik-autopilot" name="Double-ClickAuto-Pilot"/>
 			<menu_item_check label="Klik-klik-teleport" name="DoubleClick Teleport"/>
 			<menu_item_check label="Debuguj SelectMgr" name="Debug SelectMgr"/>
@@ -452,6 +464,7 @@
 			<menu_item_call label="Wczytaj z XML" name="Load from XML"/>
 			<menu_item_call label="Zapisz do XML" name="Save to XML"/>
 			<menu_item_check label="Pokaż nazwy XUI" name="Show XUI Names"/>
+			<menu_item_check label="Pokaż informacje debugowania dla widoków" name="DebugViews"/>
 			<menu_item_call label="Wyślij wiadomość (IM) testową" name="Send Test IMs"/>
 			<menu_item_call label="Wyczyść bufor pamięci nazw" name="Flush Names Caches"/>
 		</menu>
@@ -470,9 +483,14 @@
 				<menu_item_call label="Testowa kobieta" name="Test Female"/>
 				<menu_item_check label="Pozwól na zaznaczanie awatarów" name="Allow Select Avatar"/>
 			</menu>
+			<menu label="Szybkość animacji" name="Animation Speed">
+				<menu_item_call label="Wszystkie animacje 10% szybciej" name="All Animations 10 Faster"/>
+				<menu_item_call label="Wszystkie animacje 10% wolniej" name="All Animations 10 Slower"/>
+				<menu_item_call label="Resetuj szybkość wszystkich animacji" name="Reset All Animation Speed"/>
+				<menu_item_check label="Animacje w zwolnionym tempie" name="Slow Motion Animations"/>
+			</menu>
 			<menu_item_call label="Powrót do domyślnych parametrów" name="Force Params to Default"/>
 			<menu_item_check label="Informacje o animacji" name="Animation Info"/>
-			<menu_item_check label="Animacje w zwolnionym tempie" name="Slow Motion Animations"/>
 			<menu_item_check label="Pokaż na co patrzą inni" name="Show Look At"/>
 			<menu_item_check label="Pokaż na co wskazują inni" name="Show Point At"/>
 			<menu_item_check label="Debuguj aktualizacje stawów" name="Debug Joint Updates"/>
@@ -511,10 +529,10 @@
 			<menu_item_call label="Zablokuj" name="Lock"/>
 			<menu_item_call label="Pobierz ID zasobów danych (assetów)" name="Get Assets IDs"/>
 		</menu>
-		<menu label="Posiadłość" name="Parcel">
+		<menu label="Działka" name="Parcel">
 			<menu_item_call label="Wymuś ustawienie właściciela na mnie" name="Owner To Me"/>
 			<menu_item_call label="Ustaw na własność Lindenów" name="Set to Linden Content"/>
-			<menu_item_call label="Zażądaj posiadłości publicznej" name="Claim Public Land"/>
+			<menu_item_call label="Zażądaj działki publicznej" name="Claim Public Land"/>
 		</menu>
 		<menu label="Region" name="Region">
 			<menu_item_call label="Zrzuć tymczasowe informacje zasobów danych (assetów)" name="Dump Temp Asset Data"/>

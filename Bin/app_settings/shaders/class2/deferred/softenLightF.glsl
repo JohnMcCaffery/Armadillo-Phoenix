@@ -63,7 +63,7 @@ uniform vec4 glow;
 uniform float scene_light_strength;
 uniform mat3 env_mat;
 uniform vec4 shadow_clip;
-uniform mat3 ssao_effect_mat;
+uniform float ssao_effect;
 
 uniform mat4 inv_proj;
 uniform vec2 screen_res;
@@ -205,7 +205,13 @@ void calcAtmospherics(vec3 inPositionEye, float ambFactor) {
 	//increase ambient when there are more clouds
 	vec4 tmpAmbient = ambient + (vec4(1.) - ambient) * cloud_shadow * 0.5;
 	
-	/*  decrease value and saturation (that in HSV, not HSL) for occluded areas
+	//haze color
+	setAdditiveColor(
+		vec3(blue_horizon * blue_weight * (sunlight*(1.-cloud_shadow) + tmpAmbient)
+	  + (haze_horizon * haze_weight) * (sunlight*(1.-cloud_shadow) * temp2.x
+		  + tmpAmbient)));
+
+         /*  decrease value and saturation (that in HSV, not HSL) for occluded areas
 	 * // for HSV color/geometry used here, see http://gimp-savvy.com/BOOK/index.html?node52.html
 	 * // The following line of code performs the equivalent of:
 	 * float ambAlpha = tmpAmbient.a;
@@ -213,13 +219,7 @@ void calcAtmospherics(vec3 inPositionEye, float ambFactor) {
 	 * vec3 ambHueSat = vec3(tmpAmbient) - vec3(ambValue);
 	 * tmpAmbient = vec4(RenderSSAOEffect.valueFactor * vec3(ambValue) + RenderSSAOEffect.saturationFactor *(1.0 - ambFactor) * ambHueSat, ambAlpha);
 	 */
-	tmpAmbient = vec4(mix(ssao_effect_mat * tmpAmbient.rgb, tmpAmbient.rgb, ambFactor), tmpAmbient.a);
-
-	//haze color
-	setAdditiveColor(
-		vec3(blue_horizon * blue_weight * (sunlight*(1.-cloud_shadow) + tmpAmbient)
-	  + (haze_horizon * haze_weight) * (sunlight*(1.-cloud_shadow) * temp2.x
-		  + tmpAmbient)));
+	tmpAmbient = vec4(mix(ssao_effect * tmpAmbient.rgb, tmpAmbient.rgb, ambFactor), tmpAmbient.a);
 
 	//brightness of surface both sunlight and ambient
 	setSunlitColor(vec3(sunlight * .5));
@@ -279,7 +279,7 @@ void main()
 	float depth = texture2DRect(depthMap, tc.xy).r;
 	vec3 pos = getPosition_d(tc, depth).xyz;
 	vec3 norm = texture2DRect(normalMap, tc).xyz;
-	norm = vec3((norm.xy-0.5)*2.0,norm.z); // unpack norm
+	norm = (norm.xyz-0.5)*2.0; // unpack norm
 		
 	float da = max(dot(norm.xyz, sun_dir.xyz), 0.0);
 	

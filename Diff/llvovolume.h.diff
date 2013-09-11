@@ -1,0 +1,45 @@
+diff --git a/Source/indra/newview/llvovolume.h b/Source/indra/newview/llvovolume.h
+index 6192236..e056c0e 100644
+--- a/Source/indra/newview/llvovolume.h
++++ b/Source/indra/newview/llvovolume.h
+@@ -68,7 +68,7 @@ class LLVolumeInterface
+ public:
+ 	virtual ~LLVolumeInterface() { }
+ 	virtual LLVolumeInterfaceType getInterfaceType() const = 0;
+-	virtual void doIdleUpdate(LLAgent &agent, LLWorld &world, const F64 &time) = 0;
++	virtual void doIdleUpdate() = 0;
+ 	virtual BOOL doUpdateGeometry(LLDrawable *drawable) = 0;
+ 	virtual LLVector3 getPivotPosition() const = 0;
+ 	virtual void onSetVolume(const LLVolumeParams &volume_params, const S32 detail) = 0;
+@@ -114,8 +114,7 @@ public:
+ 				void	deleteFaces();
+ 
+ 				void	animateTextures();
+-	/*virtual*/ BOOL	idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
+-
++	
+ 	            BOOL    isVisible() const ;
+ 	/*virtual*/ BOOL	isActive() const;
+ 	/*virtual*/ BOOL	isAttachment() const;
+@@ -140,6 +139,9 @@ public:
+ 	/*virtual*/ BOOL lineSegmentIntersect(const LLVector3& start, const LLVector3& end, 
+ 										  S32 face = -1,                        // which face to check, -1 = ALL_SIDES
+ 										  BOOL pick_transparent = FALSE,
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++										  BOOL pick_rigged = FALSE,
++// [/SL:KB]
+ 										  S32* face_hit = NULL,                 // which face was hit
+ 										  LLVector3* intersection = NULL,       // return the intersection point
+ 										  LLVector2* tex_coord = NULL,          // return the texture coordinates of the intersection point
+@@ -306,7 +308,10 @@ public:
+ 	
+ 
+ 	//rigged volume update (for raycasting)
+-	void updateRiggedVolume();
++//	void updateRiggedVolume();
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++	void updateRiggedVolume(bool force_update = false);
++// [/SL:KB]
+ 	LLRiggedVolume* getRiggedVolume();
+ 
+ 	//returns true if volume should be treated as a rigged volume

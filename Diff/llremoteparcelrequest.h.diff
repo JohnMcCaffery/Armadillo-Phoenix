@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llremoteparcelrequest.h b/Source/indra/newview/llremoteparcelrequest.h
+index 74cf161..b870565 100644
+--- a/Source/indra/newview/llremoteparcelrequest.h
++++ b/Source/indra/newview/llremoteparcelrequest.h
+@@ -44,7 +44,7 @@ public:
+ 	/*virtual*/ void result(const LLSD& content);
+ 
+ 	//If we get back an error (not found, etc...), handle it here
+-	/*virtual*/ void error(U32 status, const std::string& reason);
++	/*virtual*/ void errorWithContent(U32 status, const std::string& reason, const LLSD& content);
+ 
+ protected:
+ 	LLHandle<LLRemoteParcelInfoObserver> mObserverHandle;

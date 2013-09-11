@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llvopartgroup.h b/Source/indra/newview/llvopartgroup.h
+index 43b2844..42c1252 100644
+--- a/Source/indra/newview/llvopartgroup.h
++++ b/Source/indra/newview/llvopartgroup.h
+@@ -63,7 +63,7 @@ public:
+ 	LLVOPartGroup(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp);
+ 
+ 	/*virtual*/ BOOL    isActive() const; // Whether this object needs to do an idleUpdate.
+-	BOOL idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
++	void idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
+ 
+ 	virtual F32 getBinRadius();
+ 	virtual void updateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax);

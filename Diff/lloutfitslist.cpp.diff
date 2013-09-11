@@ -1,0 +1,48 @@
+diff --git a/Source/indra/newview/lloutfitslist.cpp b/Source/indra/newview/lloutfitslist.cpp
+index 2318b2b..f2be092 100644
+--- a/Source/indra/newview/lloutfitslist.cpp
++++ b/Source/indra/newview/lloutfitslist.cpp
+@@ -119,6 +119,8 @@ public:
+ 		registrar.add("Gear.Rename", boost::bind(&LLOutfitListGearMenu::onRename, this));
+ 		registrar.add("Gear.Delete", boost::bind(&LLOutfitsList::removeSelected, mOutfitList));
+ 		registrar.add("Gear.Create", boost::bind(&LLOutfitListGearMenu::onCreate, this, _2));
++		registrar.add("Gear.Collapse", boost::bind(&LLOutfitsList::collapse_all_folders, mOutfitList));
++		registrar.add("Gear.Expand", boost::bind(&LLOutfitsList::expand_all_folders, mOutfitList));
+ 
+ 		registrar.add("Gear.WearAdd", boost::bind(&LLOutfitListGearMenu::onAdd, this));
+ //-TT Patch: ReplaceWornItemsOnly
+@@ -805,6 +807,34 @@ void LLOutfitsList::getSelectedItemsUUIDs(uuid_vec_t& selected_uuids) const
+ 	}
+ }
+ 
++void LLOutfitsList::collapse_all_folders()
++{
++	for (outfits_map_t::iterator iter = mOutfitsMap.begin();
++			iter != mOutfitsMap.end();
++			++iter)
++	{
++		LLAccordionCtrlTab*	tab = iter->second;
++		if(tab && tab->isExpanded())
++		{
++			tab->changeOpenClose(true);
++		}
++	}
++}
++
++void LLOutfitsList::expand_all_folders()
++{
++	for (outfits_map_t::iterator iter = mOutfitsMap.begin();
++			iter != mOutfitsMap.end();
++			++iter)
++	{
++		LLAccordionCtrlTab*	tab = iter->second;
++		if(tab && !tab->isExpanded())
++		{
++			tab->changeOpenClose(false);
++		}
++	}
++}
++
+ boost::signals2::connection LLOutfitsList::setSelectionChangeCallback(selection_change_callback_t cb)
+ {
+ 	return mSelectionChangeSignal.connect(cb);

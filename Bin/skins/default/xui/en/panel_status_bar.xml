@@ -146,6 +146,19 @@
     top="2"
     tool_tip="Parcel has WL settings" 
     width="16"/>
+   <button
+    follows="right|top"
+    height="16"
+    hover_glow_amount="0.15"
+    image_disabled="Icon_Lightshare"
+    image_disabled_selected="Icon_Lightshare"
+    image_selected="Icon_Lightshare"
+    image_unselected="Icon_Lightshare"
+    left="208"
+    name="status_lightshare_btn"
+    top="2"
+    tool_tip="Lightshare settings"
+    width="16"/>
   <icon
     follows="right|top"
     height="13"
@@ -169,15 +182,26 @@
     visible="true"
     width="35"
     />
+  <icon
+    follows="right|top"
+    height="16"
+    image_name="Statusbar_Script_Error"
+    name="scriptout"
+    top="1"
+    left="273"
+    visible="true"
+    width="16"
+	scale_image="false"
+    />
+     <!-- <FS:Zi> This text changes color when hovered over, implemented in llstatusbar.cpp
+                  Colors are defined in colors.xml as ParcelNormalColor and ParcelHoverColor -->
      <text
 	   tool_tip="Name of land parcel on which you are standing. Click for About Land."
-	   text_color="White"
-	   hover="true"
-	   hover_color="ParcelHoverColor"
+       text_color="ParcelNormalColor"
        follows="left|top|right"
        height="16"
        layout="topleft"
-       left="277"
+       left="291"
        length="1"
        name="parcel_info_text"
        top="3"
@@ -265,7 +289,7 @@
     <text
      type="string"
      font="SansSerifSmall"
-     text_readonly_color="TimeTextColor"
+     text_color="TimeTextColor"
      follows="right|top"
      halign="right"
      height="16"
@@ -316,7 +340,6 @@
      left_pad="4"
      top="2"
      name="volume_btn"
-     tool_tip="Global Volume Control"
      width="16" />
   </panel>
 </panel>

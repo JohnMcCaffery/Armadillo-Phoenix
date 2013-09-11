@@ -1,0 +1,19 @@
+diff --git a/Source/indra/newview/llwlanimator.h b/Source/indra/newview/llwlanimator.h
+index 7f9d7f6..880a89e 100644
+--- a/Source/indra/newview/llwlanimator.h
++++ b/Source/indra/newview/llwlanimator.h
+@@ -128,6 +128,14 @@ public:
+ 	/// get local time between 0 and 1
+ 	static F64 getLocalTime();
+ 
++	// <FS:Ansariel> Quickprefs integration
++	void stopInterpolation()
++	{
++		mIsInterpolating = false;
++		mIsInterpolatingSky = false;
++	}
++	// </FS:Ansariel>
++
+ private:
+ 	ETime mTimeType;
+ 	bool mIsRunning, mIsInterpolating, mIsInterpolatingSky;

@@ -1,0 +1,203 @@
+diff --git a/Source/indra/newview/lllocationinputctrl.cpp b/Source/indra/newview/lllocationinputctrl.cpp
+index f53b3a7..7bdfa71 100644
+--- a/Source/indra/newview/lllocationinputctrl.cpp
++++ b/Source/indra/newview/lllocationinputctrl.cpp
+@@ -67,7 +67,13 @@
+ #include "rlvhandler.h"
+ // [/RLVa:KB]
+ 
+-#include "llpanelpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
++#include "llmenuoptionpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
++#include "llfloaterreg.h"
++// <FS:CR> Don't show pathfinding icons in OpenSim
++#ifdef OPENSIM
++#include "llviewernetwork.h"
++#endif // OPENSIM
++// </FS:CR>
+ 
+ //============================================================================
+ /*
+@@ -434,6 +440,12 @@ LLLocationInputCtrl::LLLocationInputCtrl(const LLLocationInputCtrl::Params& p)
+ 	mEditLandmarkTooltip = LLTrans::getString("LocationCtrlEditLandmarkTooltip");
+ 	mButton->setToolTip(LLTrans::getString("LocationCtrlComboBtnTooltip"));
+ 	mInfoBtn->setToolTip(LLTrans::getString("LocationCtrlInfoBtnTooltip"));
++
++	// <FS:ND> Prevent querying LLTrans each frame
++	mTooltips.push_back( LLTrans::getString("LocationCtrlGeneralIconTooltip") );
++	mTooltips.push_back( LLTrans::getString("LocationCtrlAdultIconTooltip") );
++	mTooltips.push_back( LLTrans::getString("LocationCtrlModerateIconTooltip") );
++	// </FS:ND>
+ }
+ 
+ LLLocationInputCtrl::~LLLocationInputCtrl()
+@@ -638,7 +650,17 @@ void LLLocationInputCtrl::onInfoButtonClicked()
+ 		return;
+ // [/RLVa:KB]
+ 
+-	LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
++	// <FS:Ansariel> FIRE-817: Separate place details floater
++	//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
++	if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++	{
++		LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "agent"));
++	}
++	else
++	{
++		LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
++	}
++	// </FS:Ansariel>
+ }
+ 
+ void LLLocationInputCtrl::onForSaleButtonClicked()
+@@ -666,11 +688,31 @@ void LLLocationInputCtrl::onAddLandmarkButtonClicked()
+ 		key["type"] = "landmark";
+ 		key["id"] = landmark->getUUID();
+ 
+-		LLFloaterSidePanelContainer::showPanel("places", key);
++		// <FS:Ansariel> FIRE-817: Separate place details floater
++		//LLFloaterSidePanelContainer::showPanel("places", key);
++		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++		{
++			LLFloaterReg::showInstance("fs_placedetails", key);
++		}
++		else
++		{
++			LLFloaterSidePanelContainer::showPanel("places", key);
++		}
++		// </FS:Ansariel>
+ 	}
+ 	else
+ 	{
+-		LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
++		// <FS:Ansariel> FIRE-817: Separate place details floater
++		//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
++		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++		{
++			LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "create_landmark"));
++		}
++		else
++		{
++			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
++		}
++		// </FS:Ansariel>
+ 	}
+ }
+ 
+@@ -883,6 +925,12 @@ void LLLocationInputCtrl::refreshParcelIcons()
+ 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
+ 		bool see_avs        = current_parcel->getSeeAVs();
+ 		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
++// <FS:CR> Don't show pathfinding icons on OpenSim
++		bool is_opensim = false;
++#ifdef OPENSIM
++		is_opensim = LLGridManager::getInstance()->isInOpenSim();
++#endif // OPENSIM
++// </FS:CR>
+ 
+ 		// Most icons are "block this ability"
+ 		mParcelIcon[VOICE_ICON]->setVisible(   !allow_voice );
+@@ -892,7 +940,8 @@ void LLLocationInputCtrl::refreshParcelIcons()
+ 		mParcelIcon[SCRIPTS_ICON]->setVisible( !allow_scripts );
+ 		mParcelIcon[DAMAGE_ICON]->setVisible(  allow_damage );
+ 		mParcelIcon[PATHFINDING_DIRTY_ICON]->setVisible(mIsNavMeshDirty);
+-		mParcelIcon[PATHFINDING_DISABLED_ICON]->setVisible(!mIsNavMeshDirty && !pathfinding_dynamic_enabled);
++		mParcelIcon[PATHFINDING_DISABLED_ICON]->setVisible(!mIsNavMeshDirty && !pathfinding_dynamic_enabled //);
++														   && !is_opensim);// <FS:CR> Don't show pathfinding icons on OpenSim
+ 
+ 		mDamageText->setVisible(allow_damage);
+ 		mParcelIcon[SEE_AVATARS_ICON]->setVisible( !see_avs );
+@@ -959,17 +1008,32 @@ void LLLocationInputCtrl::refreshMaturityButton()
+ 	{
+ 	case SIM_ACCESS_PG:
+ 		rating_image = mIconMaturityGeneral;
+-		rating_tooltip = LLTrans::getString("LocationCtrlGeneralIconTooltip");
++
++		// <FS:ND> Prevent querying LLTrans each frame
++		// rating_tooltip = LLTrans::getString("LocationCtrlGeneralIconTooltip");
++		rating_tooltip = mTooltips[eGeneral];
++		// </FS:ND>
++
+ 		break;
+ 
+ 	case SIM_ACCESS_ADULT:
+ 		rating_image = mIconMaturityAdult;
+-		rating_tooltip = LLTrans::getString("LocationCtrlAdultIconTooltip");
++
++		// <FS:ND> Prevent querying LLTrans each frame
++		// rating_tooltip = LLTrans::getString("LocationCtrlAdultIconTooltip");
++		rating_tooltip = mTooltips[eAdult];
++		// </FS:ND>
++
+ 		break;
+ 
+ 	case SIM_ACCESS_MATURE:
+ 		rating_image = mIconMaturityModerate;
+-		rating_tooltip = LLTrans::getString("LocationCtrlModerateIconTooltip");
++
++		// <FS:ND> Prevent querying LLTrans each frame
++		// rating_tooltip = LLTrans::getString("LocationCtrlModerateIconTooltip");
++		rating_tooltip = mTooltips[eModerate];
++		// </FS:ND>
++
+ 		break;
+ 
+ 	default:
+@@ -1164,11 +1228,31 @@ void LLLocationInputCtrl::onLocationContextMenuItemClicked(const LLSD& userdata)
+ 			
+ 			if(!landmark)
+ 			{
+-				LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
++				// <FS:Ansariel> FIRE-817: Separate place details floater
++				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
++				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++				{
++					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "create_landmark"));
++				}
++				else
++				{
++					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
++				}
++				// </FS:Ansariel>
+ 			}
+ 			else
+ 			{
+-				LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
++				// <FS:Ansariel> FIRE-817: Separate place details floater
++				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
++				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++				{
++					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
++				}
++				else
++				{
++					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
++				}
++				// </FS:Ansariel>
+ 			}
+ // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+ 		}
+@@ -1256,11 +1340,11 @@ void LLLocationInputCtrl::onParcelIconClick(EParcelIcon icon)
+ 	case SCRIPTS_ICON:
+ 	{
+ 		LLViewerRegion* region = gAgent.getRegion();
+-		if(region && region->getRegionFlags() & REGION_FLAGS_ESTATE_SKIP_SCRIPTS)
++		if(region && region->getRegionFlag(REGION_FLAGS_ESTATE_SKIP_SCRIPTS))
+ 		{
+ 			LLNotificationsUtil::add("ScriptsStopped");
+ 		}
+-		else if(region && region->getRegionFlags() & REGION_FLAGS_SKIP_SCRIPTS)
++		else if(region && region->getRegionFlag(REGION_FLAGS_SKIP_SCRIPTS))
+ 		{
+ 			LLNotificationsUtil::add("ScriptsNotRunning");
+ 		}
+@@ -1305,8 +1389,8 @@ BOOL LLLocationInputCtrl::rebakeRegionCallback(const LLSD& notification,const LL
+ 
+ 	if(option==0)
+ 	{
+-		if(LLPanelPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded())
+-			LLPanelPathfindingRebakeNavmesh::getInstance()->rebakeNavmesh();
++		if(LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded())
++			LLMenuOptionPathfindingRebakeNavmesh::getInstance()->rebakeNavmesh();
+ 		return TRUE;
+ 	}
+ 	return FALSE;

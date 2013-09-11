@@ -1,0 +1,37 @@
+diff --git a/Source/indra/newview/llviewerparceloverlay.h b/Source/indra/newview/llviewerparceloverlay.h
+index 2c72d1f..7d1b6c9 100644
+--- a/Source/indra/newview/llviewerparceloverlay.h
++++ b/Source/indra/newview/llviewerparceloverlay.h
+@@ -67,6 +67,9 @@ public:
+ 
+ 	BOOL			isBuildCameraAllowed(const LLVector3& pos) const;
+ 	F32				getOwnedRatio() const;
++// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
++	const U8*		getOwnership() const { return mOwnership; }
++// [/SL:KB]
+ 
+ 	// Returns the number of vertices drawn
+ 	S32				renderPropertyLines();
+@@ -82,6 +85,11 @@ public:
+ 	void	idleUpdate(bool update_now = false);
+ 	void	updateGL();
+ 
++// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
++	typedef boost::signals2::signal<void (const LLViewerRegion*)> update_signal_t;
++	static boost::signals2::connection setUpdateCallback(const update_signal_t::slot_type & cb);
++// [/SL:KB]
++
+ private:
+ 	// This is in parcel rows and columns, not grid rows and columns
+ 	// Stored in bottom three bits.
+@@ -123,6 +131,10 @@ private:
+ 	S32				mVertexCount;
+ 	F32*			mVertexArray;
+ 	U8*				mColorArray;
++
++// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
++	static update_signal_t* mUpdateSignal;
++// [/SL:KB]
+ };
+ 
+ #endif

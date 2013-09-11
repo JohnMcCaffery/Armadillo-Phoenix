@@ -1,0 +1,138 @@
+diff --git a/Source/indra/newview/app_settings/settings_phoenix.xml b/Source/indra/newview/app_settings/settings_phoenix.xml
+index a2ff31a..cd3605b 100644
+--- a/Source/indra/newview/app_settings/settings_phoenix.xml
++++ b/Source/indra/newview/app_settings/settings_phoenix.xml
+@@ -83,6 +83,34 @@
+     <string>classic</string>
+   </map>
+ 
++  <key>FSSkinCurrentReadableName</key>
++  <map>
++    <key>Comment</key>
++    <string>The readable name of the currently selected skin.</string>
++    <key>Persist</key>
++    <integer>1</integer>
++    <key>HideFromEditor</key>
++    <integer>1</integer>
++    <key>Type</key>
++    <string>String</string>
++    <key>Value</key>
++    <string>Vintage</string>
++  </map>
++
++  <key>FSSkinCurrentThemeReadableName</key>
++  <map>
++    <key>Comment</key>
++    <string>The readable name of the selected theme for the current skin.</string>
++    <key>Persist</key>
++    <integer>1</integer>
++    <key>HideFromEditor</key>
++    <integer>1</integer>
++    <key>Type</key>
++    <string>String</string>
++    <key>Value</key>
++    <string>Classic</string>
++  </map>
++
+   <key>LetterKeysFocusChatBar</key>
+   <map>
+     <key>Comment</key>
+@@ -326,7 +354,7 @@
+   <key>FSLogImToChatConsole</key>
+   <map>
+     <key>Comment</key>
+-    <string>Defines if (group) IM notifications should be sent to the nearby chat console (v1-style) or toasts (v2-style).</string>
++    <string>Defines if IM notifications should be sent to the nearby chat console (v1-style) or toasts (v2-style).</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+@@ -335,5 +363,89 @@
+     <integer>1</integer>
+   </map>
+ 
++  <key>FSLogGroupImToChatConsole</key>
++  <map>
++    <key>Comment</key>
++    <string>Defines if group IM notifications should be sent to the nearby chat console (v1-style) or toasts (v2-style).</string>
++    <key>Persist</key>
++    <integer>1</integer>
++    <key>Type</key>
++    <string>Boolean</string>
++    <key>Value</key>
++    <integer>1</integer>
++  </map>
++
++  <key>FSDisableIMChiclets</key>
++  <map>
++    <key>Comment</key>
++    <string>If enabled, Firestorm will not show any group / IM chat chiclets (notifications envelope and sum of IMs will remain on the screen).</string>
++    <key>Persist</key>
++    <integer>1</integer>
++    <key>Type</key>
++    <string>Boolean</string>
++    <key>Value</key>
++    <integer>1</integer>
++  </map>
++
++  <key>FSShowGroupNameLength</key>
++  <map>
++    <key>Comment</key>
++    <string>Max length of group name to be printed in chat (-1 for full group name, 0 for disabled).</string>
++    <key>Persist</key>
++    <integer>1</integer>
++    <key>Type</key>
++    <string>S32</string>
++    <key>Value</key>
++    <integer>-1</integer>
++  </map>
++
++  <key>FSUseStandalonePlaceDetailsFloater</key>
++  <map>
++    <key>Comment</key>
++    <string>If enabled, Firestorm will use a standalone floater for each landmark details, teleport history details and parcel details view.</string>
++    <key>Persist</key>
++    <integer>1</integer>
++    <key>Type</key>
++    <string>Boolean</string>
++    <key>Value</key>
++    <integer>1</integer>
++  </map>
++
++  <key>FSUseStandaloneTeleportHistoryFloater</key>
++  <map>
++    <key>Comment</key>
++    <string>If enabled, Firestorm will use a standalone floater for the teleport history view.</string>
++    <key>Persist</key>
++    <integer>1</integer>
++    <key>Type</key>
++    <string>Boolean</string>
++    <key>Value</key>
++    <integer>1</integer>
++  </map>
++
++  <key>FSUseStandaloneBlocklistFloater</key>
++  <map>
++    <key>Comment</key>
++    <string>If enabled, Firestorm will use a standalone floater for the blocklist.</string>
++    <key>Persist</key>
++    <integer>1</integer>
++    <key>Type</key>
++    <string>Boolean</string>
++    <key>Value</key>
++    <integer>1</integer>
++  </map>
++
++  <key>FSEnableVolumeControls</key>
++  <map>
++    <key>Comment</key>
++    <string>If true, Firestorm will show volume controls (sounds, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls.</string>
++    <key>Persist</key>
++    <integer>1</integer>
++    <key>Type</key>
++    <string>Boolean</string>
++    <key>Value</key>
++    <integer>0</integer>
++  </map>
++
+ </map>
+ </llsd>

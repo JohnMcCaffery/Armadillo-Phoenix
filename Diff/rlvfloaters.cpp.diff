@@ -1,0 +1,11 @@
+diff --git a/Source/indra/newview/rlvfloaters.cpp b/Source/indra/newview/rlvfloaters.cpp
+index 3fd2ac2..da168f5 100644
+--- a/Source/indra/newview/rlvfloaters.cpp
++++ b/Source/indra/newview/rlvfloaters.cpp
+@@ -1,5 +1,5 @@
+ /** 
+- *
++ * @file rlvfloaters.cpp
+  * Copyright (c) 2009-2011, Kitty Barnett
+  * 
+  * The source code in this file is provided to you under the terms of the 

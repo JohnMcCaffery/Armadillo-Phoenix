@@ -1,0 +1,12 @@
+diff --git a/Source/indra/newview/lldrawpool.cpp b/Source/indra/newview/lldrawpool.cpp
+index 013c698..94dd927 100644
+--- a/Source/indra/newview/lldrawpool.cpp
++++ b/Source/indra/newview/lldrawpool.cpp
+@@ -419,6 +419,7 @@ void LLRenderPass::applyModelMatrix(LLDrawInfo& params)
+ 		gGL.loadMatrix(gGLModelView);
+ 		if (params.mModelMatrix)
+ 		{
++			llassert(gGL.getMatrixMode() == LLRender::MM_MODELVIEW);
+ 			gGL.multMatrix((GLfloat*) params.mModelMatrix->mMatrix);
+ 		}
+ 		gPipeline.mMatrixOpCount++;

@@ -1,0 +1,15 @@
+diff --git a/Source/indra/newview/fskeywords.cpp b/Source/indra/newview/fskeywords.cpp
+index 26c752a..0fd226d 100644
+--- a/Source/indra/newview/fskeywords.cpp
++++ b/Source/indra/newview/fskeywords.cpp
+@@ -49,8 +49,8 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
+ 	{
+ 		if(source.find(mWordList[i]) != std::string::npos)
+ 		{
+-			if(gSavedPerAccountSettings.getBOOL("FSKeywordPlaySound"))
+-				LLUI::sAudioCallback(LLUUID(gSavedPerAccountSettings.getString("FSKeywordSound")));
++			if(gSavedSettings.getBOOL("PlayModeUISndFSKeywordSound"))
++				LLUI::sAudioCallback(LLUUID(gSavedSettings.getString("UISndFSKeywordSound")));
+ 
+ 			return true;
+ 		}

@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llpanelprofile.cpp b/Source/indra/newview/llpanelprofile.cpp
+index cce96d4..448ca0c 100644
+--- a/Source/indra/newview/llpanelprofile.cpp
++++ b/Source/indra/newview/llpanelprofile.cpp
+@@ -53,7 +53,7 @@ std::string getProfileURL(const std::string& agent_name)
+ 	}
+ 	else
+ 	{
+-#if HAS_OPENSIM_SUPPORT
++#if OPENSIM
+ // <FS:CR> FIRE-8063: Web profiles for aurora, opensim, and osgrid
+ 		std::string match = "?name=[AGENT_NAME]";
+ 		if (LLGridManager::getInstance()->isInAuroraSim()) {

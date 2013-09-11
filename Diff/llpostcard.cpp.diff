@@ -1,0 +1,12 @@
+diff --git a/Source/indra/newview/llpostcard.cpp b/Source/indra/newview/llpostcard.cpp
+index 271a487..eff576d 100644
+--- a/Source/indra/newview/llpostcard.cpp
++++ b/Source/indra/newview/llpostcard.cpp
+@@ -35,6 +35,7 @@
+ #include "message.h"
+ 
+ #include "llagent.h"
++#include "llassetstorage.h"
+ #include "llassetuploadresponders.h"
+ 
+ ///////////////////////////////////////////////////////////////////////////////

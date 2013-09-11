@@ -1,0 +1,59 @@
+diff --git a/Source/indra/newview/llfloatercamera.cpp b/Source/indra/newview/llfloatercamera.cpp
+index ac1592e..f5fec52 100644
+--- a/Source/indra/newview/llfloatercamera.cpp
++++ b/Source/indra/newview/llfloatercamera.cpp
+@@ -314,6 +314,7 @@ void LLFloaterCamera::onOpen(const LLSD& key)
+ 	LLFirstUse::viewPopup();
+ 
+ 	mZoom->onOpen(key);
++	setCameraFloaterTransparencyMode(LLSD(gSavedSettings.getBOOL("FSAlwaysOpaqueCameraControls"))); // <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
+ 
+ 	// Returns to previous mode, see EXT-2727(View tool should remember state).
+ 	// In case floater was just hidden and it isn't reset the mode
+@@ -330,6 +331,10 @@ void LLFloaterCamera::onClose(bool app_quitting)
+ 	//We don't care of camera mode if app is quitting
+ 	if(app_quitting)
+ 		return;
++	// It is necessary to reset mCurrMode to CAMERA_CTRL_MODE_PAN so 
++	// to avoid seeing an empty floater when reopening the control.
++	if (mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA)
++		mCurrMode = CAMERA_CTRL_MODE_PAN;
+ 	// When mCurrMode is in CAMERA_CTRL_MODE_PAN
+ 	// switchMode won't modify mPrevMode, so force it here.
+ 	// It is needed to correctly return to previous mode on open, see EXT-2727.
+@@ -354,7 +359,11 @@ LLFloaterCamera::LLFloaterCamera(const LLSD& val)
+ // virtual
+ BOOL LLFloaterCamera::postBuild()
+ {
+-	updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
++
++	// <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
++	// updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
++	gSavedSettings.getControl("FSAlwaysOpaqueCameraControls")->getSignal()->connect(boost::bind(&LLFloaterCamera::setCameraFloaterTransparencyMode, this, _2));
++	// </FS:PP>
+ 
+ 	mRotate = getChild<LLJoystickCameraRotate>(ORBIT);
+ 	mZoom = findChild<LLPanelCameraZoom>(ZOOM);
+@@ -380,6 +389,22 @@ BOOL LLFloaterCamera::postBuild()
+ 	return LLFloater::postBuild();
+ }
+ 
++// <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
++void LLFloaterCamera::setCameraFloaterTransparencyMode(const LLSD &data)
++{
++	if(data.asBoolean())
++	{
++		updateTransparency(TT_FORCE_OPAQUE);
++		setBackgroundOpaque(true);
++	}
++	else
++	{
++		updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
++		setBackgroundOpaque(false);
++	}
++}
++// </FS:PP>
++
+ void LLFloaterCamera::fillFlatlistFromPanel (LLFlatListView* list, LLPanel* panel)
+ {
+ 	// copying child list and then iterating over a copy, because list itself

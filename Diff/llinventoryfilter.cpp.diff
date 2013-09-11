@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llinventoryfilter.cpp b/Source/indra/newview/llinventoryfilter.cpp
+index bdcf34e..de2619f 100644
+--- a/Source/indra/newview/llinventoryfilter.cpp
++++ b/Source/indra/newview/llinventoryfilter.cpp
+@@ -123,7 +123,7 @@ LLInventoryFilter::EFilterSubstringTarget LLInventoryFilter::getFilterSubStringT
+ }
+ 
+ // returns one of the searchable strings, depending on the currently selected search type
+-const std::string& LLInventoryFilter::getSearchableTarget(const LLFolderViewItem* item) const
++std::string LLInventoryFilter::getSearchableTarget(const LLFolderViewItem* item) const
+ {
+ 	if(mFilterSubStringTarget==SUBST_TARGET_NAME)
+ 		return item->getSearchableLabel();

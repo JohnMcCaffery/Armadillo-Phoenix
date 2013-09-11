@@ -1,0 +1,11 @@
+diff --git a/Source/indra/newview/pieslice.cpp b/Source/indra/newview/pieslice.cpp
+index 54b7ec2..9f5bc05 100644
+--- a/Source/indra/newview/pieslice.cpp
++++ b/Source/indra/newview/pieslice.cpp
+@@ -156,4 +156,4 @@ BOOL PieSlice::getAutohide()
+ void PieSlice::resetUpdateEnabledCheck()
+ {
+ 	mDoUpdateEnabled = TRUE;
+-}
+\ No newline at end of file
++}

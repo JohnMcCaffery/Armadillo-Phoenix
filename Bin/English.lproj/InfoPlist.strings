@@ -2,6 +2,6 @@
 
 CFBundleName = "Firestorm";
 
-CFBundleShortVersionString = "Firestorm version 5.0.1.31154";
-CFBundleGetInfoString = "Firestorm version 5.0.1.31154, Copyright 2010-2011 The Phoenix Viewer Project, Inc.";
+CFBundleShortVersionString = "Firestorm version 4.4.2.34170";
+CFBundleGetInfoString = "Firestorm version 4.4.2.34170, Copyright 2010-2013 The Phoenix Firestorm Project, Inc.";
 

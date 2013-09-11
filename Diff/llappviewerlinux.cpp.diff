@@ -1,0 +1,21 @@
+diff --git a/Source/indra/newview/llappviewerlinux.cpp b/Source/indra/newview/llappviewerlinux.cpp
+index c3a4874..6cc1b1c 100644
+--- a/Source/indra/newview/llappviewerlinux.cpp
++++ b/Source/indra/newview/llappviewerlinux.cpp
+@@ -31,7 +31,6 @@
+ #include "llcommandlineparser.h"
+ 
+ #include "lldiriterator.h"
+-#include "llmemtype.h"
+ #include "llurldispatcher.h"		// SLURL from other app instance
+ #include "llviewernetwork.h"
+ #include "llviewercontrol.h"
+@@ -71,8 +70,6 @@ static void exceptionTerminateHandler()
+ 
+ int main( int argc, char **argv ) 
+ {
+-	LLMemType mt1(LLMemType::MTYPE_STARTUP);
+-
+ #if LL_SOLARIS && defined(__sparc)
+ 	asm ("ta\t6");		 // NOTE:  Make sure memory alignment is enforced on SPARC
+ #endif

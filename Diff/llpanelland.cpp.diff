@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llpanelland.cpp b/Source/indra/newview/llpanelland.cpp
+index 70ea290..e54b240 100644
+--- a/Source/indra/newview/llpanelland.cpp
++++ b/Source/indra/newview/llpanelland.cpp
+@@ -170,7 +170,7 @@ void LLPanelLandInfo::refresh()
+ 		getChildView("button abandon land")->setEnabled(owner_release || manager_releaseable || gAgent.isGodlike());
+ 
+ 		// only mainland sims are subdividable by owner
+-		if (regionp->getRegionFlags() && REGION_FLAGS_ALLOW_PARCEL_CHANGES)
++		if (regionp->getRegionFlag(REGION_FLAGS_ALLOW_PARCEL_CHANGES))
+ 		{
+ 			getChildView("button subdivide land")->setEnabled(owner_divide || manager_divideable || gAgent.isGodlike());
+ 		}

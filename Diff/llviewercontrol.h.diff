@@ -1,0 +1,14 @@
+diff --git a/Source/indra/newview/llviewercontrol.h b/Source/indra/newview/llviewercontrol.h
+index d7191f5..646e44c 100644
+--- a/Source/indra/newview/llviewercontrol.h
++++ b/Source/indra/newview/llviewercontrol.h
+@@ -47,6 +47,9 @@ void settings_setup_listeners();
+ // for the graphics settings
+ void create_graphics_group(LLControlGroup& group);
+ 
++// <FS:Ansariel> Expose handleSetShaderChanged()
++bool handleSetShaderChanged(const LLSD& newvalue);
++
+ // saved at end of session
+ extern LLControlGroup gSavedSettings;
+ extern LLControlGroup gSavedPerAccountSettings;

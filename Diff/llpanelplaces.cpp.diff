@@ -1,0 +1,90 @@
+diff --git a/Source/indra/newview/llpanelplaces.cpp b/Source/indra/newview/llpanelplaces.cpp
+index 1cf0e57..7036e6a 100644
+--- a/Source/indra/newview/llpanelplaces.cpp
++++ b/Source/indra/newview/llpanelplaces.cpp
+@@ -118,7 +118,18 @@ public:
+ 				LLSD key;
+ 				key["type"] = "remote_place";
+ 				key["id"] = parcel_id;
+-				LLFloaterSidePanelContainer::showPanel("places", key);
++				
++				// <FS:Ansariel> FIRE-817: Separate place details floater
++				//LLFloaterSidePanelContainer::showPanel("places", key);
++				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++				{
++					LLFloaterReg::showInstance("fs_placedetails", key);
++				}
++				else
++				{
++					LLFloaterSidePanelContainer::showPanel("places", key);
++				}
++				// </FS:Ansariel>
+ 				return true;
+ 			}
+ 		}
+@@ -221,7 +232,9 @@ public:
+ 	}
+ 	/*virtual*/ void setErrorStatus(U32 status, const std::string& reason)
+ 	{
+-		llerrs << "Can't complete remote parcel request. Http Status: "
++		// <FS:Ansariel> Don't error out because of a HTTP error!
++		//llerrs << "Can't complete remote parcel request. Http Status: "
++		llwarns << "Can't complete remote parcel request. Http Status: "
+ 			   << status << ". Reason : " << reason << llendl;
+ 	}
+ 
+@@ -368,6 +381,7 @@ void LLPanelPlaces::onOpen(const LLSD& key)
+ 
+ 	if (key.size() != 0)
+ 	{
++		isLandmarkEditModeOn = false;
+ 		std::string key_type = key["type"].asString();
+ 		if (key_type == LANDMARK_TAB_INFO_TYPE)
+ 		{
+@@ -417,7 +431,6 @@ void LLPanelPlaces::onOpen(const LLSD& key)
+ 			mPlaceInfoType = key_type;
+ 			mPosGlobal.setZero();
+ 			mItem = NULL;
+-			isLandmarkEditModeOn = false;
+ 			togglePlaceInfoPanel(TRUE);
+ 
+ 			if (mPlaceInfoType == AGENT_INFO_TYPE)
+@@ -823,7 +836,11 @@ void LLPanelPlaces::onOverflowButtonClicked()
+ 		// STORM-411
+ 		// Creating landmarks for remote locations is impossible.
+ 		// So hide menu item "Make a Landmark" in "Teleport History Profile" panel.
+-		menu->setItemVisible("landmark", mPlaceInfoType != TELEPORT_HISTORY_INFO_TYPE);
++		// <FS:Ansariel> If it doesn't work for remote locations, disable
++		//               it properly for ALL displays of remote locations!
++		//menu->setItemVisible("landmark", mPlaceInfoType != TELEPORT_HISTORY_INFO_TYPE);
++		menu->setItemVisible("landmark", is_agent_place_info_visible);
++		// </FS:Ansariel>
+ 		menu->arrangeAndClear();
+ 	}
+ 	else if (mPlaceInfoType == LANDMARK_INFO_TYPE && mLandmarkMenu != NULL)
+@@ -1192,7 +1209,9 @@ void LLPanelPlaces::updateVerbs()
+ 			mTeleportBtn->setEnabled(have_3d_pos &&
+ 									 !LLViewerParcelMgr::getInstance()->inAgentParcel(mPosGlobal));
+ 		}
+-		else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE)
++		// <FS:Ansariel> FIRE-9536: Teleport button disabled if standalone TP history & sidepanel TP history detail
++		//else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE)
++		else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE || mPlaceInfoType == TELEPORT_HISTORY_INFO_TYPE)
+ 		{
+ 			mTeleportBtn->setEnabled(have_3d_pos);
+ 		}
+@@ -1222,6 +1241,14 @@ LLPanelPlaceInfo* LLPanelPlaces::getCurrentInfoPanel()
+ 	return NULL;
+ }
+ 
++// <FS:Ansariel> Reset (clear) filter
++void LLPanelPlaces::resetFilter()
++{
++	mFilterEditor->clear();
++	onFilterEdit("", true);
++}
++// </FS:Ansariel>
++
+ static bool is_agent_in_selected_parcel(LLParcel* parcel)
+ {
+ 	LLViewerParcelMgr* parcel_mgr = LLViewerParcelMgr::getInstance();

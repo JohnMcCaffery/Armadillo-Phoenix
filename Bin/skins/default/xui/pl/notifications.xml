@@ -108,12 +108,6 @@ Wybierz pojedynczy obiekt i spróbuj jeszcze raz.
 		Pamiętaj: kiedy włączysz tą opcję to każdy kto używa tego komputera może zobaczyć Twoją listę ulubionych miejsc.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="GrowlNotInstalled">
-		UWAGA: Jeśli Growl nie jest zainstalowany, to włączenie tej opcji będzie skutkować małymi zacięciami gdy ktoś wyśle do Ciebie wiadomość lub zaloguje/wyloguje się.
-Zobacz http://wiki.phoenixviewer.com/fs_growl, aby uzyskać więcej informacji.
-Ciągle chcesz włączyć tą opcję?
-		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
-	</notification>
 	<notification name="GrantModifyRights">
 		Udzielenie praw modyfikacji innemu Rezydentowi umożliwia modyfikację, usuwanie lub wzięcie JAKIEGOKOLWIEK z Twoich obiektów. Używaj tej opcji z rozwagą!
 Czy chcesz udzielić prawa do modyfikacji [NAME]?
@@ -199,7 +193,7 @@ Zaproś proszę członków w ciągu 48 godzin.
 		<usetemplate canceltext="Anuluj" name="okcancelbuttons" notext="Anuluj" yestext="Stwórz grupę za [COST]L$"/>
 	</notification>
 	<notification name="LandBuyPass">
-		Za [COST]L$ możesz odwiedzić tą posiadłość (&apos;[PARCEL_NAME]&apos;) na [TIME] godzin. Chcesz kupić przepustkę?
+		Za [COST]L$ możesz odwiedzić tą działkę (&apos;[PARCEL_NAME]&apos;) na [TIME] godzin. Chcesz kupić przepustkę?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="SalePriceRestriction">
@@ -207,19 +201,19 @@ Zaproś proszę członków w ciągu 48 godzin.
 Musisz wybrać kupca jeżeli chcesz sprzedać za 0L$.
 	</notification>
 	<notification name="ConfirmLandSaleChange">
-		Posiadłość o powierzchni [LAND_SIZE] m² zostaje wystawiona na sprzedaż.
+		Działka o powierzchni [LAND_SIZE] m² zostaje wystawiona na sprzedaż.
 Cena wynosi [SALE_PRICE]L$, a sprzedaż będzie autoryzowana dla [NAME].
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		UWAGA: Wybierając opcję &quot;Sprzedaj Każdemu&quot; udostępniasz swoją posiadłość do sprzedaży dla jakiegokolwiek Rezydenta [CURRENT_GRID] , nawet osób nieobecnych w tym regionie.
+		UWAGA: Wybierając opcję &quot;Sprzedaj Każdemu&quot; udostępniasz swoją działkę na sprzedaż dla jakiegokolwiek Rezydenta [CURRENT_GRID] , nawet osób nieobecnych w tym regionie.
 
-Posiadłość o powierzchni [LAND_SIZE] m² zostaje wystawiona na sprzedaż.
+Działka o powierzchni [LAND_SIZE] m² zostaje wystawiona na sprzedaż.
 Cena wynosi [SALE_PRICE]L$, a sprzedaż będzie autoryzowana dla [NAME].
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsDeededToGroup">
-		Czy na pewno chcesz zwrócić wszystkie obiekty udostępnione grupie &apos;[NAME]&apos; na tej posiadłości do szaf ich poprzednich właścicieli?
+		Czy na pewno chcesz zwrócić wszystkie obiekty udostępnione grupie &apos;[NAME]&apos; na tej działce do szaf ich poprzednich właścicieli?
 
 *UWAGA* Wybrana opcja spowoduje usunięcie wszystkich obiektów
 udostępnionych grupie, które nie mają praw transferu!
@@ -228,19 +222,19 @@ Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsOwnedByUser">
-		Czy na pewno chcesz zwrócić wszystkie obiekty należące do Rezydenta &apos;[NAME]&apos; znajdujące się na tej posiadłości do szafy właściciela?
+		Czy na pewno chcesz zwrócić wszystkie obiekty należące do Rezydenta &apos;[NAME]&apos; znajdujące się na tej działce do szafy właściciela?
 
 Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsOwnedBySelf">
-		Czy na pewno chcesz zwrócić wszystkie Twoje obiekty znajdujące się na tej posiadłości do swojej szafy?
+		Czy na pewno chcesz zwrócić wszystkie Twoje obiekty znajdujące się na tej działce do swojej szafy?
 
 Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsNotOwnedBySelf">
-		Czy na pewno chcesz zwrócić wszystkie obiekty, których nie jesteś właścicielem znajdujące się na tej posiadłości do szaf właścicieli?
+		Czy na pewno chcesz zwrócić wszystkie obiekty, których nie jesteś właścicielem znajdujące się na tej działce do szaf właścicieli?
 Wszystkie obiekty udostępnione grupie z prawem transferu zostaną zwrócone poprzednim właścicielom.
 
 *UWAGA* Wybrana opcja spowoduje usunięcie wszystkich obiektów udostępnionych grupie, które nie mają praw transferu!
@@ -249,7 +243,7 @@ Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsNotOwnedByUser">
-		Czy na pewno chcesz zwrócić wszystkie obiekty, które nie należą do [NAME], a znajdujące się na tej posiadłości - do szaf właścicieli?
+		Czy na pewno chcesz zwrócić wszystkie obiekty, które nie należą do [NAME], a znajdujące się na tej działce - do szaf właścicieli?
 Wszystkie obiekty udostępnione grupie z prawem transferu, zostaną zwrócone poprzednim właścicielom.
 
 *UWAGA* Wybrana opcja spowoduje usunięcie wszystkich obiektów udostępnionych grupie, które nie mają praw transferu!
@@ -258,7 +252,7 @@ Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnAllTopObjects">
-		Czy na pewno chcesz zwrócić wszystkie wymienione obiekty znajdujące się na tej posiadłości do szaf ich właścicieli?
+		Czy na pewno chcesz zwrócić wszystkie wymienione obiekty znajdujące się na tej działce do szaf ich właścicieli?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="DisableAllTopObjects">
@@ -266,7 +260,7 @@ Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsNotOwnedByGroup">
-		Zwrócić obiekty z tej posiadłości, które nie są udostępnione grupie [NAME] do ich właścicieli?
+		Zwrócić obiekty z tej działki, które nie są udostępnione grupie [NAME] do ich właścicieli?
 
 Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
@@ -283,7 +277,7 @@ W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia 
 		<usetemplate ignoretext="Media zostaną ustawione na wielu zaznaczonych powierzchniach" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="MustBeInParcel">
-		Musisz znajdować się wewnątrz posiadłości żeby wybrać punkt lądowania.
+		Musisz znajdować się wewnątrz działki, żeby wybrać punkt lądowania.
 	</notification>
 	<notification name="PromptRecipientEmail">
 		Proszę wpisać prawidłowy adres e-mail odbiorcy.
@@ -476,6 +470,21 @@ Odwiedzić [_URL], aby uzyskać więcej informacji?
 Odwiedzić [_URL] aby sprawdzić, czy są nowsze sterowniki?
 		<usetemplate ignoretext="Moje sterowniki grafiki są przestarzałe" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
+	<notification name="AMDOldDriver">
+		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej.  Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
+
+Odwiedzić [_URL] aby sprawdzić, czy są nowsze sterowniki?
+		<usetemplate ignoretext="Moje sterowniki grafiki są przestarzałe" name="okcancelignore" notext="Nie" yestext="Tak"/>
+	</notification>
+	<notification name="NVIDIAOldDriver">
+		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej.  Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
+
+Odwiedzić [_URL] aby sprawdzić, czy są nowsze sterowniki?
+		<url name="url">
+			http://www.nvidia.pl/Download/index.aspx?lang=pl
+		</url>
+		<usetemplate ignoretext="Moje sterowniki grafiki są przestarzałe" name="okcancelignore" notext="Nie" yestext="Tak"/>
+	</notification>
 	<notification name="UnknownGPU">
 		Twój system jest wyposażony w kartę graficzną, która nie jest rozpoznana przez [APP_NAME].
 Zdarza się to często w przypadku nowego sprzętu, który nie był testowany z [APP_NAME].  Prawdopodobnie wystarczy dostosowanie ustawień grafiki aby działanie było poprawne.
@@ -525,12 +534,12 @@ Awatar tymczasowo nie będzie mógł się poruszać, używać czatu (IM) lub odd
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Odblokuj" yestext="Unieruchom"/>
 	</notification>
 	<notification name="FreezeAvatarFullname">
-		Unieruchowmić [AVATAR_NAME]?
+		Unieruchomić [AVATAR_NAME]?
 Ta osoba tymczasowo nie będzie mogła się poruszać, używać czatu (IM) lub oddziaływać na świat.
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Odblokuj" yestext="Unieruchom"/>
 	</notification>
 	<notification name="FreezeAvatarMultiple">
-		Unieruchowmić poniższe awatary?
+		Unieruchomić poniższe awatary?
  
  [RESIDENTS]
  
@@ -538,25 +547,25 @@ Nie będą mogły tymczasowo się poruszać, używać czatu (IM) lub oddziaływa
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Odblokuj" yestext="Unieruchom"/>
 	</notification>
 	<notification name="EjectAvatarFullname">
-		Wyrzucić [AVATAR_NAME] z Twojej posiadłości?
+		Wyrzucić [AVATAR_NAME] z Twojej działki?
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Wyrzuć i zabroń wstępu (ban)" yestext="Wyrzuć"/>
 	</notification>
 	<notification name="EjectAvatarNoBan">
-		Wyrzucić tego awatara z Twojej posiadłości?
+		Wyrzucić tego awatara z Twojej działki?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć"/>
 	</notification>
 	<notification name="EjectAvatarFullnameNoBan">
-		Wyrzucić [AVATAR_NAME] z Twojej posiadłości?
+		Wyrzucić [AVATAR_NAME] z Twojej działki?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć"/>
 	</notification>
 	<notification name="EjectAvatarMultiple">
-		Wyrzucić poniższe awatary z Twojej posiadłości?
+		Wyrzucić poniższe awatary z Twojej działki?
 
 [RESIDENTS]
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Wyrzuć i zabroń wstępu (ban)" yestext="Wyrzuć"/>
 	</notification>
 	<notification name="EjectAvatarMultipleNoBan">
-		Wyrzucić poniższe awatary z Twojej posiadłości?
+		Wyrzucić poniższe awatary z Twojej działki?
 
 [RESIDENTS]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć"/>
@@ -686,7 +695,7 @@ Spróbuj jeszcze raz później.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
-		Nie możesz zapamiętać tego miejsca (LM) ponieważ właściciel posiadłości nie pozwala na to.
+		Nie możesz zapamiętać tego miejsca (LM) ponieważ właściciel działki nie pozwala na to.
 	</notification>
 	<notification name="CannotRecompileSelectObjectsNoScripts">
 		&apos;Rekompilacja&apos; nie powiodła się.
@@ -780,61 +789,61 @@ Jeżeli nadal otrzymujesz tę wiadomość proponujemy odwiedzić stronę [SUPPOR
 		Szafa chwilowo nie działa.
 	</notification>
 	<notification name="CannotSetLandOwnerNothingSelected">
-		Nie można wybrać właściciela posiadłości.
-Posiadłość nie została wybrana.
+		Nie można wybrać właściciela działki.
+Działka nie została wybrana.
 	</notification>
 	<notification name="CannotSetLandOwnerMultipleRegions">
-		Nie można wybrać właściciela posiadłości ponieważ wybrany obszar przekracza granicę regionów. Wybierz mniejszy obszar i spróbuj jeszcze raz.
+		Nie można wybrać właściciela działki, ponieważ wybrany obszar przekracza granicę regionów. Wybierz mniejszy obszar i spróbuj jeszcze raz.
 	</notification>
 	<notification name="ForceOwnerAuctionWarning">
-		Ta posiadłość jest wystawiona na aukcję. Wymuszenie własności anuluje aukcję i potencjalnie może zdenerwować zainteresowanych Rezydentów, jeżeli licytacja już się rozpoczęła.
+		Ta działka jest wystawiona na aukcję. Wymuszenie własności anuluje aukcję i potencjalnie może zdenerwować zainteresowanych Rezydentów, jeżeli licytacja już się rozpoczęła.
 Wymusić własność?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="CannotContentifyNothingSelected">
 		Nie można sfinalizować:
-Posiadłość nie została wybrana.
+Działka nie została wybrana.
 	</notification>
 	<notification name="CannotContentifyNoRegion">
 		Nie można sfinalizować:
 Region nie znaleziony.
 	</notification>
 	<notification name="CannotReleaseLandNothingSelected">
-		Nie można porzucić posiadłości:
-Posiadłość nie została wybrana.
+		Nie można porzucić działki:
+Działka nie została wybrana.
 	</notification>
 	<notification name="CannotReleaseLandNoRegion">
-		Nie można porzucić posiadłości:
+		Nie można porzucić działki:
 Region nie znaleziony.
 	</notification>
 	<notification name="CannotBuyLandNothingSelected">
-		Nie można kupić posiadłości:
-Posiadłość nie została wybrana.
+		Nie można kupić działki:
+Działka nie została wybrana.
 	</notification>
 	<notification name="CannotBuyLandNoRegion">
-		Nie można kupić posiadłości:
+		Nie można kupić działki:
 Region nie znaleziony.
 	</notification>
 	<notification name="CannotCloseFloaterBuyLand">
 		Okno zakupu ziemi nie może zostać zamknięte dopóki aplikacja [APP_NAME] nie określi ceny dla tej transakcji.
 	</notification>
 	<notification name="CannotDeedLandNothingSelected">
-		Nie można przekazać posiadłości:
-Posiadłość nie została wybrana.
+		Nie można przekazać działki:
+Działka nie została wybrana.
 	</notification>
 	<notification name="CannotDeedLandNoGroup">
-		Nie można przekazać posiadłości:
+		Nie można przekazać działki:
 Grupa nie została wybrana.
 	</notification>
 	<notification name="CannotDeedLandNoRegion">
-		Brak możliwości przypisania posiadłości grupie:
-Region, gdzie posiadłość się znajduje nie został odnaleziony.
+		Brak możliwości przypisania działki grupie:
+Region, gdzie działka się znajduje nie został odnaleziony.
 	</notification>
 	<notification name="CannotDeedLandMultipleSelected">
-		Nie można przekazać posiadłości:
-Wiele posiadłości jest wybranych.
+		Nie można przekazać działki:
+Wiele działek jest wybranych.
 
-Spróbuj wybrać pojedynczą posiadłość.
+Spróbuj wybrać pojedynczą działkę.
 	</notification>
 	<notification name="ParcelCanPlayMedia">
 		W tej lokalizacji można odtwarzać media, co może wymagać większej przepustowości sieci.
@@ -848,100 +857,100 @@ Odtwarzać media, gdy są dostępne?
 		</form>
 	</notification>
 	<notification name="CannotDeedLandWaitingForServer">
-		Nie można przekazać posiadłości:
+		Nie można przekazać działki:
 Serwer aktualizuje dane własności.
 
 Spróbuj jeszcze raz później.
 	</notification>
 	<notification name="CannotDeedLandNoTransfer">
-		Nie możesz przekazać posiadłości:
-Region [REGION] nie pozwala na transfer posiadłości.
+		Nie możesz przekazać działki:
+Region [REGION] nie pozwala na transfer działki.
 	</notification>
 	<notification name="CannotReleaseLandWatingForServer">
-		Nie można porzucić posiadłości:
-Serwer aktualizuje dane posiadłości.
+		Nie można porzucić działki:
+Serwer aktualizuje dane działki.
 
 Spróbuj jeszcze raz później.
 	</notification>
 	<notification name="CannotReleaseLandSelected">
-		Nie możesz porzucić posiadłości:
-Nie jesteś właścicielem wszystkich wybranych posiadłości.
+		Nie możesz porzucić działki:
+Nie jesteś właścicielem wszystkich wybranych działek.
 
-Wybierz pojedynczą posiadłość.
+Wybierz pojedynczą działkę.
 	</notification>
 	<notification name="CannotReleaseLandDontOwn">
-		Nie możesz porzucić posiadłości:
-Nie masz praw do porzucenia tej posiadłości.
-Twoje posiadłości są podświetlone na zielono.
+		Nie możesz porzucić działki:
+Nie masz praw do porzucenia tej działki.
+Twoje działki są podświetlone na zielono.
 	</notification>
 	<notification name="CannotReleaseLandRegionNotFound">
-		Brak możliwości porzucenia posiadłości:
-Region, gdzie posiadłość się znajduje nie został odnaleziony.
+		Brak możliwości porzucenia działki:
+Region, gdzie działka się znajduje nie został odnaleziony.
 	</notification>
 	<notification name="CannotReleaseLandNoTransfer">
-		Nie możesz porzucić posiadłości:
-Region [REGION] nie pozwala na transfer posiadłości.
+		Nie możesz porzucić działki:
+Region [REGION] nie pozwala na transfer działki.
 	</notification>
 	<notification name="CannotReleaseLandPartialSelection">
-		Nie można porzucić posiadłości:
-Musisz wybrać całą posiadłość by ją porzucić.
+		Nie można porzucić działki:
+Musisz wybrać całą działkę by ją porzucić.
 
-Wybierz całą posiadłość albo najpierw ją podziel.
+Wybierz całą działkę albo najpierw ją podziel.
 	</notification>
 	<notification name="ReleaseLandWarning">
-		Porzucasz posiadłość o powierzchni [AREA] m².
-Porzucenie tej posiadłości usunie ją z Twoich własności, ale nie otrzymasz za to żadnych L$.
+		Porzucasz działkę o powierzchni [AREA] m².
+Porzucenie tej działki usunie ją z Twoich własności, ale nie otrzymasz za to żadnych L$.
 
-Porzucić posiadłość?
+Porzucić działkę?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="CannotDivideLandNothingSelected">
-		Nie można podzielić posiadłości:
+		Nie można podzielić działki:
 
-Posiadłość nie została wybrana.
+Działka nie została wybrana.
 	</notification>
 	<notification name="CannotDivideLandPartialSelection">
-		Nie można podzielić posiadłości:
+		Nie można podzielić działki:
 
-Posiadłość została wybrana w całości.
-Spróbuj wybrać część posiadłości.
+Działka została wybrana w całości.
+Spróbuj wybrać część działki.
 	</notification>
 	<notification name="LandDivideWarning">
-		Podział tej posiadłości stworzy dwie posiadłości, z których każda będzie mogła mieć indywidualne ustawienia.
+		Podział tej działki stworzy dwie działki, z których każda będzie mogła mieć indywidualne ustawienia.
 Niektóre ustawienia zostaną zmienione na domyślne po tej operacji.
 
-Podzielić posiadłość?
+Podzielić działkę?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="CannotDivideLandNoRegion">
-		Brak możliwości podziału posiadłości:
-Region, gdzie posiadłość się znajduje nie został odnaleziony.
+		Brak możliwości podziału działki:
+Region, gdzie działka się znajduje nie został odnaleziony.
 	</notification>
 	<notification name="CannotJoinLandNoRegion">
-		Brak możliwości złączenia posiadłości:
-Region, gdzie posiadłość się znajduje nie został odnaleziony.
+		Brak możliwości złączenia działek:
+Region, gdzie działka się znajduje nie został odnaleziony.
 	</notification>
 	<notification name="CannotJoinLandNothingSelected">
-		Nie można połączyć posiadłości:
-Posiadłości nie zostały wybrane.
+		Nie można połączyć działek:
+Działki nie zostały wybrane.
 	</notification>
 	<notification name="CannotJoinLandEntireParcelSelected">
-		Nie można połączyć posiadłości:
-Tylko jedna posiadłość została wybrana.
+		Nie można połączyć działek:
+Tylko jedna działka została wybrana.
 
-Wybierz obszar usytuowany na obu posiadłościach.
+Wybierz obszar usytuowany na obu działkach.
 	</notification>
 	<notification name="CannotJoinLandSelection">
-		Nie można połączyć posiadłości:
-Musisz wybrać więcej niż jedną posiadłość.
+		Nie można połączyć działek:
+Musisz wybrać więcej niż jedną działkę.
 
-Wybierz obszar usytuowany na obu posiadłościach.
+Wybierz obszar usytuowany na obu działkach.
 	</notification>
 	<notification name="JoinLandWarning">
-		Połączenie tego obszaru utworzy jedną większą posiadłość ze wszystkich posiadłości przecinających wybrany prostokąt.
-Nazwa i opcje posiadłości będą musiały zostać skonfigurowane.
+		Połączenie tego obszaru utworzy jedną większą działkę ze wszystkich działek przecinających wybrany prostokąt.
+Nazwa i opcje działki będą musiały zostać skonfigurowane.
 
-Połączyć posiadłości?
+Połączyć działki?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmNotecardSave">
@@ -959,7 +968,7 @@ Połączyć posiadłości?
 		Błąd: niezdefiniowane trawy: [SPECIES]
 	</notification>
 	<notification name="ErrorUndefinedTrees">
-		Bład: niezdefiniowane drzewa: [SPECIES]
+		Błąd: niezdefiniowane drzewa: [SPECIES]
 	</notification>
 	<notification name="CannotSaveWearableOutOfSpace">
 		Nie można zapisać &apos;[NAME]&apos; do pliku stroju. Musisz zwolnić trochę miejsca na Twoim komputerze i zapisać strój jeszcze raz.
@@ -974,8 +983,8 @@ Zazwyczaj jest to tymczasowy problem. Możesz kontynuować modyfikacje i zapisa�
 		<usetemplate name="okcancelbuttons" notext="Wyłącz" yestext="Pokaż IM/czat"/>
 	</notification>
 	<notification name="OnlyOfficerCanBuyLand">
-		Nie możesz kupić posiadłości dla grupy.
-Nie masz praw kupowania posiadłości dla Twojej aktywnej grupy.
+		Nie możesz kupić działek dla grupy.
+Nie masz praw kupowania działek dla Twojej aktywnej grupy.
 	</notification>
 	<notification label="Add Friend" name="AddFriendWithMessage">
 		Znajomi mogą pozwalać na odnajdywanie się wzajemnie na mapie i na otrzymywanie informacji o statusie online.
@@ -1065,19 +1074,19 @@ Zobacz https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 	<notification name="GodDeleteAllScriptedPublicObjectsByUser">
 		Na pewno chcesz usunąć wszystkie skryptowane obiekty należące do
 ** [AVATAR_NAME] **
-z posiadłości innych w tym symulatorze?
+z działek innych w tym symulatorze?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="GodDeleteAllScriptedObjectsByUser">
 		Na pewno chcesz usunąć wszystkie skryptowane obiekty należące do
 ** [AVATAR_NAME] **
-ze wszystkich posiadłości w tym symulatorze?
+ze wszystkich działek w tym symulatorze?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="GodDeleteAllObjectsByUser">
 		Na pewno chcesz usunąć wszystkie obiekty (skryptowane i nie) należące do
 ** [AVATAR_NAME] **
-ze wszystkich posiadłości w tym symulatorze?
+ze wszystkich działek w tym symulatorze?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="BlankClassifiedName">
@@ -1163,23 +1172,23 @@ Na pewno chcesz wziąć te obiekty?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="CantBuyLandAcrossMultipleRegions">
-		Nie możesz kupić posiadłości ponieważ wybrany obszar przekracza granicę regionów.
+		Nie możesz kupić działki, ponieważ wybrany obszar przekracza granicę regionów.
 
 Wybierz mniejszy obszar i spróbuj jeszcze raz.
 	</notification>
 	<notification name="DeedLandToGroup">
-		Po przekazaniu tej posiadłości grupa będzie musiała mieć i utrzymywać wystarczający kredyt na używanie posiadłości.
-Cena zakupu posiadłości nie jest zwracana właścicielowi. Jeżeli przekazana posiadłość zostanie sprzedana, cena sprzedaży zostanie podzielona pomiędzy członków grupy.
+		Po przekazaniu tej działki grupa będzie musiała mieć i utrzymywać wystarczający kredyt na używanie działki.
+Cena zakupu działki nie jest zwracana właścicielowi. Jeżeli przekazana działka zostanie sprzedana, cena sprzedaży zostanie podzielona pomiędzy członków grupy.
 
-Przekazać tą posiadłość o powierzchni [AREA] m² grupie &apos;[GROUP_NAME]&apos;?
+Przekazać tą działkę o powierzchni [AREA] m² grupie &apos;[GROUP_NAME]&apos;?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="DeedLandToGroupWithContribution">
-		Po przekazaniu tej posiadłości grupa będzie musiała mieć i utrzymywać wystarczający kredyt na używanie posiadłości.
-Przekazanie będzie zawierać równoczesne przypisanie posiadłości do grupy od &apos;[NAME]&apos;.
-Cena zakupu posiadłości nie jest zwracana właścicielowi. Jeżeli przekazana posiadłość zostanie sprzedana, cena sprzedaży zostanie podzielona pomiędzy członków grupy.
+		Po przekazaniu tej działki grupa będzie musiała mieć i utrzymywać wystarczający kredyt na używanie działki.
+Przekazanie będzie zawierać równoczesne przypisanie działki do grupy od &apos;[NAME]&apos;.
+Cena zakupu działki nie jest zwracana właścicielowi. Jeżeli przekazana działka zostanie sprzedana, cena sprzedaży zostanie podzielona pomiędzy członków grupy.
 
-Przekazać tą posiadłość o powierzchni [AREA] m² grupie &apos;[GROUP_NAME]&apos;?
+Przekazać tą działkę o powierzchni [AREA] m² grupie &apos;[GROUP_NAME]&apos;?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="DisplaySetToSafe">
@@ -1222,7 +1231,7 @@ Możesz normalnie używać [APP_NAME], inni użytkownicy będą Cię widzieli po
 
 Jeżeli używasz [CURRENT_GRID] po raz pierwszy to musisz stworzyć konto żeby móc się zalogować.
 Czy chcesz przejść na stronę [http://join.secondlife.com secondlife.com] żeby stworzyć nowe konto?
-		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Nowe konto..."/>
+		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Stwórz konto..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
 		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [SECOND_LIFE_GRID].
@@ -1519,7 +1528,7 @@ Chcesz opuścić grupę?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CannotStartAuctionAlreadyForSale">
-		Aukcja nie może zostać rozpoczęta w posiadłości, która została już wcześniej wystawiona na sprzedaż. Dezaktywuj opcję sprzedaży posiadłości, jeżeli chcesz rozpocząć aukcję.
+		Aukcja nie może zostać rozpoczęta dla działki, która została już wcześniej wystawiona na sprzedaż. Dezaktywuj opcję sprzedaży działki, jeżeli chcesz rozpocząć aukcję.
 	</notification>
 	<notification label="Zablokuj obiekty według nazwy" name="MuteByNameFailed">
 		Rezydent/obiekt jest już zablokowany.
@@ -1770,6 +1779,16 @@ Kontynuować?
 [RESIDENTS]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
+	<notification label="Potwierdź bana" name="EstateBanUser">
+		Zabronić dostępu rezydentowi [EVIL_USER] tylko do tego Majątku, czy do [ALL_ESTATES]?
+		<usetemplate name="yesnocancelbuttons" canceltext="Anuluj" notext="Wszystkie Majątki" yestext="Ten Majątek"/>
+	</notification>
+	<notification label="Potwierdź bana" name="EstateBanUserMultiple">
+		Zabronić dostępu poniższym rezydentom tylko do tego Majątku, czy do [ALL_ESTATES]?
+
+[RESIDENTS]
+		<usetemplate name="yesnocancelbuttons" canceltext="Anuluj" notext="Wszystkie Majątki" yestext="Ten Majątek"/>
+	</notification>
 	<notification name="EstateChangeCovenant">
 		Na pewno chcesz zmienić treść umowy dla tego majątku?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
@@ -1799,10 +1818,10 @@ Kontynuować?
 		<usetemplate name="okcancelignore" yestext="Baza wiedzy" notext="Zamknij" ignoretext="Teleport: Region, który próbujesz odwiedzić zawiera treści, które są dostępne tylko dla dorosłych."/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked_Notify">
-		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY].
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawione, aby odrzucać treści [REGIONMATURITY].
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_Notify">
-		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY].
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawione, aby odrzucać treści [REGIONMATURITY].
 	</notification>
 	<notification name="RegionEntryAccessBlocked_NotifyAdultsOnly">
 		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], które są dostępne tylko dla dorosłych.
@@ -1811,7 +1830,7 @@ Kontynuować?
 		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], które są dostępne tylko dla dorosłych.
 	</notification>
 	<notification name="RegionEntryAccessBlocked_Change">
-		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje albo anulować. Gdy zostaną zmienione możesz spróbować wejść do regionu ponownie.
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje albo anulować. Gdy zostaną zmienione możesz spróbować wejść do regionu ponownie.
 		<form name="form">
 			<button name="OK" text="Zmień preferencje"/>
 			<button name="Cancel" text="Anuluj"/>
@@ -1819,7 +1838,7 @@ Kontynuować?
 		</form>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_Change">
-		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje albo anulować. Gdy zostaną zmienione możesz spróbować wejść do regionu ponownie.
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje albo anulować. Gdy zostaną zmienione możesz spróbować wejść do regionu ponownie.
 		<form name="form">
 			<button name="OK" text="Zmień preferencje"/>
 			<button name="Cancel" text="Anuluj"/>
@@ -1827,7 +1846,7 @@ Kontynuować?
 		</form>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_ChangeAndReTeleport">
-		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje i kontynuować teleport albo anulować go.
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje i kontynuować teleport albo anulować go.
 		<form name="form">
 			<button name="OK" text="Zmień i kontynuuj"/>
 			<button name="Cancel" text="Anuluj"/>
@@ -1855,10 +1874,10 @@ Kontynuować?
 		<usetemplate ignoretext="Tylko dorośli mogą kupić tą ziemię." name="okcancelignore" notext="Zamknij" yestext="Baza wiedzy"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked_Notify">
-		Ziemia, którą próbujesz odzyskać zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY].
+		Ziemia, którą próbujesz odzyskać zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawione, aby odrzucać treści [REGIONMATURITY].
 	</notification>
 	<notification name="LandBuyAccessBlocked_Notify">
-		Ziemia, którą próbujesz kupić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY].
+		Ziemia, którą próbujesz kupić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawione, aby odrzucać treści [REGIONMATURITY].
 	</notification>
 	<notification name="LandClaimAccessBlocked_NotifyAdultsOnly">
 		Ziemia, którą próbujesz odzyskać zawiera treści [REGIONMATURITY], dostępne tylko dla dorosłych.
@@ -1867,7 +1886,7 @@ Kontynuować?
 		Ziemia, którą próbujesz kupić zawiera treści [REGIONMATURITY], dostępne tylko dla dorosłych.
 	</notification>
 	<notification name="LandClaimAccessBlocked_Change">
-		Region, który próbujesz odzyskać zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje, a potem spróbować odzyskać region ponownie.
+		Region, który próbujesz odzyskać zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje, a potem spróbować odzyskać region ponownie.
 		<form name="form">
 			<button name="OK" text="Zmień preferencje"/>
 			<button name="Cancel" text="Anuluj"/>
@@ -1875,7 +1894,7 @@ Kontynuować?
 		</form>
 	</notification>
 	<notification name="LandBuyAccessBlocked_Change">
-		Region, który próbujesz kupić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje, a potem spróbować kupić region ponownie.
+		Region, który próbujesz kupić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje, a potem spróbować kupić region ponownie.
 		<form name="form">
 			<button name="OK" text="Zmień preferencje"/>
 			<button name="Cancel" text="Anuluj"/>
@@ -2230,7 +2249,7 @@ Zamieść go na stronie internetowej żeby umożliwić innym łatwy dostęp do t
 		Miejsce dostępne dla osób mających 18 lat lub więcej.
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		Nie masz dostępu do tej posiadłości ze względu na brak danych płatniczych o Twoim koncie. Czy chcesz odwiedzić stronę [CURRENT_GRID] żeby to zmienić?
+		Nie masz dostępu do tej działki ze względu na brak danych płatniczych o Twoim koncie. Czy chcesz odwiedzić stronę [CURRENT_GRID] żeby to zmienić?
 
 [_URL]
 		<url name="url">
@@ -2241,7 +2260,7 @@ Zamieść go na stronie internetowej żeby umożliwić innym łatwy dostęp do t
 	<notification name="MissingString">
 		Ciąg [STRING_NAME] nie został znaleziony w strings.xml
 	</notification>
-	<notification name="EnableMediaFilter"> 
+	<notification name="EnableMediaFilter">
 		Odtwarzanie mediów lub muzyki może pozwolić na zidentyfikowanie Twojej tożsamości witrynom poza Second Life. Możesz włączyć filtr, który pozwoli określić które strony będą mogły odtwarzać media, da Ci lepszą kontrolę nad swoją prywatnością.
 
 Włączyć filtr mediów?
@@ -2251,8 +2270,8 @@ Włączyć filtr mediów?
 			<button name="Disable" text="Wyłącz"/>
 		</form>
 	</notification>
-	<notification name="MediaAlert"> 
-		Ta parcela dostarcza media z:
+	<notification name="MediaAlert">
+		Ta działka dostarcza media z:
 
 Domena: [MEDIADOMAIN]
 URL: [MEDIAURL]
@@ -2261,7 +2280,7 @@ URL: [MEDIAURL]
 			<button name="Deny" text="Odmów"/>
 		</form>
 	</notification>
-	<notification  name="MediaAlert2"> 
+	<notification  name="MediaAlert2">
 		Chcesz zapamiętać swój wybór i zezwalać [LCONDITION] na media z tego źródła?
 
 Domena: [MEDIADOMAIN]
@@ -2272,8 +2291,8 @@ URL: [MEDIAURL]
 			<button name="RememberURL" text="[CONDITION] Zezwól temu URL"/>
 		</form>
 	</notification>
-	<notification name="AudioAlert"> 
-		Ta parcela dostarcza muzykę z:
+	<notification name="AudioAlert">
+		Ta działka dostarcza muzykę z:
 
 Domena: [AUDIODOMAIN]
 URL: [AUDIOURL]
@@ -2282,7 +2301,7 @@ URL: [AUDIOURL]
 			<button name="Deny" text="Odmów"/>
 		</form>
 	</notification>
-	<notification name="AudioAlert2"> 
+	<notification name="AudioAlert2">
 		Chcesz zapamiętać swój wybór i zezwalać [LCONDITION] na muzykę z tego źródła?
 
 Domena: [AUDIODOMAIN]
@@ -2293,7 +2312,7 @@ URL: [AUDIOURL]
 			<button name="RememberURL" text="[CONDITION] Zezwól temu URL"/>
 		</form>
 	</notification>
-	<notification name="MOAPAlert"> 
+	<notification name="MOAPAlert">
 		Obiekt dostarcza współdzielone media z:
 
 Domena: [MOAPDOMAIN]
@@ -2303,7 +2322,7 @@ URL: [MOAPURL]
 			<button name="Deny" text="Odmów"/>
 		</form>
 	</notification>
-	<notification name="MOAPAlert2"> 
+	<notification name="MOAPAlert2">
 		Chcesz zapamiętać swój wybór i zezwalać [LCONDITION] na współdzielone media z tego źródła?
 
 Domena: [MOAPDOMAIN]
@@ -2481,7 +2500,7 @@ Spróbuj wybrać mniejszy obszar.
 		</form>
 	</notification>
 	<notification name="TransferObjectsHighlighted">
-		Obiekty na tej posiadłości, które zostaną przekazane kupcowi tej posiadłości są teraz podświetlone.
+		Obiekty na tej działce, które zostaną przekazane kupcowi tej działki są teraz podświetlone.
 
 * Drzewa i trawy, które zostaną przekazane nie są podświetlone.
 		<form name="form">
@@ -2494,7 +2513,7 @@ Spróbuj wybrać mniejszy obszar.
 	</notification>
 	<notification name="NoQuickTime">
 		Wygląda na to, że Apple QuickTime nie jest zainstalowany na Twoim komputerze.
-Jeżeli chcesz odtwarzać media na tej posiadłości, które używają QuickTime idź do [http://www.apple.com/quicktime strony QuickTime] i zainstaluj odtwarzacz.
+Jeżeli chcesz odtwarzać media na tej działce, które używają QuickTime idź do [http://www.apple.com/quicktime strony QuickTime] i zainstaluj odtwarzacz.
 	</notification>
 	<notification name="NoPlugin">
 		Nie znaleziono wtyczki mediów dla typu mime "[MIME_TYPE]". Media tego typu będą niedostępne.
@@ -2509,42 +2528,42 @@ Zainstaluj wtyczki ponownie lub skontaktuj się z dostawcą, jeśli problem nada
 		</form>
 	</notification>
 	<notification name="OwnedObjectsReturned">
-		Twoje obiekty z wybranej posiadłości zostały zwrócone do Twojej Szafy.
+		Twoje obiekty z wybranej działki zostały zwrócone do Twojej Szafy.
 	</notification>
 	<notification name="OtherObjectsReturned">
-		Obiekty należące do [NAME] na wybranej posiadłości zostały zwrócone do Szafy tej osoby.
+		Obiekty należące do [NAME] na wybranej działce zostały zwrócone do Szafy tej osoby.
 	</notification>
 	<notification name="OtherObjectsReturned2">
-		Obiekty z posiadłości należącej do Rezydenta [NAME] zostały zwrócone do jego Szafy.
+		Obiekty z działki należącej do Rezydenta [NAME] zostały zwrócone do jego Szafy.
 	</notification>
 	<notification name="GroupObjectsReturned">
-		Obiekty z wybranej posiadłości przypisane do grupy [GROUPNAME] zostały zwrócone do szaf ich właścicieli.
+		Obiekty z wybranej działki przypisane do grupy [GROUPNAME] zostały zwrócone do szaf ich właścicieli.
 Przekazywalne obiekty przekazane grupie zostały zwrócone do ich poprzednich właścicieli.
 Nieprzekazywalne obiekty przekazane grupie zostały usunięte.
 	</notification>
 	<notification name="UnOwnedObjectsReturned">
-		Obiekty z wybranej posiadłości które nie należą do Ciebie zostały zwrócone do ich właścicieli.
+		Obiekty z wybranej działki które nie należą do Ciebie zostały zwrócone do ich właścicieli.
 	</notification>
 	<notification name="ServerObjectMessage">
 		Wiadomość od [NAME]:
 &lt;nolink&gt;[MSG]&lt;/nolink&gt;
 	</notification>
 	<notification name="NotSafe">
-		Ta posiadłość pozwala na uszkodzenia.
+		Ta działka pozwala na uszkodzenia.
 Możesz doznać tutaj urazu. Jeżeli zginiesz nastąpi teleportacja do Twojego miejsca startu.
 	</notification>
 	<notification name="NoFly">
-		Ta posiadłość nie pozwala na latanie.
+		Ta działka nie pozwala na latanie.
 Nie możesz tutaj latać.
 	</notification>
 	<notification name="PushRestricted">
-		Popychanie niedozwolone. Nie możesz tutaj popychać innych chyba, że jesteś właścicielem tej posiadłości.
+		Popychanie niedozwolone. Nie możesz tutaj popychać innych chyba, że jesteś właścicielem tej działki.
 	</notification>
 	<notification name="NoVoice">
-		Ta posiadłość nie pozwala na rozmowy głosowe.
+		Ta działka nie pozwala na rozmowy głosowe.
 	</notification>
 	<notification name="NoBuild">
-		Ta posiadłość nie pozwala na budowanie. Nie możesz tworzyć tutaj obiektów.
+		Ta działka nie pozwala na budowanie. Nie możesz tworzyć tutaj obiektów.
 	</notification>
 	<notification name="PathfindingDirty">
 		W tym regionie są oczekujące zmiany w odnajdywaniu ścieżek. Jeśli posiadasz prawa budowania możesz odświeżyć region klikając na przycisk “Odśwież region”.
@@ -2553,16 +2572,12 @@ Nie możesz tutaj latać.
 	<notification name="DynamicPathfindingDisabled">
 		Dynamiczne odnajdywanie ścieżek nie jest włączone w tym regionie. Oskryptowane obiekty używające odwołań LSL wykorzystujących odnajdywanie ścieżek mogą nie działać zgodnie z oczekiwaniami.
 	</notification>
-	<notification name="PathfindingRebakeNavmesh">
-		Zmiana pewnych obiektów w tym regionie może spowodować nieprawidłowe zachowanie innych. Aby sprawić, żeby obiekty ruchome zachowywały się właściwie wymuś odświeżenie Navmeshu w regionie. Wybierz “Pomoc”, aby uzyskać więcej informacji.
-		<usetemplate name="okhelpignore" ignoretext="Zmiana pewnych obiektów w tym regionie może spowodować nieprawidłowe zachowanie innych." yestext="OK" helptext="Pomoc"/>
-	</notification>
 	<notification name="PathfindingCannotRebakeNavmesh">
 		Wystąpił błąd. To może być problem sieci, serwera lub Twojego braku praw do budowania. Czasami wylogowanie się i zalogowanie ponownie może naprawić problem.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="SeeAvatars">  
-		Ta posiadłość ukrywa czat tekstowy i awatary z innych posiadłości. Nie będziesz widzieć rezydentów na zewnątrz tej posiadłości - ani oni Ciebie. Wspólny kanał czatu 0 również jest zablokowany.
+	<notification name="SeeAvatars">
+		Ta działka ukrywa czat tekstowy i awatary z innych działek. Nie będziesz widzieć rezydentów na zewnątrz tej działki - ani oni Ciebie. Wspólny kanał czatu 0 również jest zablokowany.
 	</notification>
 	<notification name="ScriptsStopped">
 		Administrator czasowo zatrzymał skrypty w tym regionie.
@@ -2571,12 +2586,12 @@ Nie możesz tutaj latać.
 		Żadne skrypty nie działają w tym regionie.
 	</notification>
 	<notification name="NoOutsideScripts">
-		Ta posiadłość nie pozwala na zewnętrzne skrypty.
+		Ta działka nie pozwala na zewnętrzne skrypty.
 
-Żadne skrypty nie będą tutaj działać za wyjątkiem skryptów należących do właściciela posiadłości.
+Żadne skrypty nie będą tutaj działać za wyjątkiem skryptów należących do właściciela działki.
 	</notification>
 	<notification name="ClaimPublicLand">
-		Tylko publiczne posiadłości w tym regionie, co Ty, mogą być przejęte.
+		Tylko publiczne działki w tym regionie, co Ty, mogą być przejęte.
 	</notification>
 	<notification name="RegionTPAccessBlocked">
 		Region, który próbujesz odwiedzić ma klasyfikację treści przekraczającą Twoje obecne preferencje treści. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
@@ -2594,7 +2609,7 @@ Nie możesz tutaj latać.
 		Musisz mieć 18 lat lub więcej, aby móc wejść do tego regionu.
 	</notification>
 	<notification name="MustGetAgeParcel">
-		Musisz mieć 18 lat lub więcej, aby móc wejść do tej posiadłości.
+		Musisz mieć 18 lat lub więcej, aby móc wejść na tą działkę.
 	</notification>
 	<notification name="NoDestRegion">
 		Żądana lokalizacja regionu nie została odnaleziona.
@@ -2603,7 +2618,7 @@ Nie możesz tutaj latać.
 		Brak dostępu do podanej lokalizacji.
 	</notification>
 	<notification name="RegionParcelBan">
-		Nie możesz przejść przez zamkniętą posiadłość. Spróbuj skorzystać z innej drogi.
+		Nie możesz przejść przez zamkniętą działkę. Spróbuj skorzystać z innej drogi.
 	</notification>
 	<notification name="TelehubRedirect">
 		Zostałeś/aś przeniesiony/a do teleportera (telehuba).
@@ -2625,7 +2640,7 @@ Spróbuj ponownie za kilka minut.
 		Wysłano do niewłaściwego regionu. Proszę spróbować ponownie.
 	</notification>
 	<notification name="NoValidAgentID">
-		Brak poprawnego identyfikatoru agenta.
+		Brak poprawnego identyfikatora agenta.
 	</notification>
 	<notification name="NoValidSession">
 		Brak poprawnego identyfikatora sesji.
@@ -2652,7 +2667,7 @@ Spróbuj ponownie za kilka minut.
 		Niepoprawny punkt lądowania.
 	</notification>
 	<notification name="NoValidParcel">
-		Niepoprawna posiadłość.
+		Niepoprawna działka.
 	</notification>
 	<notification name="ObjectGiveItem">
 		Obiekt o nazwie &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; należący do [NAME_SLURL] dał Tobie [OBJECTTYPE]:
@@ -2705,7 +2720,7 @@ Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
 
-Ten region zawiera treści [REGION_CONTENT_MATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGION_CONTENT_MATURITY]. Możesz zmienić swoje preferencje i kontynuować teleport albo anulować go.
+Ten region zawiera treści [REGION_CONTENT_MATURITY], ale Twoje obecne preferencje są tak ustawione, aby odrzucać treści [REGION_CONTENT_MATURITY]. Możesz zmienić swoje preferencje i kontynuować teleport albo anulować go.
 		<form name="form">
 			<button name="Teleport" text="Zmień i teleportuj"/>
 			<button name="Cancel" text="Anuluj"/>
@@ -2876,7 +2891,7 @@ Wybierz Zablokuj żeby wyciszyć wszystkie wiadomości od tej osoby.
 		Przekazano [NAME] pieniądze i ta osoba została automatycznie odblokowana.
 	</notification>
 	<notification name="AutoUnmuteByInventory">
-		Zaoferowno [NAME] obiekty i ta osoba została automatycznie odblokowana.
+		Zaoferowano [NAME] obiekty i ta osoba została automatycznie odblokowana.
 	</notification>
 	<notification name="VoiceInviteGroup">
 		[NAME] zaczyna rozmowę głosową z grupą [GROUP].
@@ -2939,19 +2954,19 @@ Wybierz Zaakceptuj żeby zacząć czat albo Odmów żeby nie przyjąć zaproszen
 	</notification>
 	<notification name="VoiceEffectsWillExpire">
 		Jedno lub więcej z Twoich Przekształceń Głosu wygaśnie za mniej niż [INTERVAL] dni.
-[[URL] Klinij tutaj] aby odnowić subskrypcję.
+[[URL] Kliknij tutaj] aby odnowić subskrypcję.
 	</notification>
 	<notification name="VoiceEffectsNew">
 		Nowe Przekształcenia Głosu są dostępne!
 	</notification>
 	<notification name="Cannot enter parcel: not a group member">
-		Nie masz dostępu do posiadłości, nie należysz do właściwej grupy.
+		Nie masz dostępu do działki, nie należysz do właściwej grupy.
 	</notification>
 	<notification name="Cannot enter parcel: banned">
-		Masz wzbroniony wstęp na tą posiadłość (ban).
+		Masz wzbroniony wstęp na tą działkę (ban).
 	</notification>
 	<notification name="Cannot enter parcel: not on access list">
-		Nie masz dostępu do posiadłości, nie jesteś na liście dostępu.
+		Nie masz dostępu do działki, nie jesteś na liście dostępu.
 	</notification>
 	<notification name="VoiceNotAllowed">
 		Nie masz pozwolenia na połączenie z rozmową [VOICE_CHANNEL_NAME].
@@ -3053,15 +3068,15 @@ następującym Rezydentom:
 		Przekazanie grupie nie powiodło się.
 	</notification>
 	<notification name="ReleaseLandThrottled">
-		Parcela [PARCEL_NAME] nie może teraz zostać porzucona.
+		Działka [PARCEL_NAME] nie może teraz zostać porzucona.
 	</notification>
 	<notification name="ReleasedLandWithReclaim">
-		Parcela &apos;[PARCEL_NAME]&apos; o obszarze [AREA] m² została uwolniona.
+		Działka &apos;[PARCEL_NAME]&apos; o obszarze [AREA] m² została porzucona.
 
 Masz [RECLAIM_PERIOD] godzin na odzyskanie jej za 0L$ zanim zostanie wystawiona na sprzedaż każdemu.
 	</notification>
 	<notification name="ReleasedLandNoReclaim">
-		Parcela &apos;[PARCEL_NAME]&apos; o obszarze [AREA] m² została uwolniona.
+		Działka &apos;[PARCEL_NAME]&apos; o obszarze [AREA] m² została porzucona.
 
 Jest teraz dostępna do kupienia dla każdego.
 	</notification>
@@ -3154,7 +3169,7 @@ Kliknij w strzałkę aby zobaczyć panel kontroli głosu.
 Ukrycie przycisku &quot;Mów&quot; zdezaktywuje głos.
 	</notification>
 	<notification label="Odkrywaj Świat" name="HintDestinationGuide">
-		Destination Guide zawiera tysiące nowych miejsc do odkrycia. Wybierz lokalizację i teleportuj się aby rozpocząć zwiedzanie.
+		Cele podróży (Destination Guide) zawierają tysiące nowych miejsc do odkrycia. Wybierz lokalizację i teleportuj się, aby rozpocząć zwiedzanie.
 	</notification>
 	<notification label="Panel boczny" name="HintSidePanel">
 		Panel boczny umożliwia szybki dostęp do Twojej Szafy, ubrań, profili i innych rzeczy.
@@ -3304,56 +3319,56 @@ Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 		<usetemplate name="okcancelignore" yestext="OK" notext="Anuluj" ignoretext="Potwierdź przed ukryciem interfejsu"/>
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom">
-		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+		Niektórym z zaznaczonych zbiorów części zostanie przełączony status Phantom.
 
 Czy chcesz kontynuować?
-		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+		<usetemplate ignoretext="Niektórym z zaznaczonych zbiorów części zostanie przełączony status Phantom." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PathfindingLinksets_MismatchOnRestricted">
-		Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+		Niektóre z zaznaczonych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
 
 Czy chcesz kontynuować?
-		<usetemplate ignoretext="Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+		<usetemplate ignoretext="Niektóre z zaznaczonych zbiorów części nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PathfindingLinksets_MismatchOnVolume">
-		Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły.
+		Niektóre z zaznaczonych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły.
 
 Czy chcesz kontynuować?
-		<usetemplate ignoretext="Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione, ponieważ kształt nie jest wypukły." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+		<usetemplate ignoretext="Niektóre z zaznaczonych zbiorów części nie mogą zostać ustawione, ponieważ kształt nie jest wypukły." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted">
-		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+		Niektórym z zaznaczonych zbiorów części zostanie przełączony status Phantom.
 
-Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+Niektóre z zaznaczonych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
 
 Czy chcesz kontynuować?
-		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+		<usetemplate ignoretext="Niektórym z zaznaczonych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnVolume">
-		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+		Niektórym z zaznaczonych zbiorów części zostanie przełączony status Phantom.
 
-Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły.
+Niektóre z zaznaczonych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły.
 
 Czy chcesz kontynuować?
-		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione, ponieważ kształt nie jest wypukły." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+		<usetemplate ignoretext="Niektórym z zaznaczonych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione, ponieważ kształt nie jest wypukły." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
-		Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+		Niektóre z zaznaczonych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
 
-Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły. Ich typ nie ulegnie zmianie.
+Niektóre z zaznaczonych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły. Ich typ nie ulegnie zmianie.
 
 Czy chcesz kontynuować?
-		<usetemplate ignoretext="Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części i niewypukły kształt." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+		<usetemplate ignoretext="Niektóre z zaznaczonych zbiorów części nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części i niewypukły kształt." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume">
-		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+		Niektórym z zaznaczonych zbiorów części zostanie przełączony status Phantom.
 
-Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+Niektóre z zaznaczonych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
 
-Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły. Ich typ nie ulegnie zmianie.
+Niektóre z zaznaczonych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły. Ich typ nie ulegnie zmianie.
 
 Czy chcesz kontynuować?
-		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części i niewypukły kształt." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+		<usetemplate ignoretext="Niektórym z zaznaczonych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części i niewypukły kształt." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PathfindingLinksets_ChangeToFlexiblePath">
 		Wybrany obiekt ma wpływ na Navmesh. Dodanie elastyczności spowoduje usunięcie go z Navmesha.
@@ -3371,7 +3386,7 @@ Jeżeli wciąż masz problemy sprawdź: [SUPPORT_SITE].
 		- Pamięć Twojego systemu nie spełnia minimalnych wymagań.
 	</global>
 	<global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">
-		Jeśli jesteś właścicielem posiadłości, to możesz ustawić na niej miejsce startu.
+		Jeśli jesteś właścicielem działki, to możesz ustawić na niej miejsce startu.
 W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infohub&quot;.
 	</global>
 	<global name="You died and have been teleported to your home location">
@@ -3412,7 +3427,7 @@ bazując na liście [LISTNAME].
 		Wpisz nazwę nowego zestawu AO:
 (Nazwa nie może zawierać ":" lub "|")
 		<form name="form">
-			<input name="message" type="text">
+			<input name="message">
 				Nowy zestaw AO
 			</input>
 			<button name="OK" text="OK"/>
@@ -3479,7 +3494,7 @@ Nazwa nie może zawierać ":" lub "|".
 		Tworzenie połączenia dla animacji "[NAME]" nie powiodło się!
 	</notification>
 	<notification name="SendSysinfoToIM">
-		Natępujące informacje zostaną wysłane do aktywnej sesji IM:
+		Następujące informacje zostaną wysłane do aktywnej sesji IM:
 
 [SYSINFO]
 		<usetemplate name="okcancelbuttons" yestext="Wyślij" notext="Anuluj" />
@@ -3642,6 +3657,629 @@ Anulowano.
 		Usuwasz [NUM_ITEMS] przedmiotów. Na pewno chcesz kontynuować?
 		<usetemplate ignoretext="Na pewno chcesz usunąć wiele przedmiotów?" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
+	<notification name="AvatarFrozen">
+		[AV_FREEZER] unieruchomił/a Cię. Nie możesz się poruszać ani podejmować interakcji ze światem.
+	</notification>
+	<notification name="AvatarFrozenDuration">
+		[AV_FREEZER] unieruchomił/a Cię na [AV_FREEZE_TIME] sekund. Nie możesz się poruszać ani podejmować interakcji ze światem.
+	</notification>
+	<notification name="YouFrozeAvatar">
+		Awatar unieruchomiony.
+	</notification>
+	<notification name="AvatarHasUnFrozenYou">
+		[AV_FREEZER] odblokował/a Cię.
+	</notification>
+	<notification name="AvatarUnFrozen">
+		Awatar odblokowany.
+	</notification>
+	<notification name="AvatarFreezeFailure">
+		Unieruchomienie nie powiodło się, ponieważ nie masz uprawnień administratora na tej działce.
+	</notification>
+	<notification name="AvatarFreezeThaw">
+		Czas Twojego unieruchomienia minął, możesz zająć się swoimi sprawami.
+	</notification>
+	<notification name="AvatarCantFreeze">
+		Przepraszam, ale nie mogę unieruchomić tego użytkownika.
+	</notification>
+	<notification name="NowOwnObject">
+		Jesteś od teraz właścicielem obiektu [OBJECT_NAME]
+	</notification>
+	<notification name="CantRezOnLand">
+		Nie można zrezzować obiektu na pozycji [OBJECT_POS], ponieważ właściciel działki na to nie zezwala. Użyj narzędzia ziemi, aby zobaczyć kto nim jest.
+	</notification>
+	<notification name="RezFailTooManyRequests">
+		Obiekt nie może zostać zrezzowany, ponieważ jest zbyt wiele żądań.
+	</notification>
+	<notification name="SitFailCantMove">
+		Nie możesz usiąść, ponieważ nie możesz się teraz poruszać.
+	</notification>
+	<notification name="SitFailNotAllowedOnLand">
+		Nie możesz usiąść, ponieważ nie masz zezwolenia do przebywania na tej ziemi.
+	</notification>
+	<notification name="SitFailNotSameRegion">
+		Spróbuj podejść bliżej. Nie można usiąść na obiekcie,
+bo nie jest w tym samym regionie, co Ty.
+	</notification>
+	<notification name="NoNewObjectRegionFull">
+		Nie można utworzyć nowego obiektu. Region jest pełny.
+	</notification>
+	<notification name="FailedToPlaceObject">
+		Nie udało się ustawić obiektu w podanym miejscu. Spróbuj ponownie.
+	</notification>
+	<notification name="NoOwnNoGardening">
+		Nie możesz tworzyć drzew i trawy na ziemi, która nie należy do Ciebie.
+	</notification>
+	<notification name="NoCopyPermsNoObject">
+		Kopiowanie nie powiodło się, ponieważ nie masz zezwoleń na kopiowanie obiektu '[OBJ_NAME]'.
+	</notification>
+	<notification name="NoTransPermsNoObject">
+		Kopiowanie nie powiodło się, ponieważ obiekt '[OBJ_NAME]' nie może zostać przetransferowany do Ciebie.
+	</notification>
+	<notification name="AddToNavMeshNoCopy">
+		Kopiowanie nie powiodło się, ponieważ obiekt '[OBJ_NAME]' ma wpływ na Navmesh.
+	</notification>
+	<notification name="DupeWithNoRootsSelected">
+		Wybrano duplikat bez obiektów głównych.
+	</notification>
+	<notification name="CantDupeCuzRegionIsFull">
+		Nie można zduplikować obiektów, ponieważ region jest pełny.
+	</notification>
+	<notification name="CantDupeCuzParcelNotFound">
+		Nie można zduplikować obiektów - nie można znaleźć działki, na której one są.
+	</notification>
+	<notification name="CantCreateCuzParcelFull">
+		Nie można utworzyć obiektu,
+ponieważ działka jest pełna.
+	</notification>
+	<notification name="RezAttemptFailed">
+		Próba zrezzowania obiektu nie powiodła się.
+	</notification>
+	<notification name="ToxicInvRezAttemptFailed">
+		Nie można utworzyć obiektu, który spowodował problemy w tym regionie.
+	</notification>
+	<notification name="InvItemIsBlacklisted">
+		Ten przedmiot znajduje się na czarnej liście.
+	</notification>
+	<notification name="NoCanRezObjects">
+		W tej chwili nie masz zezwolenia na tworzenie obiektów.
+	</notification>
+	<notification name="LandSearchBlocked">
+		Wyszukiwanie ziemi zablokowane.
+Zostało wysłanych zbyt wiele żądań wyszukiwania w zbyt krótkim czasie.
+Spróbuj ponownie za minutę.
+	</notification>
+	<notification name="NotEnoughResourcesToAttach">
+		Za mało dostępnych zasobów skryptów, aby dołączyć obiekt!
+	</notification>
+	<notification name="YouDiedAndGotTPHome">
+		Zginąłeś/aś i zostałeś/aś przeteleportowany/a do swojego miejsca startu
+	</notification>
+	<notification name="EjectComingSoon">
+		Nie masz już dłużej pozwolenia na przebywanie w tym miejscu i w ciągu [EJECT_TIME] sekund musisz je opuścić.
+	</notification>
+	<notification name="NoEnterServerFull">
+		Nie możesz wejść do tego regionu,
+ponieważ serwer jest pełny.
+	</notification>
+	<notification name="SaveBackToInvDisabled">
+		Zabieranie z powrotem do Szafy zostało wyłączone.
+	</notification>
+	<notification name="NoExistNoSaveToContents">
+		Nie można zapisać '[OBJ_NAME]' do zawartości obiektu, ponieważ obiekt z którego został zrezzowany już nie istnieje.
+	</notification>
+	<notification name="NoModNoSaveToContents">
+		Nie można zapisać '[OBJ_NAME]' do zawartości obiektu, ponieważ nie masz praw do modyfikacji obiektu '[DEST_NAME]'.
+	</notification>
+	<notification name="NoSaveBackToInvDisabled">
+		Nie można zabrać '[OBJ_NAME]' z powrotem do Szafy -- ta operacja została wyłączona.
+	</notification>
+	<notification name="NoCopyNoSelCopy">
+		Nie możesz skopiować tego, co jest zaznaczone, ponieważ nie masz prawa do skopiowania obiektu '[OBJ_NAME]'.
+	</notification>
+	<notification name="NoTransNoSelCopy">
+		Nie możesz skopiować tego, co jest zaznaczone, ponieważ obiektu '[OBJ_NAME]' nie można transferować.
+	</notification>
+	<notification name="NoTransNoCopy">
+		Nie możesz skopiować tego, co jest zaznaczone, ponieważ obiektu '[OBJ_NAME]' nie można transferować.
+	</notification>
+	<notification name="NoPermsNoRemoval">
+		Usunięcie obiektu '[OBJ_NAME]' z symulatora zostało wzbronione przez system zezwoleń.
+	</notification>
+	<notification name="NoModNoSaveSelection">
+		Nie możesz zapisać tego, co jest zaznaczone, ponieważ nie masz prawa do modyfikacji obiektu '[OBJ_NAME]'.
+	</notification>
+	<notification name="NoCopyNoSaveSelection">
+		Nie możesz zapisać tego, co jest zaznaczone, ponieważ obiektu '[OBJ_NAME]' nie można kopiować.
+	</notification>
+	<notification name="NoModNoTaking">
+		Nie możesz zabrać tego, co jest zaznaczone, ponieważ nie masz prawa do modyfikacji obiektu '[OBJ_NAME]'.
+	</notification>
+	<notification name="RezDestInternalError">
+		Błąd wewnętrzny: Nieznany typ lokalizacji docelowej.
+	</notification>
+	<notification name="DeleteFailObjNotFound">
+		Usuwanie nie powiodło się, ponieważ obiekt nie został znaleziony
+	</notification>
+	<notification name="SorryCantEjectUser">
+		Przepraszam, ale nie można wyrzucić tego użytkownika.
+	</notification>
+	<notification name="RegionSezNotAHome">
+		Ten region nie pozwala Ci na ustawienie miejsca startu w tej lokalizacji.
+	</notification>
+	<notification name="HomeLocationLimits">
+		Możesz ustawić 'miejsce startu' tylko na swojej własnej ziemi lub obok Infohuba na Mainlandzie.
+	</notification>
+	<notification name="HomePositionSet">
+		Ustawiono miejsce startu.
+	</notification>
+	<notification name="AvatarEjected">
+		Awatar wyrzucony.
+	</notification>
+	<notification name="AvatarEjectFailed">
+		Wyrzucenie nie powiodło się, ponieważ nie masz uprawnień administratora na tej działce.
+	</notification>
+	<notification name="CantMoveObjectParcelFull">
+		Nie można przesunąć obiektu '[OBJECT_NAME]' do
+[OBJ_POSITION] w regionie [REGION_NAME], ponieważ działka jest zbyt pełna.
+	</notification>
+	<notification name="CantMoveObjectParcelPerms">
+		Nie można przesunąć obiektu '[OBJECT_NAME]' do
+[OBJ_POSITION] w regionie [REGION_NAME], ponieważ Twoje obiekty nie są dozwolone na tej działce.
+	</notification>
+	<notification name="CantMoveObjectParcelResources">
+		Nie można przesunąć obiektu '[OBJECT_NAME]' do
+[OBJ_POSITION] w regionie [REGION_NAME], ponieważ nie ma wystarczającej ilości zasobów na tej działce.
+	</notification>
+	<notification name="CantMoveObjectRegionVersion">
+		Nie można przesunąć obiektu '[OBJECT_NAME]' do
+[OBJ_POSITION] w regionie [REGION_NAME], ponieważ the region działa na starszej wersji symulatora, która nie obsługuje otrzymywania obiektów przez granice działek.
+	</notification>
+	<notification name="CantMoveObjectNavMesh">
+		Nie można przesunąć obiektu '[OBJECT_NAME]' do
+[OBJ_POSITION] w regionie [REGION_NAME], ponieważ nie możesz modyfikować Navmesha przez granice regionów.
+	</notification>
+	<notification name="CantMoveObjectWTF">
+		Nie można przesunąć obiektu '[OBJECT_NAME]' do
+[OBJ_POSITION] w regionie [REGION_NAME] ze względu na nieznany powód. ([FAILURE_TYPE])
+	</notification>
+	<notification name="NoPermModifyObject">
+		Nie masz uprawnień do modyfikowania tego obiektu
+	</notification>
+	<notification name="CantEnablePhysObjContributesToNav">
+		Nie można włączyć fizyki dla obiektu, który ma wpływ na Navmesh.
+	</notification>
+	<notification name="CantEnablePhysKeyframedObj">
+		Nie można włączyć fizyki dla obiektów, które używają animacji opartej o klatki kluczowe.
+	</notification>
+	<notification name="CantEnablePhysNotEnoughLandResources">
+		Nie można włączyć fizyki dla obiektu -- niewystarczające zasoby na działce.
+	</notification>
+	<notification name="CantEnablePhysCostTooGreat">
+		Nie można włączyć fizyki dla obiektu, którego łączny koszt zajmowanych zasobów fizycznych jest większy, niż [MAX_OBJECTS]
+	</notification>
+	<notification name="PhantomWithConcavePiece">
+		Ten obiekt nie może mieć części wklęsłej, ponieważ jest widmowy i ma wpływ na Navmesh.
+	</notification>
+	<notification name="UnableAddItem">
+		Nie można dodać przedmiotu!
+	</notification>
+	<notification name="UnableEditItem">
+		Nie można tego edytować!
+	</notification>
+	<notification name="NoPermToEdit">
+		Brak zezwoleń na zmianę tego.
+	</notification>
+	<notification name="NoPermToCopyInventory">
+		Brak zezwoleń na kopiowanie tego przedmiotu.
+	</notification>
+	<notification name="CantSaveItemDoesntExist">
+		Nie można zapisać do zawartości obiektu: Przedmiot już nie istnieje.
+	</notification>
+	<notification name="CantSaveItemAlreadyExists">
+		Nie można zapisać do zawartości obiektu: Przedmiot z tą nazwą już w niej istnieje.
+	</notification>
+	<notification name="CantSaveModifyAttachment">
+		Nie można zapisać do zawartości obiektu: To zmodyfikowałoby prawa dodatku.
+	</notification>
+	<notification name="TooManyScripts">
+		Za dużo skryptów.
+	</notification>
+	<notification name="UnableAddScript">
+		Nie można dodać skryptu!
+	</notification>
+	<notification name="AssetServerTimeoutObjReturn">
+		Czas odpowiedzi z serwera zasobów danych przekroczył dozwolony limit. Obiekt został zwrócony do sima.
+	</notification>
+	<notification name="RegionDisablePhysicsShapes">
+		Ten region nie ma włączonych kształtów fizycznych.
+	</notification>
+	<notification name="NoModNavmeshAcrossRegions">
+		Nie możesz modyfikować Navmeshu przez granice regionów.
+	</notification>
+	<notification name="NoSetPhysicsPropertiesOnObjectType">
+		Nie można ustawić właściwości fizycznych na tym typie obiektu.
+	</notification>
+	<notification name="NoSetRootPrimWithNoShape">
+		Nie można ustawić primy głównej bez żadnego kształtu.
+	</notification>
+	<notification name="NoRegionSupportPhysMats">
+		Ten region nie ma włączonych materiałów fizycznych.
+	</notification>
+	<notification name="OnlyRootPrimPhysMats">
+		Tylko primy główne mogą mieć dostrajane materiały fizyczne.
+	</notification>
+	<notification name="NoSupportCharacterPhysMats">
+		Ustawianie materiałów fizycznych na postaciach nie jest jeszcze wspierane.
+	</notification>
+	<notification name="InvalidPhysMatProperty">
+		Jedna lub więcej właściwości określonego materiału fizycznego jest nieprawidłowa.
+	</notification>
+	<notification name="NoPermsAlterStitchingMeshObj">
+		Nie możesz zmieniać typu zszywania obiektu meszowego.
+	</notification>
+	<notification name="NoPermsAlterShapeMeshObj">
+		Nie możesz zmieniać kształtu obiektu meszowego.
+	</notification>
+	<notification name="FullRegionCantEnter">
+		Nie możesz wejść do tego regionu, \nponieważ jest pełny.
+	</notification>
+	<notification name="LinkFailedOwnersDiffer">
+		Scalanie nie powiodło się -- właściciele są różni
+	</notification>
+	<notification name="LinkFailedNoModNavmeshAcrossRegions">
+		Scalanie nie powiodło się -- nie można modyfikować Navmeshu przez granice regionów.
+	</notification>
+	<notification name="LinkFailedNoPermToEdit">
+		Scalanie nie powiodło się, ponieważ nie masz praw modyfikacji.
+	</notification>
+	<notification name="LinkFailedTooManyPrims">
+		Scalanie nie powiodło się -- za dużo prim
+	</notification>
+	<notification name="LinkFailedCantLinkNoCopyNoTrans">
+		Scalanie nie powiodło się -- nie można scalić obiektu niekopiowalnego z nietransferowalnym
+	</notification>
+	<notification name="LinkFailedNothingLinkable">
+		Scalanie nie powiodło się -- nic nie wygląda na możliwe do scalenia.
+	</notification>
+	<notification name="LinkFailedTooManyPathfindingChars">
+		Scalanie nie powiodło się -- zbyt dużo postaci odnajdywania ścieżek
+	</notification>
+	<notification name="LinkFailedInsufficientLand">
+		Scalanie nie powiodło się -- niewystarczające zasoby ziemi
+	</notification>
+	<notification name="LinkFailedTooMuchPhysics">
+		Obiekt zużywa zbyt dużo zasobów fizycznych -- jego cechy dynamiczne zostały wyłączone.
+	</notification>
+	<notification name="TeleportedHomeByObjectOnParcel">
+		Zostałeś/aś przeniesiony/a do lokalizacji startowej przez obiekt '[OBJECT_NAME]' na działce '[PARCEL_NAME]'
+	</notification>
+	<notification name="TeleportedHomeByObject">
+		Zostałeś/aś przeniesiony/a do lokalizacji startowej przez obiekt '[OBJECT_NAME]'
+	</notification>
+	<notification name="TeleportedByAttachment">
+		Zostałeś/aś teleportowany/a przez dodatek na [ITEM_ID]
+	</notification>
+	<notification name="TeleportedByObjectOnParcel">
+		Zostałeś/aś teleportowany/a przez obiekt '[OBJECT_NAME]' na działce '[PARCEL_NAME]'
+	</notification>
+	<notification name="TeleportedByObjectOwnedBy">
+		Zostałeś/aś teleportowany/a przez obiekt '[OBJECT_NAME]' należący do [OWNER_ID]
+	</notification>
+	<notification name="TeleportedByObjectUnknownUser">
+		Zostałeś/aś teleportowany/a przez obiekt '[OBJECT_NAME]' należący do nieznanej osoby.
+	</notification>
+	<notification name="CantCreateObjectRegionFull">
+		Nie można utworzyć żądanego obiektu. Region jest pełny.
+	</notification>
+	<notification name="CantAttackMultipleObjOneSpot">
+		Nie możesz podłączyć wielu obiektów do jednego punktu.
+	</notification>
+	<notification name="CantCreateMultipleObjAtLoc">
+		Nie możesz tutaj stworzyć wielu obiektów.
+	</notification>
+	<notification name="UnableToCreateObjTimeOut">
+		Nie można utworzyć żądanego obiektu. Obiektu nie ma w bazie danych.
+	</notification>
+	<notification name="UnableToCreateObjUnknown">
+		Nie można utworzyć żądanego obiektu. Upłynął limit czasu żądania. Spróbuj jeszcze raz.
+	</notification>
+	<notification name="UnableToCreateObjMissingFromDB">
+		Nie można utworzyć żądanego obiektu. Spróbuj jeszcze raz.
+	</notification>
+	<notification name="RezFailureTookTooLong">
+		Rezzowanie nie powiodło się, żądany obiekt ładował się zbyt długo.
+	</notification>
+	<notification name="FailedToPlaceObjAtLoc">
+		Nie udało się ustawić obiektu w podanej lokalizacji. Spróbuj ponownie.
+	</notification>
+	<notification name="CantCreatePlantsOnLand">
+		Nie możesz tworzyć roślin na tej ziemi.
+	</notification>
+	<notification name="CantRestoreObjectNoWorldPos">
+		Nie można przywrócić obiektu. Nie znaleziono pozycji w świecie.
+	</notification>
+	<notification name="CantRezObjectInvalidMeshData">
+		Nie można zrezzować obiektu, ponieważ dane jego mesza są nieprawidłowe.
+	</notification>
+	<notification name="CantRezObjectTooManyScripts">
+		Nie można zrezzować obiektu, ponieważ w regionie jest już zbyt dużo skryptów.
+	</notification>
+	<notification name="CantCreateObjectNoAccess">
+		Twoje prawa dostępu nie zezwalają Ci na tworzenie tutaj obiektów.
+	</notification>
+	<notification name="CantCreateObject">
+		W tej chwili nie masz pozwolenia na tworzenie obiektów.
+	</notification>
+	<notification name="InvalidObjectParams">
+		Nieprawidłowe parametry obiektu
+	</notification>
+	<notification name="CantDuplicateObjectNoAcess">
+		Twoje uprawnienia nie pozwalają Ci na duplikowanie obiektów w tym miejscu.
+	</notification>
+	<notification name="CantChangeShape">
+		Nie masz pozwolenia na zmianę tego kształtu.
+	</notification>
+	<notification name="NoAccessToClaimObjects">
+		Twoje uprawnienia nie pozwalają Ci na żądanie obiektów w tym miejscu.
+	</notification>
+	<notification name="DeedFailedNoPermToDeedForGroup">
+		Przypisywanie obiektu na grupę nie powiodło się, ponieważ nie masz w niej na to uprawnień.
+	</notification>
+	<notification name="NoPrivsToBuyObject">
+		Twoje uprawnienia nie pozwalają Ci na kupowanie obiektów w tym miejscu.
+	</notification>
+	<notification name="CantAttachObjectAvatarSittingOnIt">
+		Nie można założyć obiektu, ponieważ siedzi na nim awatar.
+	</notification>
+	<notification name="WhyAreYouTryingToWearShrubbery">
+		Drzewa i trawa nie mogą zostać założone jako dodatki.
+	</notification>
+	<notification name="CantAttachGroupOwnedObjs">
+		Nie można zakładać obiektów, które należą do grupy.
+	</notification>
+	<notification name="CantAttachObjectsNotOwned">
+		Nie możesz zakładać obiektów, jakie nie należą do Ciebie.
+	</notification>
+	<notification name="CantAttachNavmeshObjects">
+		Nie możesz zakładać obiektów, jakie mają wpływ na Navmesh.
+	</notification>
+	<notification name="CantAttachObjectNoMovePermissions">
+		Nie można założyć obiektu, ponieważ nie masz uprawnień do poruszenia go.
+	</notification>
+	<notification name="CantAttachNotEnoughScriptResources">
+		Niewystarczające dostępne zasoby skryptowe, aby założyć obiekt!
+	</notification>
+	<notification name="CantDropItemTrialUser">
+		Nie możesz tutaj upuszczać obiektów; spróbuj w strefie Darmowej Próby.
+	</notification>
+	<notification name="CantDropMeshAttachment">
+		Nie możesz upuszczać meszowych dodatków. Odłącz do Szafy, a potem zrezzuj w świecie.
+	</notification>
+	<notification name="CantDropAttachmentNoPermission">
+		Upuszczenie dodatku nie powiodło się: nie masz uprawnień do ich upuszczania w tym miejscu.
+	</notification>
+	<notification name="CantDropAttachmentInsufficientLandResources">
+		Upuszczenie dodatku nie powiodło się: niewystarczające zasoby ziemi.
+	</notification>
+	<notification name="CantDropAttachmentInsufficientResources">
+		Upuszczenie dodatku nie powiodło się: niewystarczające dostępne zasoby.
+	</notification>
+	<notification name="CantDropObjectFullParcel">
+		Nie można tutaj upuścić obiektu. Działka jest pełna.
+	</notification>
+	<notification name="CantTouchObjectBannedFromParcel">
+		Nie można dotknąć/chwycić tego obiektu, ponieważ jesteś zbanowany/a z działki ziemi.
+	</notification>
+	<notification name="PlzNarrowDeleteParams">
+		Sprecyzuj proszę swoje parametry usuwania.
+	</notification>
+	<notification name="UnableToUploadAsset">
+		Nie można załadować zasobu danych (assetu).
+	</notification>
+	<notification name="CantTeleportCouldNotFindUser">
+		Nie można znaleźć użytkownika, aby teleportować do domu
+	</notification>
+	<notification name="GodlikeRequestFailed">
+		żądanie administracyjne nie powiodło się
+	</notification>
+	<notification name="GenericRequestFailed">
+		żądanie ogólne nie powiodło się
+	</notification>
+	<notification name="CantUploadPostcard">
+		Nie można załadować pocztówki. Spróbuj ponownie później.
+	</notification>
+	<notification name="CantFetchInventoryForGroupNotice">
+		Nie można pobrać szczegółów dołączonego przedmiotu dla ogłoszenia grupy.
+	</notification>
+	<notification name="CantSendGroupNoticeNotPermitted">
+		Nie można wysłać ogłoszenia grupy -- brak zezwoleń.
+	</notification>
+	<notification name="CantSendGroupNoticeCantConstructInventory">
+		Nie można wysłać ogłoszenia grupy -- nie można stworzyć przedmiotu.
+	</notification>
+	<notification name="CantParceInventoryInNotice">
+		Nie można zanalizować przedmiotu z ogłoszenia.
+	</notification>
+	<notification name="TerrainUploadFailed">
+		Ładowanie podłoża na serwer nie powiodło się.
+	</notification>
+	<notification name="TerrainFileWritten">
+		Plik podłoża zapisany.
+	</notification>
+	<notification name="TerrainFileWrittenStartingDownload">
+		Plik podłoża zapisany, pobieranie rozpoczęte...
+	</notification>
+	<notification name="TerrainBaked">
+		Podłoże zostało zrenderowane.
+	</notification>
+	<notification name="TenObjectsDisabledPlzRefresh">
+		Tylko pierwszych 10 zaznaczonych obiektów zostało wyłączonych. Odśwież i zaznacz więcej, jeśli potrzeba.
+	</notification>
+	<notification name="UpdateViewerBuyParcel">
+		Musisz zaktualizować swoją przeglądarkę, aby móc kupić tą działkę.
+	</notification>
+	<notification name="LandBuyAccessBlocked">
+		Nie możesz kupić tej ziemi ze względu na swoją klasyfikację wieku. Musisz potwierdzić swój wiek lub/oraz zainstalować najnowszą przeglądarkę. Udaj się proszę do Bazy Wiedzy, aby poznać więcej szczegółów na temat uzyskiwania dostępu z tą klasyfikacją wieku.
+	</notification>
+	<notification name="CantBuyParcelNotForSale">
+		Nie można kupić, ta działka nie jest na sprzedaż.
+	</notification>
+	<notification name="CantBuySalePriceOrLandAreaChanged">
+		Nie można kupić, cena sprzedaży lub obszar działki uległy zmianie.
+	</notification>
+	<notification name="CantBuyParcelNotAuthorized">
+		Nie jesteś upoważnionym kupcem dla tej działki.
+	</notification>
+	<notification name="CantBuyParcelAwaitingPurchaseAuth">
+		Nie możesz kupić tej działki, ponieważ oczekuje już ona na autoryzację zakupu.
+	</notification>
+	<notification name="CantBuildOverflowParcel">
+		Nie możesz tutaj budować obiektów, ponieważ mogłoby to przekroczyć pojemność działki.
+	</notification>
+	<notification name="SelectedMultipleOwnedLand">
+		Zaznaczona przez Ciebie ziemia ma różnych właścicieli. Zaznacz mniejszy obszar i spróbuj ponownie.
+	</notification>
+	<notification name="CantJoinTooFewLeasedParcels">
+		Zbyt mało dzierżawionych działek w zaznaczeniu do przyłączenia.
+	</notification>
+	<notification name="CantDivideLandMultipleParcelsSelected">
+		Nie można podzielić ziemi.\nZaznaczono więcej niż jedną działkę.\nSpróbuj zaznaczyć mniejszy obszar ziemi.
+	</notification>
+	<notification name="CantDivideLandCantFindParcel">
+		Nie można podzielić ziemi.\nNie można znaleźć działki.\nProsimy o zgłoszenie błędu, w menu Pomoc.
+	</notification>
+	<notification name="CantDivideLandWholeParcelSelected">
+		Nie można podzielić ziemi. Cała działka jest zaznaczona.\nSpróbuj zaznaczyć mniejszy obszar ziemi.
+	</notification>
+	<notification name="LandHasBeenDivided">
+		Ziemia została podzielona.
+	</notification>
+	<notification name="PassPurchased">
+		Kupiłeś/aś przepustkę.
+	</notification>
+	<notification name="RegionDisallowsClassifieds">
+		Region nie zezwala na ogłoszenia reklamowe.
+	</notification>
+	<notification name="LandPassExpireSoon">
+		Twoja przepustka na tej ziemi za chwilę wygaśnie.
+	</notification>
+	<notification name="CantSitNoSuitableSurface">
+		Nie znaleziono odpowiedniej powierzchni, aby usiąść. Spróbuj w innym miejscu.
+	</notification>
+	<notification name="CantSitNoRoom">
+		Nie ma gdzie tutaj usiąść, spróbuj w innym miejscu.
+	</notification>
+	<notification name="AutopilotCanceled">
+		Autopilot anulowany
+	</notification>
+	<notification name="ClaimObjectFailedNoPermission">
+		Zażądanie obiektu nie powiodło się, ponieważ nie masz uprawnień
+	</notification>
+	<notification name="ClaimObjectFailedNoMoney">
+		Zażądanie obiektu nie powiodło się, ponieważ nie masz wystarczającej ilości L$.
+	</notification>
+	<notification name="CantDeedGroupLand">
+		Nie można przypisać ziemi, której właścicielem jest grupa.
+	</notification>
+	<notification name="BuyObjectFailedNoMoney">
+		Kupowanie obiektu nie powiodło się, ponieważ nie masz wystarczającej ilości L$.
+	</notification>
+	<notification name="BuyInventoryFailedNoMoney">
+		Kupowanie przedmiotu nie powiodło się, ponieważ nie masz wystarczającej ilości L$
+	</notification>
+	<notification name="BuyPassFailedNoMoney">
+		Nie masz wystarczającej ilości L$, any kupić przepustkę na tą ziemię.
+	</notification>
+	<notification name="CantBuyPassTryAgain">
+		Nie można w tej chwili kupić przepustki. Spróbuj ponownie później.
+	</notification>
+	<notification name="CantCreateObjectParcelFull">
+		Nie można utworzyć obiektu, \n ponieważ działka jest pełna.
+	</notification>
+	<notification name="FailedPlacingObject">
+		Nie udało się umieścić obiektu w żądanej lokalizacji. Spróbuj ponownie.
+	</notification>
+	<notification name="CantCreateLandmarkForEvent">
+		Nie można utworzyć landmarka dla wydarzenia.
+	</notification>
+	<notification name="GodBeatsFreeze">
+		Twoje Boskie moce przezwyciężyły unieruchomienie!
+	</notification>
+	<notification name="SpecialPowersRequestFailedLogged">
+		Zażądanie specjalnych uprawnień nie powiodło się. To żądanie zostało zapisane w logach serwera.
+	</notification>
+	<notification name="ExpireExplanation">
+		System nie jest teraz w stanie przetworzyć Twojego żądania. Upłynął limit czasu.
+	</notification>
+	<notification name="DieExplanation">
+		System nie jest w stanie przetworzyć Twojego żądania.
+	</notification>
+	<notification name="AddPrimitiveFailure">
+		Niewystarczające fundusze do utworzenia primy.
+	</notification>
+	<notification name="RezObjectFailure">
+		Niewystarczające fundusze do utworzenia obiektu.
+	</notification>
+	<notification name="ResetHomePositionNotLegal">
+		Twoje miejsce startu zostało zresetowane, ponieważ poprzednie było nielegalne/niepoprawne.
+	</notification>
+	<notification name="CantInviteRegionFull">
+		Nie możesz nikogo w tej chwili zaprosić do Twojej lokalizacji, ponieważ region jest pełny. Spróbuj ponownie później.
+	</notification>
+	<notification name="CantSetHomeAtRegion">
+		Ten region nie pozwala Ci na ustawienie miejsca startu w tej lokalizacji.
+	</notification>
+	<notification name="ListValidHomeLocations">
+		Możesz ustawić 'miejsce startu' tylko na swojej własnej ziemi lub obok Infohuba na Mainlandzie.
+	</notification>
+	<notification name="SetHomePosition">
+		Ustawiono miejsce startu.
+	</notification>
+	<notification name="CantDerezInventoryError">
+		Nie można zderezzować obiektu ze względu na błąd przedmiotu.
+	</notification>
+	<notification name="CantCreateRequestedInv">
+		Nie można utworzyć żądanego przedmiotu.
+	</notification>
+	<notification name="CantCreateRequestedInvFolder">
+		Nie można utworzyć żądanego folderu przedmiotów.
+	</notification>
+	<notification name="CantCreateInventory">
+		Nie można utworzyć tego przedmiotu.
+	</notification>
+	<notification name="CantCreateLandmark">
+		Nie można utworzyć landmarka.
+	</notification>
+	<notification name="CantCreateOutfit">
+		Nie można utworzyć stroju w tej chwili. Spróbuj ponownie za minutę.
+	</notification>
+	<notification name="InventoryNotForSale">
+		Przedmiot nie jest na sprzedaż.
+	</notification>
+	<notification name="CantFindInvItem">
+		Nie można znaleźć przedmiotu.
+	</notification>
+	<notification name="CantFindObject">
+		Nie można znaleźć obiektu.
+	</notification>
+	<notification name="CantTransfterMoneyRegionDisabled">
+		Transfery pieniędzy do obiektów są obecnie wyłączone w tym regionie.
+	</notification>
+	<notification name="CantPayNoAgent">
+		Nie udało się ustalić, komu zapłacić.
+	</notification>
+	<notification name="CantDonateToPublicObjects">
+		Nie możesz dawać L$ publicznym obiektom.
+	</notification>
+	<notification name="InventoryCreationInWorldObjectFailed">
+		Utworzenie przedmiotu w obiekcie będącym w świecie nie powiodło się.
+	</notification>
+	<notification name="UserBalanceOrLandUsageError">
+		Błąd wewnętrzny uniemożliwił poprawną aktualizację danych przeglądarki. Stan konta L$ lub posiadane działki wyświetlane w przeglądarce mogą nie odzwierciedlać faktycznego stanu posiadania na serwerach.
+	</notification>
+	<notification name="LargePrimAgentIntersect">
+		Nie można utworzyć wielkich prim, które nachodzą na innych rezydentów. Spróbuj jeszcze raz, gdy przesuną się oni.
+	</notification>
 	<notification name="LSLColorCopiedToClipboard">
 		Ciąg koloru w formacie LSL został skopiowany do schowka. Możesz go teraz wkleić w swoim skrypcie i zacząć używać.
 		<form name="form">
@@ -3671,7 +4309,7 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 		Możesz znaleźć swoje zdjęcie [http://www.flickr.com/photos/upload/edit/?ids=[ID] tutaj].
 	</notification>
 	<notification name="FirstUseFlyOverride">
-		Uwaga: Używaj Wymuszania Latania z rozwagą! Stosowanie tej opcji bez zezwolenia właściciela posiadłości może poskutkować zbanowaniem Twojego awatara z parceli, nad którą będziesz latać.		
+		Uwaga: Używaj Wymuszania Latania z rozwagą! Stosowanie tej opcji bez zezwolenia właściciela działki może poskutkować zbanowaniem Twojego awatara z działki, nad którą będziesz latać.		
 	</notification>
 	<notification name="ServerVersionChanged">
 		Region, w którym się właśnie pojawiłeś/aś działa na innej wersji symulatora.
@@ -3679,7 +4317,7 @@ Obecny symulator: [NEWVERSION]
 Poprzedni symulator: [OLDVERSION]
 	</notification>
 	<notification name="VintageLoginInfo">
-		Czy wiesz, że możesz sprawić, aby Firestorm wyglądał jak klasyczny Phoenix Viewer? Wybierz w tym celu pozycję "Phoenix" z listy "Tryb ustawień" zaraz obok przycisku "Zaloguj".
+		Czy wiesz, że możesz sprawić, aby Firestorm wyglądał jak klasyczny Phoenix Viewer? Wybierz w tym celu pozycję "Phoenix" z listy "wybierz tryb" po prawej.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CannotSaveSnapshot">
@@ -3695,5 +4333,49 @@ Poprzedni symulator: [OLDVERSION]
 		<form name="form">
 			<ignore name="ignore" text="Ostrzeżenie o braku Havoka"/>
 		</form>
+	</notification>
+	<notification name="DumpArchetypeSuccess">
+		Pomyślnie zapisano wygląd w formacie XML do pliku [FILENAME].
+	</notification>
+	<notification name="StreamListExportSuccess">
+		Pomyślnie wyeksportowano listę strumieni w formacie XML do pliku [FILENAME].
+	</notification>
+	<notification name="StreamListImportSuccess">
+		Pomyślnie zaimportowano listę strumieni z pliku XML.
+	</notification>
+	<notification name="StreamMetadata">
+        ♫ Teraz odtwarzane:
+        [TITLE]
+        [ARTIST]♫
+	</notification>
+	<notification name="StreamMetadataNoArtist">
+        ♫ Teraz odtwarzane:
+        [TITLE]♫
+	</notification>   
+	<notification name="BackupFinished">
+		Twoje ustawienia zostały zapisane i zarchiwizowane w kopii zapasowej.
+	</notification>
+	<notification name="BackupPathEmpty">
+		Ścieżka miejsca zapisu jest pusta. Proszę najpierw podać lokalizację, w jakiej będą zapisywanie i której będą przywracane kopie zapasowe.
+	</notification>
+	<notification name="SettingsRestoreNeedsLogout">
+		Przywrócenie ustawień wymaga ponownego uruchomienia przeglądarki. Czy chcesz teraz przywrócić ustawienia i wyłączyć ją?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Przywróć i wyłącz"/>
+	</notification>
+	<notification name="BackupPathDoesNotExistOrCreateFailed">
+		Ścieżka kopii zapasowej nie może zostać znaleziona lub utworzona.
+	</notification>
+	<notification name="BackupPathDoesNotExist">
+		Ścieżka kopii zapasowej nie może zostać znaleziona.
+	</notification>
+	<notification name="RestoreFinished">
+		Przywracanie zakończone! Proszę wyłączyć i włączyć ponownie swoją przeglądarkę.
+		<usetemplate name="okbutton" yestext="Wyłącz"/>
+	</notification>
+	<notification name="ConfirmRestoreQuickPrefsDefaults">
+Kontynuowanie spowoduje, że kontrolki Szybkiego Strojenia zostaną przywrócone do domyślnego ustawienia.
+
+Nie można tego cofnąć.
+		<usetemplate ignoretext="Przywrócenie domyślnych kontrolek Szybkiego Strojenia" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 </notifications>

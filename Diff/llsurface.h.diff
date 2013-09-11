@@ -1,0 +1,14 @@
+diff --git a/Source/indra/newview/llsurface.h b/Source/indra/newview/llsurface.h
+index 6769e00..820741a 100644
+--- a/Source/indra/newview/llsurface.h
++++ b/Source/indra/newview/llsurface.h
+@@ -172,9 +172,6 @@ public:
+ 	
+ 	F32 mDetailTextureScale;	//  Number of times to repeat detail texture across this surface 
+ 
+-	static F32 sTextureUpdateTime;
+-	static S32 sTexelsUpdated;
+-
+ protected:
+ 	void createSTexture();
+ 	void createWaterTexture();

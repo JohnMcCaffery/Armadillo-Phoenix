@@ -1,0 +1,29 @@
+diff --git a/Source/indra/newview/aoengine.cpp b/Source/indra/newview/aoengine.cpp
+index e3ea608..441a347 100644
+--- a/Source/indra/newview/aoengine.cpp
++++ b/Source/indra/newview/aoengine.cpp
+@@ -19,6 +19,7 @@
+  * You should have received a copy of the GNU Lesser General Public
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
++ * $/LicenseInfo$
+  */
+ 
+ #include "llviewerprecompiledheaders.h"
+@@ -1617,14 +1618,14 @@ void AOEngine::parseNotecard(const char* buffer)
+ 			continue;
+ 		}
+ 
+-		U32 endTag=line.find("]");
+-		if(endTag==std::string::npos)
++		if(line.find("]") == std::string::npos)
+ 		{
+ 			LLSD args;
+ 			args["LINE"]=(S32) index;
+ 			LLNotificationsUtil::add("AOImportNoValidDelimiter",args);
+ 			continue;
+ 		}
++		U32 endTag = line.find("]");
+ 
+ 		std::string stateName=line.substr(1,endTag-1);
+ 		LLStringUtil::trim(stateName);

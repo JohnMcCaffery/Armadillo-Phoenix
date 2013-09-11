@@ -1,0 +1,20 @@
+diff --git a/Source/indra/newview/llfasttimerview.h b/Source/indra/newview/llfasttimerview.h
+index 06568c6..e1e435f 100644
+--- a/Source/indra/newview/llfasttimerview.h
++++ b/Source/indra/newview/llfasttimerview.h
+@@ -46,6 +46,7 @@ private:
+ 	static LLSD analyzePerformanceLogDefault(std::istream& is) ;
+ 	static void exportCharts(const std::string& base, const std::string& target);
+ 	void onPause();
++	LLFastTimer::NamedTimer& getFrameTimer();
+ 
+ public:
+ 
+@@ -90,7 +91,6 @@ private:
+ 	S32 mHoverBarIndex;
+ 	LLFrameTimer mHighlightTimer;
+ 	S32 mPrintStats;
+-	S32 mAverageCyclesPerTimer;
+ 	LLRect mGraphRect;
+ 
+ 	// <FS:LO> Making the ledgend part of fast timers scrollable

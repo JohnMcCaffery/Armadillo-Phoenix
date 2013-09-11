@@ -1,0 +1,184 @@
+diff --git a/Source/indra/newview/llgroupmgr.cpp b/Source/indra/newview/llgroupmgr.cpp
+index 54c68f7..f5516f8 100644
+--- a/Source/indra/newview/llgroupmgr.cpp
++++ b/Source/indra/newview/llgroupmgr.cpp
+@@ -68,7 +68,7 @@
+ #pragma warning(pop)   // Restore all warnings to the previous state
+ #endif
+ 
+-const U32 MAX_CACHED_GROUPS = 10;
++const U32 MAX_CACHED_GROUPS = 20;
+ 
+ //
+ // LLRoleActionSet
+@@ -239,8 +239,15 @@ LLGroupMgrGroupData::LLGroupMgrGroupData(const LLUUID& id) :
+ 	mRoleDataComplete(FALSE),
+ 	mRoleMemberDataComplete(FALSE),
+ 	mGroupPropertiesDataComplete(FALSE),
+-	mPendingRoleMemberRequest(FALSE)
++	mPendingRoleMemberRequest(FALSE),
++	mAccessTime(0.0f)
+ {
++	mMemberVersion.generate();
++}
++
++void LLGroupMgrGroupData::setAccessed()
++{
++	mAccessTime = (F32)LLFrameTimer::getTotalSeconds();
+ }
+ 
+ BOOL LLGroupMgrGroupData::getRoleData(const LLUUID& role_id, LLRoleData& role_data)
+@@ -316,14 +323,14 @@ void LLGroupMgrGroupData::setRoleData(const LLUUID& role_id, LLRoleData role_dat
+ 			role_data.mChangeType = RC_UPDATE_DATA;
+ 		}
+ 		else
+-	{
++		{
+ 			role_data.mChangeType = RC_UPDATE_POWERS;
+ 		}
+ 
+ 		mRoleChanges[role_id] = role_data;
+ 	}
+ 	else
+-		{
++	{
+ 		llwarns << "Change being made to non-existant role " << role_id << llendl;
+ 	}
+ }
+@@ -422,6 +429,7 @@ void LLGroupMgrGroupData::removeMemberData()
+ 	}
+ 	mMembers.clear();
+ 	mMemberDataComplete = FALSE;
++	mMemberVersion.generate();
+ }
+ 
+ void LLGroupMgrGroupData::removeRoleData()
+@@ -943,6 +951,8 @@ void LLGroupMgr::processGroupMembersReply(LLMessageSystem* msg, void** data)
+ 		}
+ 	}
+ 
++	group_datap->mMemberVersion.generate();
++
+ 	if (group_datap->mMembers.size() ==  (U32)group_datap->mMemberCount)
+ 	{
+ 		group_datap->mMemberDataComplete = TRUE;
+@@ -1366,7 +1376,7 @@ void LLGroupMgr::processCreateGroupReply(LLMessageSystem* msg, void ** data)
+ 
+ LLGroupMgrGroupData* LLGroupMgr::createGroupData(const LLUUID& id)
+ {
+-	LLGroupMgrGroupData* group_datap;
++	LLGroupMgrGroupData* group_datap = NULL;
+ 
+ 	group_map_t::iterator existing_group = LLGroupMgr::getInstance()->mGroups.find(id);
+ 	if (existing_group == LLGroupMgr::getInstance()->mGroups.end())
+@@ -1379,6 +1389,11 @@ LLGroupMgrGroupData* LLGroupMgr::createGroupData(const LLUUID& id)
+ 		group_datap = existing_group->second;
+ 	}
+ 
++	if (group_datap)
++	{
++		group_datap->setAccessed();
++	}
++
+ 	return group_datap;
+ }
+ 
+@@ -1419,25 +1434,41 @@ void LLGroupMgr::notifyObservers(LLGroupChange gc)
+ 
+ void LLGroupMgr::addGroup(LLGroupMgrGroupData* group_datap)
+ {
+-	if (mGroups.size() > MAX_CACHED_GROUPS)
++	while (mGroups.size() >= MAX_CACHED_GROUPS)
+ 	{
+-		// get rid of groups that aren't observed
+-		for (group_map_t::iterator gi = mGroups.begin(); gi != mGroups.end() && mGroups.size() > MAX_CACHED_GROUPS / 2; )
++		// LRU: Remove the oldest un-observed group from cache until group size is small enough
++
++		F32 oldest_access = LLFrameTimer::getTotalSeconds();
++		group_map_t::iterator oldest_gi = mGroups.end();
++
++		for (group_map_t::iterator gi = mGroups.begin(); gi != mGroups.end(); ++gi )
+ 		{
+ 			observer_multimap_t::iterator oi = mObservers.find(gi->first);
+ 			if (oi == mObservers.end())
+ 			{
+-				// not observed
+-				LLGroupMgrGroupData* unobserved_groupp = gi->second;
+-				delete unobserved_groupp;
+-				mGroups.erase(gi++);
+-			}
+-			else
+-			{
+-				++gi;
++				if (gi->second 
++						&& (gi->second->getAccessTime() < oldest_access))
++				{
++					oldest_access = gi->second->getAccessTime();
++					oldest_gi = gi;
++				}
+ 			}
+ 		}
++		
++		if (oldest_gi != mGroups.end())
++		{
++			delete oldest_gi->second;
++			mGroups.erase(oldest_gi);
++		}
++		else
++		{
++			// All groups must be currently open, none to remove.
++			// Just add the new group anyway, but get out of this loop as it 
++			// will never drop below max_cached_groups.
++			break;
++		}
+ 	}
++
+ 	mGroups[group_datap->getID()] = group_datap;
+ }
+ 
+@@ -1748,8 +1779,6 @@ void LLGroupMgr::sendGroupMemberEjects(const LLUUID& group_id,
+ 	bool start_message = true;
+ 	LLMessageSystem* msg = gMessageSystem;
+ 
+-	
+-
+ 	LLGroupMgrGroupData* group_datap = LLGroupMgr::getInstance()->getGroupData(group_id);
+ 	if (!group_datap) return;
+ 
+@@ -1831,6 +1860,8 @@ void LLGroupMgr::sendGroupMemberEjects(const LLUUID& group_id,
+ 	{
+ 		gAgent.sendReliableMessage();
+ 	}
++
++	group_datap->mMemberVersion.generate();
+ }
+ 
+ 
+@@ -1841,14 +1872,15 @@ public:
+ 		GroupMemberDataResponder() {}
+ 		virtual ~GroupMemberDataResponder() {}
+ 		virtual void result(const LLSD& pContent);
+-		virtual void error(U32 pStatus, const std::string& pReason);
++		virtual void errorWithContent(U32 pStatus, const std::string& pReason, const LLSD& pContent);
+ private:
+ 		LLSD mMemberData;
+ };
+ 
+-void GroupMemberDataResponder::error(U32 pStatus, const std::string& pReason)
++void GroupMemberDataResponder::errorWithContent(U32 pStatus, const std::string& pReason, const LLSD& pContent)
+ {
+-	LL_WARNS("GrpMgr") << "Error receiving group member data." << LL_ENDL;
++	LL_WARNS("GrpMgr") << "Error receiving group member data [status:" 
++		<< pStatus << "]: " << pContent << LL_ENDL;
+ }
+ 
+ void GroupMemberDataResponder::result(const LLSD& content)
+@@ -1988,6 +2020,8 @@ void LLGroupMgr::processCapGroupMembersRequest(const LLSD& content)
+ 		group_datap->mMembers[member_id] = data;
+ 	}
+ 
++	group_datap->mMemberVersion.generate();
++
+ 	// Technically, we have this data, but to prevent completely overhauling
+ 	// this entire system (it would be nice, but I don't have the time), 
+ 	// I'm going to be dumb and just call services I most likely don't need 

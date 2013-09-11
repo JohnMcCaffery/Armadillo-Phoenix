@@ -1,0 +1,11 @@
+diff --git a/Source/indra/newview/exoflickr.h b/Source/indra/newview/exoflickr.h
+index 340c4ff..e16db2d 100644
+--- a/Source/indra/newview/exoflickr.h
++++ b/Source/indra/newview/exoflickr.h
+@@ -41,4 +41,4 @@ public:
+ 	static std::string getSignatureForCall(const LLSD& parameters, std::string url, std::string method);
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif

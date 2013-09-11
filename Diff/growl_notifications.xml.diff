@@ -1,0 +1,35 @@
+diff --git a/Source/indra/newview/app_settings/growl_notifications.xml b/Source/indra/newview/app_settings/growl_notifications.xml
+index 2a0e50a..bc76462 100644
+--- a/Source/indra/newview/app_settings/growl_notifications.xml
++++ b/Source/indra/newview/app_settings/growl_notifications.xml
+@@ -98,6 +98,15 @@
+       <key>UseDefaultTextForBody</key>
+       <boolean>true</boolean>
+     </map>
++    <key>OwnObjectGiveItem</key>
++    <map>
++      <key>GrowlName</key>
++      <string>Inventory received from object</string>
++      <key>GrowlTitle</key>
++      <string>Inventory received</string>
++      <key>UseDefaultTextForBody</key>
++      <boolean>true</boolean>
++    </map>
+     <key>ObjectGiveItemUnknownUser</key>
+     <map>
+       <key>GrowlName</key>
+@@ -182,5 +191,14 @@
+       <key>GrowlBody</key>
+       <string>[MESSAGE]</string>
+     </map>
++    <key>ScriptDialog</key>
++    <map>
++      <key>GrowlName</key>
++      <string>Script dialog</string>
++      <key>GrowlTitle</key>
++      <string>[TITLE]</string>
++      <key>GrowlBody</key>
++      <string>[MESSAGE]</string>
++    </map>
+   </map>
+ </llsd>

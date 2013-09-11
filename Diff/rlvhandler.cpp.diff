@@ -1,0 +1,21 @@
+diff --git a/Source/indra/newview/rlvhandler.cpp b/Source/indra/newview/rlvhandler.cpp
+index 5366dd7..fa3cd86 100644
+--- a/Source/indra/newview/rlvhandler.cpp
++++ b/Source/indra/newview/rlvhandler.cpp
+@@ -1,5 +1,5 @@
+ /** 
+- *
++ * @file rlvhandeler.cpp
+  * Copyright (c) 2009-2011, Kitty Barnett
+  * 
+  * The source code in this file is provided to you under the terms of the 
+@@ -1611,7 +1611,8 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
+ 				{
+ 					F32 nValue = (rlvCmdOption.m_nPelvisToFoot - gAgentAvatarp->getPelvisToFoot()) * rlvCmdOption.m_nPelvisToFootDeltaMult;
+ 					nValue += rlvCmdOption.m_nPelvisToFootOffset;
+-					gSavedPerAccountSettings.setF32(RLV_SETTING_AVATAROFFSET_Z, llclamp<F32>(nValue, -1.0f, 1.0f));
++					// <FS:CR> FIRE-9759 - Temporarily remove setting AvatarZOffset
++					//gSavedPerAccountSettings.setF32(RLV_SETTING_AVATAROFFSET_Z, llclamp<F32>(nValue, -1.0f, 1.0f));
+ 				}
+ 			}
+ 			break;

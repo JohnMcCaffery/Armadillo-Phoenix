@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llmorphview.cpp b/Source/indra/newview/llmorphview.cpp
+index b6cf0ff..29a3b3a 100644
+--- a/Source/indra/newview/llmorphview.cpp
++++ b/Source/indra/newview/llmorphview.cpp
+@@ -116,8 +116,6 @@ void LLMorphView::onSpecialRenderModeLightChanged()
+ //-----------------------------------------------------------------------------
+ void	LLMorphView::shutdown()
+ {
+-	LLVOAvatarSelf::onCustomizeEnd();
+-
+ 	if (isAgentAvatarValid())
+ 	{
+ 		gAgentAvatarp->startMotion( ANIM_AGENT_BODY_NOISE );

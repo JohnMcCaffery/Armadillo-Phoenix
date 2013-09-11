@@ -1,0 +1,30 @@
+diff --git a/Source/indra/newview/llviewernetwork.h b/Source/indra/newview/llviewernetwork.h
+index f7e8e01..59f9129 100644
+--- a/Source/indra/newview/llviewernetwork.h
++++ b/Source/indra/newview/llviewernetwork.h
+@@ -32,7 +32,7 @@
+ #define SECOND_LIFE_BETA_LABEL "Second Life Beta"
+ 
+ // <FS:AW optional opensim support>
+-#ifdef HAS_OPENSIM_SUPPORT
++#ifdef OPENSIM
+ #include "fsgridhandler.h"
+ #else
+ // </FS:AW optional opensim support>
+@@ -203,6 +203,7 @@ class LLGridManager : public LLSingleton<LLGridManager>
+ 
+ 	/// Is the selected grid a Second Life beta grid?
+ 	bool isInSLBeta() { return (isSystemGrid() && !isInProductionGrid()); }
++	bool isInSecondLife() { return (isInSLMain() || isInSLBeta()); }	// <FS:CR>
+   private:
+ //</FS:AW compatibility with opensim api>
+ 	/// Is the selected grid a production grid?
+@@ -237,7 +238,7 @@ class LLGridManager : public LLSingleton<LLGridManager>
+ 	bool mIsInProductionGrid;
+ };
+ 
+-#endif//HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
++#endif // OPENSIM // <FS:AW optional opensim support>
+ 
+ const S32 MAC_ADDRESS_BYTES = 6;
+ 

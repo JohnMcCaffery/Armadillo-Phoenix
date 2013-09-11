@@ -1,0 +1,67 @@
+diff --git a/Source/indra/newview/llcallbacklist.cpp b/Source/indra/newview/llcallbacklist.cpp
+index 357a658..79ec43d 100644
+--- a/Source/indra/newview/llcallbacklist.cpp
++++ b/Source/indra/newview/llcallbacklist.cpp
+@@ -27,6 +27,7 @@
+ #include "llviewerprecompiledheaders.h"
+ 
+ #include "llcallbacklist.h"
++#include "lleventtimer.h"
+ 
+ // Library includes
+ #include "llerror.h"
+@@ -180,6 +181,54 @@ void doOnIdleRepeating(bool_func_t callable)
+ 	gIdleCallbacks.addFunction(&OnIdleCallbackRepeating::onIdle,cb_functor);
+ }
+ 
++class NullaryFuncEventTimer: public LLEventTimer
++{
++public:
++	NullaryFuncEventTimer(nullary_func_t callable, F32 seconds):
++		LLEventTimer(seconds),
++		mCallable(callable)
++	{
++	}
++
++private:
++	BOOL tick()
++	{
++		mCallable();
++		return TRUE;
++	}
++
++	nullary_func_t mCallable;
++};
++
++// Call a given callable once after specified interval.
++void doAfterInterval(nullary_func_t callable, F32 seconds)
++{
++	new NullaryFuncEventTimer(callable, seconds);
++}
++
++class BoolFuncEventTimer: public LLEventTimer
++{
++public:
++	BoolFuncEventTimer(bool_func_t callable, F32 seconds):
++		LLEventTimer(seconds),
++		mCallable(callable)
++	{
++	}
++private:
++	BOOL tick()
++	{
++		return mCallable();
++	}
++
++	bool_func_t mCallable;
++};
++
++// Call a given callable every specified number of seconds, until it returns true.
++void doPeriodically(bool_func_t callable, F32 seconds)
++{
++	new BoolFuncEventTimer(callable, seconds);
++}
++
+ #ifdef _DEBUG
+ 
+ void test1(void *data)

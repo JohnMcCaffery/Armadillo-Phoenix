@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llpreviewgesture.cpp b/Source/indra/newview/llpreviewgesture.cpp
+index 7e7f1c7..2bfaca0 100644
+--- a/Source/indra/newview/llpreviewgesture.cpp
++++ b/Source/indra/newview/llpreviewgesture.cpp
+@@ -503,7 +503,7 @@ void LLPreviewGesture::addKeys()
+ 	combo->add( NONE_LABEL );
+ 	for (KEY key = ' '; key < KEY_NONE; key++)
+ 	{
+-		char buffer[] = {key, '\0'};
++		char buffer[] = {(char)key, '\0'}; // <FS:ND/> Added (char) for proper array initialization
+ 		std::string str_org(buffer);
+ 		std::string str_translated = LLKeyboard::stringFromKey(key);
+ 

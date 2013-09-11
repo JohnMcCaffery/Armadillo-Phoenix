@@ -1,0 +1,57 @@
+diff --git a/Source/indra/newview/fscommon.h b/Source/indra/newview/fscommon.h
+index 1e054c7..93e2e65 100644
+--- a/Source/indra/newview/fscommon.h
++++ b/Source/indra/newview/fscommon.h
+@@ -19,16 +19,27 @@
+  * You should have received a copy of the GNU Lesser General Public
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
++ * 
++ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * http://www.firestormviewer.org
++ * $/LicenseInfo$
+  */
+ 
+-#ifndef FS_FSCOMMON_H
+-#define FS_FSCOMMON_H
++#ifndef FS_COMMON_H
++#define FS_COMMON_H
+ 
+ #include "llchat.h"
++#include "llpanelpeople.h"
++#include "llviewerobject.h"
++
++const F32 AVATAR_UNKNOWN_Z_OFFSET = -1.f; // Const value for avatars at unknown height
++const F32 AVATAR_UNKNOWN_RANGE = -1.f;
+ 
+ void reportToNearbyChat(const std::string& message);
+ std::string applyAutoCloseOoc(const std::string& message);
+ std::string applyMuPose(const std::string& message);
++std::string formatString(std::string text, const LLStringUtil::format_map_t& args);
++LLPanelPeople* getPeoplePanel();
+ 
+ namespace FSCommon
+ {
+@@ -47,6 +58,21 @@ namespace FSCommon
+ 	* @return Number of seconds since 01/01/1970 UTC.
+ 	*/
+ 	S32 secondsSinceEpochFromString(const std::string& format, const std::string& str);
++	
++	// apply default build preferences to the object
++	void applyDefaultBuildPreferences(LLViewerObject* object);
++
++	bool isLinden(const LLUUID& av_id);
++	
++	/**
++	 * HACK
++	 * 
++	 * This is used to work around a LL design flaw of the similular returning the same object update packet
++	 * for _PREHASH_ObjectAdd, _PREHASH_RezObject, and _PREHASH_RezObjectFromNotecard.
++	 * 
++	 * keep track of ObjectAdd messages sent to the similular.
++	 */
++	extern S32 sObjectAddMsg;
+ };
+ 
+-#endif // FS_FSCOMMON_H
++#endif // FS_COMMON_H

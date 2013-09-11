@@ -48,6 +48,7 @@ if [ "`uname -m`" = "x86_64" ]; then
     echo '64-bit Linux detected.'
 fi
 
+
 ## Everything below this line is just for advanced troubleshooters.
 ##-------------------------------------------------------------------
 
@@ -63,7 +64,15 @@ fi
 export SDL_VIDEO_X11_DGAMOUSE=0
 
 ## - Works around a problem with misconfigured 64-bit systems not finding GL
-export LIBGL_DRIVERS_PATH="${LIBGL_DRIVERS_PATH}":/usr/lib64/dri:/usr/lib32/dri:/usr/lib/dri
+I386_MULTIARCH="$(dpkg-architecture -ai386 -qDEB_HOST_MULTIARCH 2>/dev/null)"
+MULTIARCH_ERR=$?
+if [ $MULTIARCH_ERR -eq 0 ]; then
+    echo 'Multi-arch support detected.'
+    MULTIARCH_GL_DRIVERS="/usr/lib/${I386_MULTIARCH}/dri"
+    export LIBGL_DRIVERS_PATH="${LIBGL_DRIVERS_PATH}:${MULTIARCH_GL_DRIVERS}:/usr/lib64/dri:/usr/lib32/dri:/usr/lib/dri"
+else
+    export LIBGL_DRIVERS_PATH="${LIBGL_DRIVERS_PATH}:/usr/lib64/dri:/usr/lib32/dri:/usr/lib/dri"
+fi
 
 ## - The 'scim' GTK IM module widely crashes the viewer.  Avoid it.
 if [ "$GTK_IM_MODULE" = "scim" ]; then
@@ -119,7 +128,7 @@ export LD_LIBRARY_PATH="$PWD/lib:${LD_LIBRARY_PATH}"
 # AO: experimentally removing to allow --settings on the command line w/o error. FIRE-1031
 #export SL_OPT="`cat etc/gridargs.dat` $@"
 
-# <ND> [blerg] set LD_PRELOAD so plugins will pick up the correct sll libs, otherwise they will pick up the system versions.
+# <FS:ND> [blerg] set LD_PRELOAD so plugins will pick up the correct sll libs, otherwise they will pick up the system versions.
 LLCRYPTO="`pwd`/lib/libcrypto.so.1.0.0"
 LLSSL="`pwd`/lib/libssl.so.1.0.0"
 if [ -f ${LLCRYPTO} ]
@@ -130,7 +139,7 @@ if [ -f ${LLSSL} ]
 then
 	export LD_PRELOAD="${LD_PRELOAD}:${LLSSL}"
 fi
-# <ND> End of hack; God will kill a kitten for this :(
+# <FS:ND> End of hack; God will kill a kitten for this :(
 
 
 # Have to deal specially with gridargs.dat; typical contents look like:
@@ -138,18 +147,32 @@ fi
 # Simply embedding $(<etc/gridargs.dat) into a command line treats each of
 # Second, Life and Developer as separate args -- no good. We need bash to
 # process quotes using eval.
-# First read it without scanning, then scan that string. Break quoted words
+# First, check if we have been instructed to skip reading in gridargs.dat:
+skip_gridargs=false
+argnum=0
+for ARG in "$@"; do
+    if [ "--skip-gridargs" == "$ARG" ]; then
+        skip_gridargs=true
+    else
+        ARGS[$argnum]="$ARG"
+        argnum=$(($argnum+1))
+    fi
+done
+
+# Second, read it without scanning, then scan that string. Break quoted words
 # into a bash array. Note that if gridargs.dat is empty, or contains only
 # whitespace, the resulting gridargs array will be empty -- zero entries --
 # therefore "${gridargs[@]}" entirely vanishes from the command line below,
 # just as we want.
-eval gridargs=("$(<etc/gridargs.dat)")
+if ! $skip_gridargs ; then
+    eval gridargs=("$(<etc/gridargs.dat)")
+fi
 
 # Run the program.
 # Don't quote $LL_WRAPPER because, if empty, it should simply vanish from the
 # command line. But DO quote "$@": preserve separate args as individually
 # quoted. Similar remarks about the contents of gridargs.
-$LL_WRAPPER bin/do-not-directly-run-firestorm-bin "${gridargs[@]}" "$@"
+$LL_WRAPPER bin/do-not-directly-run-firestorm-bin "${gridargs[@]}" "${ARGS[@]}"
 LL_RUN_ERR=$?
 
 # Handle any resulting errors

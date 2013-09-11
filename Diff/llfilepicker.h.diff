@@ -1,0 +1,36 @@
+diff --git a/Source/indra/newview/llfilepicker.h b/Source/indra/newview/llfilepicker.h
+index 3b0f4d3..94e37bf 100644
+--- a/Source/indra/newview/llfilepicker.h
++++ b/Source/indra/newview/llfilepicker.h
+@@ -39,8 +39,8 @@
+ #include <Carbon/Carbon.h>
+ 
+ // AssertMacros.h does bad things.
++#include "fix_macros.h"
+ #undef verify
+-#undef check
+ #undef require
+ 
+ #include <vector>
+@@ -85,7 +85,10 @@ public:
+ 		FFLOAD_MODEL = 9,
+ 		FFLOAD_COLLADA = 10,
+ 		FFLOAD_SCRIPT = 11,
+-		FFLOAD_DICTIONARY = 12
++		FFLOAD_DICTIONARY = 12,
++// <FS:CR> Export filter
++		FFLOAD_IMPORT = 13
++// </FS:CR>
+ 	};
+ 
+ 	enum ESaveFilter
+@@ -107,6 +110,9 @@ public:
+ 		FFSAVE_JPEG = 14,
+ 		FFSAVE_SCRIPT = 15,
+ 		FFSAVE_BEAM = 16,
++// <FS:CR> Export filter
++		FFSAVE_EXPORT = 17
++// </FS:CR>
+ 	};
+ 
+ 	// open the dialog. This is a modal operation

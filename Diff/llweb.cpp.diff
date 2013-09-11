@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llweb.cpp b/Source/indra/newview/llweb.cpp
+index b65b8d3..1747d4b 100644
+--- a/Source/indra/newview/llweb.cpp
++++ b/Source/indra/newview/llweb.cpp
+@@ -219,7 +219,7 @@ std::string LLWeb::expandURLSubstitutions(const std::string &url,
+ 	}
+ 	substitution["PARCEL_ID"] = llformat("%d", parcel_id);
+ 
+-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
++#ifdef OPENSIM // <FS:AW optional opensim support>
+ 	substitution["SLURL_TYPE"] = "hop"; // <FS:AW  provide SLURL_TYPE url substitution>
+ #endif // </FS:AW optional opensim support>
+ 

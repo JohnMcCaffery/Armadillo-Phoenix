@@ -1,0 +1,17 @@
+diff --git a/Source/indra/newview/fskeywords.h b/Source/indra/newview/fskeywords.h
+index e35a5f3..b62b04d 100644
+--- a/Source/indra/newview/fskeywords.h
++++ b/Source/indra/newview/fskeywords.h
+@@ -1,3 +1,5 @@
++#ifndef FS_KEYWORDS_H
++#define FS_KEYWORDS_H
+ 
+ #include "llsingleton.h"
+ #include "llstring.h"
+@@ -20,3 +22,5 @@ private:
+ 	
+ 	
+ };
++
++#endif // FS_KEYWORDS_H
+\ No newline at end of file

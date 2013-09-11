@@ -1,0 +1,38 @@
+diff --git a/Source/indra/newview/llnearbychatbarlistener.h b/Source/indra/newview/llnearbychatbarlistener.h
+index 7e61f02..f9aa20f 100644
+--- a/Source/indra/newview/llnearbychatbarlistener.h
++++ b/Source/indra/newview/llnearbychatbarlistener.h
+@@ -26,6 +26,7 @@
+  * $/LicenseInfo$
+  */
+ 
++#if 0
+ 
+ #ifndef LL_LLNEARBYCHATBARLISTENER_H
+ #define LL_LLNEARBYCHATBARLISTENER_H
+@@ -33,21 +34,19 @@
+ #include "lleventapi.h"
+ 
+ class LLSD;
+-// class LLNearbyChatBar;	// <FS:Zi> Remove floating chat bar
++class LLNearbyChatBar;
+ 
+ class LLNearbyChatBarListener : public LLEventAPI
+ {
+ public:
+-	// <FS:Zi> Remove floating chat bar
+-	// LLNearbyChatBarListener(LLNearbyChatBar & chatbar);
+-	LLNearbyChatBarListener();
+-	// </FS:Zi>
++	LLNearbyChatBarListener(LLNearbyChatBar & chatbar);
+ 
+ private:
+     void sendChat(LLSD const & chat_data) const;
+ 
+-//	LLNearbyChatBar & mChatbar;
++	LLNearbyChatBar & mChatbar;
+ };
+ 
+ #endif // LL_LLNEARBYCHATBARLISTENER_H
+ 
++#endif

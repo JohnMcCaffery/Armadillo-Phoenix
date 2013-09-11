@@ -1,0 +1,15 @@
+diff --git a/Source/indra/newview/fsfloaterprofile.cpp b/Source/indra/newview/fsfloaterprofile.cpp
+index 0c3fe81..4e88b7e 100644
+--- a/Source/indra/newview/fsfloaterprofile.cpp
++++ b/Source/indra/newview/fsfloaterprofile.cpp
+@@ -20,8 +20,8 @@
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+  *
+- * The Phoenix Viewer Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+- * http://www.phoenixviewer.com
++ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * http://www.firestormviewer.org
+  * $/LicenseInfo$
+  */
+ 

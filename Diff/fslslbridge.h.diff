@@ -1,0 +1,78 @@
+diff --git a/Source/indra/newview/fslslbridge.h b/Source/indra/newview/fslslbridge.h
+index 65cd8dd..15e0a9b 100644
+--- a/Source/indra/newview/fslslbridge.h
++++ b/Source/indra/newview/fslslbridge.h
+@@ -4,7 +4,7 @@
+  *
+  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
+  * Phoenix Firestorm Viewer Source Code
+- * Copyright (C) 2011, The Phoenix Viewer Project, Inc.
++ * Copyright (C) 2011, The Phoenix Firestorm Project, Inc.
+  * 
+  * This library is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU Lesser General Public
+@@ -20,9 +20,11 @@
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+  * 
+- * The Phoenix Viewer Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * http://www.firestormviewer.org
+  * $/LicenseInfo$
+  */
++
+ #ifndef FS_LSLBRIDGE_H
+ #define FS_LSLBRIDGE_H
+ 
+@@ -40,6 +42,9 @@
+ //-TT Client LSL Bridge File
+ //
+ 
++const std::string LIB_ROCK_NAME = "Rock - medium, round";
++const std::string FS_BRIDGE_NAME = "#Firestorm LSL Bridge v";
++
+ class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Responder, public LLVOInventoryListener
+ {
+ 	static const U8 BRIDGE_POINT = 127;
+@@ -54,22 +59,22 @@ public:
+ 	~FSLSLBridge();
+ 
+ 	bool lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID);
+-	bool viewerToLSL(std::string message, FSLSLBridgeRequestResponder *responder = NULL);
++	bool viewerToLSL(std::string message, FSLSLBridgeRequestResponder* responder = NULL);
+ 
+ 	bool updateBoolSettingValue(std::string msgVal);
+ 	bool updateBoolSettingValue(std::string msgVal, bool contentVal);
+ 	
+ 	void initBridge();
+ 	void recreateBridge();
+-	void processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
+-	void processDetach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
++	void processAttach(LLViewerObject* object, const LLViewerJointAttachment* attachment);
++	void processDetach(LLViewerObject* object, const LLViewerJointAttachment* attachment);
+ 
+-	bool getBridgeCreating() {return mBridgeCreating; };
++	bool getBridgeCreating() { return mBridgeCreating; };
+ 	void setBridgeCreating(bool status) { mBridgeCreating = status; };
+ 
+ 	void setBridge(LLViewerInventoryItem* item) { mpBridge = item; };
+ 	LLViewerInventoryItem* getBridge() { return mpBridge; };
+-	bool isBridgeValid() const { return 0 != mpBridge; }
++	bool isBridgeValid() const { return NULL != mpBridge; }
+ 
+ 	void checkBridgeScriptName(std::string fileName);
+ 	std::string currentFullName() { return mCurrentFullName; }
+@@ -103,11 +108,10 @@ protected:
+ 	bool isItemAttached(LLUUID iID);
+ 	void createNewBridge();
+ 	void create_script_inner(LLViewerObject* object);
+-	bool isOldBridgeVersion(LLInventoryItem *item);
+-	void reportToNearbyChat(std::string message);
++	bool isOldBridgeVersion(LLInventoryItem* item);
+ 	void cleanUpBridgeFolder();
+ 	void cleanUpBridgeFolder(std::string nameToCleanUp);
+-	void setupBridgePrim(LLViewerObject *object);
++	void setupBridgePrim(LLViewerObject* object);
+ 	void initCreationStep();
+ 	void cleanUpBridge();
+ 	void startCreation();

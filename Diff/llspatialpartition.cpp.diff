@@ -1,0 +1,622 @@
+diff --git a/Source/indra/newview/llspatialpartition.cpp b/Source/indra/newview/llspatialpartition.cpp
+index a52963b..e84ff37 100644
+--- a/Source/indra/newview/llspatialpartition.cpp
++++ b/Source/indra/newview/llspatialpartition.cpp
+@@ -54,8 +54,10 @@
+ #include "llglslshader.h"
+ #include "llviewershadermgr.h"
+ 
++#include "nd/ndobjectpool.h" // <FS:ND/> For operator new/delete
++
+ static LLFastTimer::DeclareTimer FTM_FRUSTUM_CULL("Frustum Culling");
+-static LLFastTimer::DeclareTimer FTM_CULL_REBOUND("Cull Rebound");
++static LLFastTimer::DeclareTimer FTM_CULL_REBOUND("Cull Rebound Partition");
+ 
+ const F32 SG_OCCLUSION_FUDGE = 0.25f;
+ #define SG_DISCARD_TOLERANCE 0.01f
+@@ -70,11 +72,6 @@ const F32 SG_OCCLUSION_FUDGE = 0.25f;
+ 
+ extern bool gShiftFrame;
+ 
+-// <FS:ND> helper to extract the tree data before iterating over it
+-bool extractDrawables( const LLSpatialGroup::OctreeNode* branch, std::vector< LLPointer< LLDrawable > >& );
+-bool extractChildNodes( const LLSpatialGroup::OctreeNode* node, std::vector< const LLSpatialGroup::OctreeNode* >& );
+-// </FS:ND>
+-
+ static U32 sZombieGroups = 0;
+ U32 LLSpatialGroup::sNodeCount = 0;
+ 
+@@ -381,7 +378,6 @@ LLSpatialGroup::~LLSpatialGroup()
+ 		}
+ 	}
+ 
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	clearDrawMap();
+ 	clearAtlasList() ;
+ }
+@@ -620,8 +616,6 @@ void LLSpatialGroup::validateDrawMap()
+ 
+ BOOL LLSpatialGroup::updateInGroup(LLDrawable *drawablep, BOOL immediate)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+-		
+ 	drawablep->updateSpatialExtents();
+ 
+ 	OctreeNode* parent = mOctreeNode->getOctParent();
+@@ -643,7 +637,6 @@ BOOL LLSpatialGroup::updateInGroup(LLDrawable *drawablep, BOOL immediate)
+ 
+ BOOL LLSpatialGroup::addObject(LLDrawable *drawablep, BOOL add_all, BOOL from_octree)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	if (!from_octree)
+ 	{
+ 		mOctreeNode->insert(drawablep);
+@@ -669,7 +662,6 @@ BOOL LLSpatialGroup::addObject(LLDrawable *drawablep, BOOL add_all, BOOL from_oc
+ 
+ void LLSpatialGroup::rebuildGeom()
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	if (!isDead())
+ 	{
+ 		mSpatialPartition->rebuildGeom(this);
+@@ -881,7 +873,6 @@ LLSpatialGroup* LLSpatialGroup::getParent()
+ 
+ BOOL LLSpatialGroup::removeObject(LLDrawable *drawablep, BOOL from_octree)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	unbound();
+ 	if (mOctreeNode && !from_octree)
+ 	{
+@@ -918,7 +909,6 @@ BOOL LLSpatialGroup::removeObject(LLDrawable *drawablep, BOOL from_octree)
+ 
+ void LLSpatialGroup::shift(const LLVector4a &offset)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	LLVector4a t = mOctreeNode->getCenter();
+ 	t.add(offset);	
+ 	mOctreeNode->setCenter(t);
+@@ -973,8 +963,6 @@ void LLSpatialGroup::setState(U32 state)
+ 
+ void LLSpatialGroup::setState(U32 state, S32 mode) 
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+-
+ 	llassert(state <= LLSpatialGroup::STATE_MASK);
+ 	
+ 	if (mode > STATE_MODE_SINGLE)
+@@ -1031,8 +1019,6 @@ void LLSpatialGroup::clearState(U32 state, S32 mode)
+ {
+ 	llassert(state <= LLSpatialGroup::STATE_MASK);
+ 
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+-	
+ 	if (mode > STATE_MODE_SINGLE)
+ 	{
+ 		if (mode == STATE_MODE_DIFF)
+@@ -1089,8 +1075,6 @@ public:
+ 
+ void LLSpatialGroup::setOcclusionState(U32 state, S32 mode) 
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+-	
+ 	if (mode > STATE_MODE_SINGLE)
+ 	{
+ 		if (mode == STATE_MODE_DIFF)
+@@ -1155,8 +1139,6 @@ public:
+ 
+ void LLSpatialGroup::clearOcclusionState(U32 state, S32 mode)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+-	
+ 	if (mode > STATE_MODE_SINGLE)
+ 	{
+ 		if (mode == STATE_MODE_DIFF)
+@@ -1208,7 +1190,6 @@ LLSpatialGroup::LLSpatialGroup(OctreeNode* node, LLSpatialPartition* part) :
+ 	ll_assert_aligned(this,16);
+ 	
+ 	sNodeCount++;
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 
+ 	mViewAngle.splat(0.f);
+ 	mLastUpdateViewAngle.splat(-1.f);
+@@ -1394,7 +1375,6 @@ BOOL LLSpatialGroup::changeLOD()
+ 
+ void LLSpatialGroup::handleInsertion(const TreeNode* node, LLDrawable* drawablep)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	addObject(drawablep, FALSE, TRUE);
+ 	unbound();
+ 	setState(OBJECT_DIRTY);
+@@ -1402,14 +1382,12 @@ void LLSpatialGroup::handleInsertion(const TreeNode* node, LLDrawable* drawablep
+ 
+ void LLSpatialGroup::handleRemoval(const TreeNode* node, LLDrawable* drawable)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	removeObject(drawable, TRUE);
+ 	setState(OBJECT_DIRTY);
+ }
+ 
+ void LLSpatialGroup::handleDestruction(const TreeNode* node)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	setState(DEAD);
+ 	
+ 	for (element_iter i = getDataBegin(); i != getDataEnd(); ++i)
+@@ -1451,7 +1429,6 @@ void LLSpatialGroup::handleStateChange(const TreeNode* node)
+ 
+ void LLSpatialGroup::handleChildAddition(const OctreeNode* parent, OctreeNode* child) 
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	if (child->getListenerCount() == 0)
+ 	{
+ 		new LLSpatialGroup(child, mSpatialPartition);
+@@ -1797,7 +1774,6 @@ void LLSpatialGroup::doOcclusion(LLCamera* camera)
+ LLSpatialPartition::LLSpatialPartition(U32 data_mask, BOOL render_by_group, U32 buffer_usage)
+ : mRenderByGroup(render_by_group), mBridge(NULL)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	mOcclusionEnabled = TRUE;
+ 	mDrawableType = 0;
+ 	mPartitionType = LLViewerRegion::PARTITION_NONE;
+@@ -1821,8 +1797,6 @@ LLSpatialPartition::LLSpatialPartition(U32 data_mask, BOOL render_by_group, U32
+ 
+ LLSpatialPartition::~LLSpatialPartition()
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+-	
+ 	delete mOctree;
+ 	mOctree = NULL;
+ }
+@@ -1830,8 +1804,6 @@ LLSpatialPartition::~LLSpatialPartition()
+ 
+ LLSpatialGroup *LLSpatialPartition::put(LLDrawable *drawablep, BOOL was_visible)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+-		
+ 	drawablep->updateSpatialExtents();
+ 
+ 	//keep drawable from being garbage collected
+@@ -1853,8 +1825,6 @@ LLSpatialGroup *LLSpatialPartition::put(LLDrawable *drawablep, BOOL was_visible)
+ 
+ BOOL LLSpatialPartition::remove(LLDrawable *drawablep, LLSpatialGroup *curp)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+-	
+ 	if (!curp->removeObject(drawablep))
+ 	{
+ 		OCT_ERRS << "Failed to remove drawable from octree!" << llendl;
+@@ -1873,8 +1843,6 @@ BOOL LLSpatialPartition::remove(LLDrawable *drawablep, LLSpatialGroup *curp)
+ 
+ void LLSpatialPartition::move(LLDrawable *drawablep, LLSpatialGroup *curp, BOOL immediate)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+-		
+ 	// sanity check submitted by open source user bushing Spatula
+ 	// who was seeing crashing here. (See VWR-424 reported by Bunny Mayne)
+ 	if (!drawablep)
+@@ -1931,7 +1899,6 @@ public:
+ 
+ void LLSpatialPartition::shift(const LLVector4a &offset)
+ { //shift octree node bounding boxes by offset
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	LLSpatialShift shifter(offset);
+ 	shifter.traverse(mOctree);
+ }
+@@ -2345,7 +2312,6 @@ public:
+ 
+ void LLSpatialPartition::restoreGL()
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ }
+ 
+ void LLSpatialPartition::resetVertexBuffers()
+@@ -2388,7 +2354,6 @@ BOOL LLSpatialPartition::visibleObjectsInFrustum(LLCamera& camera)
+ 
+ S32 LLSpatialPartition::cull(LLCamera &camera, std::vector<LLDrawable *>* results, BOOL for_select)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ #if LL_OCTREE_PARANOIA_CHECK
+ 	((LLSpatialGroup*)mOctree->getListener(0))->checkStates();
+ #endif
+@@ -3505,6 +3470,8 @@ void renderPhysicsShapes(LLSpatialGroup* group)
+ 			LLViewerObject* object = drawable->getVObj();
+ 			if (object && object->getPCode() == LLViewerObject::LL_VO_SURFACE_PATCH)
+ 			{
++				gGL.pushMatrix();
++				gGL.multMatrix((F32*) object->getRegion()->mRenderMatrix.mMatrix);
+ 				//push face vertices for terrain
+ 				for (S32 i = 0; i < drawable->getNumFaces(); ++i)
+ 				{
+@@ -3526,6 +3493,7 @@ void renderPhysicsShapes(LLSpatialGroup* group)
+ 						}
+ 					}
+ 				}
++				gGL.popMatrix();
+ 			}
+ 		}
+ 	}
+@@ -3578,9 +3546,9 @@ void renderTexturePriority(LLDrawable* drawable)
+ 		drawBox(center, size);
+ 		
+ 		/*S32 boost = imagep->getBoostLevel();
+-		if (boost>LLViewerTexture::BOOST_NONE)
++		if (boost>LLGLTexture::BOOST_NONE)
+ 		{
+-			F32 t = (F32) boost / (F32) (LLViewerTexture::BOOST_MAX_LEVEL-1);
++			F32 t = (F32) boost / (F32) (LLGLTexture::BOOST_MAX_LEVEL-1);
+ 			LLVector4 col = lerp(boost_cold, boost_hot, t);
+ 			LLGLEnable blend_on(GL_BLEND);
+ 			gGL.blendFunc(GL_SRC_ALPHA, GL_ONE);
+@@ -4032,7 +4000,7 @@ void renderAgentTarget(LLVOAvatar* avatar)
+ 	{
+ 		renderCrossHairs(avatar->getPositionAgent(), 0.2f, LLColor4(1, 0, 0, 0.8f));
+ 		renderCrossHairs(avatar->mDrawable->getPositionAgent(), 0.2f, LLColor4(1, 0, 0, 0.8f));
+-		renderCrossHairs(avatar->mRoot.getWorldPosition(), 0.2f, LLColor4(1, 1, 1, 0.8f));
++		renderCrossHairs(avatar->mRoot->getWorldPosition(), 0.2f, LLColor4(1, 1, 1, 0.8f));
+ 		renderCrossHairs(avatar->mPelvisp->getWorldPosition(), 0.2f, LLColor4(0, 0, 1, 0.8f));
+ 	}
+ }
+@@ -4096,9 +4064,6 @@ public:
+ 			return;
+ 		}
+ 
+-		LLVector4a nodeCenter = group->mBounds[0];
+-		LLVector4a octCenter = group->mOctreeNode->getCenter();
+-
+ 		group->rebuildGeom();
+ 		group->rebuildMesh();
+ 
+@@ -4443,8 +4408,6 @@ void LLSpatialPartition::renderDebug()
+ 		sCurMaxTexPriority = 0.f;
+ 	}
+ 
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+-	
+ 	LLGLDisable cullface(GL_CULL_FACE);
+ 	LLGLEnable blend(GL_BLEND);
+ 	gGL.setSceneBlendType(LLRender::BT_ALPHA);
+@@ -4496,6 +4459,88 @@ BOOL LLSpatialPartition::isVisible(const LLVector3& v)
+ 	return TRUE;
+ }
+ 
++// <FS:ND> Class to watch for any octree changes while iterating. Will catch child insertion/removal as well as data insertion/removal.
++// Template so it can be used for than LLOctreeNode< LLDrawable > if needed
++
++template< typename T > class ndOctreeListener: public LLOctreeListener< T >
++{
++	typedef LLOctreeNode< T > tNode;
++	typedef std::vector< LLPointer< LLTreeListener< T > > > tListener;
++
++	tNode *mNode;
++	bool mNodeIsDead;
++	bool mNodeChildrenChanged;
++	bool mNodeDataChanged;
++
++	virtual void handleInsertion(const LLTreeNode<T>* node, T* data)
++	{ mNodeDataChanged = true; }
++	
++	virtual void handleRemoval(const LLTreeNode<T>* node, T* data)
++	{ mNodeDataChanged = true; }
++
++	virtual void handleDestruction(const LLTreeNode<T>* node)
++	{ mNodeIsDead = true; }
++
++	virtual void handleStateChange(const LLTreeNode<T>* node)
++	{ }
++
++	virtual void handleChildAddition(const tNode* parent, tNode* child)
++	{ mNodeChildrenChanged = true; }
++
++	virtual void handleChildRemoval(const tNode* parent, const tNode* child)
++	{ mNodeChildrenChanged = true; }
++
++public:
++	ndOctreeListener( LLSpatialGroup::OctreeNode *aNode )
++		: mNode( aNode )
++		, mNodeIsDead( false )
++		, mNodeChildrenChanged( false )
++		, mNodeDataChanged( false )
++	{
++		if( mNode )
++			mNode->addListener( this );
++		else
++			mNodeIsDead = true;
++	}
++
++	~ndOctreeListener()
++	{ removeObserver();	}
++
++	bool getNodeIsDead() const
++	{ return mNodeIsDead; }
++
++	bool getNodeChildrenChanged() const
++	{ return mNodeChildrenChanged; }
++
++	bool getNodeDataChanged() const
++	{ return mNodeDataChanged; }
++
++	// FS:ND This is kind of hackery, poking into the internals of mNode like that. But there's no removeListener function.
++	// To keep change locality for merges I decided to put the implemention here.
++	// This is what you get for making your member public/protected.
++	void removeObserver()
++	{
++		if( mNode && !getNodeIsDead() )
++		{
++			for( typename tListener::iterator itr = mNode->mListeners.begin(); itr != mNode->mListeners.end(); ++itr )
++			{
++				if( (*itr).get() == this )
++				{
++					mNode->mListeners.erase( itr );
++					break;
++				}
++			}
++		}
++		mNode = 0;
++		mNodeIsDead = true;
++	}
++};
++
++typedef ndOctreeListener< LLDrawable > ndDrawableOctreeListener;
++typedef LLPointer< ndDrawableOctreeListener > ndDrawableOctreeListenerPtr;
++
++// </FS:ND>
++
+ class LLOctreeIntersect : public LLSpatialGroup::OctreeTraveler
+ {
+ public:
+@@ -4508,9 +4553,16 @@ public:
+ 	LLVector3 *mBinormal;
+ 	LLDrawable* mHit;
+ 	BOOL mPickTransparent;
+-
+-	LLOctreeIntersect(LLVector3 start, LLVector3 end, BOOL pick_transparent,
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++	BOOL mPickRigged;
++// [/SL:KB]
++
++//	LLOctreeIntersect(LLVector3 start, LLVector3 end, BOOL pick_transparent,
++//					  S32* face_hit, LLVector3* intersection, LLVector2* tex_coord, LLVector3* normal, LLVector3* binormal)
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++	LLOctreeIntersect(LLVector3 start, LLVector3 end, BOOL pick_transparent, BOOL pick_rigged,
+ 					  S32* face_hit, LLVector3* intersection, LLVector2* tex_coord, LLVector3* normal, LLVector3* binormal)
++// [/SL:KB]
+ 		: mStart(start),
+ 		  mEnd(end),
+ 		  mFaceHit(face_hit),
+@@ -4519,53 +4571,61 @@ public:
+ 		  mNormal(normal),
+ 		  mBinormal(binormal),
+ 		  mHit(NULL),
+-		  mPickTransparent(pick_transparent)
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++		  mPickTransparent(pick_transparent),
++		  mPickRigged(pick_rigged)
++// [/SL:KB]
++//		  mPickTransparent(pick_transparent)
+ 	{
+ 	}
+ 	
+ 	virtual void visit(const LLSpatialGroup::OctreeNode* branch) 
+ 	{	
+-		// <FS:ND> Tree can change while we are visiting, make sure to restart iteration if the tree changes
++		// <FS:ND> Make sure we catch any changes to this node while we iterate over it
++		ndDrawableOctreeListenerPtr nodeObserver = new ndDrawableOctreeListener ( const_cast<LLSpatialGroup::OctreeNode*>(branch) );
+ 
+ 		// for (LLSpatialGroup::OctreeNode::const_element_iter i = branch->getDataBegin(); i != branch->getDataEnd(); ++i)
+-		// {
+-		// 	check(*i);
+-		// }
+-
+-		std::vector< LLPointer< LLDrawable > > vTree;
+-		extractDrawables( branch, vTree );
+-
+-		for( std::vector< LLPointer< LLDrawable > >::iterator itr = vTree.begin(); vTree.end() != itr; )
++		for (LLSpatialGroup::OctreeNode::const_element_iter i = branch->getDataBegin(); i != branch->getDataEnd(); )
++		// </FS:ND>
+ 		{
+-			check( *itr );
++		 	check(*i);
+ 
+-			if( !extractDrawables( branch, vTree ) )
+-				++itr;
++			// <FS:ND> Check for any change that happened during check, it is possible the tree changes due to calling it.
++			// If it does, we need to restart again as pointers might be invalidated.
++
++			if( !nodeObserver->getNodeDataChanged() )
++				++i;
+ 			else
+-				itr = vTree.begin();
++			{
++				i = branch->getDataBegin();
++				llwarns << "Warning, resetting data iterator to branch->getDataBegin due to tree change." << llendl;
++			}
++
++			// FS:ND Can this really happen? I seriously hope not.
++			if( nodeObserver->getNodeIsDead() )
++			{
++				llwarns << "Warning, node died. Exiting iteration" << llendl;
++				break;
++			}
++
++			// </FS:ND>
+ 		}
+ 
+-		// </FS:ND>
++		nodeObserver->removeObserver();
+ 	}
+ 
+ 	virtual LLDrawable* check(const LLSpatialGroup::OctreeNode* node)
+ 	{
+ 		node->accept(this);
+-	
+-		// <FS:ND> Tree can change while we are visiting, make sure to restart iteration if the tree changes
+-		std::vector< const LLSpatialGroup::OctreeNode* > vTree;
+-		extractChildNodes( node, vTree );
++
++		// <FS:ND> Make sure we catch any changes to this node while we iterate over it
++		ndDrawableOctreeListenerPtr nodeObserver = new ndDrawableOctreeListener ( const_cast<LLSpatialGroup::OctreeNode*>(node) );
+ 
+ 		// for (U32 i = 0; i < node->getChildCount(); i++)
+-		for (U32 i = 0; i < vTree.size(); )
+-		 // </FS:ND>
++		for (U32 i = 0; i < node->getChildCount(); )
++		// </FS:ND>
+ 		{
+-			// <FS:ND> Tree can change while we are visiting, make sure to restart iteration if the tree changes
+-
+-			// const LLSpatialGroup::OctreeNode* child = node->getChild(i);
+-			const LLSpatialGroup::OctreeNode* child = vTree[i];
+-			
+-			// </FS:ND>
++			const LLSpatialGroup::OctreeNode* child = node->getChild(i);
+ 
+ 			LLVector3 res;
+ 
+@@ -4598,24 +4658,34 @@ public:
+ 				check(child);
+ 			}
+ 
+-			// <FS:ND> Tree can change while we are visiting, make sure to restart iteration if the tree changes
++			// <FS:ND> Check for any change that happened during check, it is possible the tree changes due to calling it.
++			// If it does, do we need to restart again as pointers might be invalidated? Child insertion/removal happens it seems, but restarting
++			// iteration leads into endless recursion.
+ 
+-			if( !extractChildNodes( node, vTree ) )
++			if( !nodeObserver->getNodeChildrenChanged() )
+ 				++i;
+ 			else
+-				i = 0;
++			{
++				++i;
++			 	llwarns << "Warning, child nodes changed during tree iteration." << llendl;
++			}
++
++			// FS:ND Can this really happen? I seriously hope not.
++			if( nodeObserver->getNodeIsDead() )
++			{
++				llwarns << "Warning, node died. Exiting iteration" << llendl;
++				break;
++			}
+ 
+ 			// </FS:ND>
+ 		}	
+ 
++		nodeObserver->removeObserver();
+ 		return mHit;
+ 	}
+ 
+ 	virtual bool check(LLDrawable* drawable)
+-	{	
+-		LLVector3 local_start = mStart;
+-		LLVector3 local_end = mEnd;
+-
++	{
+ 		if (!drawable || !gPipeline.hasRenderType(drawable->getRenderType()) || !drawable->isVisible())
+ 		{
+ 			return false;
+@@ -4641,9 +4711,15 @@ public:
+ 				if (vobj->isAvatar())
+ 				{
+ 					LLVOAvatar* avatar = (LLVOAvatar*) vobj;
+-					if (avatar->isSelf() && LLFloater::isVisible(gFloaterTools))
++//					if (avatar->isSelf() && LLFloater::isVisible(gFloaterTools))
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++					if ( (mPickRigged) || ((avatar->isSelf()) && (LLFloater::isVisible(gFloaterTools))) )
++// [/SL:KB]
+ 					{
+-						LLViewerObject* hit = avatar->lineSegmentIntersectRiggedAttachments(mStart, mEnd, -1, mPickTransparent, mFaceHit, &intersection, mTexCoord, mNormal, mBinormal);
++//						LLViewerObject* hit = avatar->lineSegmentIntersectRiggedAttachments(mStart, mEnd, -1, mPickTransparent, mFaceHit, &intersection, mTexCoord, mNormal, mBinormal);
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++						LLViewerObject* hit = avatar->lineSegmentIntersectRiggedAttachments(mStart, mEnd, -1, mPickTransparent, mPickRigged, mFaceHit, &intersection, mTexCoord, mNormal, mBinormal);
++// [/SL:KB]
+ 						if (hit)
+ 						{
+ 							mEnd = intersection;
+@@ -4659,7 +4735,10 @@ public:
+ 					}
+ 				}
+ 
+-				if (!skip_check && vobj->lineSegmentIntersect(mStart, mEnd, -1, mPickTransparent, mFaceHit, &intersection, mTexCoord, mNormal, mBinormal))
++//				if (!skip_check && vobj->lineSegmentIntersect(mStart, mEnd, -1, mPickTransparent, mFaceHit, &intersection, mTexCoord, mNormal, mBinormal))
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++				if (!skip_check && vobj->lineSegmentIntersect(mStart, mEnd, -1, mPickTransparent, mPickRigged, mFaceHit, &intersection, mTexCoord, mNormal, mBinormal))
++// [/SL:KB]
+ 				{
+ 					mEnd = intersection;  // shorten ray so we only find CLOSER hits
+ 					if (mIntersection)
+@@ -4678,6 +4757,9 @@ public:
+ 
+ LLDrawable* LLSpatialPartition::lineSegmentIntersect(const LLVector3& start, const LLVector3& end,
+ 													 BOOL pick_transparent,													
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++													 BOOL pick_rigged,
++// [/SL:KB]
+ 													 S32* face_hit,                   // return the face hit
+ 													 LLVector3* intersection,         // return the intersection point
+ 													 LLVector2* tex_coord,            // return the texture coordinates of the intersection point
+@@ -4686,7 +4768,10 @@ LLDrawable* LLSpatialPartition::lineSegmentIntersect(const LLVector3& start, con
+ 	)
+ 
+ {
+-	LLOctreeIntersect intersect(start, end, pick_transparent, face_hit, intersection, tex_coord, normal, bi_normal);
++//	LLOctreeIntersect intersect(start, end, pick_transparent, face_hit, intersection, tex_coord, normal, bi_normal);
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++	LLOctreeIntersect intersect(start, end, pick_transparent, pick_rigged, face_hit, intersection, tex_coord, normal, bi_normal);
++// [/SL:KB]
+ 	LLDrawable* drawable = intersect.check(mOctree);
+ 
+ 	return drawable;
+@@ -5006,45 +5091,19 @@ void LLCullResult::assertDrawMapsEmpty()
+ 	}
+ }
+ 
+-// <FS:ND> helper to extract the tree data before iterating over it.
+-// Returns false if sequence is equal to old one and old was not empty.
++// <FS:ND> Make this non inline to use an object pool
+ 
+-bool extractDrawables( const LLSpatialGroup::OctreeNode* branch, std::vector< LLPointer< LLDrawable > > &aTree )
+-{
+-	std::vector< LLPointer< LLDrawable > > vTree;
+-	for (LLSpatialGroup::OctreeNode::const_element_iter i = branch->getDataBegin(); i != branch->getDataEnd(); ++i)
+-		vTree.push_back( *i );
++// Assume this is singlethreaded (nd::locks::NoLock) 16 byte aligned and allocate 128 objects per chunk
++nd::objectpool::ObjectPool< LLDrawInfo, nd::locks::NoLock, 16, 128 > sDrawinfoPool;
+ 
+-	if( aTree.empty() )
+-	{
+-		aTree = vTree;
+-		return true;
+-	}
+-	else if( aTree == vTree )
+-		return false;
+-
+-	LL_DEBUGS("Octree") << "Tree did change while traversing it, restarting traversal." << LL_ENDL;
+-	aTree = vTree;
+-	return true;
++void* LLDrawInfo::operator new(size_t size)
++{
++	return sDrawinfoPool.allocMemoryForObject();
+ }
+ 
+-bool extractChildNodes( const LLSpatialGroup::OctreeNode* node, std::vector< const LLSpatialGroup::OctreeNode* > &aTree )
++void LLDrawInfo::operator delete(void* ptr)
+ {
+-	std::vector< const LLSpatialGroup::OctreeNode* > vTree;
+-	for (U32 i = 0; i < node->getChildCount(); i++)
+-		vTree.push_back( node->getChild(i) );
+-
+-	if( aTree.empty() )
+-	{
+-		aTree = vTree;
+-		return true;
+-	}
+-	else if( aTree == vTree )
+-		return false;
+-
+-	LL_DEBUGS("Octree") << "Tree did change while traversing it, restarting traversal." << LL_ENDL;
+-	aTree = vTree;
+-	return true;
++	sDrawinfoPool.freeMemoryOfObject( ptr );
+ }
+ 
+ // </FS:ND>

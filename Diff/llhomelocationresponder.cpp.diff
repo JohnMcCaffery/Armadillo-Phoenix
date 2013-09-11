@@ -1,0 +1,14 @@
+diff --git a/Source/indra/newview/llhomelocationresponder.cpp b/Source/indra/newview/llhomelocationresponder.cpp
+index 4850d18..37428c4 100644
+--- a/Source/indra/newview/llhomelocationresponder.cpp
++++ b/Source/indra/newview/llhomelocationresponder.cpp
+@@ -97,7 +97,7 @@ void LLHomeLocationResponder::result( const LLSD& content )
+   }
+ }
+ 
+-void LLHomeLocationResponder::error( U32 status, const std::string& reason )
++void LLHomeLocationResponder::errorWithContent( U32 status, const std::string& reason, const LLSD& content )
+ {
+-  llinfos << "received error(" << reason  << ")" << llendl;
++	llwarns << "LLHomeLocationResponder error [status:" << status << "]: " << content << llendl;
+ }

@@ -1,0 +1,86 @@
+diff --git a/Source/indra/newview/llassetuploadresponders.cpp b/Source/indra/newview/llassetuploadresponders.cpp
+index 4a967b5..59a7f6b 100644
+--- a/Source/indra/newview/llassetuploadresponders.cpp
++++ b/Source/indra/newview/llassetuploadresponders.cpp
+@@ -48,8 +48,8 @@
+ #include "llviewercontrol.h"
+ #include "llviewerobjectlist.h"
+ #include "llviewermenufile.h"
++#include "llviewertexlayer.h"
+ #include "llviewerwindow.h"
+-#include "lltexlayer.h"
+ #include "lltrans.h"
+ //-TT Client LSL Bridge
+ #include "fslslbridge.h"
+@@ -229,17 +229,17 @@ LLAssetUploadResponder::~LLAssetUploadResponder()
+ }
+ 
+ // virtual
+-void LLAssetUploadResponder::error(U32 statusNum, const std::string& reason)
++void LLAssetUploadResponder::errorWithContent(U32 statusNum, const std::string& reason, const LLSD& content)
+ {
+-	llinfos << "LLAssetUploadResponder::error " << statusNum 
+-			<< " reason: " << reason << llendl;
++	llinfos << "LLAssetUploadResponder::error [status:" 
++			<< statusNum << "]: " << content << llendl;
+ 	LLSD args;
+ 	switch(statusNum)
+ 	{
+ 		case 400:
+ 			args["FILE"] = (mFileName.empty() ? mVFileID.asString() : mFileName);
+ 			args["REASON"] = "Error in upload request.  Please visit "
+-				"http://www.phoenixviewer.com/support.php for help fixing this problem.";
++				"http://www.firestormviewer.org/support for help fixing this problem.";
+ 			LLNotificationsUtil::add("CannotUploadReason", args);
+ 			break;
+ 		case 500:
+@@ -344,9 +344,9 @@ LLNewAgentInventoryResponder::LLNewAgentInventoryResponder(
+ }
+ 
+ // virtual
+-void LLNewAgentInventoryResponder::error(U32 statusNum, const std::string& reason)
++void LLNewAgentInventoryResponder::errorWithContent(U32 statusNum, const std::string& reason, const LLSD& content)
+ {
+-	LLAssetUploadResponder::error(statusNum, reason);
++	LLAssetUploadResponder::errorWithContent(statusNum, reason, content);
+ 	//LLImportColladaAssetCache::getInstance()->assetUploaded(mVFileID, LLUUID(), FALSE);
+ }
+ 
+@@ -460,7 +460,7 @@ LLSendTexLayerResponder::LLSendTexLayerResponder(const LLSD& post_data,
+ 
+ LLSendTexLayerResponder::~LLSendTexLayerResponder()
+ {
+-	// mBakedUploadData is normally deleted by calls to LLTexLayerSetBuffer::onTextureUploadComplete() below
++	// mBakedUploadData is normally deleted by calls to LLViewerTexLayerSetBuffer::onTextureUploadComplete() below
+ 	if (mBakedUploadData)
+ 	{	// ...but delete it in the case where uploadComplete() is never called
+ 		delete mBakedUploadData;
+@@ -481,22 +481,23 @@ void LLSendTexLayerResponder::uploadComplete(const LLSD& content)
+ 	if (result == "complete"
+ 		&& mBakedUploadData != NULL)
+ 	{	// Invoke 
+-		LLTexLayerSetBuffer::onTextureUploadComplete(new_id, (void*) mBakedUploadData, 0, LL_EXSTAT_NONE);
++		LLViewerTexLayerSetBuffer::onTextureUploadComplete(new_id, (void*) mBakedUploadData, 0, LL_EXSTAT_NONE);
+ 		mBakedUploadData = NULL;	// deleted in onTextureUploadComplete()
+ 	}
+ 	else
+ 	{	// Invoke the original callback with an error result
+-		LLTexLayerSetBuffer::onTextureUploadComplete(new_id, (void*) mBakedUploadData, -1, LL_EXSTAT_NONE);
++		LLViewerTexLayerSetBuffer::onTextureUploadComplete(new_id, (void*) mBakedUploadData, -1, LL_EXSTAT_NONE);
+ 		mBakedUploadData = NULL;	// deleted in onTextureUploadComplete()
+ 	}
+ }
+ 
+-void LLSendTexLayerResponder::error(U32 statusNum, const std::string& reason)
++void LLSendTexLayerResponder::errorWithContent(U32 statusNum, const std::string& reason, const LLSD& content)
+ {
+-	llinfos << "status: " << statusNum << " reason: " << reason << llendl;
++	llinfos << "LLSendTexLayerResponder error [status:"
++			<< statusNum << "]: " << content << llendl;
+ 	
+ 	// Invoke the original callback with an error result
+-	LLTexLayerSetBuffer::onTextureUploadComplete(LLUUID(), (void*) mBakedUploadData, -1, LL_EXSTAT_NONE);
++	LLViewerTexLayerSetBuffer::onTextureUploadComplete(LLUUID(), (void*) mBakedUploadData, -1, LL_EXSTAT_NONE);
+ 	mBakedUploadData = NULL;	// deleted in onTextureUploadComplete()
+ }
+ 

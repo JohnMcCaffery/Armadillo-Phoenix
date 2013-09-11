@@ -1,0 +1,49 @@
+diff --git a/Source/indra/newview/llnearbychatbarlistener.cpp b/Source/indra/newview/llnearbychatbarlistener.cpp
+index 2249aa5..e4c8e1d 100644
+--- a/Source/indra/newview/llnearbychatbarlistener.cpp
++++ b/Source/indra/newview/llnearbychatbarlistener.cpp
+@@ -28,25 +28,20 @@
+ 
+ #include "llviewerprecompiledheaders.h"
+ 
++#if 0
++
+ #include "llnearbychatbarlistener.h"
+-// <FS:Zi> Remove floating chat bar
+-// #include "llnearbychatbar.h"
+-#include "llnearbychathub.h"
+-// </FS:Zi>
++#include "llnearbychatbar.h"
+ 
+ #include "llagent.h"
+ #include "llchat.h"
+ 
+ 
+-// <FS:Zi> Remove floating chat bar
+-// LLNearbyChatBarListener::LLNearbyChatBarListener(LLNearbyChatBar & chatbar)
+-//  : LLEventAPI("LLChatBar",
+-//               "LLChatBar listener to (e.g.) sendChat, etc."),
+-//	mChatbar(chatbar)
+-LLNearbyChatBarListener::LLNearbyChatBarListener()
++
++LLNearbyChatBarListener::LLNearbyChatBarListener(LLNearbyChatBar & chatbar)
+   : LLEventAPI("LLChatBar",
+-               "LLChatBar listener to (e.g.) sendChat, etc.")
+-// </FS:Zi>
++               "LLChatBar listener to (e.g.) sendChat, etc."),
++	mChatbar(chatbar)
+ {
+     add("sendChat",
+         "Send chat to the simulator:\n"
+@@ -102,9 +97,7 @@ void LLNearbyChatBarListener::sendChat(LLSD const & chat_data) const
+ 	}
+ 
+ 	// Send it as if it was typed in
+-	// <FS:Zi> Remove floating chat bar
+-	// mChatbar.sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
+-	LLNearbyChat::instance().sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
+-	// <FS:Zi>
++	mChatbar.sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
+ }
+ 
++#endif

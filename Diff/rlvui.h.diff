@@ -1,0 +1,11 @@
+diff --git a/Source/indra/newview/rlvui.h b/Source/indra/newview/rlvui.h
+index 0816889..996b993 100644
+--- a/Source/indra/newview/rlvui.h
++++ b/Source/indra/newview/rlvui.h
+@@ -1,5 +1,5 @@
+ /** 
+- *
++ * @file rlvui.h
+  * Copyright (c) 2009-2011, Kitty Barnett
+  * 
+  * The source code in this file is provided to you under the terms of the 

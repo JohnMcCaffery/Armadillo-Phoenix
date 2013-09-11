@@ -1,0 +1,15 @@
+diff --git a/Source/indra/newview/llgroupactions.h b/Source/indra/newview/llgroupactions.h
+index c1a5127..eeeda7f 100644
+--- a/Source/indra/newview/llgroupactions.h
++++ b/Source/indra/newview/llgroupactions.h
+@@ -73,7 +73,9 @@ public:
+ 	/**
+ 	 * Refresh group notices panel.
+ 	 */
+-	static void refresh_notices();
++	// <FS:Ansariel> Standalone group floaters
++	//static void refresh_notices();
++	static void refresh_notices(const LLUUID& group_id = LLUUID::null);
+ 
+ 	/**
+ 	 * Refresh group information panel.

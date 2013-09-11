@@ -45,7 +45,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -68,7 +68,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="55"
+			 height="61"
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
@@ -79,22 +79,32 @@
 				 left="5"
 				 name="BasicShaders"
 				 tool_tip="This should ALWAYS be on as it is required for DoF, Shadows and Lights, Ambient Occlusion, Water Reflections and more."
-				 top_pad="10"
+				 top_pad="8"
 				 width="240">
 				</check_box>
 				<check_box
 				 control_name="WindLightUseAtmosShaders"
 				 enabled_control="VertexShaderEnable"
 				 height="16"
-				 initial_valuthe="true"
+				 initial_value="true"
 				 label="Enable Atmospheric Shaders (Windlight)"
 				 layout="topleft"
 				 left="5"
 				 name="WindLightUseAtmosShaders"
-				 top_pad="10"
+				 top_pad="2"
 				 tool_tip="This will enable full WindLight functionality (atmospheric shaders). If you cannot enable this feature, ensure that Basic Shaders are enabled below."
-				 width="110">
+				 width="240">
 				</check_box>
+				<check_box
+				 control_name="UseEnvironmentFromRegion"
+				 follows="left|top"
+				 height="16"
+				 label="Use Region Windlight"
+				 layout="topleft"
+				 left="5"
+				 name="UseRegionWindlight"
+				 top_pad="2"
+				 width="240"/>
 			</panel>
 
 			<panel
@@ -104,7 +114,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="70"
+			 height="85"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -117,12 +127,13 @@
 				 name="WL Sky"
 				 tool_tip="Windlight presets for your sky."
 				 mouse_opaque="false"
-				 top_pad="15"
+				 top_pad="10"
 				 width="90">
 					WL Sky
 				</text>
 				<combo_box
 				 allow_text_entry="true"
+				 max_chars="50"
 				 height="23"
 				 layout="topleft"
 				 left_delta="58"
@@ -160,12 +171,13 @@
 				 name="WL Water"
 				 tool_tip="Windlight presets for your water."
 				 mouse_opaque="false"
-				 top_pad="12"
+				 top_pad="8"
 				 width="90">
 				 WL Water
 				</text>
 				<combo_box
 				 allow_text_entry="true"
+				 max_chars="50"
 				 height="23"
 				 follows="top|left"
 				 layout="topleft"
@@ -186,6 +198,50 @@
 				<button
 				 enabled="true"
 				 name="WWNextPreset"
+				 follows="top|left"
+				 height="23"
+				 width="20"
+				 bottom_delta="-0"
+				 left_pad="0"
+				 image_overlay="Arrow_Right_Off"
+				 scale_image="true"/>
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="10"
+				 layout="topleft"
+				 left="5"
+				 name="Day Cycle"
+				 tool_tip="Windlight presets for your day cycle."
+				 mouse_opaque="false"
+				 top_pad="8"
+				 width="90">
+				 Day Cycle
+				</text>
+				<combo_box
+				 allow_text_entry="true"
+				 max_chars="50"
+				 height="23"
+				 follows="top|left"
+				 layout="topleft"
+				 left_delta="58"
+				 name="DCPresetsCombo"
+				 top_delta="-4"
+				 width="170"/>
+				<button
+				 enabled="true"
+				 name="DCPrevPreset"
+				 follows="top|left"
+				 height="23"
+				 width="20"
+				 bottom_delta="-0"
+				 left_pad="-3"
+				 image_overlay="Arrow_Left_Off"
+				 scale_image="true"/>
+				<button
+				 enabled="true"
+				 name="DCNextPreset"
 				 follows="top|left"
 				 height="23"
 				 width="20"
@@ -232,7 +288,7 @@
 				 width="240"/>
 				<button
 				 enabled="true"
-				 name="UseRegionWL"
+				 name="ResetToRegionDefault"
 				 follows="left|top"
 				 height="47"
 				 width="20"
@@ -250,7 +306,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="135"
-			 height="140"
+			 height="135"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -258,7 +314,7 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="10"
-				 top_pad="10"
+				 top_pad="5"
 				 height="20"
 				 word_wrap="true"
 				 width="135">
@@ -347,7 +403,7 @@
 			 top_delta="0"
 			 left_pad="5"
 			 width="135"
-			 height="140"
+			 height="135"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -355,7 +411,7 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="10"
-				 top_pad="10"
+				 top_pad="5"
 				 height="20"
 				 word_wrap="true"
 				 tool_tip="Click an item below to create new preset or modify an existing one."
@@ -439,11 +495,11 @@
 			 name="P_W_Reflections"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="10"
+			 top_pad="5"
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -466,7 +522,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="40"
+			 height="36"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -474,7 +530,7 @@
 				 follows="left|top"
 				 height="15"
 				 left="10" 
-				 top_pad="15"
+				 top_pad="13"
 				 width="75"
 				 layout="topleft"
 				 tool_tip="Determine what will show up in water reflections.">
@@ -519,7 +575,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="58"
+			 height="54"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -527,10 +583,10 @@
 				 follows="left|top"
 				 height="15"
 				 left="10" 
-				 top_pad="15"
+				 top_pad="13"
 				 width="80"
 				 layout="topleft"
-				 tool_tip="Determines the resolution/quality of water reflections. Whenever resolution settings are set to 'Very Good' or above, you must also enable 'Lighting and Shadows' in tab 'Light'.">
+				 tool_tip="Determines the resolution/quality of water reflections. Whenever resolution settings are set to 'Very Good' or above, you must also enable 'Advanced Lighting Model' in tab 'Light'.">
 					Resolution
 				</text>
 				<combo_box
@@ -552,19 +608,19 @@
 					 name="1"
 					 value="512"/>
 					<combo_box.item
-					 label="Very Good          - NOTE: You must also enable 'Lighting and Shadows' (Light Tab)"
+					 label="Very Good          - NOTE: You must also enable 'Advanced Lighting Model' (Light Tab)"
 					 name="2"
 					 value="1024"/>
 					<combo_box.item
-					 label="Excellent            - NOTE: You must also enable 'Lighting and Shadows' (Light Tab)"
+					 label="Excellent            - NOTE: You must also enable 'Advanced Lighting Model' (Light Tab)"
 					 name="3"
 					 value="1536"/>
 					<combo_box.item
-					 label="Outstanding      - NOTE: You must also enable 'Lighting and Shadows' (Light Tab)"
+					 label="Outstanding      - NOTE: You must also enable 'Advanced Lighting Model' (Light Tab)"
 					 name="4"
 					 value="2048"/>
 					<combo_box.item
-					 label="Life-Like             - NOTE: You must also enable 'Lighting and Shadows' (Light Tab)"
+					 label="Life-Like             - NOTE: You must also enable 'Advanced Lighting Model' (Light Tab)"
 					 name="5"
 					 value="4096"/>
 					<combo_box.commit_callback
@@ -617,7 +673,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -647,8 +703,8 @@
 				 control_name="RenderDeferred"
 				 enabled_control="VertexShaderEnable"
 				 height="16"
-				 initial_valuthe="true"
-				 label="Enable Lighting and Shadows"
+				 initial_value="true"
+				 label="Enable Advanced Lighting Model"
 				 layout="topleft"
 				 left="5"
 				 name="RenderDeferred"
@@ -1003,7 +1059,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -1237,7 +1293,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -1437,7 +1493,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -1471,7 +1527,7 @@
 				 layout="topleft"
 				 left="5"
 				 name="UseDepthofField"
-				 tool_tip="This will enable Depth of Field which will 'determine distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image' (Wikipedia). If you are not using it turn it off and it will speed up your frame rate. If you cannot enable this feature or do not see its effect, please turn on 'Lighting and Shadows' ob tab 'Light'."
+				 tool_tip="This will enable Depth of Field which will 'determine distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image' (Wikipedia). If you are not using it turn it off and it will speed up your frame rate. If you cannot enable this feature or do not see its effect, please turn on 'Advanced Lighting Model' in tab 'Light'."
 				 top_pad="10"
 				 width="230"/>
 				<check_box
@@ -1927,7 +1983,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -2155,7 +2211,7 @@
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="2"
+				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2167,7 +2223,7 @@
 				 left_pad="3"
 				 decimal_digits="3"
 				 follows="top|left"
-				 max_val="5"
+				 max_val="1"
 				 min_val="0"
 				 width="53"
 				 increment="0.001"
@@ -2360,7 +2416,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -2380,10 +2436,10 @@
 			 name="P_General_Settings"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="275"
+			 height="250"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -2957,58 +3013,6 @@
 					 function="ResetControl"
 					 parameter="WLSkyDetail"/>
 				</button>
-
-				<text
-				 name="T_Av_Floor_Offset"
-				 follows="left|top"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip="Controls how far above or below the floor your avatar stands. Helpful if your find yourself above or below the floor."
-				 width="110">
-					Avatar Floor Offset
-				</text>
-				<slider_bar
-				 name="SB_Av_Floor_Offset"
-				 can_edit_text="true"
-				 control_name="AvatarZOffset"
-				 follows="left|top"
-				 height="16"
-				 increment=".001"
-				 layout="topleft"
-				 left_pad="0"
-				 min_val="-2"
-				 max_val="2"
-				 top_delta="-2"
-				 width="77"/>
-				<spinner
-				 name="S_Av_Floor_Offset"
-				 can_edit_text="true"
-				 control_name="AvatarZOffset"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="2"
-				 follows="left|top"
-				 max_val="2"
-				 min_val="-2"
-				 width="53"
-				 increment=".01"
-				 border_visible="false"/>
-				<button
-				 follows="left|top"
-				 name="Reset_Av_Floor_Offset"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetPerAccountControl"
-					 parameter="AvatarZOffset"/>
-				</button>
 			</panel>
 
 			<!--view_border
@@ -3020,12 +3024,163 @@
 			 name="horiz_separator4"
 			 top_pad="5"
 			 width="260"/-->
+			
+			<panel
+			 name="P_Vignetting"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="3"
+			 left="4"
+			 width="275"
+			 height="70"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_VignetteX"
+				 follows="left|top"
+				 layout="topleft"
+				 left="5"
+				 top_pad="10"
+				 tool_tip=""
+				 width="80">
+				 Vig. Amount
+				</text>
+				<slider_bar
+				 name="VignetteSliderX"
+				 can_edit_text="true"
+				 follows="left|top"
+				 height="16"
+				 increment="0.05"
+				 layout="topleft"
+				 left_pad="-10"
+				 min_val="0.0"
+				 max_val="1.0"
+				 initial_value="0"
+				 top_delta="-2"
+				 width="117"/>
+				<spinner
+				 name="VignetteSpinnerX"
+				 can_edit_text="true"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="3"
+				 follows="left|top"
+				 max_val="1.0"
+				 min_val="0.0"
+				 width="53"
+				 increment="0.05"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_VignetteX"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value." />
+				<text
+				 name="T_VignetteY"
+				 follows="left|top"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 tool_tip=""
+				 width="80">
+				 Vig. Power
+				</text>
+				<slider_bar
+				 name="VignetteSliderY"
+				 can_edit_text="true"
+				 follows="left|top"
+				 height="16"
+				 increment="0.1"
+				 layout="topleft"
+				 left_pad="-10"
+				 min_val="0.0"
+				 max_val="32.0"
+				 initial_value="1"
+				 top_delta="-2"
+				 width="117"/>
+				<spinner
+				 name="VignetteSpinnerY"
+				 can_edit_text="true"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="2"
+				 follows="left|top"
+				 max_val="32.0"
+				 min_val="0.0"
+				 width="53"
+				 increment="0.1"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_VignetteY"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value." />
+				<text
+				 name="T_VignetteZ"
+				 follows="left|top"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 tool_tip=""
+				 width="80">
+				 Vig. Multiply
+				</text>
+				<slider_bar
+				 name="VignetteSliderZ"
+				 can_edit_text="true"
+				 follows="left|top"
+				 height="16"
+				 increment="0.1"
+				 layout="topleft"
+				 left_pad="-10"
+				 min_val="0.0"
+				 max_val="8.0"
+				 initial_value="1"
+				 top_delta="-2"
+				 width="117"/>
+				<spinner
+				 name="VignetteSpinnerZ"
+				 can_edit_text="true"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="3"
+				 follows="left|top"
+				 max_val="8.0"
+				 min_val="0.0"
+				 width="53"
+				 increment="0.1"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_VignetteZ"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value." />
+			</panel>
 
 			<panel
 			 name="P_Render"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="4"
 			 width="275"
 			 height="100"
@@ -3108,10 +3263,10 @@
 			 name="P_Anti-aliasing"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="35"
+			 height="60"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -3157,25 +3312,12 @@
 					 name="16x"
 					 value="16"/>
 				</combo_box>
-			</panel>
-
-			<panel
-			 name="P_Texture_Bumpiness"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="55"
-			 border_visible="true"
-			 border_thickness="1"
-			 background_visible="true">
 				<text
 				 name="T_Texture_Bumpiness"
 				 follows="left|top"
 				 height="15"
 				 left="10" 
-				 top_pad="25"
+				 top_pad="12"
 				 width="110"
 				 layout="topleft"
 				 tool_tip="Controls the strength and resolution of normal and bump maps.">
@@ -3235,7 +3377,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -3427,7 +3569,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -3591,7 +3733,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -4080,7 +4222,6 @@
 				<check_box
 				 name="CB_ZoomDirect"
 				 control_name="ZoomDirect"
-				 label_width="15"
 				 label="Enable Zoom Control (See Tool Tip!)"
 				 layout="topleft"
 				 left="6"
@@ -4090,7 +4231,6 @@
 				<check_box
 				 name="CB_AutoLeveling"
 				 control_name="AutoLeveling"
-				 label_width="15"
 				 label="Enable Auto Leveling (Prevents Camera Roll)"
 				 layout="topleft"
 				 left="6"
@@ -4100,7 +4240,6 @@
 				<check_box
 				 name="CB_Move_Avatar"
 				 control_name="JoystickAvatarEnabled"
-				 label_width="15"
 				 label="Use the 3D Mouse to move the avatar"
 				 layout="topleft"
 				 left="6"
@@ -4110,7 +4249,6 @@
 				<check_box
 				 name="CB_Move_Objects"
 				 control_name="JoystickBuildEnabled"
-				 label_width="15"
 				 label="Use the 3D Mouse to move objects (building)"
 				 tool_tip="Uses the 3D mouse to move objects when building and editing."
 				 layout="topleft"
@@ -4142,7 +4280,7 @@
 			 left="0"
 			 width="285"
 			 height="22"
-			 bg_alpha_color="EmphasisColor"
+			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -4499,7 +4637,7 @@
 						 border_visible="true"
 						 background_visible="true">
 							<check_box
-							 top_pad="15"
+							 top_pad="7"
 							 follows="left|top"
 							 height="16"
 							 label="Clicking your avatar keeps camera position"
@@ -4542,6 +4680,17 @@
 							 width="250"
 							 control_name="FSIgnoreSimulatorCameraConstraints"
 							 tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects. REQUIRES RESTART!"/>
+							<check_box
+							 top_pad="2"
+							 follows="left|top"
+							 height="16"
+							 label="Reset camera position on avatar movement"
+							 layout="topleft"
+							 left="10"
+							 name="resetcamerapositiononmovement"
+							 width="250"
+							 control_name="FSResetCameraOnMovement"
+							 tool_tip="Resets the camera to its default position when you move the avatar"/>
 						</panel>
 					</panel>
 				</tab_container>

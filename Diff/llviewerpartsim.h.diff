@@ -1,0 +1,25 @@
+diff --git a/Source/indra/newview/llviewerpartsim.h b/Source/indra/newview/llviewerpartsim.h
+index c9959c6..5c6141b 100644
+--- a/Source/indra/newview/llviewerpartsim.h
++++ b/Source/indra/newview/llviewerpartsim.h
+@@ -76,6 +76,11 @@ public:
+ 	LLVector2		mScale;
+ 
+ 	static U32		sNextPartID;
++
++	// <FS:ND> Object pool for LLViewerPart
++	void* operator new(size_t size);
++	void operator delete(void* ptr);
++	// </FS:ND>
+ };
+ 
+ 
+@@ -142,7 +147,7 @@ public:
+ 
+ 	void cleanupRegion(LLViewerRegion *regionp);
+ 
+-	BOOL shouldAddPart(); // Just decides whether this particle should be added or not (for particle count capping)
++	static BOOL shouldAddPart(); // Just decides whether this particle should be added or not (for particle count capping)
+ 	F32 maxRate() // Return maximum particle generation rate
+ 	{
+ 		if (sParticleCount >= MAX_PART_COUNT)

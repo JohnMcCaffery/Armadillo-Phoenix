@@ -218,10 +218,10 @@
           top="4"
           width="80">
   <commit_callback function="Floater.Toggle"
-                   parameter="nearby_chat" />
+                   parameter="fs_nearby_chat" />
   </button>
 
-    <nearby_chat_control layout="topleft"
+    <fs_nearby_chat_control layout="topleft"
                          name="default_chat_bar"
                          label="To nearby chat"
                          left_pad="8"
@@ -368,7 +368,7 @@
           width="22">
   <button.commit_callback
           function="Floater.ToggleOrBringToFront"
-          parameter="volume_controls" />
+          parameter="fs_volume_controls" />
   </button>
   <!-- Volume controls -->
 
@@ -414,7 +414,7 @@
           width="38">
   <button.commit_callback
           function="Floater.ToggleOrBringToFront"
-          parameter="voice_controls" />
+          parameter="fs_voice_controls" />
   </button>
 
   <button name="utility_talk_button"
