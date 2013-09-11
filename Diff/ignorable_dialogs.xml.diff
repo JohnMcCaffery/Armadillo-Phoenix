@@ -1,0 +1,21 @@
+diff --git a/Source/indra/newview/app_settings/ignorable_dialogs.xml b/Source/indra/newview/app_settings/ignorable_dialogs.xml
+index f9cd317..64008ab 100644
+--- a/Source/indra/newview/app_settings/ignorable_dialogs.xml
++++ b/Source/indra/newview/app_settings/ignorable_dialogs.xml
+@@ -276,5 +276,16 @@
+       <key>Value</key>
+       <integer>0</integer>
+     </map>
++    <key>ConfirmQuit</key>
++    <map>
++      <key>Comment</key>
++      <string>Stop firestorm prompting the user before quitting</string>
++      <key>Persist</key>
++      <integer>1</integer>
++      <key>Type</key>
++      <string>Boolean</string>
++      <key>Value</key>
++      <integer>0</integer>
++    </map>
+   </map>
+ </llsd>

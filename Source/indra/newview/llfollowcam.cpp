@@ -231,6 +231,7 @@ void LLFollowCamParams::setPosition( const LLVector3& p )
 void LLFollowCamParams::setUpVector( const LLVector3& u ) 
 { 
 	mUpVector = u;
+	gSavedSettings.setVector3("UpVector", mUpVector);
 }
 
 //---------------------------------------------------------
@@ -254,6 +255,7 @@ F32			LLFollowCamParams::getBehindnessAngle	() const { return mBehindnessMaxAngl
 F32			LLFollowCamParams::getBehindnessLag		() const { return mBehindnessLag;		}
 LLVector3	LLFollowCamParams::getPosition			() const { return mPosition;			}
 LLVector3	LLFollowCamParams::getFocus				() const { return mFocus;				}
+LLVector3	LLFollowCamParams::getUpVector			() const { return mUpVector;			}
 bool		LLFollowCamParams::getPositionLocked	() const { return mPositionLocked;		}
 bool		LLFollowCamParams::getFocusLocked		() const { return mFocusLocked;			}
 
@@ -609,7 +611,7 @@ void LLFollowCam::reset( const LLVector3 p, const LLVector3 f , const LLVector3 
 {
 	setPosition(p);
 	setFocus(f);
-	mUpVector	= u;
+	//mUpVector	= u;
 }
 
 //---------------------------------------------------------
@@ -700,11 +702,6 @@ LLVector3	LLFollowCam::getSimulatedFocus() const
 { 
 	// return simulated focus point
 	return mSubjectPosition + (mRelativeFocus * mSubjectRotation);
-}
-
-LLVector3	LLFollowCam::getUpVector() 
-{ 
-	return mUpVector;			
 }
 
 //------------------------------------

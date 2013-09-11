@@ -1,5 +1,5 @@
 diff --git a/Source/indra/newview/llagentcamera.cpp b/Source/indra/newview/llagentcamera.cpp
-index eafbd91..98b50a0 100644
+index eafbd91..e5f6763 100644
 --- a/Source/indra/newview/llagentcamera.cpp
 +++ b/Source/indra/newview/llagentcamera.cpp
 @@ -1197,9 +1197,11 @@ void LLAgentCamera::updateCamera()
@@ -11,7 +11,19 @@ index eafbd91..98b50a0 100644
 +	if ( camera_mode == CAMERA_MODE_FOLLOW )
  	{
  		mCameraUpVector = mFollowCam.getUpVector();
-+		gSavedSettings.setVector3("UpVector", mCameraUpVector);
++		//gSavedSettings.setVector3("UpVector", mCameraUpVector);
  	}
  
  	if (mSitCameraEnabled)
+@@ -1433,7 +1435,10 @@ void LLAgentCamera::updateCamera()
+ 
+ 	// Move the camera
+ 
+-	LLViewerCamera::getInstance()->updateCameraLocation(mCameraPositionAgent, mCameraUpVector, focus_agent);
++
++	//mCameraUpVector = ;
++	LLViewerCamera::getInstance()->updateCameraLocation(mCameraPositionAgent, gSavedSettings.getVector3("UpVector"), focus_agent);
++	//LLViewerCamera::getInstance()->updateCameraLocation(mCameraPositionAgent, mCameraUpVector, focus_agent);
+ 	//LLViewerCamera::getInstance()->updateCameraLocation(mCameraPositionAgent, camera_skyward, focus_agent);
+ 	
+ 	// Change FOV
