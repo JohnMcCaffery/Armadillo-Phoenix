@@ -279,7 +279,7 @@
     <key>ConfirmQuit</key>
     <map>
       <key>Comment</key>
-      <string>Disable dialog that asks user if they are sure they want to quit</string>
+      <string>Stop firestorm prompting the user before quitting</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
