@@ -1,0 +1,35 @@
+diff --git a/Source/indra/newview/llclassifiedstatsresponder.cpp b/Source/indra/newview/llclassifiedstatsresponder.cpp
+index b4da318..d994d00 100644
+--- a/Source/indra/newview/llclassifiedstatsresponder.cpp
++++ b/Source/indra/newview/llclassifiedstatsresponder.cpp
+@@ -37,6 +37,8 @@
+ #include "llview.h"
+ #include "message.h"
+ 
++#include "fspanelclassified.h"
++
+ LLClassifiedStatsResponder::LLClassifiedStatsResponder(LLUUID classified_id)
+ :
+ mClassifiedID(classified_id)
+@@ -59,11 +61,18 @@ void LLClassifiedStatsResponder::result(const LLSD& content)
+ 		map + search_map,
+ 		profile + search_profile,
+ 		true);
++
++	// <FS:Ansariel> FIRE-8787: Also update legacy profiles
++	FSPanelClassifiedInfo::setClickThrough(
++		mClassifiedID, 
++		teleport + search_teleport, 
++		map + search_map,
++		profile + search_profile,
++		true);
+ }
+ 
+ /*virtual*/
+-void LLClassifiedStatsResponder::error(U32 status, const std::string& reason)
++void LLClassifiedStatsResponder::errorWithContent(U32 status, const std::string& reason, const LLSD& content)
+ {
+-	llinfos << "LLClassifiedStatsResponder::error("
+-		<< status << ": " << reason << ")" << llendl;
++	llinfos << "LLClassifiedStatsResponder::error [status:" << status << "]: " << content << llendl;
+ }

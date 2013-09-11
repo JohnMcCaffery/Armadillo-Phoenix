@@ -1,0 +1,89 @@
+diff --git a/Source/indra/newview/llinventoryfunctions.cpp b/Source/indra/newview/llinventoryfunctions.cpp
+index 7a7d930..17ef3a0 100644
+--- a/Source/indra/newview/llinventoryfunctions.cpp
++++ b/Source/indra/newview/llinventoryfunctions.cpp
+@@ -506,7 +506,7 @@ void show_item_original(const LLUUID& item_uuid)
+ 	//sidetray inventory panel
+ 	LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+ 
+-	bool reset_inventory_filter = !floater_inventory->isInVisibleChain();
++	bool do_reset_inventory_filter = !floater_inventory->isInVisibleChain();
+ 
+ 	LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel();
+ 	if (!active_panel) 
+@@ -526,37 +526,49 @@ void show_item_original(const LLUUID& item_uuid)
+ 	}
+ 	active_panel->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_NO);
+ 	
+-	if(reset_inventory_filter)
++	if(do_reset_inventory_filter)
+ 	{
+-		//inventory floater
+-		bool floater_inventory_visible = false;
++		reset_inventory_filter();
++	}
++}
++
+ 
+-		LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("inventory");
+-		for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin(); iter != inst_list.end(); ++iter)
++void reset_inventory_filter()
++{
++	//inventory floater
++	bool floater_inventory_visible = false;
++
++	LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("inventory");
++	for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin(); iter != inst_list.end(); ++iter)
++	{
++		LLFloaterInventory* floater_inventory = dynamic_cast<LLFloaterInventory*>(*iter);
++		if (floater_inventory)
+ 		{
+-			LLFloaterInventory* floater_inventory = dynamic_cast<LLFloaterInventory*>(*iter);
+-			if (floater_inventory)
+-			{
+-				LLPanelMainInventory* main_inventory = floater_inventory->getMainInventoryPanel();
++			LLPanelMainInventory* main_inventory = floater_inventory->getMainInventoryPanel();
+ 
+-				main_inventory->onFilterEdit("");
++			main_inventory->onFilterEdit("");
+ 
+-				if(floater_inventory->getVisible())
+-				{
+-					floater_inventory_visible = true;
+-				}
++			if(floater_inventory->getVisible())
++			{
++				floater_inventory_visible = true;
+ 			}
+ 		}
+-		if(sidepanel_inventory && !floater_inventory_visible)
++	}
++
++	if(!floater_inventory_visible)
++	{
++		LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
++		if (sidepanel_inventory)
+ 		{
+ 			LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
+-
+-			main_inventory->onFilterEdit("");
++			if (main_inventory)
++			{
++				main_inventory->onFilterEdit("");
++			}
+ 		}
+ 	}
+ }
+ 
+-
+ void open_outbox()
+ {
+ 	LLFloaterReg::showInstance("outbox");
+@@ -1022,7 +1034,6 @@ void LLSaveFolderState::setApply(BOOL apply)
+ 
+ void LLSaveFolderState::doFolder(LLFolderViewFolder* folder)
+ {
+-	LLMemType mt(LLMemType::MTYPE_INVENTORY_DO_FOLDER);
+ 	LLInvFVBridge* bridge = (LLInvFVBridge*)folder->getListener();
+ 	if(!bridge) return;
+ 	

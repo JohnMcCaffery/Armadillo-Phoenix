@@ -1,0 +1,27 @@
+diff --git a/Source/indra/newview/llinventorymodel.h b/Source/indra/newview/llinventorymodel.h
+index 4dba3fc..657f4d0 100644
+--- a/Source/indra/newview/llinventorymodel.h
++++ b/Source/indra/newview/llinventorymodel.h
+@@ -88,7 +88,7 @@ public:
+ 	public:
+ 		fetchInventoryResponder(const LLSD& request_sd) : mRequestSD(request_sd) {};
+ 		void result(const LLSD& content);			
+-		void error(U32 status, const std::string& reason);
++		void errorWithContent(U32 status, const std::string& reason, const LLSD& content);
+ 	protected:
+ 		LLSD mRequestSD;
+ 	};
+@@ -161,11 +161,11 @@ private:
+ 	cat_map_t mCategoryMap;
+ 	item_map_t mItemMap;
+ 	
+-	//<ND> Link Processsing Efficiency
++	// <FS:ND> Link Processsing Efficiency
+ 	typedef std::set< LLUUID > item_links_set_t;
+ 	typedef std::map< LLUUID, item_links_set_t > item_links_map_t;
+ 	item_links_map_t mItemLinks;
+-	//</ND>
++	// </FS:ND>
+ 	
+ 	// This last set of indices is used to map parents to children.
+ 	typedef std::map<LLUUID, cat_array_t*> parent_cat_map_t;

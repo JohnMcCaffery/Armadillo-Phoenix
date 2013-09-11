@@ -1,0 +1,124 @@
+diff --git a/Source/indra/newview/llappearancemgr.h b/Source/indra/newview/llappearancemgr.h
+index df7d9a7..fa50656 100644
+--- a/Source/indra/newview/llappearancemgr.h
++++ b/Source/indra/newview/llappearancemgr.h
+@@ -35,7 +35,6 @@
+ #include "llinventoryobserver.h"
+ #include "llviewerinventory.h"
+ 
+-class LLWearable;
+ class LLWearableHoldingPattern;
+ class LLInventoryCallback;
+ class LLOutfitUnLockTimer;
+@@ -110,6 +109,10 @@ public:
+ 
+ 	// Find the Current Outfit folder.
+ 	const LLUUID getCOF() const;
++	S32 getCOFVersion() const;
++
++	// Debugging - get truncated LLSD summary of COF contents.
++	LLSD dumpCOF() const;
+ 
+ 	// Finds the folder link to the currently worn outfit
+ 	const LLViewerInventoryItem *getBaseOutfitLink();
+@@ -124,6 +127,7 @@ public:
+ 	// Update the displayed outfit name in UI.
+ 	void updatePanelOutfitName(const std::string& name);
+ 
++	void purgeBaseOutfitLink(const LLUUID& category);
+ 	void createBaseOutfitLink(const LLUUID& category, LLPointer<LLInventoryCallback> link_waiter);
+ 
+ 	void updateAgentWearables(LLWearableHoldingPattern* holder, bool append);
+@@ -143,15 +147,17 @@ public:
+ 				 LLPointer<LLInventoryCallback> cb);
+ 
+ 	// Add COF link to individual item.
+-	void addCOFItemLink(const LLUUID& item_id, bool do_update = true, LLPointer<LLInventoryCallback> cb = NULL);
+-	void addCOFItemLink(const LLInventoryItem *item, bool do_update = true, LLPointer<LLInventoryCallback> cb = NULL);
++	void addCOFItemLink(const LLUUID& item_id, bool do_update = true, LLPointer<LLInventoryCallback> cb = NULL, const std::string description = "");
++	void addCOFItemLink(const LLInventoryItem *item, bool do_update = true, LLPointer<LLInventoryCallback> cb = NULL, const std::string description = "");
+ 
+-	// Remove COF entries
+-	void removeCOFItemLinks(const LLUUID& item_id, bool do_update = true);
+-	void removeCOFLinksOfType(LLWearableType::EType type, bool do_update = true);
++	// Find COF entries referencing the given item.
++	LLInventoryModel::item_array_t findCOFItemLinks(const LLUUID& item_id);
+ 
+-	// Add COF link to ensemble folder.
+-	void addEnsembleLink(LLInventoryCategory* item, bool do_update = true);
++	// Remove COF entries
++	void removeCOFItemLinks(const LLUUID& item_id);
++	void removeCOFLinksOfType(LLWearableType::EType type);
++	void removeAllClothesFromAvatar();
++	void removeAllAttachmentsFromAvatar();
+ 
+ 	//has the current outfit changed since it was loaded?
+ 	bool isOutfitDirty() { return mOutfitIsDirty; }
+@@ -179,6 +185,7 @@ public:
+ 	bool updateBaseOutfit();
+ 
+ 	//Remove clothing or detach an object from the agent (a bodypart cannot be removed)
++	void removeItemsFromAvatar(const uuid_vec_t& item_ids);
+ 	void removeItemFromAvatar(const LLUUID& item_id);
+ 
+ 
+@@ -199,6 +206,20 @@ public:
+ 
+ 	bool isInUpdateAppearanceFromCOF() { return mIsInUpdateAppearanceFromCOF; }
+ 
++	void requestServerAppearanceUpdate(LLCurl::ResponderPtr responder_ptr = NULL);
++
++	void incrementCofVersion(LLHTTPClient::ResponderPtr responder_ptr = NULL);
++
++	// *HACK Remove this after server side texture baking is deployed on all sims.
++	void incrementCofVersionLegacy();
++
++	void setAppearanceServiceURL(const std::string& url) { mAppearanceServiceURL = url; }
++	std::string getAppearanceServiceURL() const;
++
++private:
++	std::string		mAppearanceServiceURL;
++	
++
+ protected:
+ 	LLAppearanceMgr();
+ 	~LLAppearanceMgr();
+@@ -218,15 +239,16 @@ private:
+ 								   LLInventoryModel::item_array_t& gest_items,
+ 								   bool follow_folder_links);
+ 
+-	void purgeCategory(const LLUUID& category, bool keep_outfit_links);
+-	void purgeBaseOutfitLink(const LLUUID& category);
+-
++	void purgeCategory(const LLUUID& category, bool keep_outfit_links, LLInventoryModel::item_array_t* keep_items = NULL);
+ 	static void onOutfitRename(const LLSD& notification, const LLSD& response);
+ 
+ 	void setOutfitLocked(bool locked);
+ 
+ // [SL:KB] - Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+-	void syncCOF(const LLInventoryModel::item_array_t& items, LLAssetType::EType type, LLPointer<LLInventoryCallback> cb);
++	void purgeItems(const LLInventoryModel::item_array_t& items);
++	void purgeItemsOfType(LLAssetType::EType asset_type);
++	void syncCOF(const LLInventoryModel::item_array_t& items, 
++	             LLInventoryModel::item_array_t& items_to_add, LLInventoryModel::item_array_t& items_to_remove);
+ // [/SL:KB]
+ 
+ 	bool mAttachmentInvLinkEnabled;
+@@ -241,7 +263,7 @@ private:
+ 
+ 	std::auto_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
+ 
+-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-3.0.0a) | Modified: Catznip-2.1.2e
++// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.1)
+ public:
+ 	void linkPendingAttachments();
+ 	void onRegisterAttachmentComplete(const LLUUID& idItem);
+@@ -275,7 +297,7 @@ private:
+ 	bool mUpdateBaseOrder;
+ };
+ 
+-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-3.0.0a) | Added: Catznip-2.1.2a
++// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.1)
+ class LLRegisterAttachmentCallback : public LLInventoryCallback
+ {
+ public:

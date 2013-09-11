@@ -24,7 +24,14 @@
 		<check_box label="Medien, die an andere Avatare angehängt sind, wiedergeben." name="media_show_on_others_btn" tool_tip="Diese Option deaktivieren, um Medien für andere Avataren, die sich in der Nähe befinden, auszublenden."/>
 		<check_box name="media_filter" tool_tip="Aktiviert den Medienfilter, der abhängig der Medien-URL die Wiedergabe erlaubt oder verbietet." label="Medienfilter aktivieren (erhöhte Sicherheit)"/>
 		<button label="Listen bearbeiten..." name="edit_media_lists_button" left_pad="45"/>
-        <check_box name="ShowStreamMetadata" label="Musikstream-Titel im lokalem Chat anzeigen"/>
+		<text name="show_stream_metadata_text">
+			Musikstream-Titel anzeigen:
+		</text>
+		<radio_group name="show_stream_metadata">
+			<radio_item label="Aus" name="radio_off"/>
+			<radio_item label="Toasts" name="radio_toasts"/>
+			<radio_item label="Chat in der Nähe" name="radio_chat"/>
+		</radio_group>
         <check_box name="StreamMetadataAnnounceToChat" label="Stream-Titel an diesen Kanal senden:" width="230"/>
         <check_box name="FSFadeAudioStream" tool_tip="Aktiviert Fading, wenn sich der Parzellen-Audiostream ändert" label="Parzellen-Audiostream-Fading aktivieren:"/>
 		<slider label="Einblenden" label_width="70" name="FSAudioMusicFadeIn" tool_tip="Einblenddauer für Parzellen-Audiostream."/>
@@ -172,6 +179,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<combo_box name="PlayModeUISndNewIncomingIMSession">
 			<combo_box.item label="Bei neuer IM" name="1"/>
 			<combo_box.item label="Bei jeder IM" name="2"/>
+			<combo_box.item label="Wenn kein Fokus" name="3"/>
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
 
@@ -183,6 +191,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
 			<combo_box.item label="Bei neuer Nachr." name="1"/>
 			<combo_box.item label="Bei jeder Nachr." name="2"/>
+			<combo_box.item label="Wenn kein Fokus" name="3"/>
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
 
@@ -200,14 +209,12 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="S" name="Def_UISndObjectCreate" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndObjectCreate"/>
 
-		<!-- Note: This sound is unused in Firestorm at the moment -->
-		<text tool_tip="UUID des Klangs beim Löschen eines Objektes. Wird momentan nicht verwendet." name="textFSObjectDelete">
+		<text tool_tip="UUID des Klangs beim Löschen eines Objektes." name="textFSObjectDelete">
 			Objektlöschung:
 		</text>
 		<button label="V" name="Prev_UISndObjectDelete" tool_tip="Vorschau zu diesem Sound."/>
 		<button label="S" name="Def_UISndObjectDelete" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndObjectDelete"/>
-		<!-- End of unused sound here -->
 
 		<text tool_tip="UUID des Klangs beim Rezzen eines Objektes." name="textFSObjectRezIn">
             Objekt rezzen:
@@ -357,6 +364,49 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="V" name="Prev_UISndFriendOffline" tool_tip="Vorschau zu diesem Sound."/>
 		<button label="S" name="Def_UISndFriendOffline" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndFriendOffline"/>
+
+		<text tool_tip="UUID des Klangs für Freundschafts-Angebote." name="textFSFriendshipOffer">
+			Freundschafts-Angebote:
+		</text>
+		<button label="V" name="Prev_UISndFriendshipOffer" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndFriendshipOffer" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndFriendshipOffer"/>
+
+		<text tool_tip="UUID des Klangs für Teleport-Angebote." name="textFSTeleportOffer">
+			Teleport-Angebote:
+		</text>
+		<button label="V" name="Prev_UISndTeleportOffer" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndTeleportOffer" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndTeleportOffer"/>
+    </panel>
+
+	<!-- UI Sounds 3 -->
+	<panel label="UI Sounds 3" name="UI Sounds tab 3">
+		<text name="textFSExplanation_tab3">
+			Hier können die Klänge der Benutzeroberfläche geändert, aktiviert oder deaktiviert werden.
+Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
+		</text>
+
+		<text tool_tip="UUID des Klangs für Schritte. Erfordert Neustart" name="textFSFootsteps">
+			Schritte:
+		</text>
+		<button label="V" name="Prev_UISndFootsteps" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndFootsteps" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndFootsteps"/>
+
+		<text tool_tip="UUID des Klangs für Gruppeneinladungen." name="textFSGroupInvitation">
+			Gruppeneinladungen:
+		</text>
+		<button label="V" name="Prev_UISndGroupInvitation" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndGroupInvitation" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndGroupInvitation"/>
+
+		<text tool_tip="UUID des Klangs für Gruppennachrichten." name="textFSGroupNotice">
+			Gruppennachrichten:
+		</text>
+		<button label="V" name="Prev_UISndGroupNotice" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndGroupNotice" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndGroupNotice"/>
     </panel>
 	
 	</tab_container>

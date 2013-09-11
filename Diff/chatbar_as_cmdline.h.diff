@@ -1,0 +1,11 @@
+diff --git a/Source/indra/newview/chatbar_as_cmdline.h b/Source/indra/newview/chatbar_as_cmdline.h
+index 4fc3ed4..a735915 100644
+--- a/Source/indra/newview/chatbar_as_cmdline.h
++++ b/Source/indra/newview/chatbar_as_cmdline.h
+@@ -41,4 +41,4 @@ void cmdline_rezplat(bool use_saved_value = true, F32 visual_radius = 30.0);
+ void cmdline_tp2name(std::string target);
+ LLUUID cmdline_partial_name2key(std::string name);
+ 
+-#endif // CHATBAR_AS_CMDLINE_H
+\ No newline at end of file
++#endif // CHATBAR_AS_CMDLINE_H

@@ -1,0 +1,139 @@
+diff --git a/Source/indra/newview/llinventorymodel.cpp b/Source/indra/newview/llinventorymodel.cpp
+index 29d92fb..7de8f77 100644
+--- a/Source/indra/newview/llinventorymodel.cpp
++++ b/Source/indra/newview/llinventorymodel.cpp
+@@ -465,9 +465,10 @@ public:
+ 	{
+ 	}
+ 	
+-	virtual void error(U32 status, const std::string& reason)
++	virtual void errorWithContent(U32 status, const std::string& reason, const LLSD& content)
+ 	{
+-		LL_WARNS("InvAPI") << "CreateInventoryCategory failed.   status = " << status << ", reasion = \"" << reason << "\"" << LL_ENDL;
++		LL_WARNS("InvAPI") << "CreateInventoryCategory failed [status:"
++				<< status << "]: " << content << LL_ENDL;
+ 	}
+ 	
+ 	virtual void result(const LLSD& content)
+@@ -709,7 +710,7 @@ void LLInventoryModel::addChangedMaskForLinks(const LLUUID& object_id, U32 mask)
+ 	if (!obj || obj->getIsLinkType())
+ 		return;
+ 
+-//  <ND>: More efficient link updates
++// <FS:ND>: More efficient link updates
+ //
+ //	LLInventoryModel::cat_array_t cat_array;
+ //	LLInventoryModel::item_array_t item_array;
+@@ -745,9 +746,8 @@ void LLInventoryModel::addChangedMaskForLinks(const LLUUID& object_id, U32 mask)
+ 		for( item_links_set_t::iterator itrIds = itr->second.begin(); itr->second.end() != itrIds; ++itrIds )
+ 			addChangedMask(mask, *itrIds);
+  	}
+-	//</ND>
+-	
+ 
++	// </FS:ND>
+ }
+ 
+ const LLUUID& LLInventoryModel::getLinkedItemID(const LLUUID& object_id) const
+@@ -1198,7 +1198,7 @@ void LLInventoryModel::deleteObject(const LLUUID& id)
+ 	mItemMap.erase(id);
+ 	
+ 	
+-	// <ND>: Link processing efficiency
++	// <FS:ND>: Link processing efficiency
+ 	if(LLAssetType::lookupIsLinkType(obj->getActualType()))
+ 	{
+ 		LLUUID idLinked(obj->getLinkedUUID());
+@@ -1208,7 +1208,7 @@ void LLInventoryModel::deleteObject(const LLUUID& id)
+ 	}
+ 	else
+ 		mItemLinks.erase( id );
+-	// </ND>
++	// </FS:ND>
+ 	
+ 	
+ 	//mInventory.erase(id);
+@@ -1471,7 +1471,6 @@ void  LLInventoryModel::fetchInventoryResponder::result(const LLSD& content)
+ 	item_array_t items;
+ 	update_map_t update;
+ 	S32 count = content["items"].size();
+-	bool all_one_folder = true;
+ 	LLUUID folder_id;
+ 	// Does this loop ever execute more than once?
+ 	for(S32 i = 0; i < count; ++i)
+@@ -1504,10 +1503,6 @@ void  LLInventoryModel::fetchInventoryResponder::result(const LLSD& content)
+ 		{
+ 			folder_id = titem->getParentUUID();
+ 		}
+-		else
+-		{
+-			all_one_folder = false;
+-		}
+ 	}
+ 
+ 	U32 changes = 0x0;
+@@ -1521,10 +1516,9 @@ void  LLInventoryModel::fetchInventoryResponder::result(const LLSD& content)
+ }
+ 
+ //If we get back an error (not found, etc...), handle it here
+-void LLInventoryModel::fetchInventoryResponder::error(U32 status, const std::string& reason)
++void LLInventoryModel::fetchInventoryResponder::errorWithContent(U32 status, const std::string& reason, const LLSD& content)
+ {
+-	llinfos << "fetchInventory::error "
+-		<< status << ": " << reason << llendl;
++	llwarns << "fetchInventory error [status:" << status << "]: " << content << llendl;
+ 	gInventory.notifyObservers();
+ }
+ 
+@@ -1638,10 +1632,10 @@ void LLInventoryModel::addItem(LLViewerInventoryItem* item)
+ 			llinfos << "Adding broken link [ name: " << item->getName() << " itemID: " << item->getUUID() << " assetID: " << item->getAssetUUID() << " )  parent: " << item->getParentUUID() << llendl;
+ 		}
+ 		
+-		//<ND> Link Processing Efficiency
++		// <FS:ND> Link Processing Efficiency
+ 		if( LLAssetType::lookupIsLinkType(item->getActualType()) )
+ 			mItemLinks[ item->getLinkedUUID() ].insert( item->getUUID() );
+-		//</ND>
++		// </FS:ND>
+ 
+ 		mItemMap[item->getUUID()] = item;
+ 	}
+@@ -2063,8 +2057,9 @@ bool LLInventoryModel::loadSkeleton(
+ 		{
+ 			LLViewerInventoryCategory* cat = (*invalid_cat_it).get();
+ 			cat->setVersion(NO_VERSION);
+-			llinfos << "Invalidating category name: " << cat->getName() << " UUID: " << cat->getUUID() << " due to invalid descendents cache" << llendl;
++			LL_DEBUGS("Inventory") << "Invalidating category name: " << cat->getName() << " UUID: " << cat->getUUID() << " due to invalid descendents cache" << llendl;
+ 		}
++		LL_INFOS("Inventory") << "Invalidated " << invalid_categories.size() << " categories due to invalid descendents cache" << llendl;
+ 
+ 		// At this point, we need to set the known descendents for each
+ 		// category which successfully cached so that we do not
+@@ -2605,7 +2600,6 @@ bool LLInventoryModel::messageUpdateCore(LLMessageSystem* msg, bool account)
+ 	item_array_t items;
+ 	update_map_t update;
+ 	S32 count = msg->getNumberOfBlocksFast(_PREHASH_InventoryData);
+-	bool all_one_folder = true;
+ 	LLUUID folder_id;
+ 	// Does this loop ever execute more than once?
+ 	for(S32 i = 0; i < count; ++i)
+@@ -2637,10 +2631,6 @@ bool LLInventoryModel::messageUpdateCore(LLMessageSystem* msg, bool account)
+ 		{
+ 			folder_id = titem->getParentUUID();
+ 		}
+-		else
+-		{
+-			all_one_folder = false;
+-		}
+ 	}
+ 	if(account)
+ 	{
+@@ -3456,7 +3446,7 @@ void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
+ 					for (U32 j=0; j<count; j++) //remove all
+ 					{
+ 						//take the first one from the list, since the list is diminishing.
+-						LLWearable* wearable = gAgentWearables.getWearable((LLWearableType::EType)iType,0);
++						LLViewerWearable* wearable = gAgentWearables.getViewerWearable((LLWearableType::EType)iType,0);
+ 						//if the item is from our folder - don't remove it
+ 						//for (LLViewerInventoryItem *item = item_array.get(i); 
+ 						if (mItemArray.find((LLViewerInventoryItem *)wearable) == -1)

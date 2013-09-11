@@ -1,0 +1,15 @@
+diff --git a/Source/indra/newview/llfloatercolorpicker.cpp b/Source/indra/newview/llfloatercolorpicker.cpp
+index 3c453a5..e1e7fb8 100644
+--- a/Source/indra/newview/llfloatercolorpicker.cpp
++++ b/Source/indra/newview/llfloatercolorpicker.cpp
+@@ -174,9 +174,9 @@ void LLFloaterColorPicker::createUI ()
+ //
+ void LLFloaterColorPicker::showUI ()
+ {
++	openFloater(getKey());
+ 	setVisible ( TRUE );
+ 	setFocus ( TRUE );
+-	openFloater(getKey());
+ 
+ 	// HACK: if system color picker is required - close the SL one we made and use default system dialog
+ 	if ( gSavedSettings.getBOOL ( "UseDefaultColorPicker" ) )

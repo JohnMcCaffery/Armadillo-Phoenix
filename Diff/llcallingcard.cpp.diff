@@ -1,0 +1,166 @@
+diff --git a/Source/indra/newview/llcallingcard.cpp b/Source/indra/newview/llcallingcard.cpp
+index db99b20..8de1774 100644
+--- a/Source/indra/newview/llcallingcard.cpp
++++ b/Source/indra/newview/llcallingcard.cpp
+@@ -64,11 +64,17 @@
+ #include "lggcontactsets.h"
+ // <FS:Zi> Remove floating chat bar
+ // #include "llnearbychat.h"
+-#include "llfloaternearbychat.h"
++// <FS:Ansariel> [FS communication UI]
++//#include "llfloaternearbychat.h"
++#include "fsfloaternearbychat.h"
++// <FS:Ansariel> [FS communication UI]
+ // </FS:Zi>
+ #include "llfloaterreg.h"
+ #include "llnotificationmanager.h"
+-#include "llimfloater.h"
++// <FS:Ansariel> [FS communication UI]
++//#include "llimfloater.h"
++#include "fsfloaterim.h"
++// <FS:Ansariel>
+ 
+ ///----------------------------------------------------------------------------
+ /// Local function declarations, constants, enums, and typedefs
+@@ -192,7 +198,8 @@ LLVector3d LLAvatarTracker::getGlobalPos()
+ 		global_pos = object->getPositionGlobal();
+ 		// HACK - for making the tracker point above the avatar's head
+ 		// rather than its groin
+-		global_pos.mdV[VZ] += 0.7f * ((LLVOAvatar *)object)->mBodySize.mV[VZ];
++		LLVOAvatar* av = (LLVOAvatar*)object;
++		global_pos.mdV[VZ] += 0.7f * (av->mBodySize.mV[VZ] + av->mAvatarOffset.mV[VZ]);
+ 
+ 		mTrackingData->mGlobalPositionEstimate = global_pos;
+ 	}
+@@ -746,7 +753,12 @@ void LLAvatarTracker::processChangeUserRights(LLMessageSystem* msg, void**)
+ void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
+ {
+ 	S32 count = msg->getNumberOfBlocksFast(_PREHASH_AgentBlock);
+-	BOOL chat_notify = gSavedSettings.getBOOL("ChatOnlineNotification");
++
++	// <FS:PP> Attempt to speed up things a little
++	// 	BOOL chat_notify = gSavedSettings.getBOOL("ChatOnlineNotification");
++	static LLCachedControl<bool> ChatOnlineNotification(gSavedSettings, "ChatOnlineNotification");
++	BOOL chat_notify = ChatOnlineNotification;
++	// </FS:PP>
+ 
+ 	lldebugs << "Received " << count << " online notifications **** " << llendl;
+ 	if(count > 0)
+@@ -783,7 +795,12 @@ void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
+ 			gInventory.addChangedMask(LLInventoryObserver::CALLING_CARD, LLUUID::null);
+ 		}
+ 		//[FIX FIRE-3522 : SJ] Notify Online/Offline to Nearby Chat even if chat_notify isnt true
+-		if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id)||gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat"))
++		
++		// <FS:PP> Attempt to speed up things a little
++		// if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id)||gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat"))
++		static LLCachedControl<bool> OnlineOfflinetoNearbyChat(gSavedSettings, "OnlineOfflinetoNearbyChat");
++		if(chat_notify || LGGContactSets::getInstance()->notifyForFriend(agent_id) || OnlineOfflinetoNearbyChat)
++		// </FS:PP>
+ 		{
+ 			// Look up the name of this agent for the notification
+ 			LLAvatarNameCache::get(agent_id,
+@@ -807,11 +824,19 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
+ 	// Ansariel: No please! Take preference settings into account!
+ 	LLSD args;
+ 
+-	if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
++	// <FS:PP> Attempt to speed up things a little
++	// if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
++	static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
++	static LLCachedControl<bool> UseDisplayNames(gSavedSettings, "UseDisplayNames");
++	if ((NameTagShowUsernames) && (UseDisplayNames))
++	// </FS:PP>
+ 	{
+ 		args["NAME"] = av_name.getCompleteName();
+ 	}
+-	else if (gSavedSettings.getBOOL("UseDisplayNames"))
++	// <FS:PP> Attempt to speed up things a little
++	// else if (gSavedSettings.getBOOL("UseDisplayNames"))
++	else if (UseDisplayNames)
++	// </FS:PP>
+ 	{
+ 		args["NAME"] = av_name.mDisplayName;
+ 	}
+@@ -856,7 +881,13 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
+ 	// online/offline times to be referenced in chat & logged.
+ 	// [FIRE-3522 : SJ] Only show Online/Offline toast for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Toasts
+ 	//                  or for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Nearby Chat
+-	if ((gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")) || (gSavedSettings.getBOOL("FSContactSetsNotificationNearbyChat") && LGGContactSets::getInstance()->notifyForFriend(agent_id)))
++	
++	// <FS:PP> Attempt to speed up things a little
++	// if ((gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")) || (gSavedSettings.getBOOL("FSContactSetsNotificationNearbyChat") && LGGContactSets::getInstance()->notifyForFriend(agent_id)))
++	static LLCachedControl<bool> OnlineOfflinetoNearbyChat(gSavedSettings, "OnlineOfflinetoNearbyChat");
++	static LLCachedControl<bool> FSContactSetsNotificationNearbyChat(gSavedSettings, "FSContactSetsNotificationNearbyChat");
++	if ((OnlineOfflinetoNearbyChat) || (FSContactSetsNotificationNearbyChat && LGGContactSets::getInstance()->notifyForFriend(agent_id)))
++	// </FS:PP>
+ 	{
+ 		static LLCachedControl<bool> history_only(gSavedSettings, "OnlineOfflinetoNearbyChatHistory"); // LO - Adding a setting to show online/offline notices only in chat history. Helps prevent your screen from being filled with online notices on login.
+ 		LLChat chat;
+@@ -865,7 +896,10 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
+ 		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+ 		if (history_only)
+ 		{
+-			LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
++			// <FS:Ansariel> [FS communication UI]
++			//LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
++			FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
++			// </FS:Ansariel> [FS communication UI]
+ 			nearby_chat->addMessage(chat, true, LLSD());
+ 		}
+ 		else
+@@ -892,7 +926,10 @@ void LLAvatarTracker::formFriendship(const LLUUID& id)
+ 
+ 			// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
+ 			LLUUID im_session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, id);
+-			LLIMFloater* im_floater = LLIMFloater::findInstance(im_session_id);
++			// <FS:Ansariel> [FS communication UI]
++			//LLIMFloater* im_floater = LLIMFloater::findInstance(im_session_id);
++			FSFloaterIM* im_floater = FSFloaterIM::findInstance(im_session_id);
++			// </FS:Ansariel> [FS communication UI]
+ 			if (im_floater)
+ 			{
+ 				im_floater->setEnableAddFriendButton(FALSE);
+@@ -918,7 +955,10 @@ void LLAvatarTracker::processTerminateFriendship(LLMessageSystem* msg, void**)
+ 
+ 		// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
+ 		LLUUID im_session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, id);
+-		LLIMFloater* im_floater = LLIMFloater::findInstance(im_session_id);
++		// <FS:Ansariel> [FS communication UI]
++		//LLIMFloater* im_floater = LLIMFloater::findInstance(im_session_id);
++		FSFloaterIM* im_floater = FSFloaterIM::findInstance(im_session_id);
++		// </FS:Ansariel> [FS communication UI]
+ 		if (im_floater)
+ 		{
+ 			im_floater->setEnableAddFriendButton(TRUE);
+@@ -1015,10 +1055,28 @@ bool LLCollectMappableBuddies::operator()(const LLUUID& buddy_id, LLRelationship
+ {
+ 	LLAvatarName av_name;
+ 	LLAvatarNameCache::get( buddy_id, &av_name);
+-	buddy_map_t::value_type value(av_name.mDisplayName, buddy_id);
++	// <FS:Ansariel> Friend names on worldmap should respect display name settings
++	//buddy_map_t::value_type value(av_name.mDisplayName, buddy_id);
+ 	if(buddy->isOnline() && buddy->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION))
+ 	{
+-		mMappable.insert(value);
++		// <FS:Ansariel> Friend names on worldmap should respect display name settings
++		//mMappable.insert(value);
++		
++		// <FS:PP> Attempt to speed up things a little
++		// if (LLAvatarNameCache::useDisplayNames() && gSavedSettings.getBOOL("NameTagShowUsernames"))
++		static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
++		if (LLAvatarNameCache::useDisplayNames() && NameTagShowUsernames)
++		// </FS:PP>
++		{
++			buddy_map_t::value_type value(av_name.getCompleteName(), buddy_id);
++			mMappable.insert(value);
++		}
++		else
++		{
++			buddy_map_t::value_type value(av_name.mDisplayName, buddy_id);
++			mMappable.insert(value);
++		}
++		// </FS:Ansariel>
+ 	}
+ 	return true;
+ }

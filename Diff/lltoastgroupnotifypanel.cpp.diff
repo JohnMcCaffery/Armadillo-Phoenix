@@ -1,0 +1,12 @@
+diff --git a/Source/indra/newview/lltoastgroupnotifypanel.cpp b/Source/indra/newview/lltoastgroupnotifypanel.cpp
+index 3397fb9..0c18db2 100644
+--- a/Source/indra/newview/lltoastgroupnotifypanel.cpp
++++ b/Source/indra/newview/lltoastgroupnotifypanel.cpp
+@@ -33,6 +33,7 @@
+ #include "llbutton.h"
+ #include "lliconctrl.h"
+ #include "llinventoryfunctions.h"
++#include "llinventoryicon.h"
+ #include "llnotifications.h"
+ #include "llviewertexteditor.h"
+ 

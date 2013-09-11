@@ -1,0 +1,40 @@
+diff --git a/Source/indra/newview/fslslpreproc.h b/Source/indra/newview/fslslpreproc.h
+index ac27548..8b5a611 100644
+--- a/Source/indra/newview/fslslpreproc.h
++++ b/Source/indra/newview/fslslpreproc.h
+@@ -29,6 +29,9 @@
+  * THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
++#ifndef FS_LSLPREPROC_H
++#define FS_LSLPREPROC_H
++
+ #include "llviewerprecompiledheaders.h"
+ #include "llpreviewscript.h"
+ 
+@@ -37,10 +40,11 @@
+ 
+ class FSLSLPreprocessor
+ {
++	LOG_CLASS(FSLSLPreprocessor);
+ public:
+ 
+ 	FSLSLPreprocessor(LLScriptEdCore* corep)
+-		: mCore(corep), waving(FALSE), mClose(FALSE)
++		: mCore(corep), mWaving(FALSE), mClose(FALSE)
+ 	{}
+ 
+ 	static bool mono_directive(std::string const& text, bool agent_inv = true);
+@@ -78,8 +82,10 @@ public:
+ 	bool mDefinitionCaching;
+ 
+ 	LLScriptEdCore* mCore;
+-	BOOL waving;
++	BOOL mWaving;
+ 	BOOL mClose;
+ 	BOOL mHDDInclude;
+ 	std::string mMainScriptName;
+ };
++
++#endif // FS_LSLPREPROC_H
+\ No newline at end of file

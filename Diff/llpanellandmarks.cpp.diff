@@ -1,0 +1,70 @@
+diff --git a/Source/indra/newview/llpanellandmarks.cpp b/Source/indra/newview/llpanellandmarks.cpp
+index 031d2c1..6201de1 100644
+--- a/Source/indra/newview/llpanellandmarks.cpp
++++ b/Source/indra/newview/llpanellandmarks.cpp
+@@ -390,7 +390,17 @@ void LLLandmarksPanel::onSelectorButtonClicked()
+ 		key["type"] = "landmark";
+ 		key["id"] = listenerp->getUUID();
+ 
+-		LLFloaterSidePanelContainer::showPanel("places", key);
++		// <FS:Ansariel> FIRE-817: Separate place details floater
++		//LLFloaterSidePanelContainer::showPanel("places", key);
++		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++		{
++			LLFloaterReg::showInstance("fs_placedetails", key);
++		}
++		else
++		{
++			LLFloaterSidePanelContainer::showPanel("places", key);
++		}
++		// </FS:Ansariel>
+ 	}
+ }
+ 
+@@ -441,12 +451,13 @@ void LLLandmarksPanel::setItemSelected(const LLUUID& obj_id, BOOL take_keyboard_
+ bool LLLandmarksPanel::isLandmarkSelected() const 
+ {
+ 	LLFolderViewItem* current_item = getCurSelectedItem();
+-	if(current_item && current_item->getListener()->getInventoryType() == LLInventoryType::IT_LANDMARK)
+-	{
+-		return true;
+-	}
++	return current_item && current_item->getListener()->getInventoryType() == LLInventoryType::IT_LANDMARK;
++}
+ 
+-	return false;
++bool LLLandmarksPanel::isFolderSelected() const
++{
++	LLFolderViewItem* current_item = getCurSelectedItem();
++	return current_item && current_item->getListener()->getInventoryType() == LLInventoryType::IT_CATEGORY;
+ }
+ 
+ bool LLLandmarksPanel::isReceivedFolderSelected() const
+@@ -743,7 +754,7 @@ void LLLandmarksPanel::initListCommandsHandlers()
+ void LLLandmarksPanel::updateListCommands()
+ {
+ 	bool add_folder_enabled = isActionEnabled("category");
+-	bool trash_enabled = isActionEnabled("delete");
++	bool trash_enabled = isActionEnabled("delete") && (isFolderSelected() || isLandmarkSelected());
+ 
+ 	// keep Options & Add Landmark buttons always enabled
+ 	mListCommands->getChildView(ADD_FOLDER_BUTTON_NAME)->setEnabled(add_folder_enabled);
+@@ -813,7 +824,17 @@ void LLLandmarksPanel::onAddAction(const LLSD& userdata) const
+ 			}
+ 			else
+ 			{
+-				LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
++				// <FS:Ansariel> FIRE-817: Separate place details floater
++				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
++				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++				{
++					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "create_landmark"));
++				}
++				else
++				{
++					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
++				}
++				// </FS:Ansariel>
+ 			}
+ // [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+ 		}

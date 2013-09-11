@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/lldaycyclemanager.cpp b/Source/indra/newview/lldaycyclemanager.cpp
+index e00294d..b8b4f9b 100644
+--- a/Source/indra/newview/lldaycyclemanager.cpp
++++ b/Source/indra/newview/lldaycyclemanager.cpp
+@@ -200,7 +200,7 @@ void LLDayCycleManager::loadPresets(const std::string& dir)
+ 	{
+ 		std::string file;
+ 		if (!dir_iter.next(file)) break; // no more files
+-		loadPreset(dir + file);
++		loadPreset(gDirUtilp->add(dir, file));
+ 	}
+ }
+ 

@@ -1,0 +1,1390 @@
+diff --git a/Source/indra/newview/llfloaterpreference.cpp b/Source/indra/newview/llfloaterpreference.cpp
+index ab36615..08b019b 100644
+--- a/Source/indra/newview/llfloaterpreference.cpp
++++ b/Source/indra/newview/llfloaterpreference.cpp
+@@ -52,13 +52,19 @@
+ #include "llfloaterabout.h"
+ #include "llfloaterhardwaresettings.h"
+ #include "llfloatersidepanelcontainer.h"
+-#include "llimfloater.h"
++// <FS:Ansariel> [FS communication UI]
++//#include "llimfloater.h"
++#include "fsfloaterim.h"
++// </FS:Ansariel> [FS communication UI]
+ #include "llkeyboard.h"
+ #include "llmodaldialog.h"
+ #include "llnavigationbar.h"
+ // <FS:Zi> Remove floating chat bar
+ // #include "llnearbychat.h"
+-#include "llfloaternearbychat.h"
++// <FS:Ansariel> [FS communication UI]
++//#include "llfloaternearbychat.h"
++#include "fsfloaternearbychat.h"
++// </FS:Ansariel> [FS communication UI]
+ // </FS:Zi>
+ #include "llnotifications.h"
+ #include "llnotificationsutil.h"
+@@ -125,6 +131,18 @@
+ 
+ #include "llviewernetwork.h" // <FS:AW  opensim search support>
+ 
++// <FS:Zi> Backup Settings
++#include "llline.h"
++#include "llscrolllistctrl.h"
++#include "llspellcheck.h"
++#include "lltoolbarview.h"
++#include "llwaterparammanager.h"
++#include "llwldaycycle.h"
++#include "llwlparammanager.h"
++// </FS:Zi>
++#include "growlmanager.h"
++#include "lldiriterator.h"	// <Kadah> for populating the fonts combo
++
+ const F32 MAX_USER_FAR_CLIP = 512.f;
+ const F32 MIN_USER_FAR_CLIP = 64.f;
+ //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+@@ -236,21 +254,6 @@ bool callback_clear_cache(const LLSD& notification, const LLSD& response)
+ 	return false;
+ }
+ 
+-// <FS:LO> FIRE-7050 - Add a warning to the Growl preference option because of FIRE-6868
+-#ifdef LL_WINDOWS
+-bool callback_growl_not_installed(const LLSD& notification, const LLSD& response)
+-{
+-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+-	if ( option == 1 ) // NO
+-	{
+-		gSavedSettings.setBOOL("FSEnableGrowl", FALSE);
+-	}
+-
+-	return false;
+-}
+-#endif
+-// </FS:LO>
+-
+ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response)
+ {
+ 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+@@ -298,7 +301,7 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response)
+ 	if ( option == 0 ) // YES
+ 	{
+ 		std::string url;
+-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
++#ifdef OPENSIM // <FS:AW optional opensim support>
+ 		if(LLGridManager::getInstance()->isInOpenSim())
+ 		{
+ 			url = LLLoginInstance::getInstance()->hasResponse("search")
+@@ -306,7 +309,7 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response)
+ 				: gSavedSettings.getString("SearchURLOpenSim");
+ 		}
+ 		else // we are in SL or SL beta
+-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
++#endif // OPENSIM // <FS:AW optional opensim support>
+ 		{
+ 			//not in OpenSim means we are in SL or SL beta
+ 			url = gSavedSettings.getString("SearchURL");
+@@ -480,8 +483,19 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
+ 
+ 	mCommitCallbackRegistrar.add("Pref.ClickActionChange",				boost::bind(&LLFloaterPreference::onClickActionChange, this));
+ 
+-	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
+-	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
++	// <FS:Zi> Backup settings
++	mCommitCallbackRegistrar.add("Pref.SetBackupSettingsPath",	boost::bind(&LLFloaterPreference::onClickSetBackupSettingsPath, this));
++	mCommitCallbackRegistrar.add("Pref.BackupSettings",			boost::bind(&LLFloaterPreference::onClickBackupSettings, this));
++	mCommitCallbackRegistrar.add("Pref.RestoreSettings",		boost::bind(&LLFloaterPreference::onClickRestoreSettings, this));
++	mCommitCallbackRegistrar.add("Pref.BackupSelectAll",		boost::bind(&LLFloaterPreference::onClickSelectAll, this));
++	mCommitCallbackRegistrar.add("Pref.BackupDeselectAll",		boost::bind(&LLFloaterPreference::onClickDeselectAll, this));
++	// </FS:Zi>
++
++	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
++	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
++	// <FS:CR>
++	gSavedSettings.getControl("FSColorUsername")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged, _2));
++	// </FS:CR>
+ 	gSavedSettings.getControl("UseDisplayNames")->getCommitSignal()->connect(boost::bind(&handleDisplayNamesOptionChanged,  _2));
+ // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+ 	gSavedSettings.getControl("DontTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged,  _2));
+@@ -562,13 +576,16 @@ void LLFloaterPreference::saveAvatarProperties( void )
+ 
+ BOOL LLFloaterPreference::postBuild()
+ {
+-	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2));
+-
+-	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
+-
+-	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2));
+-
+-	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
++	// <FS:Ansariel> [FS communication UI]
++	//gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2));
++	//gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
++	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2));
++	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
++	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
++	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
++	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
++	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
++	// </FS:Ansariel> [FS communication UI]
+ 
+ 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLViewerChat::signalChatFontChanged));
+ 
+@@ -613,7 +630,7 @@ BOOL LLFloaterPreference::postBuild()
+ // [/SL:KB]
+ 
+ // <FS:AW  opensim preferences>
+-#ifndef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support/>
++#ifndef OPENSIM// <FS:AW optional opensim support/>
+ 	// Hide the opensim tab if opensim isn't enabled
+ 	LLTabContainer* tab_container = getChild<LLTabContainer>("pref core");
+ 	if (tab_container)
+@@ -623,7 +640,7 @@ BOOL LLFloaterPreference::postBuild()
+ 			tab_container->removeTabPanel(opensim_panel);
+ 	}
+ // </FS:AW  opensim preferences>
+-#endif  // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
++#endif  // OPENSIM // <FS:AW optional opensim support/>
+ 
+ 
+ // ## Zi: Pie menu
+@@ -635,6 +652,16 @@ BOOL LLFloaterPreference::postBuild()
+ 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+ 	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", getString("LoginToChange"));
+ 
++	// <FS:Zi> Backup Settings
++	// Apparently, line editors don't update with their settings controls, so do that manually here
++	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
++	getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
++	// </FS:Zi>
++
++	// <FS:Kadah> Load the list of font settings
++	populateFontSelectionCombo();
++	// </FS:Kadah>
++    
+ 	return TRUE;
+ }
+ 
+@@ -685,6 +712,17 @@ LLFloaterPreference::~LLFloaterPreference()
+ 	*/
+ }
+ 
++//void LLFloaterPreference::draw()
++//{
++//	BOOL has_first_selected = (getChildRef<LLScrollListCtrl>("disabled_popups").getFirstSelected()!=NULL);
++//	gSavedSettings.setBOOL("FirstSelectedDisabledPopups", has_first_selected);
++//	
++//	has_first_selected = (getChildRef<LLScrollListCtrl>("enabled_popups").getFirstSelected()!=NULL);
++//	gSavedSettings.setBOOL("FirstSelectedEnabledPopups", has_first_selected);
++//	
++//	LLFloater::draw();
++//}
++
+ void LLFloaterPreference::saveSettings()
+ {
+ 	LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
+@@ -803,9 +841,14 @@ void LLFloaterPreference::cancel()
+ 	// hide translation settings floater
+ 	LLFloaterReg::hideInstance("prefs_translation");
+ 	
+-	// hide translation settings floater
++	// hide autoreplace settings floater
+ 	LLFloaterReg::hideInstance("prefs_autoreplace");
+ 	
++// <FS:CR> STORM-1888
++	// hide spellchecker settings floater
++	LLFloaterReg::hideInstance("prefs_spellchecker");
++// </FS:CR>
++	
+ 	// cancel hardware menu
+ 	LLFloaterHardwareSettings* hardware_settings = LLFloaterReg::getTypedInstance<LLFloaterHardwareSettings>("prefs_hardware_settings");
+ 	if (hardware_settings)
+@@ -838,7 +881,6 @@ void LLFloaterPreference::cancel()
+ 
+ void LLFloaterPreference::onOpen(const LLSD& key)
+ {
+-	
+ 	// this variable and if that follows it are used to properly handle busy mode response message
+ 	static bool initialized = FALSE;
+ 	// if user is logged in and we haven't initialized busy_response yet, do it
+@@ -910,6 +952,15 @@ void LLFloaterPreference::onOpen(const LLSD& key)
+ 	getChildView("plain_text_chat_history")->setEnabled(TRUE);
+ 	getChild<LLUICtrl>("plain_text_chat_history")->setValue(gSavedSettings.getBOOL("PlainTextChatHistory"));
+ 	
++// <FS:CR> Show/hide Client Tag panel
++	bool show_client_tags = false;
++#ifdef OPENSIM
++	//Disabled for now because client tags don't currently work <FS:CR>
++	//show_client_tags = LLGridManager::getInstance()->isInOpenSim();
++#endif // OPENSIM
++	getChild<LLPanel>("client_tags_panel")->setVisible(show_client_tags);
++// </FS:CR>
++	
+ 	// Make sure the current state of prefs are saved away when
+ 	// when the floater is opened.  That will make cancel do its
+ 	// job
+@@ -961,7 +1012,10 @@ void LLFloaterPreference::onClose(bool app_quitting)
+ {
+ 	gSavedSettings.setS32("LastPrefTab", getChild<LLTabContainer>("pref core")->getCurrentPanelIndex());
+ 	LLPanelLogin::setAlwaysRefresh(false);
+-	cancel();
++	if (!app_quitting)
++	{
++		cancel();
++	}
+ }
+ 
+ void LLFloaterPreference::onOpenHardwareSettings()
+@@ -1001,7 +1055,7 @@ void LLFloaterPreference::onBtnOK()
+ 		llinfos << "Can't close preferences!" << llendl;
+ 	}
+ 
+-	LLPanelLogin::updateLocationCombo( false );
++	LLPanelLogin::updateLocationSelectorsVisibility();	
+ 	//Need to reload the navmesh if the pathing console is up
+ 	LLHandle<LLFloaterPathfindingConsole> pathfindingConsoleHandle = LLFloaterPathfindingConsole::getInstanceHandle();
+ 	if ( !pathfindingConsoleHandle.isDead() )
+@@ -1026,7 +1080,7 @@ void LLFloaterPreference::onBtnApply( )
+ 	apply();
+ 	saveSettings();
+ 
+-	LLPanelLogin::updateLocationCombo( false );
++	LLPanelLogin::updateLocationSelectorsVisibility();
+ }
+ 
+ // static 
+@@ -1210,7 +1264,7 @@ void LLFloaterPreference::onClickChatOnlineNotices()
+ 
+ void LLFloaterPreference::onClickClearSpamList()
+ {
+-	NACLAntiSpamRegistry::purgeAllQueues(); 
++	NACLAntiSpamRegistry::instance().purgeAllQueues(); 
+ }
+ 
+ void LLFloaterPreference::setPreprocInclude()
+@@ -1337,7 +1391,7 @@ void LLFloaterPreference::refreshEnabledState()
+ 	S32 max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting();
+ 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem);
+ 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem);
+-    
++
+ 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderVBOEnable") ||
+ 		!gGLManager.mHasVertexBufferObject)
+ 	{
+@@ -1351,7 +1405,7 @@ void LLFloaterPreference::refreshEnabledState()
+ #else
+ 		getChildView("vbo_stream")->setEnabled(LLVertexBuffer::sEnableVBOs);
+ #endif
+-	
++
+ 	//if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||  FS:TM disabled as we do not have RenderCompressTextures in our feature table.
+ 	//	!gGLManager.mHasVertexBufferObject)
+ 	if (!gGLManager.mHasVertexBufferObject)
+@@ -1359,18 +1413,47 @@ void LLFloaterPreference::refreshEnabledState()
+ 		getChildView("texture compression")->setEnabled(FALSE);
+ 	}
+ 
++	//FS:TM from LLFloaterHardwareSettings.cpp
+ 	// if no windlight shaders, turn off nighttime brightness, gamma, and fog distance
+-	getChildView("gamma")->setEnabled(!gPipeline.canUseWindLightShaders());
++	LLSpinCtrl* gamma_ctrl = getChild<LLSpinCtrl>("gamma");
++	gamma_ctrl->setEnabled(!gPipeline.canUseWindLightShaders());
+ 	getChildView("(brightness, lower is brighter)")->setEnabled(!gPipeline.canUseWindLightShaders());
+ 	getChildView("fog")->setEnabled(!gPipeline.canUseWindLightShaders());
+-	getChildView("fsaa")->setEnabled(gPipeline.canUseAntiAliasing());
+-	getChildView("antialiasing restart")->setVisible(!gSavedSettings.getBOOL("RenderDeferred"));
+-	getChildView("LocalLightsDetail")->setEnabled(gSavedSettings.getBOOL("RenderLocalLights"));
++
++	// anti-aliasing
++	{
++		LLUICtrl* fsaa_ctrl = getChild<LLUICtrl>("fsaa");
++		LLTextBox* fsaa_text = getChild<LLTextBox>("antialiasing label");
++		LLView* fsaa_restart = getChildView("antialiasing restart");
++		
++		// Enable or disable the control, the "Antialiasing:" label and the restart warning
++		// based on code support for the feature on the current hardware.
++
++		if (gPipeline.canUseAntiAliasing())
++		{
++			fsaa_ctrl->setEnabled(TRUE);
++			
++			// borrow the text color from the gamma control for consistency
++			fsaa_text->setColor(gamma_ctrl->getEnabledTextColor());
++
++			fsaa_restart->setVisible(!gSavedSettings.getBOOL("RenderDeferred"));
++		}
++		else
++		{
++			fsaa_ctrl->setEnabled(FALSE);
++			fsaa_ctrl->setValue((LLSD::Integer) 0);
++			
++			// borrow the text color from the gamma control for consistency
++			fsaa_text->setColor(gamma_ctrl->getDisabledTextColor());
++			
++			fsaa_restart->setVisible(FALSE);
++		}
++	}
+     
+ 	LLComboBox* ctrl_reflections = getChild<LLComboBox>("Reflections");
+ 	// <FS:Ansariel> Radio group "ReflectionDetailRadio" doesn't exist as of 20/11/2012
+ 	//LLRadioGroup* radio_reflection_detail = getChild<LLRadioGroup>("ReflectionDetailRadio");
+-	
++
+ // [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
+ 	if (rlv_handler_t::isEnabled())
+ 		childSetEnabled("busy_response", !gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM));
+@@ -1462,6 +1545,9 @@ void LLFloaterPreference::refreshEnabledState()
+ 						(ctrl_wind_light->get()) ? TRUE : FALSE;
+ 
+ 	ctrl_deferred->setEnabled(enabled);
++
++	// <FS:Ansariel> Tofu's SSR
++	getChild<LLCheckBoxCtrl>("FSRenderSSR")->setEnabled(enabled && (ctrl_deferred->get() ? TRUE : FALSE) && gSavedSettings.getS32("RenderShadowDetail") > 0);
+ 	
+ 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
+ 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
+@@ -1495,6 +1581,8 @@ void LLFloaterPreference::disableUnavailableSettings()
+ 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
+ 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
+ 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
++	// <FS:Ansariel> Tofu's SSR
++	LLCheckBoxCtrl* ctrl_ssr = getChild<LLCheckBoxCtrl>("FSRenderSSR");
+ 
+ 	// if vertex shaders off, disable all shader related products
+ 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"))
+@@ -1525,6 +1613,10 @@ void LLFloaterPreference::disableUnavailableSettings()
+ 
+ 		ctrl_deferred->setEnabled(FALSE);
+ 		ctrl_deferred->setValue(FALSE);
++
++		// <FS:Ansariel> Tofu's SSR
++		ctrl_ssr->setEnabled(FALSE);
++		ctrl_ssr->setValue(FALSE);
+ 	}
+ 	
+ 	// disabled windlight
+@@ -1545,6 +1637,10 @@ void LLFloaterPreference::disableUnavailableSettings()
+ 
+ 		ctrl_deferred->setEnabled(FALSE);
+ 		ctrl_deferred->setValue(FALSE);
++
++		// <FS:Ansariel> Tofu's SSR
++		ctrl_ssr->setEnabled(FALSE);
++		ctrl_ssr->setValue(FALSE);
+ 	}
+ 
+ 	// disabled deferred
+@@ -1562,6 +1658,10 @@ void LLFloaterPreference::disableUnavailableSettings()
+ 
+ 		ctrl_deferred->setEnabled(FALSE);
+ 		ctrl_deferred->setValue(FALSE);
++
++		// <FS:Ansariel> Tofu's SSR
++		ctrl_ssr->setEnabled(FALSE);
++		ctrl_ssr->setValue(FALSE);
+ 	}
+ 	
+ 	// disabled deferred SSAO
+@@ -1576,6 +1676,10 @@ void LLFloaterPreference::disableUnavailableSettings()
+ 	{
+ 		ctrl_shadows->setEnabled(FALSE);
+ 		ctrl_shadows->setValue(0);
++
++		// <FS:Ansariel> Tofu's SSR
++		ctrl_ssr->setEnabled(FALSE);
++		ctrl_ssr->setValue(FALSE);
+ 	}
+ 
+ 	// disabled reflections
+@@ -1606,6 +1710,10 @@ void LLFloaterPreference::disableUnavailableSettings()
+ 
+ 		ctrl_deferred->setEnabled(FALSE);
+ 		ctrl_deferred->setValue(FALSE);
++
++		// <FS:Ansariel> Tofu's SSR
++		ctrl_ssr->setEnabled(FALSE);
++		ctrl_ssr->setValue(FALSE);
+ 	}
+ 
+ 	// disabled cloth
+@@ -1638,7 +1746,7 @@ void LLFloaterPreference::refresh()
+ 	updateSliderText(getChild<LLSliderCtrl>("TerrainMeshDetail",	true), getChild<LLTextBox>("TerrainMeshDetailText",		true));
+ 	updateSliderText(getChild<LLSliderCtrl>("RenderPostProcess",	true), getChild<LLTextBox>("PostProcessText",			true));
+ 	updateSliderText(getChild<LLSliderCtrl>("SkyMeshDetail",		true), getChild<LLTextBox>("SkyMeshDetailText",			true));
+-	
++		
+ 	refreshEnabledState();
+ }
+ 
+@@ -1695,7 +1803,7 @@ void LLFloaterPreference::onClickSetSounds()
+ void LLFloaterPreference::onClickPreviewUISound(const LLSD& ui_sound_id)
+ {
+ 	std::string uisndid = ui_sound_id.asString();
+-	make_ui_sound(uisndid.c_str());
++	make_ui_sound(uisndid.c_str(), true);
+ }
+ // </FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
+ 
+@@ -1920,7 +2028,17 @@ void LLFloaterPreference::onChangeMaturity()
+ // but the UI for this will still be enabled
+ void LLFloaterPreference::onClickBlockList()
+ {
+-	LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
++	// </FS:Ansariel> Optional standalone blocklist floater
++	//LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
++	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
++	{
++		LLFloaterReg::showInstance("fs_blocklist", LLSD());
++	}
++	else
++	{
++		LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
++	}
++	// </FS:Ansariel>
+ }
+ 
+ void LLFloaterPreference::onClickSortContacts()
+@@ -1976,16 +2094,11 @@ void LLFloaterPreference::updateClickActionControls()
+ // <FS:PP> Load UI Sounds tabs settings
+ void LLFloaterPreference::updateUISoundsControls()
+ {
+-	getChild<LLComboBox>("PlayModeUISndNewIncomingIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession")); // 0, 1, 2. Shared with Chat > Notifications > "When receiving Instant Messages"
+-	getChild<LLComboBox>("PlayModeUISndNewIncomingGroupIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession")); // 0, 1, 2. Shared with Chat > Notifications > "When receiving Group Instant Messages"
++	getChild<LLComboBox>("PlayModeUISndNewIncomingIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession")); // 0, 1, 2, 3. Shared with Chat > Notifications > "When receiving Instant Messages"
++	getChild<LLComboBox>("PlayModeUISndNewIncomingGroupIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession")); // 0, 1, 2, 3. Shared with Chat > Notifications > "When receiving Group Instant Messages"
+ 	// Set proper option for Chat > Notifications > "When receiving Instant Messages"
+-	getChild<LLComboBox>("WhenPlayIM")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession")); // 0, 1, 2
+-	getChild<LLComboBox>("WhenPlayGroupIM")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession")); // 0, 1, 2
+-	// This sound is unused in Firestorm at the moment
+-	getChild<LLUICtrl>("UISndObjectDelete")->setEnabled(FALSE);
+-	getChild<LLButton>("Prev_UISndObjectDelete")->setEnabled(FALSE);
+-	getChild<LLButton>("Def_UISndObjectDelete")->setEnabled(FALSE);
+-	getChild<LLCheckBoxCtrl>("PlayModeUISndObjectDelete")->setEnabled(FALSE);
++	getChild<LLComboBox>("WhenPlayIM")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession")); // 0, 1, 2, 3
++	getChild<LLComboBox>("WhenPlayGroupIM")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession")); // 0, 1, 2, 3
+ }
+ // </FS:PP>
+ 
+@@ -2112,7 +2225,15 @@ BOOL LLPanelPreference::postBuild()
+ 		getChildView("voice_unavailable")->setVisible( voice_disabled);
+ 		getChildView("enable_voice_check")->setVisible( !voice_disabled);
+ 	}
+-	
++
++	//////////////////////PanelGraphics (hardware) ///////////////////
++	if (gGLManager.mIsIntel || gGLManager.mGLVersion < 3.f)
++	{ //remove FSAA settings above "4x"
++		LLComboBox* combo = getChild<LLComboBox>("fsaa");
++		combo->remove("8x");
++		combo->remove("16x");
++	}
++
+ 	//////////////////////PanelSkins ///////////////////
+ 	/*
+ 	if (hasChild("skin_selection"))
+@@ -2204,22 +2325,24 @@ BOOL LLPanelPreference::postBuild()
+ 	{
+ 		getChildView("OnlineOfflinetoNearbyChatHistory")->setEnabled(getChild<LLUICtrl>("OnlineOfflinetoNearbyChat")->getValue().asBoolean());
+ 	}
+-	// <FS:LO> FIRE-7050 - Add a warning to the Growl preference option because of FIRE-6868
+-#ifdef LL_WINDOWS
++
++	// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
+ 	if (hasChild("notify_growl_checkbox", TRUE))
+ 	{
+-		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setCommitCallback(boost::bind(&showGrowlNotInstalledWarning, _1, _2));
++		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setCommitCallback(boost::bind(&LLPanelPreference::onEnableGrowlChanged, this));
++		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setEnabled(GrowlManager::isUsable());
++		getChild<LLCheckBoxCtrl>("notify_growl_always_checkbox")->setEnabled(gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable());
+ 	}
+-#endif
+-	// </FS:LO>
+-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
++	// </FS:Ansariel>
++
++#ifdef OPENSIM // <FS:AW optional opensim support/>
+ // <FS:AW Disable LSL bridge on opensim>
+-	if(LLGridManager::getInstance()->isInOpenSim() && hasChild("UseLSLBridge", TRUE))
++	if(LLGridManager::getInstance()->isInOpenSim() && !LLGridManager::getInstance()->isInAuroraSim() && hasChild("UseLSLBridge", TRUE))
+ 	{
+  		getChild<LLCheckBoxCtrl>("UseLSLBridge")->setEnabled(FALSE);
+ 	}
+ // </FS:AW Disable LSL bridge on opensim>
+-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
++#endif // OPENSIM // <FS:AW optional opensim support/>
+ 
+ 	apply();
+ 	return true;
+@@ -2306,17 +2429,12 @@ void LLPanelPreference::showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LL
+ 	}
+ }
+ 
+-// <FS:LO> FIRE-7050 - Add a warning to the Growl preference option because of FIRE-6868
+-#ifdef LL_WINDOWS
+-void LLPanelPreference::showGrowlNotInstalledWarning(LLUICtrl* checkbox, const LLSD& value)
++// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
++void LLPanelPreference::onEnableGrowlChanged()
+ {
+-	if (checkbox && checkbox->getValue())
+-	{
+-		LLNotificationsUtil::add("GrowlNotInstalled",LLSD(), LLSD(), callback_growl_not_installed);
+-	}
++	getChild<LLCheckBoxCtrl>("notify_growl_always_checkbox")->setEnabled(gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable());
+ }
+-#endif
+-// </FS:LO>
++// </FS:Ansariel>
+ 
+ void LLPanelPreference::cancel()
+ {
+@@ -2739,38 +2857,40 @@ void LLPanelPreferenceCrashReports::cancel()
+ }
+ // [/SL:KB]
+ 
+-// <KB> - Catznip Viewer-Skins 
+-
++// [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-21 (Catznip-2.2)
+ static LLRegisterPanelClassWrapper<LLPanelPreferenceSkins> t_pref_skins("panel_preference_skins");
+ 
+-
+-LLPanelPreferenceSkins::LLPanelPreferenceSkins() : LLPanelPreference(), m_pSkinCombo(NULL), m_pSkinThemeCombo(NULL)
++LLPanelPreferenceSkins::LLPanelPreferenceSkins()
++	: LLPanelPreference()
++	, m_pSkinCombo(NULL)
++	, m_pSkinThemeCombo(NULL)
+ {
+ 	m_Skin = gSavedSettings.getString("SkinCurrent");
+ 	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
++	m_SkinName = gSavedSettings.getString("FSSkinCurrentReadableName");
++	m_SkinThemeName = gSavedSettings.getString("FSSkinCurrentThemeReadableName");
++
+ 	const std::string strSkinsPath = gDirUtilp->getSkinBaseDir() + gDirUtilp->getDirDelimiter() + "skins.xml";
+ 	llifstream fileSkins(strSkinsPath, std::ios::binary);
+ 	if (fileSkins.is_open())
+ 	{
+-		LLSDSerialize::fromXMLDocument(m_SkinsInfo, fileSkins);	
++		LLSDSerialize::fromXMLDocument(m_SkinsInfo, fileSkins);
+ 	}
+ }
+ 
+-
+ BOOL LLPanelPreferenceSkins::postBuild()
+ {
+-
+ 	m_pSkinCombo = getChild<LLComboBox>("skin_combobox");
+ 	if (m_pSkinCombo)
+ 		m_pSkinCombo->setCommitCallback(boost::bind(&LLPanelPreferenceSkins::onSkinChanged, this));
+-		
++
+ 	m_pSkinThemeCombo = getChild<LLComboBox>("theme_combobox");
+ 	if (m_pSkinThemeCombo)
+ 		m_pSkinThemeCombo->setCommitCallback(boost::bind(&LLPanelPreferenceSkins::onSkinThemeChanged, this));
+-			
++
+ 	refreshSkinList();
+ 
+-	return LLPanelPreference::postBuild();	
++	return LLPanelPreference::postBuild();
+ }
+ 
+ void LLPanelPreferenceSkins::apply()
+@@ -2780,70 +2900,83 @@ void LLPanelPreferenceSkins::apply()
+ 		gSavedSettings.setString("SkinCurrent", m_Skin);
+ 		gSavedSettings.setString("SkinCurrentTheme", m_SkinTheme);
+ 
+-		LLNotificationsUtil::add("ChangeSkin");	
++		gSavedSettings.setString("FSSkinCurrentReadableName", m_SkinName);
++		gSavedSettings.setString("FSSkinCurrentThemeReadableName", m_SkinThemeName);
+ 
++		LLNotificationsUtil::add("ChangeSkin");
+ 	}
+ }
+ 
+-
+ void LLPanelPreferenceSkins::cancel()
+ {
+ 	m_Skin = gSavedSettings.getString("SkinCurrent");
+ 	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
+-	refreshSkinList();	
++	m_SkinName = gSavedSettings.getString("FSSkinCurrentReadableName");
++	m_SkinThemeName = gSavedSettings.getString("FSSkinCurrentThemeReadableName");
++	refreshSkinList();
+ }
+ 
+ void LLPanelPreferenceSkins::onSkinChanged()
+ {
+ 	m_Skin = (m_pSkinCombo) ? m_pSkinCombo->getSelectedValue().asString() : "default";
+-	m_SkinTheme = "default";
+ 	refreshSkinThemeList();
+-	onSkinThemeChanged(); // make sure we initialize a theme for our new skin
+-
+-        // <FS:AO> Some crude hardcoded preferences per skin. Without this, some defaults from the
+-        // current skin would be carried over, leading to confusion and a first experience with
+-        // the skin that the designer didn't intend.
+-
+-        if  (m_Skin.compare("starlight") == 0)
+-        {
+-                gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
+-                gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
+-        }
+-        else
+-        {
+-                gSavedSettings.setBOOL("ShowMenuBarLocation", TRUE);
+-                gSavedSettings.setBOOL("ShowNavbarNavigationPanel",FALSE);
+-        }
++	m_SkinTheme = (m_pSkinThemeCombo) ? m_pSkinThemeCombo->getSelectedValue().asString() : "";
+ 
+-	if (gSavedSettings.getBOOL("FSSkinClobbersToolbarPrefs"))
++	m_SkinName = m_pSkinCombo->getSelectedItemLabel();
++	m_SkinThemeName = m_pSkinThemeCombo->getSelectedItemLabel();
++
++    // <FS:AO> Some crude hardcoded preferences per skin. Without this, some defaults from the
++    // current skin would be carried over, leading to confusion and a first experience with
++    // the skin that the designer didn't intend.
++	if  (m_Skin.compare("starlight") == 0)
+ 	{
+-        	llinfos << "Clearing toolbar settings." << llendl;
+-        	gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
++		gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
++		gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
++	}
++	else
++	{
++		gSavedSettings.setBOOL("ShowMenuBarLocation", TRUE);
++		gSavedSettings.setBOOL("ShowNavbarNavigationPanel",FALSE);
+ 	}
+ 
+-        //</FS:AO>
++	if (gSavedSettings.getBOOL("FSSkinClobbersToolbarPrefs"))
++	{
++		llinfos << "Clearing toolbar settings." << llendl;
++		gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
++	}
++    //</FS:AO>
+ }
+ 
+ void LLPanelPreferenceSkins::onSkinThemeChanged()
+ {
+-	m_SkinTheme = (m_pSkinThemeCombo) ? m_pSkinThemeCombo->getSelectedValue().asString() : "default";
++	m_SkinTheme = (m_pSkinThemeCombo) ? m_pSkinThemeCombo->getSelectedValue().asString() : "";
++	m_SkinThemeName = m_pSkinThemeCombo->getSelectedItemLabel();
+ }
+ 
+ void LLPanelPreferenceSkins::refreshSkinList()
+ {
+ 	if (!m_pSkinCombo)
+ 		return;
+-	
+-	m_pSkinCombo->clearRows();
+ 
++	m_pSkinCombo->clearRows();
+ 	for (LLSD::array_const_iterator itSkinInfo = m_SkinsInfo.beginArray(), endSkinInfo = m_SkinsInfo.endArray();
+-		 itSkinInfo != endSkinInfo; ++itSkinInfo)		
++			itSkinInfo != endSkinInfo; ++itSkinInfo)
+ 	{
+ 		const LLSD& sdSkin = *itSkinInfo;
+-		m_pSkinCombo->add(sdSkin["name"].asString(), sdSkin["folder"]);	
++		std::string strPath = gDirUtilp->getSkinBaseDir();
++		gDirUtilp->append(strPath, sdSkin["folder"].asString());
++		if (gDirUtilp->fileExists(strPath))
++		{
++			m_pSkinCombo->add(sdSkin["name"].asString(), sdSkin["folder"]);
++		}
+ 	}
+ 	
+-	m_pSkinCombo->setSelectedByValue(m_Skin, TRUE);
++	BOOL fFound = m_pSkinCombo->setSelectedByValue(m_Skin, TRUE);
++	if (!fFound)
++	{
++		m_pSkinCombo->setSelectedByValue("default", TRUE);
++	}
++
+ 	refreshSkinThemeList();
+ }
+ 
+@@ -2854,7 +2987,7 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
+ 
+ 	m_pSkinThemeCombo->clearRows();
+ 	for (LLSD::array_const_iterator itSkinInfo = m_SkinsInfo.beginArray(), endSkinInfo = m_SkinsInfo.endArray(); 
+-		 itSkinInfo != endSkinInfo; ++itSkinInfo)
++			itSkinInfo != endSkinInfo; ++itSkinInfo)
+ 	{
+ 		const LLSD& sdSkin = *itSkinInfo;
+ 		if (sdSkin["folder"].asString() == m_Skin)
+@@ -2863,46 +2996,611 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
+ 			for (LLSD::array_const_iterator itTheme = sdThemes.beginArray(), endTheme = sdThemes.endArray(); itTheme != endTheme; ++itTheme)
+ 			{
+ 				const LLSD& sdTheme = *itTheme;
+-				m_pSkinThemeCombo->add(sdTheme["name"].asString(), sdTheme["folder"]);
++				std::string strPath = gDirUtilp->getSkinBaseDir();
++				gDirUtilp->append(strPath, sdSkin["folder"].asString());
++				gDirUtilp->append(strPath, "themes");
++				gDirUtilp->append(strPath, sdTheme["folder"].asString());
++				if ( (gDirUtilp->fileExists(strPath)) || (sdTheme["folder"].asString().empty()) )
++				{
++					m_pSkinThemeCombo->add(sdTheme["name"].asString(), sdTheme["folder"]);
++				}
+ 			}
+-			
+ 			break;
+-		}	
++		}
+ 	}
+-	
+-	bool foundTheme = m_pSkinThemeCombo->setSelectedByValue(m_SkinTheme, TRUE);
+-	if (!foundTheme)
++
++	BOOL fFound = m_pSkinThemeCombo->setSelectedByValue(m_SkinTheme, TRUE);
++	if (!fFound)
++	{
+ 		m_pSkinThemeCombo->selectFirstItem();
++	}
++}
++// [/SL:KB]
++
++// <FS:Zi> Backup Settings
++// copied from llxfer_file.cpp - Hopefully this will be part of LLFile some day -Zi
++// added a safeguard so the destination file is only created when the source file exists -Zi
++S32 copy_prefs_file(const std::string& from, const std::string& to)
++{
++	llwarns << "copying " << from << " to " << to << llendl;
++	S32 rv = 0;
++	LLFILE* in = LLFile::fopen(from, "rb");	/*Flawfinder: ignore*/
++	if(!in)
++	{
++		llwarns << "couldn't open source file " << from << " - copy aborted." << llendl;
++		return -1;
++	}
++
++	LLFILE* out = LLFile::fopen(to, "wb");	/*Flawfinder: ignore*/
++	if(!out)
++	{
++		fclose(in);
++		llwarns << "couldn't open destination file " << to << " - copy aborted." << llendl;
++		return -1;
++	}
++
++	S32 read = 0;
++	const S32 COPY_BUFFER_SIZE = 16384;
++	U8 buffer[COPY_BUFFER_SIZE];
++	while(((read = fread(buffer, 1, sizeof(buffer), in)) > 0)
++			&& (fwrite(buffer, 1, read, out) == (U32)read));		/* Flawfinder : ignore */
++	if(ferror(in) || ferror(out)) rv = -2;
++
++	if(in) fclose(in);
++	if(out) fclose(out);
++
++	return rv;
+ }
+-// </KB>
+ 
+-#ifdef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support>
+-//<FS:AW  opensim preferences>
++void LLFloaterPreference::onClickSetBackupSettingsPath()
++{
++	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
++	LLDirPicker& picker=LLDirPicker::instance();
++	if(!picker.getDir(&dir_name))
++	{
++		// canceled
++		return;
++	}
++
++	dir_name=picker.getDirName();
++	gSavedSettings.setString("SettingsBackupPath",dir_name);
++	getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
++}
++
++void LLFloaterPreference::onClickBackupSettings()
++{
++	llwarns << "entered" << llendl;
++	// Get settings backup path
++	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
++
++	// If we don't have a path yet, ask the user
++	if(dir_name.empty())
++	{
++		llwarns << "ask user for backup path" << llendl;
++		onClickSetBackupSettingsPath();
++	}
++
++	// Remember the backup path
++	dir_name=gSavedSettings.getString("SettingsBackupPath");
++
++	// If the backup path is still empty, complain to the user and do nothing else
++	if(dir_name.empty())
++	{
++		llwarns << "backup path empty" << llendl;
++		LLNotificationsUtil::add("BackupPathEmpty");
++		return;
++	}
++
++	// Try to make sure the folder exists
++	LLFile::mkdir(dir_name.c_str());
++	// If the folder is still not there, give up
++	if(!LLFile::isdir(dir_name.c_str()))
++	{
++		llwarns << "backup path does not exist or could not be created" << llendl;
++		LLNotificationsUtil::add("BackupPathDoesNotExistOrCreateFailed");
++		return;
++	}
++
++	// define a couple of control groups to store the settings to back up
++	LLControlGroup backup_global_controls("BackupGlobal");
++	LLControlGroup backup_per_account_controls("BackupPerAccount");
++
++	// functor that will go over all settings in a control group and copy the ones that are
++	// meant to be backed up
++	struct f : public LLControlGroup::ApplyFunctor
++	{
++		LLControlGroup* group;	// our control group that will hold the backup controls
++		f(LLControlGroup* g) : group(g) {}	// constructor, initializing group variable
++		virtual void apply(const std::string& name, LLControlVariable* control)
++		{
++			if(!control->isPersisted() && !control->isBackupable())
++			{
++				llwarns << "Settings control " << control->getName() << ": non persistant controls don't need to be set not backupable." << llendl;
++				return;
++			}
++
++			// only backup settings that are not default, are persistent an are marked as "safe" to back up
++			if(!control->isDefault() && control->isPersisted() && control->isBackupable())
++			{
++				llwarns << control->getName() << llendl;
++				// copy the control to our backup group
++				(*group).declareControl(
++					control->getName(),
++					control->type(),
++					control->getValue(),
++					control->getComment(),
++					SANITY_TYPE_NONE,
++					LLSD(),
++					std::string(),
++					TRUE);	// need to set persisitent flag, or it won't be saved
++			}
++		}
++	} func_global(&backup_global_controls), func_per_account(&backup_per_account_controls);
++
++	// run backup on global controls
++	llwarns << "running functor on global settings" << llendl;
++	gSavedSettings.applyToAll(&func_global);
++
++	// make sure to write color preferences before copying them
++	llwarns << "saving UI color table" << llendl;
++	LLUIColorTable::instance().saveUserSettings();
++
++	// set it to save defaults, too (FALSE), because our declaration automatically
++	// makes the value default
++	std::string backup_global_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,
++				LLAppViewer::instance()->getSettingsFilename("Default","Global"));
++	llwarns << "saving backup global settings" << llendl;
++	backup_global_controls.saveToFile(backup_global_name,FALSE);
++
++	// Get scroll list control that holds the list of global files
++	LLScrollListCtrl* globalScrollList=getChild<LLScrollListCtrl>("restore_global_files_list");
++	// Pull out all data
++	std::vector<LLScrollListItem*> globalFileList=globalScrollList->getAllData();
++	// Go over each entry
++	for(S32 index=0;index<globalFileList.size();index++)
++	{
++		// Get the next item in the list
++		LLScrollListItem* item=globalFileList[index];
++		// Don't bother with the checkbox and get the path, since we back up all files
++		// and only restore selectively
++		std::string file=item->getColumn(2)->getValue().asString();
++		llwarns << "copying global file " << file << llendl;
++		copy_prefs_file(
++			gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,file),
++			gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,file));
++	}
++
++	// Only back up per-account settings when the path is available, meaning, the user
++	// has logged in
++	std::string per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,
++				LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
++	if(!per_account_name.empty())
++	{
++		// get path and file names to the relevant settings files
++		std::string userlower=gDirUtilp->getBaseFileName(gDirUtilp->getLindenUserDir(),false);
++		std::string backup_per_account_folder=dir_name+gDirUtilp->getDirDelimiter()+userlower;
++		std::string backup_per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,
++					LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
++
++		llwarns << "copying per account settings" << llendl;
++		// create per-user folder if it doesn't exist yet
++		LLFile::mkdir(backup_per_account_folder.c_str());
++
++		// check if the path is actually a folder
++		if(LLFile::isdir(backup_per_account_folder.c_str()))
++		{
++			// run backup on per-account controls
++			llwarns << "running functor on per account settings" << llendl;
++			gSavedPerAccountSettings.applyToAll(&func_per_account);
++			// save defaults here as well (FALSE)
++			llwarns << "saving backup per account settings" << llendl;
++			backup_per_account_controls.saveToFile(backup_per_account_name,FALSE);
++
++			// Get scroll list control that holds the list of per account files
++			LLScrollListCtrl* perAccountScrollList=getChild<LLScrollListCtrl>("restore_per_account_files_list");
++			// Pull out all data
++			std::vector<LLScrollListItem*> perAccountFileList=perAccountScrollList->getAllData();
++			// Go over each entry
++			for(S32 index=0;index<perAccountFileList.size();index++)
++			{
++				// Get the next item in the list
++				LLScrollListItem* item=perAccountFileList[index];
++				// Don't bother with the checkbox and get the path, since we back up all files
++				// and only restore selectively
++				std::string file=item->getColumn(2)->getValue().asString();
++				llwarns << "copying per account file " << file << llendl;
++				copy_prefs_file(
++					gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,file),
++					gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,file));
++			}
++		}
++		else
++			llwarns << backup_per_account_folder << " is not a folder. Per account settings save aborted." << llendl;
++	}
++
++	// Get scroll list control that holds the list of global folders
++	LLScrollListCtrl* globalFoldersScrollList=getChild<LLScrollListCtrl>("restore_global_folders_list");
++	// Pull out all data
++	std::vector<LLScrollListItem*> globalFoldersList=globalFoldersScrollList->getAllData();
++	// Go over each entry
++	for(S32 index=0;index<globalFoldersList.size();index++)
++	{
++		// Get the next item in the list
++		LLScrollListItem* item=globalFoldersList[index];
++		// Don't bother with the checkbox and get the path, since we back up all folders
++		// and only restore selectively
++		std::string folder=item->getColumn(2)->getValue().asString();
++
++		std::string folder_name=gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,folder)+gDirUtilp->getDirDelimiter();
++		std::string backup_folder_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,folder)+gDirUtilp->getDirDelimiter();
++
++		llwarns << "backing up global folder: " << folder_name << llendl;
++
++		// create folder if it's not there already
++		LLFile::mkdir(backup_folder_name.c_str());
++
++		std::string file_name;
++		while(gDirUtilp->getNextFileInDir(folder_name,"*",file_name))
++		{
++			llwarns << "found entry: " << folder_name+file_name << llendl;
++			// only copy files, not subfolders
++			if(LLFile::isfile(folder_name+file_name.c_str()))
++			{
++				copy_prefs_file(folder_name+file_name,backup_folder_name+file_name);
++			}
++			llwarns << "skipping subfolder " << folder_name+file_name << llendl;
++		}
++	}
++
++	LLNotificationsUtil::add("BackupFinished");
++}
++
++void LLFloaterPreference::onClickRestoreSettings()
++{
++	// ask the user if they really want to restore and restart
++	LLNotificationsUtil::add("SettingsRestoreNeedsLogout",LLSD(),LLSD(),boost::bind(&LLFloaterPreference::doRestoreSettings,this,_1,_2));
++}
++
++void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD& response)
++{
++	llwarns << "entered" << llendl;
++	// Check the user's answer about restore and restart
++	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
++
++	// If canceled, do nothing
++	if(option==1)
++	{
++		llwarns << "restore canceled" << llendl;
++		return;
++	}
++
++	// Get settings backup path
++	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
++
++	// Backup path is empty, ask the user where to find the backup
++	if(dir_name.empty())
++	{
++		llwarns << "ask user for path to restore from" << llendl;
++		onClickSetBackupSettingsPath();
++	}
++
++	// Remember the backup path
++	dir_name=gSavedSettings.getString("SettingsBackupPath");
++
++	// If the backup path is still empty, complain to the user and do nothing else
++	if(dir_name.empty())
++	{
++		llwarns << "restore path empty" << llendl;
++		LLNotificationsUtil::add("BackupPathEmpty");
++		return;
++	}
++
++	// If the path does not exist, give up
++	if(!LLFile::isdir(dir_name.c_str()))
++	{
++		llwarns << "backup path does not exist" << llendl;
++		LLNotificationsUtil::add("BackupPathDoesNotExist");
++		return;
++	}
++
++	// Close the window so the restored settings can't be destroyed by the user
++	onBtnOK();
++
++	if(gSavedSettings.getBOOL("RestoreGlobalSettings"))
++	{
++		// Get path and file names to backup and restore settings path
++		std::string global_name=gSavedSettings.getString("ClientSettingsFile");
++		std::string backup_global_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,
++					LLAppViewer::instance()->getSettingsFilename("Default","Global"));
++
++		// start clean
++		llwarns << "clearing global settings" << llendl;
++		gSavedSettings.resetToDefaults();
++
++		// run restore on global controls
++		llwarns << "restoring global settings from backup" << llendl;
++		gSavedSettings.loadFromFile(backup_global_name);
++		llwarns << "saving global settings" << llendl;
++		gSavedSettings.saveToFile(global_name,TRUE);
++	}
++
++	// Get scroll list control that holds the list of global files
++	LLScrollListCtrl* globalScrollList=getChild<LLScrollListCtrl>("restore_global_files_list");
++	// Pull out all data
++	std::vector<LLScrollListItem*>globalFileList=globalScrollList->getAllData();
++	// Go over each entry
++	for(S32 index=0;index<globalFileList.size();index++)
++	{
++		// Get the next item in the list
++		LLScrollListItem* item=globalFileList[index];
++		// Look at the first column and make sure it's a checkbox control
++		LLScrollListCheck* checkbox=dynamic_cast<LLScrollListCheck*>(item->getColumn(0));
++		if(!checkbox)
++			continue;
++		// Only restore if this item is checked on
++		if (checkbox->getCheckBox()->getValue().asBoolean())
++		{
++			// Get the path to restore for this item
++			std::string file=item->getColumn(2)->getValue().asString();
++			llwarns << "copying global file " << file << llendl;
++			copy_prefs_file(
++				gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,file),
++				gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,file));
++		}
++	}
++
++	// Only restore per-account settings when the path is available
++	std::string per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,
++				LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
++	if(!per_account_name.empty())
++	{
++		// Get path and file names to the relevant settings files
++		std::string userlower=gDirUtilp->getBaseFileName(gDirUtilp->getLindenUserDir(),false);
++		std::string backup_per_account_folder=dir_name+gDirUtilp->getDirDelimiter()+userlower;
++		std::string backup_per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,
++					LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
++
++		if(gSavedSettings.getBOOL("RestorePerAccountSettings"))
++		{
++			// run restore on per-account controls
++			llwarns << "restoring per account settings" << llendl;
++			gSavedPerAccountSettings.loadFromFile(backup_per_account_name);
++			llwarns << "saving per account settings" << llendl;
++			gSavedPerAccountSettings.saveToFile(per_account_name,TRUE);
++		}
++
++		// Get scroll list control that holds the list of per account files
++		LLScrollListCtrl* perAccountScrollList=getChild<LLScrollListCtrl>("restore_per_account_files_list");
++		// Pull out all data
++		std::vector<LLScrollListItem*> perAccountFileList=perAccountScrollList->getAllData();
++		// Go over each entry
++		for(S32 index=0;index<perAccountFileList.size();index++)
++		{
++			// Get the next item in the list
++			LLScrollListItem* item=perAccountFileList[index];
++			// Look at the first column and make sure it's a checkbox control
++			LLScrollListCheck* checkbox=dynamic_cast<LLScrollListCheck*>(item->getColumn(0));
++			if(!checkbox)
++				continue;
++			// Only restore if this item is checked on
++			if (checkbox->getCheckBox()->getValue().asBoolean())
++			{
++				// Get the path to restore for this item
++				std::string file=item->getColumn(2)->getValue().asString();
++				llwarns << "copying per account file " << file << llendl;
++				copy_prefs_file(
++					gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,file),
++					gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,file));
++			}
++		}
++
++		// toolbars get overwritten when LLToolbarView is destroyed, so make sure
++		// the toolbars are updated here already
++		llwarns << "clearing toolbars" << llendl;
++		gToolBarView->clearToolbars();
++		llwarns << "reloading toolbars" << llendl;
++		gToolBarView->loadToolbars(FALSE);
++	}
++
++	// Get scroll list control that holds the list of global folders
++	LLScrollListCtrl* globalFoldersScrollList=getChild<LLScrollListCtrl>("restore_global_folders_list");
++	// Pull out all data
++	std::vector<LLScrollListItem*> globalFoldersList=globalFoldersScrollList->getAllData();
++	// Go over each entry
++	for(S32 index=0;index<globalFoldersList.size();index++)
++	{
++		// Get the next item in the list
++		LLScrollListItem* item=globalFoldersList[index];
++		// Look at the first column and make sure it's a checkbox control
++		LLScrollListCheck* checkbox=dynamic_cast<LLScrollListCheck*>(item->getColumn(0));
++		if(!checkbox)
++			continue;
++		// Only restore if this item is checked on
++		if (checkbox->getCheckBox()->getValue().asBoolean())
++		{
++			// Get the path to restore for this item
++			std::string folder=item->getColumn(2)->getValue().asString();
++
++			std::string folder_name=gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,folder)+gDirUtilp->getDirDelimiter();
++			std::string backup_folder_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,folder)+gDirUtilp->getDirDelimiter();
++
++			llwarns << "restoring global folder: " << folder_name << llendl;
++
++			// create folder if it's not there already
++			LLFile::mkdir(folder_name.c_str());
++
++			std::string file_name;
++			while(gDirUtilp->getNextFileInDir(backup_folder_name,"*",file_name))
++			{
++				llwarns << "found entry: " << backup_folder_name+file_name << llendl;
++				// only restore files, not subfolders
++				if(LLFile::isfile(backup_folder_name+file_name.c_str()))
++				{
++					copy_prefs_file(backup_folder_name+file_name,folder_name+file_name);
++				}
++				else
++					llwarns << "skipping subfolder " << backup_folder_name+file_name << llendl;
++			}
++		}
++	}
++	// Tell the user we have finished restoring settings and the viewer must shut down
++	LLNotificationsUtil::add("RestoreFinished",LLSD(),LLSD(),boost::bind(&LLFloaterPreference::onQuitConfirmed,this,_1,_2));
++}
++
++// User confirmed the shutdown and we proceed
++void LLFloaterPreference::onQuitConfirmed(const LLSD& notification,const LLSD& response)
++{
++	// Make sure the viewer will not save any settings on exit, so our copied files will survive
++	LLAppViewer::instance()->setSaveSettingsOnExit(FALSE);
++	// Quit the viewer so all gets saved immediately
++	llwarns << "setting to quit" << llendl;
++	LLAppViewer::instance()->requestQuit();
++}
++
++void LLFloaterPreference::onClickSelectAll()
++{
++	doSelect(TRUE);
++}
++
++void LLFloaterPreference::onClickDeselectAll()
++{
++	doSelect(FALSE);
++}
++
++void LLFloaterPreference::doSelect(BOOL all)
++{
++	// Get scroll list control that holds the list of global files
++	LLScrollListCtrl* globalScrollList=getChild<LLScrollListCtrl>("restore_global_files_list");
++	// Get scroll list control that holds the list of per account files
++	LLScrollListCtrl* perAccountScrollList=getChild<LLScrollListCtrl>("restore_per_account_files_list");
++	// Get scroll list control that holds the list of global folders
++	LLScrollListCtrl* globalFoldersScrollList=getChild<LLScrollListCtrl>("restore_global_folders_list");
++
++	applySelection(globalScrollList,all);
++	applySelection(perAccountScrollList,all);
++	applySelection(globalFoldersScrollList,all);
++}
++
++void LLFloaterPreference::applySelection(LLScrollListCtrl* control,BOOL all)
++{
++	// Pull out all data
++	std::vector<LLScrollListItem*> itemList=control->getAllData();
++	// Go over each entry
++	for(S32 index=0;index<itemList.size();index++)
++	{
++		// Get the next item in the list
++		LLScrollListItem* item=itemList[index];
++		// Check/uncheck the box only when the item is enabled
++		if(item->getEnabled())
++		{
++			// Look at the first column and make sure it's a checkbox control
++			LLScrollListCheck* checkbox=dynamic_cast<LLScrollListCheck*>(item->getColumn(0));
++			if(checkbox)
++				checkbox->getCheckBox()->setValue(all);
++		}
++	}
++}
++// </FS:Zi>
++
++// <FS:Kadah>
++void LLFloaterPreference::loadFontPresetsFromDir(const std::string& dir, LLComboBox* font_selection_combo)
++{
++	LLDirIterator dir_iter(dir, "*.xml");
++	while (1)
++	{
++		std::string file;
++		if (!dir_iter.next(file))
++		{
++			break; // no more files
++		}
++			
++		//hack to deal with "fonts.xml" 
++		if (file == "fonts.xml")
++		{
++			font_selection_combo->add("Deja Vu", file);
++		}
++		//hack to get "fonts_[name].xml" to "Name"
++		else
++		{
++			std::string fontpresetname = file.substr(6, file.length()-10);
++			LLStringUtil::replaceChar(fontpresetname, '_', ' ');
++			fontpresetname[0] = LLStringOps::toUpper(fontpresetname[0]);
++                
++			font_selection_combo->add(fontpresetname, file);
++		}
++	}
++}
++
++void LLFloaterPreference::populateFontSelectionCombo()
++{
++	LLComboBox* font_selection_combo = getChild<LLComboBox>("Fontsettingsfile");
++	if(font_selection_combo)
++	{
++		const std::string fontDir(gDirUtilp->getExpandedFilename(LL_PATH_FONTS, "", ""));
++		const std::string userfontDir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "fonts", ""));
++
++		// Load fonts.xmls from the install dir first then user_settings
++		loadFontPresetsFromDir(fontDir, font_selection_combo);
++		loadFontPresetsFromDir(userfontDir, font_selection_combo);
++        
++		font_selection_combo->setValue(gSavedSettings.getString("FSFontSettingsFile"));
++	}
++}
++// </FS:Kadah>
++
++// <FS:AW optional opensim support>
++#ifdef OPENSIM
+ static LLRegisterPanelClassWrapper<LLPanelPreferenceOpensim> t_pref_opensim("panel_preference_opensim");
+ 
+ LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference(),
+ 	mGridListControl(NULL)
+ {
+-// <FS:AW  opensim search support>
+ 	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL", boost::bind(&LLPanelPreferenceOpensim::onClickClearDebugSearchURL, this));
+ 	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL", boost::bind(&LLPanelPreferenceOpensim::onClickPickDebugSearchURL, this));
+-// </FS:AW  opensim search support>
+-// <FS:AW  grid management>
+ 	mCommitCallbackRegistrar.add("Pref.AddGrid", boost::bind(&LLPanelPreferenceOpensim::onClickAddGrid, this));
+ 	mCommitCallbackRegistrar.add("Pref.ClearGrid", boost::bind(&LLPanelPreferenceOpensim::onClickClearGrid, this));
+ 	mCommitCallbackRegistrar.add("Pref.RefreshGrid", boost::bind( &LLPanelPreferenceOpensim::onClickRefreshGrid, this));
+ 	mCommitCallbackRegistrar.add("Pref.RemoveGrid", boost::bind( &LLPanelPreferenceOpensim::onClickRemoveGrid, this));
+-// </FS:AW  grid management>
++	mCommitCallbackRegistrar.add("Pref.SaveGrid", boost::bind(&LLPanelPreferenceOpensim::onClickSaveGrid, this));
+ }
+-// <FS:AW  grid management>
++
+ BOOL LLPanelPreferenceOpensim::postBuild()
+ {
++	mEditorGridName = findChild<LLLineEditor>("name_edit");
++	mEditorGridURI = findChild<LLLineEditor>("grid_uri_edit");
++	mEditorLoginPage = findChild<LLLineEditor>("login_page_edit");
++	mEditorHelperURI = findChild<LLLineEditor>("helper_uri_edit");
++	mEditorWebsite = findChild<LLLineEditor>("website_edit");
++	mEditorSupport = findChild<LLLineEditor>("support_edit");
++	mEditorRegister = findChild<LLLineEditor>("register_edit");
++	mEditorPassword = findChild<LLLineEditor>("password_edit");
++	mEditorSearch = findChild<LLLineEditor>("search_edit");
++	mEditorGridMessage = findChild<LLLineEditor>("message_edit");
+ 	mGridListControl = getChild<LLScrollListCtrl>("grid_list");
++	mGridListControl->setCommitCallback(boost::bind(&LLPanelPreferenceOpensim::onSelectGrid, this));
+ 	refreshGridList();
+ 
+ 	return LLPanelPreference::postBuild();
+ }
+ 
++void LLPanelPreferenceOpensim::onSelectGrid()
++{
++	LLSD  grid_info;
++	std::string grid = mGridListControl->getSelectedValue();
++	LLGridManager::getInstance()->getGridData(grid, grid_info);
++	
++	mEditorGridName->setText(grid_info[GRID_LABEL_VALUE].asString());
++	mEditorGridURI->setText(grid_info[GRID_LOGIN_URI_VALUE][0].asString());
++	mEditorLoginPage->setText(grid_info[GRID_LOGIN_PAGE_VALUE].asString());
++	mEditorHelperURI->setText(grid_info[GRID_HELPER_URI_VALUE].asString());
++	mEditorWebsite->setText(grid_info["about"].asString());
++	mEditorSupport->setText(grid_info["help"].asString());
++	mEditorRegister->setText(grid_info[GRID_REGISTER_NEW_ACCOUNT].asString());
++	mEditorPassword->setText(grid_info[GRID_FORGOT_PASSWORD].asString());
++	mEditorSearch->setText(grid_info["search"].asString());
++	mEditorGridMessage->setText(grid_info["message"].asString());
++}
++
+ void LLPanelPreferenceOpensim::apply()
+ {
+ 	LLGridManager::getInstance()->saveGridList();
+@@ -2936,6 +3634,30 @@ void LLPanelPreferenceOpensim::addedGrid(bool success)
+ 	refreshGridList(success);
+ }
+ 
++// TODO: Save changes to grid entries
++void LLPanelPreferenceOpensim::onClickSaveGrid()
++{
++	LLSD  grid_info;
++	grid_info[GRID_VALUE] = mGridListControl->getSelectedValue();
++	grid_info[GRID_LABEL_VALUE] = mEditorGridName->getValue();
++	grid_info[GRID_LOGIN_URI_VALUE][0] = mEditorGridURI->getValue();
++	grid_info[GRID_LOGIN_PAGE_VALUE] = mEditorLoginPage->getValue();
++	grid_info[GRID_HELPER_URI_VALUE] = mEditorHelperURI->getValue();
++	grid_info["about"] = mEditorWebsite->getValue();
++	grid_info["help"] = mEditorSupport->getValue();
++	grid_info[GRID_REGISTER_NEW_ACCOUNT] = mEditorRegister->getValue();
++	grid_info[GRID_FORGOT_PASSWORD] = mEditorPassword->getValue();
++	grid_info["search"] = mEditorSearch->getValue();
++	grid_info["message"] = mEditorGridMessage->getValue();
++	GridEntry* grid_entry = new GridEntry;
++	grid_entry->grid = grid_info;
++	grid_entry->set_current = false;
++	
++	//getChild<LLUICtrl>("grid_management_panel")->setEnabled(FALSE);
++	//LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&LLPanelPreferenceOpensim::addedGrid, this, _1));
++	//LLGridManager::getInstance()->addGrid(grid_entry, LLGridManager::MANUAL);
++}
++
+ void LLPanelPreferenceOpensim::onClickClearGrid()
+ {
+ 	gSavedSettings.setString("OpensimPrefsAddGrid", std::string());
+@@ -3025,8 +3747,7 @@ void LLPanelPreferenceOpensim::refreshGridList(bool success)
+ 		}
+ 	}
+ }
+-// <FS:AW  grid management>
+-// <FS:AW  opensim search support>
++
+ void LLPanelPreferenceOpensim::onClickClearDebugSearchURL()
+ {
+ 	LLNotificationsUtil::add("ConfirmClearDebugSearchURL", LLSD(), LLSD(), callback_clear_debug_search);
+@@ -3037,7 +3758,7 @@ void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
+ 
+ 	LLNotificationsUtil::add("ConfirmPickDebugSearchURL", LLSD(), LLSD(),callback_pick_debug_search );
+ }
+-// </FS:AW  opensim search support>
+-// </FS:AW  opensim preferences>
+-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
++
++#endif // OPENSIM
++// <FS:AW optional opensim support>
+ 

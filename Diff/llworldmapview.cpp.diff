@@ -1,0 +1,111 @@
+diff --git a/Source/indra/newview/llworldmapview.cpp b/Source/indra/newview/llworldmapview.cpp
+index e9a0573..527597c 100644
+--- a/Source/indra/newview/llworldmapview.cpp
++++ b/Source/indra/newview/llworldmapview.cpp
+@@ -59,7 +59,7 @@
+ #include "rlvhandler.h"
+ // [/RLVa:KB]
+ 
+-#ifdef HAS_OPENSIM_SUPPORT
++#ifdef OPENSIM
+ #include "llviewernetwork.h"	// <FS:CR> Aurora Sim
+ #endif
+ 
+@@ -317,6 +317,7 @@ void LLWorldMapView::draw()
+ 	static LLCachedControl<bool> showMatureEvents(gSavedSettings, "ShowMatureEvents");
+ 	static LLCachedControl<bool> showAdultEvents(gSavedSettings, "ShowAdultEvents");
+ 	static LLCachedControl<bool> drawAdvancedRegionInfo(gSavedSettings, "FSAdvancedWorldmapRegionInfo");
++	static LLCachedControl<bool> sDrawRegionGridCoordinates(gSavedSettings, "FSShowRegionGridCoordinates", false);
+ 
+ 	LLTextureView::clearDebugImages();
+ 
+@@ -358,13 +359,13 @@ void LLWorldMapView::draw()
+ 
+ 	// Draw the image tiles
+ // <FS:CR> Aurora Sim
+-#ifdef HAS_OPENSIM_SUPPORT
++#ifdef OPENSIM
+ 	if(!LLGridManager::getInstance()->isInAuroraSim()) {
+ 		drawMipmap(width, height);
+ 	}
+ #else
+ 	drawMipmap(width, height);
+-#endif //HAS_OPENSIM_SUPPORT
++#endif //OPENSIM
+ // </FS:CR> Aurora Sim
+ 
+ 	gGL.flush();
+@@ -450,11 +451,11 @@ void LLWorldMapView::draw()
+ 		}
+ 		 **********************/
+ // <FS:CR> Aurora Sim
+-#ifdef HAS_OPENSIM_SUPPORT
++#ifdef OPENSIM
+ 		else if ((mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD)) || LLGridManager::getInstance()->isInAuroraSim())
+ #else
+ 		else if (mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD))
+-#endif //HAS_OPENSIM_SUPPORT
++#endif //OPENSIM
+ 		{
+ 			// Draw the overlay image "Land for Sale / Land for Auction"
+ 			LLViewerFetchedTexture* overlayimage = info->getLandForSaleImage();
+@@ -463,13 +464,13 @@ void LLWorldMapView::draw()
+ 				// Inform the fetch mechanism of the size we need
+ // <FS:CR> Aurora Sim
+ 				//S32 draw_size = llround(sMapScale);
+-				//overlayimage->setKnownDrawSize(llround(draw_size * LLUI::sGLScaleFactor.mV[VX]), llround(draw_size * LLUI::sGLScaleFactor.mV[VY]));
++				//overlayimage->setKnownDrawSize(llround(draw_size * LLUI::getScaleFactor().mV[VX]), llround(draw_size * LLUI::getScaleFactor().mV[VY]));
+ 				S32 x_draw_size = llround(sMapScale);
+ 				S32 y_draw_size = llround(sMapScale);
+ 				x_draw_size *= (info->mSizeX / REGION_WIDTH_METERS);
+ 				y_draw_size *= (info->mSizeY / REGION_WIDTH_METERS);
+ 
+-				overlayimage->setKnownDrawSize(llround(x_draw_size * LLUI::sGLScaleFactor.mV[VX]), llround(y_draw_size * LLUI::sGLScaleFactor.mV[VY]));
++				overlayimage->setKnownDrawSize(llround(x_draw_size * LLUI::getScaleFactor().mV[VX]), llround(y_draw_size * LLUI::getScaleFactor().mV[VY]));
+ // </FS:CR> Aurora Sim
+ 				// Draw something whenever we have enough info
+ 				if (overlayimage->hasGLTexture())
+@@ -541,6 +542,17 @@ void LLWorldMapView::draw()
+ 					LLColor4::white,
+ 					LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW);
+ 			}
++// <FS:CR> Show the grid coordinates (in units of regions)
++			if (sDrawRegionGridCoordinates)
++			{
++				LLVector3d origin = info->getGlobalOrigin();
++				std::ostringstream coords;
++				coords << "(" << origin.mdV[VX] / REGION_WIDTH_METERS << "," << origin.mdV[VY] / REGION_WIDTH_METERS << ")";
++				//mesg += coords.str();
++				font->renderUTF8(coords.str(), 0, llfloor(left + 3), llfloor(bottom + 16), LLColor4::white,
++								 LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW);
++			}
++// </FS:CR>
+ 		}
+ 	}
+ 
+@@ -1045,8 +1057,6 @@ void LLWorldMapView::drawTracking(const LLVector3d& pos_global, const LLColor4&
+ 	S32 text_x = x;
+ 	S32 text_y = (S32)(y - sTrackCircleImage->getHeight()/2 - font->getLineHeight());
+ 
+-	BOOL is_in_window = true;
+-
+ 	if(    x < 0 
+ 		|| y < 0 
+ 		|| x >= getRect().getWidth() 
+@@ -1059,7 +1069,6 @@ void LLWorldMapView::drawTracking(const LLVector3d& pos_global, const LLColor4&
+ 			text_x = sTrackingArrowX;
+ 			text_y = sTrackingArrowY;
+ 		}
+-		is_in_window = false;
+ 	}
+ 	else if (LLTracker::getTrackingStatus() == LLTracker::TRACKING_LOCATION &&
+ 		LLTracker::getTrackedLocationType() != LLTracker::LOCATION_AVATAR && // Ansariel: For avatar tracking feature
+@@ -1409,7 +1418,7 @@ void LLWorldMapView::drawTrackingCircle( const LLRect& rect, S32 x, S32 y, const
+ 
+ 	gGL.matrixMode(LLRender::MM_MODELVIEW);
+ 	gGL.pushMatrix();
+-	gGL.translatef((F32)x, (F32)y, 0.f);
++	gGL.translatef((F32)x * LLUI::getScaleFactor().mV[VX], (F32)y * LLUI::getScaleFactor().mV[VY], 0.f);
+ 	gl_washer_segment_2d(inner_radius, outer_radius, start_theta, end_theta, 40, color, color);
+ 	gGL.popMatrix();
+ 

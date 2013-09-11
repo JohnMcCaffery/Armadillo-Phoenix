@@ -1,0 +1,43 @@
+diff --git a/Source/indra/newview/llpanelgroup.h b/Source/indra/newview/llpanelgroup.h
+index 9a3e1eb..0e6f5b8 100644
+--- a/Source/indra/newview/llpanelgroup.h
++++ b/Source/indra/newview/llpanelgroup.h
+@@ -26,9 +26,6 @@
+ #ifndef LL_LLPANELGROUP_H
+ #define LL_LLPANELGROUP_H
+ 
+-//-TT - Patch : ShowGroupFloaters
+-#include "llfloater.h"
+-//-TT
+ #include "llgroupmgr.h"
+ #include "llpanel.h"
+ #include "lltimer.h"
+@@ -36,7 +33,7 @@
+ 
+ class LLOfferInfo;
+ 
+-const S32 UPDATE_MEMBERS_PER_FRAME = 500;
++const F32 UPDATE_MEMBERS_SECONDS_PER_FRAME = 0.005; // 5ms
+ 
+ // Forward declares
+ class LLPanelGroupTab;
+@@ -173,19 +170,4 @@ protected:
+ 	BOOL mHasModal;
+ };
+ 
+-//-TT - Patch : ShowGroupFloaters
+-class LLFloaterGroupView : public LLFloater
+-{
+-public:
+-	LLFloaterGroupView(const LLSD& seed) : LLFloater(seed) {}
+-	~LLFloaterGroupView() {}
+-	
+-	void onOpen(const LLSD& key)
+-	{
+-		LLPanel* panel = findChild<LLPanel>("panel_group_info_sidetray");
+-		if(panel)
+-			panel->onOpen(key);
+-	}
+-};
+-//-TT
+ #endif // LL_LLPANELGROUP_H

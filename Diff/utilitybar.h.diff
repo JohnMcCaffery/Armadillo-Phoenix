@@ -1,0 +1,28 @@
+diff --git a/Source/indra/newview/utilitybar.h b/Source/indra/newview/utilitybar.h
+index ff3cc6a..123b5c2 100644
+--- a/Source/indra/newview/utilitybar.h
++++ b/Source/indra/newview/utilitybar.h
+@@ -19,6 +19,7 @@
+  * You should have received a copy of the GNU Lesser General Public
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
++ * $/LicenseInfo$
+  */
+ 
+ #ifndef UTILITYBAR_H
+@@ -44,6 +45,7 @@ class UtilityBar
+ 		void init();
+ 		virtual BOOL tick();
+ 		void setAOInterfaceButtonExpanded(bool expanded);
++		void setVolumeControlsButtonExpanded(bool expanded);
+ 
+ 	protected:
+ 		void onParcelStreamClicked();
+@@ -53,6 +55,7 @@ class UtilityBar
+ 		LLButton* mParcelMediaPlayButton;
+ 		LLButton* mTalkButton;
+ 		LLButton* mAOInterfaceButton;
++		LLButton* mVolumeControlsInterfaceButton;
+ };
+ 
+ #endif // UTILITYBAR_H

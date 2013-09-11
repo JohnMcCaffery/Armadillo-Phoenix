@@ -1,0 +1,12 @@
+diff --git a/Source/indra/newview/llpanelclassified.h b/Source/indra/newview/llpanelclassified.h
+index cedd65c..ef100b8 100644
+--- a/Source/indra/newview/llpanelclassified.h
++++ b/Source/indra/newview/llpanelclassified.h
+@@ -284,6 +284,7 @@ protected:
+ 	void onTextureSelected();
+ 
+ private:
++	S32 getClassifiedFee();	// <FS:CR> FIRE-9814 - Don't hardcode a classified listing fee
+ 	bool mIsNew;
+ 	bool mIsNewWithErrors;
+ 	bool mCanClose;

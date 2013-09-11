@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llfloaterregiondebugconsole.cpp b/Source/indra/newview/llfloaterregiondebugconsole.cpp
+index c7fab25..3a7ca17 100644
+--- a/Source/indra/newview/llfloaterregiondebugconsole.cpp
++++ b/Source/indra/newview/llfloaterregiondebugconsole.cpp
+@@ -75,7 +75,7 @@ namespace
+ 	{
+ 	public:
+ 		/* virtual */
+-		void error(U32 status, const std::string& reason)
++		void errorWithContent(U32 status, const std::string& reason, const LLSD& content)
+ 		{
+ 			sConsoleReplySignal(UNABLE_TO_SEND_COMMAND);
+ 		}

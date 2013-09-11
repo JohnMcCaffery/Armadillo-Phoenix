@@ -1,0 +1,22 @@
+diff --git a/Source/indra/newview/llfloateravatartextures.h b/Source/indra/newview/llfloateravatartextures.h
+index 85ff545..02474a1 100644
+--- a/Source/indra/newview/llfloateravatartextures.h
++++ b/Source/indra/newview/llfloateravatartextures.h
+@@ -30,7 +30,7 @@
+ #include "llfloater.h"
+ #include "lluuid.h"
+ #include "llstring.h"
+-#include "llvoavatardefines.h"
++#include "llavatarappearancedefines.h"
+ 
+ class LLTextureCtrl;
+ 
+@@ -51,7 +51,7 @@ private:
+ private:
+ 	LLUUID	mID;
+ 	std::string mTitle;
+-	LLTextureCtrl* mTextures[LLVOAvatarDefines::TEX_NUM_INDICES];
++	LLTextureCtrl* mTextures[LLAvatarAppearanceDefines::TEX_NUM_INDICES];
+ };
+ 
+ #endif

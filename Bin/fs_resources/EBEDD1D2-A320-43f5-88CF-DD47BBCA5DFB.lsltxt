@@ -1,4 +1,4 @@
-//http bridge script v.2.3
+//http bridge script v.2.4
 //Firestorm
 //Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
@@ -19,7 +19,7 @@
     integer UNKNOWN_VIEWER = 1;
     integer META_CONTROL = 1024;      //control value to do nothing; for no-script sims
     string  bridgeAuth = "BRIDGEKEY"; // filled in dynamically
-    string  bridgeVersion = "2.3";    //this should match fslslbridge.cpp
+    string  bridgeVersion = "2.4";    //this should match fslslbridge.cpp
     string  bridgeURL;
     string  latestURL;
     integer debug = FALSE;
@@ -47,7 +47,8 @@
     // Note: the radar tag system is optional, opt-in, off by default. It can be enabled in viewer preferences.
 
 
-    // Teleport 
+    // Teleport
+    float   TP_TARGET_DISTANCE = 1.0;// Distance to target when move to target should stop
     integer MAX_TIME_TO_TP = 10;     // (seconds) should be set to 10 for normal use
     float   TP_TIMER_TICK = 0.05;
     vector  mttVector;               // target for llMoveToTarget() teleport
@@ -94,7 +95,7 @@
         integer n = llGetInventoryNumber(INVENTORY_SCRIPT);
         if (n > 1)
         {
-            llOwnerSay("NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option re-create your bridge now.");
+            llOwnerSay("NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to re-create your bridge now.");
             llSleep(1.0);
             while(n)
             {
@@ -213,6 +214,12 @@
             string params = "<" + llList2String(commandList,1) + ">";
             mttVector=(vector)params;
             //debugOutput("Parsing vector: " + (string)mttVector);
+            vector relpos = mttVector - llGetPos();
+            float groundLevel = llGround(relpos);
+            if (mttVector.z < groundLevel)  // Trying to go underground? I think not!
+            {
+                mttVector.z = groundLevel + 1;
+            } 
             startTPTimer = llGetUnixTime();
               
               // tp commands immediately configure a TP timer consumer
@@ -434,7 +441,7 @@ reportTag(key av, integer tagIdx)
         //debugOutput("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
         
         //if we are out of time or distance - stop
-        if((dist < 2.0) ||  (llGetUnixTime() - MAX_TIME_TO_TP > startTPTimer) || (mttVector == loc))
+        if((dist < TP_TARGET_DISTANCE) ||  (llGetUnixTime() - MAX_TIME_TO_TP > startTPTimer) || (mttVector == loc))
         {    
             llStopMoveToTarget();
             timerMask = timerMask ^ TIMER_TYPE_TP; // remove our timer if we finish
@@ -452,17 +459,12 @@ reportTag(key av, integer tagIdx)
                 llMoveToTarget(loc+llVecNorm(targ)*60, TP_TIMER_TICK);
             }
         }
-            
-        // if we get this far, set our the timer for the next tick
-        if ((timerInterval > TP_TIMER_TICK) || (timerInterval < 0.1))
+        
+        // If we're not close to target and time is not up yet, check again
+        if (timerMask & TIMER_TYPE_TP)
         {
             timerInterval = TP_TIMER_TICK;
             llSetTimerEvent(timerInterval);
-        }
-        else
-        {
-            //else no more timers. In this case, make EXTRA sure that we're not moving.
-            llStopMoveToTarget();
         }
     }
 

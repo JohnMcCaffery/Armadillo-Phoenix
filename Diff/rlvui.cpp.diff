@@ -1,0 +1,90 @@
+diff --git a/Source/indra/newview/rlvui.cpp b/Source/indra/newview/rlvui.cpp
+index 341633b..82c7b8c 100644
+--- a/Source/indra/newview/rlvui.cpp
++++ b/Source/indra/newview/rlvui.cpp
+@@ -1,5 +1,5 @@
+ /** 
+- *
++ * @file rlvui.cpp
+  * Copyright (c) 2009-2011, Kitty Barnett
+  * 
+  * The source code in this file is provided to you under the terms of the 
+@@ -19,7 +19,10 @@
+ #include "llavataractions.h"			// LLAvatarActions::profileVisible()
+ #include "llavatarlist.h"				// Avatar list control used by the "Nearby" tab in the "People" sidebar panel
+ #include "llavatarnamecache.h"
+-#include "llcallfloater.h"
++// <FS:Ansariel> [FS communication UI]
++//#include "llcallfloater.h"
++#include "fsfloatervoicecontrols.h"
++// </FS:Ansariel> [FS communication UI]
+ #include "llenvmanager.h"
+ #include "llfloatersidepanelcontainer.h"
+ #include "llhudtext.h"					// LLHUDText::refreshAllObjectText()
+@@ -44,6 +47,8 @@
+ #include "rlvhandler.h"
+ #include "rlvextensions.h"
+ 
++#include "fsradar.h"
++
+ // ============================================================================
+ 
+ // Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
+@@ -249,10 +254,17 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
+ 	//
+ 	// Filter (or stop filtering) opening new inventory floaters
+ 	//
++	// <FS:Ansariel> Modified for FIRE-8804
+ 	if (!fEnable)
++	{
+ 		addGenericFloaterFilter("inventory");
++		addGenericFloaterFilter("secondary_inventory");
++	}
+ 	else
++	{
+ 		removeGenericFloaterFilter("inventory");
++		removeGenericFloaterFilter("secondary_inventory");
++	}
+ }
+ 
+ // Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+@@ -361,13 +373,22 @@ void RlvUIEnabler::onToggleShowNames(bool fQuitting)
+ 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+ 
+ 	// Refresh the nearby people list
+-	LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
+-	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
+-	if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
+-		pPeoplePanel->getNearbyList()->updateAvatarNames();
++	// <FS:Ansariel> [Standalone radar]
++	//LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
++	//RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
++	//if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
++	//	pPeoplePanel->getNearbyList()->updateAvatarNames();
++	FSRadar* pRadar = FSRadar::getInstance();
++	RLV_ASSERT( (pRadar) );
++	if ( (pRadar) )
++		pRadar->updateNames();
++	// </FS:Ansariel> [Standalone radar]
+ 
+ 	// Refresh the speaker list
+-	LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
++	// <FS:Ansariel> [FS communication UI]
++	//LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
++	FSFloaterVoiceControls* pCallFloater = LLFloaterReg::findTypedInstance<FSFloaterVoiceControls>("fs_voice_controls");
++	// </FS:Ansariel> [FS communication UI]
+ 	if (pCallFloater)
+ 		pCallFloater->getAvatarCallerList()->updateAvatarNames();
+ 
+@@ -590,7 +611,10 @@ bool RlvUIEnabler::canViewRegionProperties()
+ bool RlvUIEnabler::hasOpenIM(const LLUUID& idAgent)
+ {
+ 	LLUUID idSession = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, idAgent);
+-	return (NULL != LLFloaterReg::findInstance("impanel", idSession));
++	// <FS:Ansariel> [FS communication UI]
++	//return (NULL != LLFloaterReg::findInstance("impanel", idSession));
++	return (NULL != LLFloaterReg::findInstance("fs_impanel", idSession));
++	// </FS:Ansariel> [FS communication UI]
+ }
+ 
+ // Checked: 2011-11-04 (RLVa-1.4.4a) | Modified: RLVa-1.4.4a

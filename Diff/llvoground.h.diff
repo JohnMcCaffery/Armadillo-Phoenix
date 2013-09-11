@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llvoground.h b/Source/indra/newview/llvoground.h
+index 73b0973..290579b 100644
+--- a/Source/indra/newview/llvoground.h
++++ b/Source/indra/newview/llvoground.h
+@@ -41,7 +41,7 @@ protected:
+ public:
+ 	LLVOGround(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp);
+ 
+-	/*virtual*/ BOOL idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
++	/*virtual*/ void idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
+ 	
+ 	// Graphical stuff for objects - maybe broken out into render class
+ 	// later?

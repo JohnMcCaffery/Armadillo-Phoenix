@@ -1,0 +1,229 @@
+diff --git a/Source/indra/newview/llviewerpartsim.cpp b/Source/indra/newview/llviewerpartsim.cpp
+index 345023d..c79f0a7 100644
+--- a/Source/indra/newview/llviewerpartsim.cpp
++++ b/Source/indra/newview/llviewerpartsim.cpp
+@@ -41,6 +41,8 @@
+ #include "llspatialpartition.h"
+ #include "llvovolume.h"
+ 
++#include "nd/ndobjectpool.h" // <FS:ND/> For operator new/delete
++
+ const F32 PART_SIM_BOX_SIDE = 16.f;
+ const F32 PART_SIM_BOX_OFFSET = 0.5f*PART_SIM_BOX_SIDE;
+ const F32 PART_SIM_BOX_RAD = 0.5f*F_SQRT3*PART_SIM_BOX_SIDE;
+@@ -79,7 +81,6 @@ LLViewerPart::LLViewerPart() :
+ 	mVPCallback(NULL),
+ 	mImagep(NULL)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	mPartSourcep = NULL;
+ 
+ 	++LLViewerPartSim::sParticleCount2 ;
+@@ -87,7 +88,6 @@ LLViewerPart::LLViewerPart() :
+ 
+ LLViewerPart::~LLViewerPart()
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	mPartSourcep = NULL;
+ 
+ 	--LLViewerPartSim::sParticleCount2 ;
+@@ -95,7 +95,6 @@ LLViewerPart::~LLViewerPart()
+ 
+ void LLViewerPart::init(LLPointer<LLViewerPartSource> sourcep, LLViewerTexture *imagep, LLVPCallback cb)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	mPartID = LLViewerPart::sNextPartID;
+ 	LLViewerPart::sNextPartID++;
+ 	mFlags = 0x00f;
+@@ -120,7 +119,6 @@ void LLViewerPart::init(LLPointer<LLViewerPartSource> sourcep, LLViewerTexture *
+ LLViewerPartGroup::LLViewerPartGroup(const LLVector3 &center_agent, const F32 box_side, bool hud)
+  : mHud(hud)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	mVOPartGroupp = NULL;
+ 	mUniformParticles = TRUE;
+ 
+@@ -177,7 +175,6 @@ LLViewerPartGroup::LLViewerPartGroup(const LLVector3 &center_agent, const F32 bo
+ 
+ LLViewerPartGroup::~LLViewerPartGroup()
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	cleanup();
+ 	
+ 	S32 count = (S32) mParticles.size();
+@@ -192,7 +189,6 @@ LLViewerPartGroup::~LLViewerPartGroup()
+ 
+ void LLViewerPartGroup::cleanup()
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	if (mVOPartGroupp)
+ 	{
+ 		if (!mVOPartGroupp->isDead())
+@@ -205,7 +201,6 @@ void LLViewerPartGroup::cleanup()
+ 
+ BOOL LLViewerPartGroup::posInGroup(const LLVector3 &pos, const F32 desired_size)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	if ((pos.mV[VX] < mMinObjPos.mV[VX])
+ 		|| (pos.mV[VY] < mMinObjPos.mV[VY])
+ 		|| (pos.mV[VZ] < mMinObjPos.mV[VZ]))
+@@ -233,8 +228,6 @@ BOOL LLViewerPartGroup::posInGroup(const LLVector3 &pos, const F32 desired_size)
+ 
+ BOOL LLViewerPartGroup::addPart(LLViewerPart* part, F32 desired_size)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+-
+ 	if (part->mFlags & LLPartData::LL_PART_HUD && !mHud)
+ 	{
+ 		return FALSE;
+@@ -261,7 +254,6 @@ BOOL LLViewerPartGroup::addPart(LLViewerPart* part, F32 desired_size)
+ 
+ void LLViewerPartGroup::updateParticles(const F32 lastdt)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	F32 dt;
+ 	
+ 	LLVector3 gravity(0.f, 0.f, GRAVITY);
+@@ -429,7 +421,6 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
+ 
+ void LLViewerPartGroup::shift(const LLVector3 &offset)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	mCenterAgent += offset;
+ 	mMinObjPos += offset;
+ 	mMaxObjPos += offset;
+@@ -442,8 +433,6 @@ void LLViewerPartGroup::shift(const LLVector3 &offset)
+ 
+ void LLViewerPartGroup::removeParticlesByID(const U32 source_id)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+-
+ 	for (S32 i = 0; i < (S32)mParticles.size(); i++)
+ 	{
+ 		if(mParticles[i]->mPartSourcep->getID() == source_id)
+@@ -475,7 +464,6 @@ void LLViewerPartSim::checkParticleCount(U32 size)
+ 
+ LLViewerPartSim::LLViewerPartSim()
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	sMaxParticleCount = llmin(gSavedSettings.getS32("RenderMaxPartCount"), LL_MAX_PARTICLE_COUNT);
+ 	static U32 id_seed = 0;
+ 	mID = ++id_seed;
+@@ -484,7 +472,6 @@ LLViewerPartSim::LLViewerPartSim()
+ 
+ void LLViewerPartSim::destroyClass()
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	S32 i;
+ 	S32 count;
+ 
+@@ -500,9 +487,9 @@ void LLViewerPartSim::destroyClass()
+ 	mViewerPartSources.clear();
+ }
+ 
++//static
+ BOOL LLViewerPartSim::shouldAddPart()
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	if (sParticleCount > PART_THROTTLE_THRESHOLD*sMaxParticleCount)
+ 	{
+ 
+@@ -525,7 +512,6 @@ BOOL LLViewerPartSim::shouldAddPart()
+ 
+ void LLViewerPartSim::addPart(LLViewerPart* part)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	if (sParticleCount < MAX_PART_COUNT)
+ 	{
+ 		put(part);
+@@ -541,7 +527,6 @@ void LLViewerPartSim::addPart(LLViewerPart* part)
+ 
+ LLViewerPartGroup *LLViewerPartSim::put(LLViewerPart* part)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	const F32 MAX_MAG = 1000000.f*1000000.f; // 1 million
+ 	LLViewerPartGroup *return_group = NULL ;
+ 	if (part->mPosAgent.magVecSquared() > MAX_MAG || !part->mPosAgent.isFinite())
+@@ -599,7 +584,6 @@ LLViewerPartGroup *LLViewerPartSim::put(LLViewerPart* part)
+ 
+ LLViewerPartGroup *LLViewerPartSim::createViewerPartGroup(const LLVector3 &pos_agent, const F32 desired_size, bool hud)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	//find a box that has a center position divisible by PART_SIM_BOX_SIDE that encompasses
+ 	//pos_agent
+ 	LLViewerPartGroup *groupp = new LLViewerPartGroup(pos_agent, desired_size, hud);
+@@ -632,16 +616,16 @@ static LLFastTimer::DeclareTimer FTM_SIMULATE_PARTICLES("Simulate Particles");
+ 
+ void LLViewerPartSim::updateSimulation()
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+-	
+ 	static LLFrameTimer update_timer;
+ 
+ 	const F32 dt = llmin(update_timer.getElapsedTimeAndResetF32(), 0.1f);
+ 
+- 	if (!(gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES)))
++	// <FS:LO> Dont suspend partical processing while particles are hidden, just skip over drawing them
++ 	/*if (!(gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES)))
+ 	{
+ 		return;
+-	}
++	}*/
++	// </FS:LO>
+ 
+ 	LLFastTimer ftm(FTM_SIMULATE_PARTICLES);
+ 
+@@ -800,7 +784,6 @@ void LLViewerPartSim::updatePartBurstRate()
+ 
+ void LLViewerPartSim::addPartSource(LLPointer<LLViewerPartSource> sourcep)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	if (!sourcep)
+ 	{
+ 		llwarns << "Null part source!" << llendl;
+@@ -817,7 +800,6 @@ void LLViewerPartSim::removeLastCreatedSource()
+ 
+ void LLViewerPartSim::cleanupRegion(LLViewerRegion *regionp)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	for (group_list_t::iterator i = mViewerPartGroups.begin(); i != mViewerPartGroups.end(); )
+ 	{
+ 		group_list_t::iterator iter = i++;
+@@ -832,7 +814,6 @@ void LLViewerPartSim::cleanupRegion(LLViewerRegion *regionp)
+ 
+ void LLViewerPartSim::clearParticlesByID(const U32 system_id)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	for (group_list_t::iterator g = mViewerPartGroups.begin(); g != mViewerPartGroups.end(); ++g)
+ 	{
+ 		(*g)->removeParticlesByID(system_id);
+@@ -850,7 +831,6 @@ void LLViewerPartSim::clearParticlesByID(const U32 system_id)
+ 
+ void LLViewerPartSim::clearParticlesByOwnerID(const LLUUID& task_id)
+ {
+-	LLMemType mt(LLMemType::MTYPE_PARTICLES);
+ 	for (source_list_t::iterator iter = mViewerPartSources.begin(); iter != mViewerPartSources.end(); ++iter)
+ 	{
+ 		if ((*iter)->getOwnerUUID() == task_id)
+@@ -859,3 +839,21 @@ void LLViewerPartSim::clearParticlesByOwnerID(const LLUUID& task_id)
+ 		}
+ 	}
+ }
++
++// <FS:ND> Object pool for LLViewerPart
++
++// Assume this is singlethreaded (nd::locks::NoLock) 16 byte aligned and allocate 128 objects per chunk
++nd::objectpool::ObjectPool< LLViewerPart, nd::locks::NoLock, 16, 128 > sViewerpartPool;
++
++void* LLViewerPart::operator new(size_t size)
++{
++	llassert_always( size == sizeof(LLViewerPart) );
++	return sViewerpartPool.allocMemoryForObject();
++}
++
++void LLViewerPart::operator delete(void* ptr)
++{
++	sViewerpartPool.freeMemoryOfObject( ptr );
++}
++
++// </FS:ND>

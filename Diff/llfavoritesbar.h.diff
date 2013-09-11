@@ -1,0 +1,27 @@
+diff --git a/Source/indra/newview/llfavoritesbar.h b/Source/indra/newview/llfavoritesbar.h
+index 447d30f..19793c4 100644
+--- a/Source/indra/newview/llfavoritesbar.h
++++ b/Source/indra/newview/llfavoritesbar.h
+@@ -44,6 +44,9 @@ public:
+ 	{
+ 		Optional<LLUIImage*> image_drag_indication;
+ 		Optional<LLTextBox::Params> more_button;
++		// <FS:Ansariel> Allow V3 and FS style favorites bar
++		Optional<LLButton::Params> chevron_button;
++		// </FS:Ansariel>
+ 		Optional<LLTextBox::Params> label;
+ 		Params();
+ 	};
+@@ -149,7 +152,11 @@ private:
+ 	BOOL mShowDragMarker;
+ 	LLUICtrl* mLandingTab;
+ 	LLUICtrl* mLastTab;
+-	LLTextBox* mMoreTextBox;
++	// <FS:Ansariel> Allow V3 and FS style favorites bar
++	//LLTextBox* mMoreTextBox;
++	//LLButton* mChevronButton;
++	LLUICtrl* mMoreCtrl;
++	// </FS:Ansariel>
+ 	LLTextBox* mBarLabel;
+ 
+ 	LLUUID mDragItemId;

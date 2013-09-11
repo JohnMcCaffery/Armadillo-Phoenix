@@ -1,0 +1,38 @@
+diff --git a/Source/indra/newview/llpanelteleporthistory.h b/Source/indra/newview/llpanelteleporthistory.h
+index 31280d2..6a1ba62 100644
+--- a/Source/indra/newview/llpanelteleporthistory.h
++++ b/Source/indra/newview/llpanelteleporthistory.h
+@@ -41,6 +41,9 @@ class LLFlatListView;
+ 
+ class LLTeleportHistoryPanel : public LLPanelPlacesTab
+ {
++	// <FS:Ansariel> FIRE-816: Separate teleport history floater
++	friend class FSFloaterTeleportHistory;
++
+ public:
+ 	// *TODO: derive from LLListContextMenu?
+ 	class ContextMenu
+@@ -75,6 +78,11 @@ public:
+ 	/*virtual*/ void updateVerbs();
+ 	/*virtual*/ bool isSingleItemSelected();
+ 
++	// <FS:Ansariel> Separate search filter for standalone TP history
++	void setIsStandAlone(bool standalone) { mIsStandAlone = standalone; }
++	std::string getFilterString() { return mFilterString; }
++	// </FS:Ansariel>
++
+ private:
+ 
+ 	void onDoubleClickItem();
+@@ -120,6 +128,11 @@ private:
+ 	LLHandle<LLView>		mGearMenuHandle;
+ 
+ 	boost::signals2::connection mTeleportHistoryChangedConnection;
++
++	// </FS:Ansariel> Separate search filter for standalone TP history
++	bool		mIsStandAlone;
++	std::string	mFilterString;
++	// </FS:Ansariel>
+ };
+ 
+ 

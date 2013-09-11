@@ -1,5 +1,5 @@
 diff --git a/Source/indra/newview/llviewercamera.cpp b/Source/indra/newview/llviewercamera.cpp
-index 7b6d0d2..9495599 100644
+index 7b6d0d2..b708938 100644
 --- a/Source/indra/newview/llviewercamera.cpp
 +++ b/Source/indra/newview/llviewercamera.cpp
 @@ -48,15 +48,16 @@
@@ -62,7 +62,34 @@ index 7b6d0d2..9495599 100644
  }
  
  glh::matrix4f gl_lookat(LLVector3 eye, LLVector3 center, LLVector3 up)
-@@ -896,3 +920,19 @@ void LLViewerCamera::updateCameraAngle( void* user_data, const LLSD& value)
+@@ -139,9 +163,6 @@ void LLViewerCamera::updateCameraLocation(const LLVector3 &center,
+ 
+ 	mLastPointOfInterest = point_of_interest;
+ 
+-	// constrain to max distance from avatar
+-	LLVector3 camera_offset = center - gAgent.getPositionAgent();
+-
+ 	LLViewerRegion * regp = gAgent.getRegion();
+ 	F32 water_height = (NULL != regp) ? regp->getWaterHeight() : 0.f;
+ 
+@@ -321,7 +342,7 @@ void LLViewerCamera::setPerspective(BOOL for_selection,
+ {
+ 	F32 fov_y, aspect;
+ 	fov_y = RAD_TO_DEG * getView();
+-	BOOL z_default_near, z_default_far = FALSE;
++	BOOL z_default_far = FALSE;
+ 	if (z_far <= 0)
+ 	{
+ 		z_default_far = TRUE;
+@@ -329,7 +350,6 @@ void LLViewerCamera::setPerspective(BOOL for_selection,
+ 	}
+ 	if (z_near <= 0)
+ 	{
+-		z_default_near = TRUE;
+ 		z_near = getNear();
+ 	}
+ 	aspect = getAspect();
+@@ -896,3 +916,19 @@ void LLViewerCamera::updateCameraAngle( void* user_data, const LLSD& value)
  	self->setDefaultFOV(value.asReal());	
  }
  

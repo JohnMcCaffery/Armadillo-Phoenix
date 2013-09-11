@@ -1,0 +1,39 @@
+diff --git a/Source/indra/newview/app_settings/settings_v3.xml b/Source/indra/newview/app_settings/settings_v3.xml
+index cc006b1..9983970 100644
+--- a/Source/indra/newview/app_settings/settings_v3.xml
++++ b/Source/indra/newview/app_settings/settings_v3.xml
+@@ -95,6 +95,34 @@
+     <string>original_orange</string>
+   </map>
+ 
++  <key>FSSkinCurrentReadableName</key>
++  <map>
++    <key>Comment</key>
++    <string>The readable name of the currently selected skin.</string>
++    <key>Persist</key>
++    <integer>1</integer>
++    <key>HideFromEditor</key>
++    <integer>1</integer>
++    <key>Type</key>
++    <string>String</string>
++    <key>Value</key>
++    <string>Starlight</string>
++  </map>
++
++  <key>FSSkinCurrentThemeReadableName</key>
++  <map>
++    <key>Comment</key>
++    <string>The readable name of the selected theme for the current skin.</string>
++    <key>Persist</key>
++    <integer>1</integer>
++    <key>HideFromEditor</key>
++    <integer>1</integer>
++    <key>Type</key>
++    <string>String</string>
++    <key>Value</key>
++    <string>Original Orange</string>
++  </map>
++
+   <key>LetterKeysFocusChatBar</key>
+   <map>
+     <key>Comment</key>

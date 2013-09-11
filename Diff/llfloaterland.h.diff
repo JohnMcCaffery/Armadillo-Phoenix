@@ -1,0 +1,12 @@
+diff --git a/Source/indra/newview/llfloaterland.h b/Source/indra/newview/llfloaterland.h
+index f513937..db75fc1 100644
+--- a/Source/indra/newview/llfloaterland.h
++++ b/Source/indra/newview/llfloaterland.h
+@@ -335,6 +335,7 @@ private:
+ 	static void onClickClear(void* userdata);
+ 
+ private:
++	S32 getDirectoryFee();
+ 	LLCheckBoxCtrl*	mCheckEditObjects;
+ 	LLCheckBoxCtrl*	mCheckEditGroupObjects;
+ 	LLCheckBoxCtrl*	mCheckAllObjectEntry;

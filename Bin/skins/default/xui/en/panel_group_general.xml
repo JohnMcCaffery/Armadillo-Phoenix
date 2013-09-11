@@ -2,7 +2,7 @@
 <panel
  label="General"
  width="470"
- height="420"
+ height="410"
  class="panel_group_general"
  name="general_tab"
  layout="topleft"
@@ -24,10 +24,10 @@ Hover your mouse over the options for more help.
 
    <panel
     name="group_general_panel"
-    left="8"
-    top="8"
-    height="404"
-    width="455"
+    left="3"
+    top="-408"
+    height="408"
+    width="467"
     follows="all"
     layout="topleft">
 
@@ -89,16 +89,25 @@ Hover your mouse over the options for more help.
     </text>
 
     <text
+     icon_positioning="left"
      name="founder_name"
      left_pad="4"
-     right="-1"
      height="20"
+     width="278"
      initial_value="(loading...)"
      type="string"
      use_ellipses="true"
      follows="top|left|right"
      layout="topleft" />
 
+    <button
+     name="copy_name"
+     left_pad="4"
+     right="-1"
+     height="20"
+     label="Copy Name"
+     follows="top|right" />
+	 
     <texture_picker
      name="insignia"
      tool_tip="Click to choose a picture"
@@ -113,6 +122,7 @@ Hover your mouse over the options for more help.
      layout="topleft" />
 
     <text_editor
+     bg_readonly_color="Transparent"
      name="charter"
      left_pad="4"
      top_pad="-109"
@@ -145,7 +155,7 @@ Hover your mouse over the options for more help.
      left_pad="4"
      right="-1"
      height="20"
-     label="JOIN NOW!"
+     label="Join now!"
      visible="true"
      follows="top|right"
      layout="topleft" />
@@ -173,7 +183,7 @@ Hover your mouse over the options for more help.
     <name_list
      left="0"
      top_pad="4"
-     height="112"
+     height="115"
      column_padding="0"
      draw_heading="true"
      heading_height="23"

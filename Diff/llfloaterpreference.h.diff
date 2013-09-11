@@ -1,0 +1,165 @@
+diff --git a/Source/indra/newview/llfloaterpreference.h b/Source/indra/newview/llfloaterpreference.h
+index 77cfecb..5e2eff4 100644
+--- a/Source/indra/newview/llfloaterpreference.h
++++ b/Source/indra/newview/llfloaterpreference.h
+@@ -35,6 +35,7 @@
+ 
+ #include "llfloater.h"
+ #include "llavatarpropertiesprocessor.h"
++#include "lllineeditor.h" // <FS:CR>
+ 
+ class LLPanelPreference;
+ class LLPanelLCD;
+@@ -65,7 +66,7 @@ public:
+ 
+ 	void apply();
+ 	void cancel();
+-
++	///*virtual*/ void draw();
+ 	/*virtual*/ BOOL postBuild();
+ 	/*virtual*/ void onOpen(const LLSD& key);
+ 	/*virtual*/	void onClose(bool app_quitting);
+@@ -89,16 +90,15 @@ protected:
+ 	void		onBtnCancel();
+ 	void		onBtnApply();
+ 
++	//void		onClickClearCache();			// Clear viewer texture cache, vfs, and VO cache on next startup // AO: was protected, moved to public
+ 	void		onClickBrowserClearCache();		// Clear web history and caches as well as viewer caches above
+ 	void		onLanguageChange();
+ 	void		onNameTagOpacityChange(const LLSD& newvalue);
+ 
+-
+-
+-	// ## Zi: Pie menu
++	// <FS:Zi> Pie menu
+ 	// make sure controls get greyed out or enabled when pie color override is toggled
+ 	void onPieColorsOverrideChanged();
+-	// ## Zi: Pie menu
++	// </FS:Zi> Pie menu
+ 
+ 	// set value of "BusyResponseChanged" in account settings depending on whether busy response
+ 	// string differs from default after user changes.
+@@ -111,7 +111,7 @@ protected:
+ 	void setHardwareDefaults();
+ 	// callback for when client turns on shaders
+ 	void onVertexShaderEnable();
+-	// AO: callback for local lights toggle
++	// <FS:AO> callback for local lights toggle
+ 	void onLocalLightsEnable();
+ 
+ 	// callback for commit in the "Single click on land" and "Double click on land" comboboxes.
+@@ -123,15 +123,19 @@ protected:
+ 	// <FS:PP> updates UI Sounds controls depending on values from settings.xml
+ 	void updateUISoundsControls();
+ 	
+-	// ## Zi: Optional Edit Appearance Lighting
++	// <FS:Zi> Optional Edit Appearance Lighting
+ 	// make sure controls get greyed out or enabled when appearance camera movement is toggled
+ 	void onAppearanceCameraChanged();
+-	// ## Zi: Optional Edit Appearance Lighting
++	// </FS:Zi> Optional Edit Appearance Lighting
+ 
++	//<FS:Kadah> Font Selection
++	void populateFontSelectionCombo();
++	void loadFontPresetsFromDir(const std::string& dir, LLComboBox* font_selection_combo);
++	//</FS:Kadah>
++    
+ 	// This function squirrels away the current values of the controls so that
+ 	// cancel() can restore them.	
+ 	void saveSettings();
+-		
+ 
+ public:
+ 
+@@ -196,6 +200,19 @@ public:
+ 	
+ 	void buildPopupLists();
+ 	static void refreshSkin(void* data);
++
++	// <FS:Zi> Backup settings
++	void onClickSetBackupSettingsPath();
++	void onClickSelectAll();
++	void onClickDeselectAll();
++	void onClickBackupSettings();
++	void onClickRestoreSettings();
++
++	void doSelect(BOOL all);		// calls applySelection for each list
++	void applySelection(LLScrollListCtrl* control,BOOL all);		// selects or deselects all items in a scroll list
++	void doRestoreSettings(const LLSD& notification,const LLSD& response);	// callback for restore dialog
++	void onQuitConfirmed(const LLSD& notification,const LLSD& response);	// callback for finished restore dialog
++// </FS:Zi>
+ private:
+ 	static std::string sSkin;
+ 	bool mClickActionDirty; ///< Set to true when the click/double-click options get changed by user.
+@@ -246,11 +263,8 @@ private:
+  	//for "Show my Favorite Landmarks at Login"
+ 	static void showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LLSD& value);
+ 
+-	// <FS:LO> FIRE-7050 - Add a warning to the Growl preference option because of FIRE-6868
+-#ifdef LL_WINDOWS
+-	static void showGrowlNotInstalledWarning(LLUICtrl* checkbox, const LLSD& value);
+-#endif
+-	// </FS:LO>
++	// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
++	void onEnableGrowlChanged();
+ 
+ 	typedef std::map<std::string, LLColor4> string_color_map_t;
+ 	string_color_map_t mSavedColors;
+@@ -296,6 +310,8 @@ protected:
+ 	std::string m_SkinTheme;
+ 	LLComboBox* m_pSkinThemeCombo;
+ 	LLSD        m_SkinsInfo;
++	std::string	m_SkinName;
++	std::string	m_SkinThemeName;
+ };
+ // [/SL:KB]
+ 
+@@ -313,7 +329,7 @@ public:
+ };
+ // [/SL:KB]
+ 
+-#ifdef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support>
++#ifdef OPENSIM // <FS:AW optional opensim support>
+ // <FS:AW  opensim preferences>
+ class LLPanelPreferenceOpensim : public LLPanelPreference
+ {
+@@ -330,7 +346,9 @@ protected:
+ 	void addedGrid(bool success);
+ 	void onClickClearGrid();
+ 	void onClickRefreshGrid();
++	void onClickSaveGrid();
+ 	void onClickRemoveGrid();
++	void onSelectGrid();
+ 	bool removeGridCB(const LLSD& notification, const LLSD& response);
+ // </FS:AW  grid management>
+ // <FS:AW  opensim search support>
+@@ -340,9 +358,20 @@ protected:
+ 
+ 	void refreshGridList(bool success = true);
+ 	LLScrollListCtrl* mGridListControl;
++private:
++	LLLineEditor* mEditorGridName;
++	LLLineEditor* mEditorGridURI;
++	LLLineEditor* mEditorLoginPage;
++	LLLineEditor* mEditorHelperURI;
++	LLLineEditor* mEditorWebsite;
++	LLLineEditor* mEditorSupport;
++	LLLineEditor* mEditorRegister;
++	LLLineEditor* mEditorPassword;
++	LLLineEditor* mEditorSearch;
++	LLLineEditor* mEditorGridMessage;
+ };
+ // </FS:AW  opensim preferences>
+-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
++#endif // OPENSIM // <FS:AW optional opensim support>
+ 
+ class LLFloaterPreferenceProxy : public LLFloater
+ {
+@@ -369,7 +398,6 @@ private:
+ 	bool mSocksSettingsDirty;
+ 	typedef std::map<LLControlVariable*, LLSD> control_values_map_t;
+ 	control_values_map_t mSavedValues;
+-
+ };
+ 
+ 

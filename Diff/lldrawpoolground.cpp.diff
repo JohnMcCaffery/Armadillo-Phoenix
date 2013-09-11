@@ -1,0 +1,17 @@
+diff --git a/Source/indra/newview/lldrawpoolground.cpp b/Source/indra/newview/lldrawpoolground.cpp
+index 59c3fbf..0ebbaf0 100644
+--- a/Source/indra/newview/lldrawpoolground.cpp
++++ b/Source/indra/newview/lldrawpoolground.cpp
+@@ -58,7 +58,11 @@ void LLDrawPoolGround::prerender()
+ 
+ void LLDrawPoolGround::render(S32 pass)
+ {
+-	if (mDrawFace.empty() || !gSavedSettings.getBOOL("RenderGround"))
++	// <FS:PP> Attempt to speed up things a little
++	// if (mDrawFace.empty() || !gSavedSettings.getBOOL("RenderGround"))
++	static LLCachedControl<bool> RenderGround(gSavedSettings, "RenderGround");
++	if (mDrawFace.empty() || !RenderGround)
++	// </FS:PP>
+ 	{
+ 		return;
+ 	}	

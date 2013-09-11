@@ -1,0 +1,55 @@
+diff --git a/Source/indra/newview/fsfloaterwsassetblacklist.h b/Source/indra/newview/fsfloaterwsassetblacklist.h
+index 65dfb01..80ba4a7 100644
+--- a/Source/indra/newview/fsfloaterwsassetblacklist.h
++++ b/Source/indra/newview/fsfloaterwsassetblacklist.h
+@@ -20,22 +20,18 @@
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+  *
+- * The Phoenix Viewer Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+- * http://www.phoenixviewer.com
++ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * http://www.firestormviewer.org
+  * $/LicenseInfo$
+  */
+ 
+-#ifndef FS_FSFLOATERWSASSETBLACKLIST_H
+-#define FS_FSFLOATERWSASSETBLACKLIST_H
++#ifndef FS_FLOATERWSASSETBLACKLIST_H
++#define FS_FLOATERWSASSETBLACKLIST_H
+ 
+ #include "llfloater.h"
+-#include "llassettype.h"
+-
+ 
+ class LLScrollListCtrl;
+ 
+-
+-
+ class FSFloaterWSAssetBlacklist : public LLFloater
+ {
+     LOG_CLASS(FSFloaterWSAssetBlacklist);
+@@ -44,13 +40,12 @@ public:
+     virtual ~FSFloaterWSAssetBlacklist();
+ 
+     /*virtual*/ void onOpen(const LLSD& key);
+-
+     /*virtual*/ BOOL postBuild();
+-	std::string TypeToString(S32 type);
+-	void BuildBlacklist();
+-	void addElementToList(LLUUID id, LLSD data);
+-	void removeElementFromList(LLUUID id);
+ 
++	std::string getTypeString(S32 type);
++	void buildBlacklist();
++	void addElementToList(const LLUUID& id, const LLSD& data);
++	void removeElementFromList(const LLUUID& id);
+ 
+ protected:
+     void onRemoveBtn();
+@@ -60,4 +55,4 @@ private:
+ 	LLScrollListCtrl* mResultList;
+ };
+ 
+-#endif // FS_FSFLOATERPROFILE_H
++#endif // FS_FLOATERWSASSETBLACKLIST_H

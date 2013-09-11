@@ -1,0 +1,23 @@
+diff --git a/Source/indra/newview/llvotree.h b/Source/indra/newview/llvotree.h
+index 0554935..8758f12 100644
+--- a/Source/indra/newview/llvotree.h
++++ b/Source/indra/newview/llvotree.h
+@@ -59,7 +59,7 @@ public:
+ 											void **user_data,
+ 											U32 block_num, const EObjectUpdateType update_type,
+ 											LLDataPacker *dp);
+-	/*virtual*/ BOOL idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
++	/*virtual*/ void idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
+ 	
+ 	// Graphical stuff for objects - maybe broken out into render class later?
+ 	/*virtual*/ void render(LLAgent &agent);
+@@ -112,6 +112,9 @@ public:
+ 	 /*virtual*/ BOOL lineSegmentIntersect(const LLVector3& start, const LLVector3& end, 
+ 										  S32 face = -1,                        // which face to check, -1 = ALL_SIDES
+ 										  BOOL pick_transparent = FALSE,
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++										  BOOL pick_rigged = FALSE,
++// [/SL:KB]
+ 										  S32* face_hit = NULL,                 // which face was hit
+ 										  LLVector3* intersection = NULL,       // return the intersection point
+ 										  LLVector2* tex_coord = NULL,          // return the texture coordinates of the intersection point

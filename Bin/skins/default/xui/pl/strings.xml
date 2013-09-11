@@ -315,7 +315,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Skrypty zabronione
 	</string>
 	<string name="TooltipLand">
-		Posiadłość:
+		Działka:
 	</string>
 	<string name="TooltipMustSingleDrop">
 		Tylko pojedynczy obiekt może być tutaj przeciągnięty
@@ -343,13 +343,13 @@ Spróbuj zalogować się ponownie za minutę.
 		Primów: [COUNT]
 	</string>
 	<string name="TooltipPrimEquivalent">
-		, wpływ na posiadłość: [PEWEIGHT] PE
+		, wpływ na działkę: [PEWEIGHT] PE
 	</string>
 	<string name="TooltipPrimEquivalentLoading">
-		, sprawdzanie wpływu na posiadłość...
+		, sprawdzanie wpływu na działkę...
 	</string>
 	<string name="TooltipPrimEquivalentUnavailable">
-		, wpływ na posiadłość niedostępny
+		, wpływ na działkę niedostępny
 	</string>
 	<string name="TooltipDistance">
 		Odległość: [DISTANCE] m
@@ -394,7 +394,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Kliknij aby zobaczyć szczegóły tego miejsca
 	</string>
 	<string name="TooltipAgentUrl">
-		Kliknij aby zobaczyc profil Rezydenta
+		Kliknij aby zobaczyć profil Rezydenta
 	</string>
 	<string name="TooltipAgentInspect">
 		Dowiedz się więcej o tym Rezydencie
@@ -427,7 +427,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Kliknij aby zobaczyć tę reklamę
 	</string>
 	<string name="TooltipParcelUrl">
-		Kliknij aby zobaczyć opis tej posiadłości
+		Kliknij aby zobaczyć opis tej działki
 	</string>
 	<string name="TooltipTeleportUrl">
 		Kliknij aby teleportować się do tego miejsca
@@ -952,6 +952,18 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TeleportYourAgent">
 		Teleportować Cię
 	</string>
+	<string name="JoinAnExperience">
+		Rozpocznij przygodę
+	</string>
+	<string name="SilentlyManageEstateAccess">
+		Wyciszyć powiadomienia o zmianach zezwoleń Majątku
+	</string>
+	<string name="OverrideYourAnimations">
+		Zastąpić animacje Twojego awatara
+	</string>
+	<string name="ScriptReturnObjects">
+		Zwróć przedmioty w swoim imieniu
+	</string>
 	<string name="NotConnected">
 		Brak połączenia
 	</string>
@@ -1035,6 +1047,9 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="dictionary_files">
 		Słowniki
+	</string>
+	<string name="backup_files">
+		Kopie zapasowe obiektów
 	</string>
 	<string name="AvatarSetNotAway">
 		Nie Śpij
@@ -1444,6 +1459,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="InvFolder favorite">
 		Ulubione
 	</string>
+	<string name="InvFolder favorites">
+		Ulubione
+	</string>
 	<string name="InvFolder Current Outfit">
 		Obecny strój
 	</string>
@@ -1804,6 +1822,9 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="SummaryForTheWeek" value="Podsumowanie dla tego tygodnia, począwszy od "/>
 	<string name="NextStipendDay" value="Następna wypłata będzie w "/>
+	<string name="GroupPlanningDate">
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
+	</string>
 	<string name="GroupIndividualShare" value="                      Grupa       Udziały Indywidualne"/>
 	<string name="GroupColumn" value="                      Grupa"/>
 	<string name="Balance">
@@ -1864,10 +1885,10 @@ Spróbuj zalogować się ponownie za minutę.
 		Zbanowani Rezydenci
 	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
-		Pamięć skryptów Posiadłości
+		Pamięć skryptów działki
 	</string>
 	<string name="ScriptLimitsParcelsOwned">
-		Posiadłości: [PARCELS]
+		Działki: [PARCELS]
 	</string>
 	<string name="ScriptLimitsMemoryUsed">
 		Pamięć wykorzystana: [COUNT] kb z [MAX] kb; [AVAILABLE] kb pozostało
@@ -1876,7 +1897,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Pamięć wykorzystana: [COUNT] kb
 	</string>
 	<string name="ScriptLimitsParcelScriptURLs">
-		Skrypty URL Posiadłości
+		Skrypty URL działki
 	</string>
 	<string name="ScriptLimitsURLsUsed">
 		URL: [COUNT] z [MAX]; [AVAILABLE] dostępne
@@ -1888,7 +1909,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Błąd wyszukiwania informacji
 	</string>
 	<string name="ScriptLimitsRequestNoParcelSelected">
-		Posiadłość nie została wybrana
+		Działka nie została wybrana
 	</string>
 	<string name="ScriptLimitsRequestWrongRegion">
 		Błąd: informacja o skrypcie jest dostępna tylko w obecnym regionie.
@@ -1897,7 +1918,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Wyszukiwanie informacji...
 	</string>
 	<string name="ScriptLimitsRequestDontOwnParcel">
-		Nie masz pozwolenia na sprawdzenie posiadłości.
+		Nie masz pozwolenia na sprawdzenie działki.
 	</string>
 	<string name="SITTING_ON">
 		Usiądź na
@@ -2016,6 +2037,12 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="ATTACH_HUD_BOTTOM_RIGHT">
 		HUD prawa dolna strona
 	</string>
+	<string name="ATTACH_NECK">
+		Szyja
+	</string>
+	<string name="ATTACH_AVATAR_CENTER">
+		Środek awatara
+	</string>
 	<string name="ATTACH_BRIDGE">
 		Most
 	</string>
@@ -2056,7 +2083,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Brak umowy dla tego majątku.
 	</string>
 	<string name="RegionNoCovenantOtherOwner">
-		Brak umowy dla tego majątku. Posiadłość w tym majątku została sprzedana przez właściciela majątku, a nie przez Linden Lab. Skontaktuj się z właścicielem majątku w celu uzyskania szczegółów sprzedaży.
+		Brak umowy dla tego majątku. Działka w tym majątku została sprzedana przez właściciela majątku, a nie przez Linden Lab. Skontaktuj się z właścicielem majątku w celu uzyskania szczegółów sprzedaży.
 	</string>
 	<string name="covenant_last_modified" value="Ostatnia modyfikacja: "/>
 	<string name="none_text" value=" (brak) "/>
@@ -2159,6 +2186,9 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="GroupMoneyDebits">
 		Obciążenia
+	</string>
+	<string name="GroupMoneyDate">
+		[weekday,datetime,utc], [day,datetime,utc] [mth,datetime,utc] [year,datetime,utc]
 	</string>
 	<string name="ViewerObjectContents">
 		Zawartość
@@ -2276,7 +2306,7 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .bvh
 		Wynajem ziemi
 	</string>
 	<string name="Property Rental">
-		Wynajem Posiadłości
+		Wynajem działek
 	</string>
 	<string name="Special Attraction">
 		Specjalne Oferty
@@ -3045,6 +3075,9 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	</string>
 	<string name="Hip Width">
 		Szerokość bioder
+	</string>
+	<string name="Hover">
+		Uniesienie
 	</string>
 	<string name="In">
 		Wewnętrznie
@@ -3890,7 +3923,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Historia odwiedzonych miejsc
 	</string>
 	<string name="LocationCtrlForSaleTooltip">
-		Kup tą posiadłość
+		Kup tą działkę
 	</string>
 	<string name="LocationCtrlVoiceTooltip">
 		Głos niedostępny w tym miejscu
@@ -3920,7 +3953,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Region ogólny
 	</string>
 	<string name="LocationCtrlSeeAVsTooltip">
-		Awatary widoczne, czat poza parcelą dozwolony
+		Awatary wewnątrz tej działki nie mogą być widziane lub słyszane przez awatary, które są poza nią
 	</string>
 	<string name="LocationCtrlPathfindingDirtyTooltip">
 		Obiekty poruszające się mogą nie zachowywać się poprawnie, póki region nie zostanie odświeżony.
@@ -4153,13 +4186,13 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		dla [ITEM]
 	</string>
 	<string name="for a parcel of land">
-		za Posiadłość
+		za działkę
 	</string>
 	<string name="for a land access pass">
-		za przepustkę na Posiadłość
+		za przepustkę na działkę
 	</string>
 	<string name="for deeding land">
-		dla przypisania Posiadłości
+		dla przypisania działki
 	</string>
 	<string name="to create a group">
 		aby stworzyć grupę
@@ -4183,7 +4216,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		To kosztuje [AMOUNT]L$
 	</string>
 	<string name="buying_selected_land">
-		Kupno wybranej Posiadłości za [AMOUNT]L$
+		Kupno wybranej działki za [AMOUNT]L$
 	</string>
 	<string name="this_object_costs">
 		Ten obiekt kosztuje [AMOUNT]L$
@@ -4377,7 +4410,7 @@ Raport o Nadużyciu
 		Kobieta - Wow
 	</string>
 	<string name="AvatarBirthDateFormat">
-		[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
 	</string>
 	<string name="DefaultMimeType">
 		brak/brak
@@ -4429,22 +4462,22 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 		Status grupy
 	</string>
 	<string name="Parcel Management">
-		Zarządzanie parcelą
+		Zarządzanie działką
 	</string>
 	<string name="Parcel Identity">
-		Status parceli
+		Status działki
 	</string>
 	<string name="Parcel Settings">
-		Ustawienia parceli
+		Ustawienia działki
 	</string>
 	<string name="Parcel Powers">
-		Możliwości parceli
+		Możliwości działki
 	</string>
 	<string name="Parcel Access">
-		Dostęp do posiadłości
+		Dostęp do działki
 	</string>
 	<string name="Parcel Content">
-		Zawartość parceli
+		Zawartość działki
 	</string>
 	<string name="Object Management">
 		Zarządzanie obiektami
@@ -4521,7 +4554,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Ukryj cząsteczki
 	</string>
 	<string name="Command_AboutLand_Label">
-		O posiadłości
+		O działce
 	</string>
 	<string name="Command_Appearance_Label">
 		Wygląd
@@ -4643,8 +4676,20 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Mouselook_Label">
 		Tryb pierwszoosobowy
 	</string>
-	<string name="Command_Legacy_Search_Label">
-		Klasyczne szukanie
+	<string name="Command_Landmark_Here_Label">
+		Utwórz Landmark
+	</string>
+	<string name="Command_Teleport_History_Label">
+		Historia teleportacji
+	</string>
+	<string name="Command_Pose_Stand_Label">
+		Podest do pozowania
+	</string>
+	<string name="Command_Snapshot_To_Disk_Label">
+		Zdjęcie na dysk
+	</string>
+	<string name="Command_Radar_Label">
+		Radar
 	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
@@ -4766,6 +4811,21 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Mouselook_Tooltip">
 		Wejście w tryb pierwszoosobowy, widoku z oczu awatara (M)
 	</string>
+	<string name="Command_Landmark_Here_Tooltip">
+		Utwórz Landmark Twojej bieżącej pozycji
+	</string>
+	<string name="Command_Teleport_History_Tooltip">
+		Otwiera historię teleportacji
+	</string>
+	<string name="Command_Pose_Stand_Tooltip">
+		Podest do pozowania dla awatara, do dostrajania dodatków
+	</string>
+	<string name="Command_Snapshot_To_Disk_Tooltip">
+		Wykonuje szybko zdjęcie i zapisuje je na twardym dysku
+	</string>
+	<string name="Command_Radar_Tooltip">
+		Otwiera radar z najbliższymi awatarami
+	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
 	</string>
@@ -4777,9 +4837,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Fly_Tooltip">
 		Włącz/wyłącz tryb latania
-	</string>
-	<string name="Command_Legacy_Search_Tooltip">
-		Znajdź miejsca, grupy oraz ludzi używając klasycznego sposobu wyszukiwania
 	</string>
 	<string name="Retain%">
 		%Zachowania
@@ -4978,5 +5035,203 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="FSWithOpensim">
 		ze wsparciem dla OpenSimulatora
+	</string>
+	<string name="not_found">
+		Nie znaleziono: &apos;[TEXT]&apos;
+	</string>
+	<string name="no_results">
+		Brak wyników
+	</string>
+	<string name="searching">
+		Szukanie...
+	</string>
+	<string name="all_categories">
+		Wszystkie kategorie
+	</string>
+	<string name="search_banned">
+		Niektóre słowa zostały wykluczone z Twojego zapytania ze względu na ograniczenia treści Norm Wspólnotowych.
+	</string>
+	<string name="search_short">
+		Twoje zapytanie było zbyt krótkie, aby rozpocząć wyszukiwanie.
+	</string>
+	<string name="search_disabled">
+		Klasyczne wyszukiwanie jest wyłączone w tym regionie.
+	</string>
+	<string name="render_quality_low">
+		Niska (1/7)
+	</string>
+	<string name="render_quality_mediumlow">
+		Średnio-niska (2/7)
+	</string>
+	<string name="render_quality_medium">
+		Średnia (3/7)
+	</string>
+	<string name="render_quality_mediumhigh">
+		Średnio-wysoka (4/7)
+	</string>
+	<string name="render_quality_high">
+		Wysoka (5/7)
+	</string>
+	<string name="render_quality_highultra">
+		Wysoka-Ultra (6/7)
+	</string>
+	<string name="render_quality_unknown">
+		Nieznana, poza normalnym zakresem, sprawdź ustawienie debugowania RenderQualityPerformance
+	</string>
+	<string name="qtool_busy">
+		Poczekaj, narzędzie wyrównywania jest zajęte.
+	</string>
+	<string name="qtool_still_busy">
+		Poczekaj jeszcze chwilę, narzędzie wyrównywania jest ciągle zajęte.
+	</string>
+	<string name="qtool_done">
+		Narzędzie wyrównywania zakończyło pracę.
+	</string>
+	<string name="fsbridge_no_library">
+		Firestorm nie mógł utworzyć Mostu LSL. Włącz swoją Bibliotekę i zaloguj się ponownie.
+	</string>
+	<string name="fsbridge_already_creating">
+		Tworzenie Mostu LSL już trwa, nie można rozpocząć procesu budowania kolejnego. Poczekaj kilka minut, zanim spróbujesz ponownie.
+	</string>
+	<string name="fsbridge_creating">
+		Trwa tworzenie Mostu LSL. To może chwilę zająć, poczekaj proszę.
+	</string>
+	<string name="fsbridge_failure_creation_bad_name">
+		Most LSL nie został utworzony, bo jest nazwany niepoprawnie. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
+	<string name="fsbridge_failure_creation_null">
+		Most LSL nie został utworzony, bo nie może zostać znaleziony w Szafie. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
+	<string name="fsbridge_failure_attach_wrong_object">
+		Most LSL nie mógł zostać założony na awatara, bo nie jest w aktualnej wersji. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
+	<string name="fsbridge_failure_attach_wrong_location">
+		Most LSL nie mógł zostać założony na awatara, bo nie został znaleziony w odpowiednim miejscu Szafy. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
+	<string name="fsbridge_failure_attach_point_in_use">
+		Most LSL nie mógł zostać założony na awatara, bo coś innego używa punktu zaczepu dodatku zarezerwowanego dla niego. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
+	<string name="fsbridge_failure_not_found">
+		Obiekt Mostu LSL nie mógł zostać znaleziony. Nie można kontynuować procesu jego tworzenia, kończę operację.
+	</string>
+	<string name="fsbridge_warning_unexpected_items">
+		Wewnątrz Mostu LSL znaleziono nieoczekiwane elementy.
+	</string>
+	<string name="fsbridge_warning_not_finished">
+		Proces tworzenia Mostu LSL nie dobiegł do końca. Być może będzie trzeba utworzyć go na nowo, aby zadział ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
+	<string name="fsbridge_detached">
+		Most LSL został odłączony od awatara.
+	</string>
+	<string name="fsbridge_created">
+		Most LSL został utworzony pomyślnie.
+	</string>
+	<string name="QP Draw Distance">
+		Pole widzenia
+	</string>
+	<string name="QP Max Particles">
+		Maks. cząstek
+	</string>
+	<string name="QP Avatar Physics LOD">
+		LOD fiz. awatarów
+	</string>
+	<string name="QP LOD Factor">
+		Mnożnik LOD
+	</string>
+	<string name="QP Max Avatars">
+		Maks. awatarów
+	</string>
+	<string name="QP Tags Offset">
+		Pozycja tagów
+	</string>
+	<string name="QP Name Tags">
+		Tagi imion
+	</string>
+	<string name="QP LookAt Target">
+		Cele spojrzeń
+	</string>
+	<string name="QP Color Under Cursor">
+		Kolor spod kursora
+	</string>
+	<string name="PS_T_Pose">
+		Poza w kształcie litery T
+	</string>
+	<string name="PS_Arms_Down_Legs_together">
+		Ramiona w dole, nogi złączone
+	</string>
+	<string name="PS_Arms_down_sitting">
+		Ramiona w dole, siedząc
+	</string>
+	<string name="PS_Arms_downward_Legs_together">
+		Ramiona nisko, nogi złączone
+	</string>
+	<string name="PS_Arms_downward_Legs_apart">
+		Ramiona nisko, nogi oddzielnie
+	</string>
+	<string name="PS_Arms_forward_Legs_apart">
+		Ramiona w przód, nogi oddzielnie
+	</string>
+	<string name="PS_Arms_forward_Legs_together">
+		Ramiona w przód, nogi złączone
+	</string>
+	<string name="PS_Arms_straight_Legs_apart">
+		Ramiona prosto, nogi oddzielnie
+	</string>
+	<string name="PS_Arms_straight_sitting">
+		Ramiona prosto, siedząc
+	</string>
+	<string name="PS_Arms_upward_Legs_apart">
+		Ramiona w górze, nogi oddzielnie
+	</string>
+	<string name="PS_Arms_upward_Legs_together">
+		Ramiona w górze, nogi złączone
+	</string>
+	<string name="QP_WL_Region_Default">
+		Domyślne regionu
+	</string>
+	<string name="QP_WL_Day_Cycle_Based">
+		Bazowane na cyklu dnia
+	</string>
+	<string name="QP_WL_None">
+		Brak
+	</string>
+	<string name="GroupChatMuteNotice">
+		Wyciszanie czatu grupowego [NAME].
+	</string>
+	<string name="camera_no_focus">
+		Kamera nie może skupić się na [AVATARNAME], ponieważ jest on/ona poza polem widzenia.
+	</string>
+	<string name="entering_draw_distance">
+		pojawił/a się w polu widzenia ([DISTANCE] m).
+	</string>
+	<string name="leaving_draw_distance">
+		opuścił/a pole widzenia.
+	</string>
+	<string name="entering_chat_range">
+		pojawił/a się w zasięgu czatu ([DISTANCE] m).
+	</string>
+	<string name="leaving_chat_range">
+		opuścił/a zasięgu czatu.
+	</string>
+	<string name="entering_region">
+		pojawił/a się w regionie.
+	</string>
+	<string name="entering_region_distance">
+		pojawił/a się w regionie ([DISTANCE] m).
+	</string>
+	<string name="leaving_region">
+		opuścił/a region.
+	</string>
+	<string name="export_fail_no_mesh">
+		Eksportowanie meszy jest obecnie nieobsługiwane. Anulowano.
+	</string>
+	<string name="TotalScriptCountChangeIncrease">
+		Całkowita il. skryptów w regionie wzrosła z [OLD_VALUE] do [NEW_VALUE] ([DIFFERENCE]).
+	</string>
+	<string name="TotalScriptCountChangeDecrease">
+		Całkowita il. skryptów w regionie zmalała z [OLD_VALUE] do [NEW_VALUE] ([DIFFERENCE]).
+	</string>
+	<string name="preproc_toggle_warning">
+		Przełączenie trybu preprocesora odniesie pełny skutek dopiero po zamknięciu i ponownym otwarciu tego edytora.
 	</string>
 </strings>

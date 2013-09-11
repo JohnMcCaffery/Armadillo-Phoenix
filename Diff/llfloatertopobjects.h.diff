@@ -1,0 +1,15 @@
+diff --git a/Source/indra/newview/llfloatertopobjects.h b/Source/indra/newview/llfloatertopobjects.h
+index ea02893..2876f1b 100644
+--- a/Source/indra/newview/llfloatertopobjects.h
++++ b/Source/indra/newview/llfloatertopobjects.h
+@@ -86,9 +86,7 @@ private:
+ 
+ 	void onGetByOwnerName();
+ 	void onGetByObjectName();
+-
+-//	static void onGetByOwnerNameClicked(void* data)  { onGetByOwnerName(NULL, data); };
+-//	static void onGetByObjectNameClicked(void* data) { onGetByObjectName(NULL, data); };
++	void onGetByParcelName();
+ 
+ 	void showBeacon();
+ 

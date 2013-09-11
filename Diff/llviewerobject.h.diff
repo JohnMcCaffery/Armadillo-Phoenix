@@ -1,0 +1,124 @@
+diff --git a/Source/indra/newview/llviewerobject.h b/Source/indra/newview/llviewerobject.h
+index bc5f4c9..c7f50f7 100644
+--- a/Source/indra/newview/llviewerobject.h
++++ b/Source/indra/newview/llviewerobject.h
+@@ -34,7 +34,6 @@
+ #include "llhudicon.h"
+ #include "llinventory.h"
+ #include "llrefcount.h"
+-#include "llmemtype.h"
+ #include "llprimitive.h"
+ #include "lluuid.h"
+ #include "llvoinventorylistener.h"
+@@ -88,18 +87,6 @@ typedef void (*inventory_callback)(LLViewerObject*,
+ 								   S32 serial_num,
+ 								   void*);
+ 
+-// a small struct for keeping track of joints
+-struct LLVOJointInfo
+-{
+-	EHavokJointType mJointType;
+-	LLVector3 mPivot;			// parent-frame
+-	// whether the below an axis or anchor (and thus its frame)
+-	// depends on the joint type:
+-	//     HINGE   ==>   axis=parent-frame
+-	//     P2P     ==>   anchor=child-frame
+-	LLVector3 mAxisOrAnchor;	
+-};
+-
+ // for exporting textured materials from SL
+ struct LLMaterialExportInfo
+ {
+@@ -140,7 +127,6 @@ public:
+ 	typedef const child_list_t const_child_list_t;
+ 
+ 	LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp, BOOL is_global = FALSE);
+-	MEM_TYPE_NEW(LLMemType::MTYPE_OBJECT);
+ 
+ 	virtual void markDead();				// Mark this object as dead, and clean up its references
+ 	BOOL isDead() const									{return mDead;}
+@@ -157,7 +143,7 @@ public:
+ 	LLNameValue*	getNVPair(const std::string& name) const;			// null if no name value pair by that name
+ 
+ 	// Object create and update functions
+-	virtual BOOL	idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
++	virtual void	idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
+ 
+ 	// Types of media we can associate
+ 	enum { MEDIA_NONE = 0, MEDIA_SET = 1 };
+@@ -188,8 +174,6 @@ public:
+ 	virtual void 	updateRadius() {};
+ 	virtual F32 	getVObjRadius() const; // default implemenation is mDrawable->getRadius()
+ 	
+-	BOOL 			isJointChild() const { return mJointInfo ? TRUE : FALSE; } 
+-	EHavokJointType	getJointType() const { return mJointInfo ? mJointInfo->mJointType : HJT_INVALID; }
+ 	// for jointed and other parent-relative hacks
+ 	LLViewerObject* getSubParent();
+ 	const LLViewerObject* getSubParent() const;
+@@ -280,6 +264,9 @@ public:
+ 	virtual BOOL lineSegmentIntersect(const LLVector3& start, const LLVector3& end,
+ 									  S32 face = -1,                          // which face to check, -1 = ALL_SIDES
+ 									  BOOL pick_transparent = FALSE,
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++									  BOOL pick_rigged = FALSE,
++// [/SL:KB]
+ 									  S32* face_hit = NULL,                   // which face was hit
+ 									  LLVector3* intersection = NULL,         // return the intersection point
+ 									  LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point
+@@ -320,7 +307,8 @@ public:
+ 	/*virtual*/	void	setNumTEs(const U8 num_tes);
+ 	/*virtual*/	void	setTE(const U8 te, const LLTextureEntry &texture_entry);
+ 	/*virtual*/ S32		setTETexture(const U8 te, const LLUUID &uuid);
+-	S32 setTETextureCore(const U8 te, const LLUUID& uuid, LLHost host);
++	S32 				setTETextureCore(const U8 te, LLViewerTexture *image);
++	S32 setTETextureCore(const U8 te, const LLUUID& uuid, const std::string &url );
+ 	/*virtual*/ S32		setTEColor(const U8 te, const LLColor3 &color);
+ 	/*virtual*/ S32		setTEColor(const U8 te, const LLColor4 &color);
+ 	/*virtual*/ S32		setTEScale(const U8 te, const F32 s, const F32 t);
+@@ -403,6 +391,9 @@ public:
+ 	void setIcon(LLViewerTexture* icon_image);
+ 	void clearIcon();
+ 
++	// <FS:Ansariel> Getter for HUD icon attached to the object
++	LLPointer<LLHUDIcon> getIcon() const { return mIcon; };
++
+ 	void markForUpdate(BOOL priority);
+ 	void updateVolume(const LLVolumeParams& volume_params);
+ 	virtual	void updateSpatialExtents(LLVector4a& min, LLVector4a& max);
+@@ -500,12 +491,15 @@ public:
+ 	inline BOOL		flagPhantom() const				{ return ((mFlags & FLAGS_PHANTOM) != 0); }
+ 	inline BOOL		flagInventoryEmpty() const		{ return ((mFlags & FLAGS_INVENTORY_EMPTY) != 0); }
+ 	inline BOOL		flagAllowInventoryAdd() const	{ return ((mFlags & FLAGS_ALLOW_INVENTORY_DROP) != 0); }
+-	inline BOOL		flagTemporary() const			{ return ((mFlags & FLAGS_TEMPORARY) != 0); } //readed to FS do to use in pie and area serch FS:TM
+ 	inline BOOL		flagTemporaryOnRez() const		{ return ((mFlags & FLAGS_TEMPORARY_ON_REZ) != 0); }
+ 	inline BOOL		flagAnimSource() const			{ return ((mFlags & FLAGS_ANIM_SOURCE) != 0); }
+ 	inline BOOL		flagCameraSource() const		{ return ((mFlags & FLAGS_CAMERA_SOURCE) != 0); }
+ 	inline BOOL		flagCameraDecoupled() const		{ return ((mFlags & FLAGS_CAMERA_DECOUPLED) != 0); }
+ 
++	// <FS:Techwolf Lupindo> prim export
++	U32 getFlags() { return mFlags; }
++	// <FS:Techwolf Lupindo>
++	
+ 	U8       getPhysicsShapeType() const;
+ 	inline F32      getPhysicsGravity() const       { return mPhysicsGravity; }
+ 	inline F32      getPhysicsFriction() const      { return mPhysicsFriction; }
+@@ -690,7 +684,10 @@ protected:
+ 	void setParticleSource(const LLPartSysData& particle_parameters, const LLUUID& owner_id);
+ 	
+ public:
+-		
++	// <FS:Techwolf Lupindo> export
++	LLViewerPartSourceScript* getPartSourceScript() { return mPartSourcep.get(); }
++	bool getPhysicsShapeUnknown () { return mPhysicsShapeUnknown; }
++	// </FS:Techwolf Lupindo>
+ private:
+ 	void setNameValueList(const std::string& list);		// clears nv pairs and then individually adds \n separated NV pairs from \0 terminated string
+ 	void deleteTEImages(); // correctly deletes list of images
+@@ -748,7 +745,6 @@ protected:
+ 	LLQuaternion	mAngularVelocityRot;		// accumulated rotation from the angular velocity computations
+ 	LLQuaternion	mPreviousRotation;
+ 
+-	LLVOJointInfo*  mJointInfo;
+ 	U8				mState;	// legacy
+ 	LLViewerObjectMedia* mMedia;	// NULL if no media associated
+ 	U8 mClickAction;

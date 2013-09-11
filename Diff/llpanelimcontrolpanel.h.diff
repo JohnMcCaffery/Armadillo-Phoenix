@@ -1,0 +1,19 @@
+diff --git a/Source/indra/newview/llpanelimcontrolpanel.h b/Source/indra/newview/llpanelimcontrolpanel.h
+index bba847b..3cdf1a1 100644
+--- a/Source/indra/newview/llpanelimcontrolpanel.h
++++ b/Source/indra/newview/llpanelimcontrolpanel.h
+@@ -24,6 +24,8 @@
+  * $/LicenseInfo$
+  */
+ 
++#if 0
++
+ #ifndef LL_LLPANELIMCONTROLPANEL_H
+ #define LL_LLPANELIMCONTROLPANEL_H
+ 
+@@ -136,3 +138,5 @@ public:
+ };
+ 
+ #endif // LL_LLPANELIMCONTROLPANEL_H
++
++#endif

@@ -1,0 +1,11 @@
+diff --git a/Source/indra/newview/rlvinventory.h b/Source/indra/newview/rlvinventory.h
+index 6270e2b..cd923ef 100644
+--- a/Source/indra/newview/rlvinventory.h
++++ b/Source/indra/newview/rlvinventory.h
+@@ -1,5 +1,5 @@
+ /** 
+- *
++ * @file rlvinventory.h
+  * Copyright (c) 2009-2011, Kitty Barnett
+  * 
+  * The source code in this file is provided to you under the terms of the 

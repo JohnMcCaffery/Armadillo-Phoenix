@@ -1,0 +1,23 @@
+diff --git a/Source/indra/newview/llvowater.cpp b/Source/indra/newview/llvowater.cpp
+index 702524d..4f7944a 100644
+--- a/Source/indra/newview/llvowater.cpp
++++ b/Source/indra/newview/llvowater.cpp
+@@ -103,17 +103,8 @@ void LLVOWater::updateTextures()
+ }
+ 
+ // Never gets called
+-BOOL LLVOWater::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
++void  LLVOWater::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
+ {
+- 	/*if (mDead || !(gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_WATER)))
+-	{
+-		return TRUE;
+-	}
+-	if (mDrawable) 
+-	{
+-		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, TRUE);
+-	}*/
+-	return TRUE;
+ }
+ 
+ LLDrawable *LLVOWater::createDrawable(LLPipeline *pipeline)

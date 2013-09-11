@@ -1,0 +1,57 @@
+diff --git a/Source/indra/newview/rlvcommon.h b/Source/indra/newview/rlvcommon.h
+index 23937e8..1f65df7 100644
+--- a/Source/indra/newview/rlvcommon.h
++++ b/Source/indra/newview/rlvcommon.h
+@@ -1,5 +1,5 @@
+ /** 
+- *
++ * @file rlvcommon.h
+  * Copyright (c) 2009-2011, Kitty Barnett
+  * 
+  * The source code in this file is provided to you under the terms of the 
+@@ -19,6 +19,7 @@
+ 
+ #include "llavatarname.h"
+ #include "llselectmgr.h"
++#include "lltrans.h"
+ #include "llviewercontrol.h"
+ 
+ #include "rlvdefines.h"
+@@ -43,6 +44,7 @@ class LLInventoryItem;
+ class LLViewerInventoryCategory;
+ class LLViewerInventoryItem;
+ class LLViewerJointAttachment;
++class LLViewerWearable;
+ class LLWearable;
+ 
+ //
+@@ -76,7 +78,8 @@ template<typename T> inline T rlvGetPerUserSetting(const std::string& strSetting
+ class RlvSettings
+ {
+ public:
+-	static F32  getAvatarOffsetZ()				{ return rlvGetSetting<F32>(RLV_SETTING_AVATAROFFSET_Z, 0.0); }
++    // <FS:CR> FIRE-9759 - Temporarily remove setting AvatarZOffset
++	//static F32  getAvatarOffsetZ()				{ return rlvGetPerUserSetting<F32>(RLV_SETTING_AVATAROFFSET_Z, 0.0); }
+ 	static bool getDebug()						{ return rlvGetSetting<bool>(RLV_SETTING_DEBUG, false); }
+ 	static bool getCanOOC()						{ return fCanOOC; }
+ 	static bool getForbidGiveToRLV()			{ return rlvGetSetting<bool>(RLV_SETTING_FORBIDGIVETORLV, true); }
+@@ -160,7 +163,7 @@ public:
+ 
+ 	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD());
+ 	static void notifyBlockedGeneric()	{ notifyBlocked(RLV_STRING_BLOCKED_GENERIC); }
+-	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RLV_STRING_BLOCKED_VIEWXXX, LLSD().with("[TYPE]", LLAssetType::lookup(assetType))); }
++	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RLV_STRING_BLOCKED_VIEWXXX, LLSD().with("[TYPE]", LLTrans::getString(LLAssetType::lookupHumanReadable(assetType)))); }
+ 	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);
+ 
+ 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);
+@@ -230,8 +233,8 @@ protected:
+ 
+ bool rlvPredCanWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWearMask);
+ bool rlvPredCanNotWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWearMask);
+-bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem);
+-bool rlvPredCanNotRemoveItem(const LLViewerInventoryItem* pItem);
++bool rlvPredCanRemoveItem(const LLInventoryItem* pItem);
++bool rlvPredCanNotRemoveItem(const LLInventoryItem* pItem);
+ 
+ struct RlvPredCanWearItem
+ {

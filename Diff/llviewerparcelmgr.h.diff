@@ -1,0 +1,43 @@
+diff --git a/Source/indra/newview/llviewerparcelmgr.h b/Source/indra/newview/llviewerparcelmgr.h
+index 6c591b6..e32027f 100644
+--- a/Source/indra/newview/llviewerparcelmgr.h
++++ b/Source/indra/newview/llviewerparcelmgr.h
+@@ -166,6 +166,14 @@ public:
+ 	LLParcel*	getHoverParcel() const;
+ 
+ 	LLParcel*	getCollisionParcel() const;
++// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
++	const U8*	getCollisionBitmap() const { return mCollisionBitmap; }
++	size_t		getCollisionBitmapSize() const { return mParcelsPerEdge * mParcelsPerEdge / 8; }
++	U64			getCollisionRegionHandle() const { return mCollisionRegionHandle; }
++ 
++	typedef boost::signals2::signal<void (const LLViewerRegion*)> collision_update_signal_t;
++	boost::signals2::connection setCollisionUpdateCallback(const collision_update_signal_t::slot_type & cb);
++// [/SL:KB]
+ 
+ 	// Can this agent build on the parcel he is on?
+ 	// Used for parcel property icons in nav bar.
+@@ -226,11 +234,6 @@ public:
+ 	// Takes an Access List flag, like AL_ACCESS or AL_BAN
+ 	void	sendParcelAccessListRequest(U32 flags);
+ 
+-	// asks for the parcel's media url filter list
+-	void    requestParcelMediaURLFilter();
+-	// receive the response
+-	void    receiveParcelMediaURLFilter(const LLSD &content);
+-	
+ 	// Dwell is not part of the usual parcel update information because the
+ 	// simulator doesn't actually know the per-parcel dwell.  Ack!  We have
+ 	// to get it out of the database.
+@@ -365,6 +368,11 @@ private:
+ 	// Watch for pending collisions with a parcel you can't access.
+ 	// If it's coming, draw the parcel's boundaries.
+ 	LLParcel*					mCollisionParcel;
++// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
++	U8*							mCollisionBitmap;
++	U64							mCollisionRegionHandle;
++	collision_update_signal_t*	mCollisionUpdateSignal;
++// [/SL:KB]
+ 	U8*							mCollisionSegments;
+ 	BOOL						mRenderCollision; 
+ 	BOOL						mRenderSelection;

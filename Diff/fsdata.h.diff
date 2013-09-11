@@ -1,0 +1,38 @@
+diff --git a/Source/indra/newview/fsdata.h b/Source/indra/newview/fsdata.h
+index 3269e70..fde9538 100644
+--- a/Source/indra/newview/fsdata.h
++++ b/Source/indra/newview/fsdata.h
+@@ -29,6 +29,9 @@
+  * THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
++#ifndef FS_DATA_H
++#define FS_DATA_H
++
+ #include <map>
+ #include <llsd.h>
+ #include <llinstantmessage.h>
+@@ -47,6 +50,7 @@ struct FSDataAgent
+ 
+ class FSData : public LLSingleton<FSData>
+ {
++	friend class LLSingleton<FSData>;
+ 	LOG_CLASS(FSData);
+ public:
+ 	void startDownload();
+@@ -82,6 +86,8 @@ public:
+ 	FSDataAgent* getAgent(LLUUID avatar_id);
+ 
+ 	LLSD allowed_login();
++	
++	static bool enableLegacySearch() {return true;}
+ 
+ 	std::string processRequestForInfo(LLUUID requester,std::string message, std::string name, LLUUID sessionid);
+ 	static LLSD getSystemInfo();
+@@ -100,3 +106,5 @@ private:
+ 	FSDataAgent mSupportAgent;
+ 	std::map<LLUUID, FSDataAgent> mSupportAgentList;
+ };
++
++#endif // FS_DATA_H
+\ No newline at end of file

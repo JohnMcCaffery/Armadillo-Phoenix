@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_about" title="O [CAPITALIZED_APP_NAME]">
+<floater name="floater_about" title="O [APP_NAME]">
 	<floater.string name="AboutHeader">
 		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] Informacje o wydaniu]
@@ -39,6 +39,7 @@ Czcionka (Font): [FONT] ([FONT_SCREEN_DPI])
 Pole widzenia (Draw Distance): [DRAW_DISTANCE]
 Przepustowość (Bandwidth): [BANDWIDTH]
 Mnożnik poziomu detali (LOD Factor): [LOD]
+Jakość wyświetlania (Render quality): [RENDERQUALITY]
 	</floater.string>
 	<floater.string name="none">
 		(brak)
@@ -53,7 +54,7 @@ Mnożnik poziomu detali (LOD Factor): [LOD]
 		<panel label="Informacje" name="support_panel">
 			<text name="support_intro">
 				Najnowsze informacje o Firestorm są dostępne pod adresem 
-http://www.phoenixviewer.com
+http://www.firestormviewer.org
 			</text>
 			<button label="Kopiuj do schowka" name="copy_btn"/>
 		</panel>
@@ -72,7 +73,7 @@ Lindeni to:
 		</panel>
 		<panel label="Firestorm" name="fs_credits_panel">
 			<text name="firestorm_intro">
-				Firestorm jest programistycznym projektem społecznościowym mającym na celu poprawę jakości doświadczeń płynących z używania SecondLife(tm) Viewer. Scalamy wkład różnych programistów udzielających się w społeczności razem z kodem Linden Lab i naszym własnym, aby tworzyć dobrą, bogatą w funkcje przeglądarkę świata nad którą czuwa zespół wsparcia złożony z wolontariuszy. Firestorm istnieje dzięki The Phoenix Viewer Project, Inc., organizacji non-profit.
+				Firestorm jest programistycznym projektem społecznościowym mającym na celu poprawę jakości doświadczeń płynących z używania SecondLife(tm) Viewer. Scalamy wkład różnych programistów udzielających się w społeczności razem z kodem Linden Lab i naszym własnym, aby tworzyć dobrą, bogatą w funkcje przeglądarkę świata nad którą czuwa zespół wsparcia złożony z wolontariuszy. Firestorm istnieje dzięki The Phoenix Firestorm Project, Inc., organizacji non-profit.
 
 Zespół programistów Firestorma:
 			</text>

@@ -1,0 +1,113 @@
+diff --git a/Source/indra/newview/llmutelist.cpp b/Source/indra/newview/llmutelist.cpp
+index d83889e..0045df2 100644
+--- a/Source/indra/newview/llmutelist.cpp
++++ b/Source/indra/newview/llmutelist.cpp
+@@ -44,6 +44,8 @@
+ 
+ #include "llmutelist.h"
+ 
++#include "pipeline.h"
++
+ #include <boost/tokenizer.hpp>
+ 
+ #include "lldispatcher.h"
+@@ -192,6 +194,23 @@ BOOL LLMuteList::isLinden(const std::string& name) const
+ 	return last_name == "Linden";
+ }
+ 
++static LLVOAvatar* find_avatar(const LLUUID& id)
++{
++	LLViewerObject *obj = gObjectList.findObject(id);
++	while (obj && obj->isAttachment())
++	{
++		obj = (LLViewerObject *)obj->getParent();
++	}
++
++	if (obj && obj->isAvatar())
++	{
++		return (LLVOAvatar*)obj;
++	}
++	else
++	{
++		return NULL;
++	}
++}
+ 
+ BOOL LLMuteList::add(const LLMute& mute, U32 flags)
+ {
+@@ -288,6 +307,12 @@ BOOL LLMuteList::add(const LLMute& mute, U32 flags)
+ 						LLViewerPartSim::getInstance()->clearParticlesByOwnerID(localmute.mID);
+ 					}
+ 				}
++				//mute local lights that are attached to the avatar
++				LLVOAvatar *avatarp = find_avatar(localmute.mID);
++				if (avatarp)
++				{
++					LLPipeline::removeMutedAVsLights(avatarp);
++				}
+ 				return TRUE;
+ 			}
+ 		}
+@@ -372,6 +397,9 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
+ 		
+ 		// Must be after erase.
+ 		setLoaded();  // why is this here? -MG
++
++		// <FS:Ansariel> Return correct return value
++		found = TRUE;
+ 	}
+ 	else
+ 	{
+@@ -385,6 +413,9 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
+ 			mLegacyMutes.erase(legacy_it);
+ 			// Must be after erase.
+ 			setLoaded(); // why is this here? -MG
++
++			// <FS:Ansariel> Return correct return value
++			found = TRUE;
+ 		}
+ 	}
+ 	
+@@ -591,10 +622,22 @@ BOOL LLMuteList::saveToFile(const std::string& filename)
+ 
+ BOOL LLMuteList::isMuted(const LLUUID& id, const std::string& name, U32 flags) const
+ {
++	// <FS:ND> In case of an empty mutelist, we can exit right away.
++	if( 0 == mMutes.size() )
++		return FALSE;
++	// </FS:ND>
++
+ 	// for objects, check for muting on their parent prim
+ 	LLViewerObject* mute_object = get_object_to_mute_from_id(id);
+ 	LLUUID id_to_check  = (mute_object) ? mute_object->getID() : id;
+ 
++	// <FS:Ansariel> FIRE-8540: Make sure we don't mute ourself if we added
++	//               a legacy mute by name with our name.
++	if (id_to_check == gAgentID)
++	{
++		return FALSE;
++	}
++
+ 	// don't need name or type for lookup
+ 	LLMute mute(id_to_check);
+ 	mute_set_t::const_iterator mute_it = mMutes.find(mute);
+@@ -741,3 +784,19 @@ void LLMuteList::notifyObservers()
+ 		it = mObservers.upper_bound(observer);
+ 	}
+ }
++
++// <FS:Ansariel> Agent profile button
++LLMute LLMuteList::getMute(const LLUUID& id)
++{
++	LLMute mute(id);
++	mute_set_t::iterator found = mMutes.find(mute);
++	if (found != mMutes.end())
++	{
++		return (*found);
++	}
++	else
++	{
++		return LLMute(LLUUID::null);
++	}
++}
++// </FS:Ansariel>

@@ -1,0 +1,11 @@
+diff --git a/Source/indra/newview/rlvextensions.cpp b/Source/indra/newview/rlvextensions.cpp
+index 6365f19..ef9c205 100644
+--- a/Source/indra/newview/rlvextensions.cpp
++++ b/Source/indra/newview/rlvextensions.cpp
+@@ -1,5 +1,5 @@
+ /** 
+- *
++ * @file rlvextentions.cpp
+  * Copyright (c) 2009-2011, Kitty Barnett
+  * 
+  * The source code in this file is provided to you under the terms of the 

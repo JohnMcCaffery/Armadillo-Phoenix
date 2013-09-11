@@ -5,12 +5,12 @@
  left="280"
  mouse_opaque="true"
  name="groups"
- width="350">
+ width="355">
 	<view_border
-	 top="-9"
+	 top="-1"
 	 bottom="25"
 	 left="6"
-	 width="244"
+	 width="262"
 	 follows="left|top|right|bottom"
 	 bevel_style="in"
 	 name="info_border" />
@@ -21,8 +21,8 @@
 	 left="7"
 	 name="group_list"
 	 color="ScrollBgWriteableColor"
-	 top="-10"
-	 width="243" />
+	 top="-1"
+	 width="260" />
     <text
      type="string"
      length="1"
@@ -35,11 +35,11 @@
 You belong to [COUNT] out of [MAX] groups.
     </text>
 	<button
-	 top="-10"
+	 top="-1"
 	 follows="top|right"
 	 height="22"
 	 label="IM/Call"
-	 right="-10"
+	 left_delta="267"
 	 name="chat_btn"
 	 tool_tip="Open Instant Message session"
 	 width="80" />
@@ -50,13 +50,13 @@ You belong to [COUNT] out of [MAX] groups.
 	 label="Info"
 	 name="info_btn"
 	 width="80" />
-	<!--<button
+	<button
 	 bottom_delta="-25"
 	 follows="top|right"
 	 height="22"
-	 label="Titles..."
+	 label="Group Titles"
 	 name="titles_btn"
-	 width="80" />-->
+	 width="80" />
 	<button
 	 bottom_delta="-25"
 	 follows="top|right"
@@ -72,7 +72,7 @@ You belong to [COUNT] out of [MAX] groups.
 	 name="leave_btn"
 	 width="80" />
 	<button
-	 bottom_delta="-25"
+	 bottom_delta="-35"
 	 follows="top|right"
 	 height="22"
 	 label="Create..."
@@ -89,66 +89,7 @@ You belong to [COUNT] out of [MAX] groups.
 	 bottom_delta="-25"
 	 follows="top|right"
 	 height="22"
-	 label="Group Titles"
-	 name="titles_btn"
-	 width="80" />
-	<!--<button
-	 bottom_delta="-25"
-	 follows="top|right"
-	 font="SansSerif"
-	 height="22"
 	 label="Invite..."
 	 name="invite_btn"
-	 width="80" />-->
-  <!--  <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="16"
-   layout="topleft"
-   left="12"
-   name="group_label"
-   top="24"
-   width="50">
-    Total groups: 
-  </text>
-  <text
-   follows="top|left|right"
-   font="SansSerifBigBold"
-   height="29"
-   layout="topleft"
-   left="45"
-   name="group_count"
-   text_color="LtGray"
-   top="22"
-   value="42"
-   use_ellipses="true"
-   word_wrap="true"
-   visible="false"
-   width="255" />
-  <text
-  type="string"
-  length="1"
-  follows="left|top"
-  height="16"
-  layout="topleft"
-  left="12"
-  name="group_label"
-  top="24"
-  width="248">
-    of :
-  </text> <text
-  follows="top|left|right"
-  font="SansSerifBigBold"
-  height="29"
-  layout="topleft"
-  left="45"
-  name="group_count_max"
-  text_color="LtGray"
-  top="22"
-  value="42"
-  use_ellipses="true"
-  word_wrap="true"
-  visible="false"
-  width="255" /> -->
+	 width="80" />
 </panel>

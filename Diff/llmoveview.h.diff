@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llmoveview.h b/Source/indra/newview/llmoveview.h
+index ea1a9b4..7a150ed 100644
+--- a/Source/indra/newview/llmoveview.h
++++ b/Source/indra/newview/llmoveview.h
+@@ -177,6 +177,8 @@ private:
+ 	 */
+ 	LLHandle<LLPanel> mOriginalParent;
+ 
++	LLHandle<LLPanel> mStateManagementButtons;
++
+ 	/**
+ 	 * True if the panel is currently attached to the movement controls floater.
+ 	 * 

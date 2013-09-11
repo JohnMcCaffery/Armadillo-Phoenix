@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llviewerjointattachment.cpp b/Source/indra/newview/llviewerjointattachment.cpp
+index 46ce457..66a6912 100644
+--- a/Source/indra/newview/llviewerjointattachment.cpp
++++ b/Source/indra/newview/llviewerjointattachment.cpp
+@@ -177,7 +177,7 @@ BOOL LLViewerJointAttachment::addObject(LLViewerObject* object)
+ 		// re-connect object to the joint correctly
+ 	}
+ 	
+-// [SL:KB] - Patch: Appearance-Misc | Checked: Catznip-3.0.0a (2011-01-13) | Added: Catznip-2.4.0h
++// [SL:KB] - Patch: Appearance-Misc | Checked: 2011-01-13 (Catznip-2.4)
+ 	// LLViewerJointAttachment::removeObject() sets the object's item to the NULL UUID so we need to extract it *after* the block above
+ 	object->extractAttachmentItemID();
+ // [/SL:KB]

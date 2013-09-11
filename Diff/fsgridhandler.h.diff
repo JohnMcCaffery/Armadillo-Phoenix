@@ -1,0 +1,75 @@
+diff --git a/Source/indra/newview/fsgridhandler.h b/Source/indra/newview/fsgridhandler.h
+index 8c5b1ea..f91c3e1 100644
+--- a/Source/indra/newview/fsgridhandler.h
++++ b/Source/indra/newview/fsgridhandler.h
+@@ -59,12 +59,13 @@ extern const char* DEFAULT_LOGIN_PAGE;
+ #define GRID_PROFILE_URI_VALUE "profileuri"
+ #define GRID_SENDGRIDINFO "SendGridInfoToViewerOnLogin"
+ #define GRID_DIRECTORY_FEE "DirectoryFee"
++#define GRID_CLASSIFIED_FEE "ClassifiedFee"
+ #define GRID_CURRENCY_SYMBOL "CurrencySymbol"
+ #define GRID_REAL_CURRENCY_SYMBOL "RealCurrencySymbol"
+ #define GRID_MAXGROUPS "MaxGroups"
+ #define GRID_PLATFORM "platform"
+ #define GRID_MESSAGE "message"
+-// <FS:CR> Aurora Sim
++// </FS:CR> Aurora Sim
+ // </AW opensim>
+ #define GRID_IS_SYSTEM_GRID_VALUE "system_grid"
+ #define GRID_IS_FAVORITE_VALUE "favorite"
+@@ -116,6 +117,7 @@ public:
+ 		FETCH,
+ 		FETCHTEMP,
+ 		SYSTEM,
++		MANUAL,
+ 		RETRY,
+ 		LOCAL,
+ 		FINISH,
+@@ -245,6 +247,7 @@ public:
+ 	grid_list_changed_signal_t	mGridListChangedSignal;
+ // <FS:AW  grid management>
+ // <AW opensim>
++	bool isInSecondLife();
+ 	bool isInSLMain();
+ 	bool isInSLBeta();
+ 	bool isInOpenSim();
+@@ -254,10 +257,10 @@ public:
+ 	void saveGridList();
+ // </AW opensim>
+ 	void clearFavorites();
++	void addGrid(GridEntry* grid_info, AddState state);
+ 
+ private:
+ 	friend class GridInfoRequestResponder;
+-	void addGrid(GridEntry* grid_info, AddState state);
+ 	void incResponderCount(){++mResponderCount;}
+ 	void decResponderCount(){--mResponderCount;}
+ 	void gridInfoResponderCB(GridEntry* grid_data);
+@@ -282,16 +285,21 @@ protected:
+ 	LLSD mGridList;
+ // <AW opensim>
+ 	LLSD mConnectedGrid;
+-	bool mIsInSLMain;
+-	bool mIsInSLBeta;
+-	bool mIsInOpenSim;
+-// <FS:CR> Aurora Sim
+-	bool mIsInAuroraSim;
+-// </FS:CR> Aurora Sim
+ 	int mResponderCount;
+ 	bool mReadyToLogin;
+ 	bool mCommandLineDone;
+ // </AW opensim>
++	
++	// <FS:CR> OpenSim
++	enum e_grid_platform
++	{
++		GP_NOTSET,
++		GP_SLMAIN,
++		GP_SLBETA,
++		GP_OPENSIM,
++		GP_AURORA
++	} EGridPlatform;
++	// </FS:CR>
+ };
+ 
+ #endif // FS_GRIDHANDLER_H

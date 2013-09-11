@@ -1,0 +1,377 @@
+diff --git a/Source/indra/newview/llnearbychathandler.cpp b/Source/indra/newview/llnearbychathandler.cpp
+index 7e1afb8..e8b9035 100644
+--- a/Source/indra/newview/llnearbychathandler.cpp
++++ b/Source/indra/newview/llnearbychathandler.cpp
+@@ -43,7 +43,10 @@
+ #include "llviewerwindow.h"//for screen channel position
+ // <FS:Zi> Remove floating chat bar
+ // #include "llnearbychatbar.h"
+-#include "llfloaternearbychat.h"
++// <FS:Ansariel> [FS communication UI]
++//#include "llfloaternearbychat.h"
++#include "fsfloaternearbychat.h"
++// <FS:Ansariel> [FS communication UI]
+ // </FS:Zi>
+ #include "llrootview.h"
+ #include "lllayoutstack.h"
+@@ -52,9 +55,7 @@
+ #include "rlvhandler.h"
+ // [/RLVa:KB]
+ 
+-#include "llavatarnamecache.h"
+-#include "llconsole.h"
+-#include "lltrans.h"
++#include "fsconsoleutils.h"
+ 
+ //add LLNearbyChatHandler to LLNotificationsUI namespace
+ using namespace LLNotificationsUI;
+@@ -509,20 +510,12 @@ LLNearbyChatHandler::LLNearbyChatHandler(e_notification_type type, const LLSD& i
+ 	LLChannelManager::getInstance()->addChannel(channel);
+ 
+ 	mChannel = channel->getHandle();
+-	
+-	FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
+-	gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLNearbyChatHandler::updateFSUseNearbyChatConsole, this, _2));
+ }
+ 
+ LLNearbyChatHandler::~LLNearbyChatHandler()
+ {
+ }
+ 
+-void LLNearbyChatHandler::updateFSUseNearbyChatConsole(const LLSD &data)
+-{
+-	FSUseNearbyChatConsole = data.asBoolean();
+-}
+-
+ void LLNearbyChatHandler::initChannel()
+ {
+ 	//LLRect snap_rect = gFloaterView->getSnapRect();
+@@ -538,7 +531,9 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
+ 	// <FS:Ansariel> Optional muted chat history
+ 		//return;
+ 	{
+-		LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
++		// <FS:Ansariel> [FS communication UI]
++		FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
++		// <FS:Ansariel> [FS communication UI]
+ 		nearby_chat->addMessage(chat_msg, true, args);
+ 		return;
+ 	}
+@@ -552,6 +547,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
+ 	if (rlv_handler_t::isEnabled())
+ 	{
+ 		// NOTE-RLVa: we can only filter the *message* here since most everything else will already be part of "args" as well
++		LLChat& tmp_chat = const_cast<LLChat&>(chat_msg);
+ 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (!tmp_chat.mRlvLocFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
+ 		{
+ 			RlvUtil::filterLocation(tmp_chat.mText);
+@@ -565,10 +561,13 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
+ 	}
+ // [/RLVa:KB]
+ 
++
+ // ## Zi - Post merge fixup ## //	LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
+ // ## Zi - Post merge fixup ## //	LLNearbyChat* nearby_chat = chat_bar->findChild<LLNearbyChat>("nearby_chat");
+-	LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
+-
++	// <FS:Ansariel> [FS communication UI]
++	//LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
++	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
++	// </FS:Ansariel> [FS communication UI]
+ 	// Build notification data 
+ 	LLSD notification;
+ 	notification["message"] = chat_msg.mText;
+@@ -608,7 +607,8 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
+ 			return;
+ 		}
+ 
+-		if (gSavedSettings.getS32("ShowScriptErrorsLocation")== 1)// show error in window //("ScriptErrorsAsChat"))
++		// <FS:Ansariel> Script debug icon
++		//if (gSavedSettings.getS32("ShowScriptErrorsLocation")== 1)// show error in window //("ScriptErrorsAsChat"))
+ 		{
+ 
+ 			LLColor4 txt_color;
+@@ -619,23 +619,19 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
+ 												chat_msg.mFromName,
+ 												txt_color,
+ 												chat_msg.mFromID);
+-			return;
++			// <FS:Ansariel> Script debug icon
++			//return;
++			if (gSavedSettings.getS32("ShowScriptErrorsLocation") == 1)
++			{
++				return;
++			}
++			// </FS:Ansariel> Script debug icon
++
+ 		}
+ 	}
+ 
+ 	nearby_chat->addMessage(chat_msg, true, args);
+ 
+-	// Handle irc styled messages for toast panel
+-	// HACK ALERT - changes mText, stripping out IRC style "/me" prefixes
+-	if ((tmp_chat.mChatStyle == CHAT_STYLE_IRC) &&
+-		!FSUseNearbyChatConsole)
+-	{
+-		if(!tmp_chat.mFromName.empty())
+-			tmp_chat.mText = tmp_chat.mFromName + tmp_chat.mText.substr(3);
+-		else
+-			tmp_chat.mText = tmp_chat.mText.substr(3);
+-	}
+-
+ 	if(chat_msg.mSourceType == CHAT_SOURCE_AGENT 
+ 		&& chat_msg.mFromID.notNull() 
+ 		&& chat_msg.mFromID != gAgentID)
+@@ -653,207 +649,71 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
+ 	// Send event on to LLEventStream
+ 	sChatWatcher->post(notification);
+ 
+-	static LLCachedControl<bool> useChatBubbles(gSavedSettings, "UseChatBubbles");
++	// <FS:Ansariel> Nearby chat in console
++	if (FSConsoleUtils::ProcessChatMessage(chat_msg, args))
++	{
++		return;
++	}
++	// </FS:Ansariel>
+ 
+-	if( ( nearby_chat->getVisible() && !FSUseNearbyChatConsole) // Ansariel: If nearby chat not visible but we use the console, proceed!
++	static LLCachedControl<bool> useChatBubbles(gSavedSettings, "UseChatBubbles");
++// ## Zi - Post merge fixup ## //	if( !chat_bar->isMinimized() && nearby_chat->getVisible()
++	if( nearby_chat->getVisible()	// ## Zi - Post merge fixup ##
+ 		|| ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
+ 			&& useChatBubbles )
+ 		|| mChannel.isDead()
+ 		|| !mChannel.get()->getShowToasts() ) // to prevent toasts in Busy mode
+ 		return;//no need in toast if chat is visible or if bubble chat is enabled
+ 
+-	// Ansariel: Use either old style chat output to console or toasts
+-	if (FSUseNearbyChatConsole)
++	// arrange a channel on a screen
++	if(!mChannel.get()->getVisible())
+ 	{
+-		// Don't write to console if avatar chat and user wants
+-		// bubble chat or if the user is busy.
+-		if ( (chat_msg.mSourceType == CHAT_SOURCE_AGENT && useChatBubbles)
+-			|| gAgent.getBusy() )
+-			return;
+-
+-		std::string consoleChat;
+-		
+-		if (chat_msg.mSourceType == CHAT_SOURCE_AGENT) 
+-		{
+-			LLAvatarNameCache::get(chat_msg.mFromID, boost::bind(&LLNearbyChatHandler::onAvatarNameLookup, this, _1, _2, chat_msg));
+-		}
+-		else if (chat_msg.mSourceType == CHAT_SOURCE_OBJECT)
+-		{
+-			std::string senderName(chat_msg.mFromName);
+-			std::string prefix = chat_msg.mText.substr(0, 4);
+-			LLStringUtil::toLower(prefix);
+-
+-			//IRC styled /me messages.
+-			bool irc_me = prefix == "/me " || prefix == "/me'";
+-
+-			// Delimiter after a name in header copy/past and in plain text mode
+-			std::string delimiter = ": ";
+-			std::string shout = LLTrans::getString("shout");
+-			std::string whisper = LLTrans::getString("whisper");
+-			if (chat_msg.mChatType == CHAT_TYPE_SHOUT || 
+-				chat_msg.mChatType == CHAT_TYPE_WHISPER ||
+-				chat_msg.mText.compare(0, shout.length(), shout) == 0 ||
+-				chat_msg.mText.compare(0, whisper.length(), whisper) == 0)
+-			{
+-				delimiter = " ";
+-			}
+-
+-			// Don't add any delimiter after name in irc styled messages
+-			if (irc_me || chat_msg.mChatStyle == CHAT_STYLE_IRC)
+-			{
+-				delimiter = LLStringUtil::null;
+-			}
++		initChannel();
++	}
+ 
+-			std::string message = irc_me ? chat_msg.mText.substr(3) : chat_msg.mText;
+-// <Ansariel> console support
+-			consoleChat = senderName + delimiter + message;
+-			LLColor4 chatcolor;
+-			LLViewerChat::getChatColor(chat_msg, chatcolor);
+-			gConsole->addConsoleLine(consoleChat, chatcolor);
+-// </Ansariel>
+-		}
+-		else
+-		{
+-			if (chat_msg.mSourceType == CHAT_SOURCE_SYSTEM &&
+-				args["type"].asInteger() == LLNotificationsUI::NT_MONEYCHAT)
+-			{
+-				consoleChat = args["console_message"].asString();
+-			}
+-			//consoleChat = chat_msg.mText;
+-			// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+-			else if(chat_msg.mFromName.empty())
+-			{
+-				consoleChat = chat_msg.mText;
+-			}
+-			else
+-			{
+-				consoleChat = chat_msg.mFromName + " " + chat_msg.mText;
+-			}
+-			// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
++	/*
++	//comment all this due to EXT-4432
++	..may clean up after some time...
+ 
+-			LLColor4 chatcolor;
+-			LLViewerChat::getChatColor(chat_msg, chatcolor);
+-			gConsole->addConsoleLine(consoleChat, chatcolor);
+-			gConsole->setVisible(!nearby_chat->getVisible());
+-		}
+-	}
+-	else
++	//only messages from AGENTS
++	if(CHAT_SOURCE_OBJECT == chat_msg.mSourceType)
+ 	{
+-		// Toasts mode...
+-		
+-// ## Zi - Post merge fixup ## //	if( !chat_bar->isMinimized() && nearby_chat->getVisible()
+-		if( nearby_chat->getVisible()	// ## Zi - Post merge fixup ##
+-			|| ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
+-				&& useChatBubbles )
+-			|| mChannel.isDead()
+-			|| !mChannel.get()->getShowToasts() ) // to prevent toasts in Busy mode
+-			return;//no need in toast if chat is visible or if bubble chat is enabled
+-
+-		// arrange a channel on a screen
+-		if(!mChannel.get()->getVisible())
+-		{
+-			initChannel();
+-		}
+-
+-		/*
+-		//comment all this due to EXT-4432
+-		..may clean up after some time...
++		if(chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG)
++			return;//ok for now we don't skip messeges from object, so skip only debug messages
++	}
++	*/
+ 
+-		//only messages from AGENTS
+-		if(CHAT_SOURCE_OBJECT == chat_msg.mSourceType)
++	LLNearbyChatScreenChannel* channel = dynamic_cast<LLNearbyChatScreenChannel*>(mChannel.get());
++		
++	if(channel)
++	{
++		// Handle IRC styled messages.
++		if (tmp_chat.mChatStyle == CHAT_STYLE_IRC)
+ 		{
+-			if(chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG)
+-				return;//ok for now we don't skip messeges from object, so skip only debug messages
++			if(!tmp_chat.mFromName.empty())
++				tmp_chat.mText = tmp_chat.mFromName + tmp_chat.mText.substr(3);
++			else
++				tmp_chat.mText = tmp_chat.mText.substr(3);
+ 		}
+-		*/
+ 
++		// Add a nearby chat toast.
+ 		LLUUID id;
+ 		id.generate();
+-
+-		LLNearbyChatScreenChannel* channel = dynamic_cast<LLNearbyChatScreenChannel*>(mChannel.get());
+-		
+-		if(channel)
+-		{
+-			//LLSD notification;
+-			notification["id"] = id;
++		notification["id"] = id;
+ // [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+-			if (rlv_handler_t::isEnabled())
+-				notification["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;
++	if (rlv_handler_t::isEnabled())
++		notification["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;
+ // [/RLVa:KB]
+-			notification["message"] = chat_msg.mText;
+-			//notification["from"] = chat_msg.mFromName;
+-			//notification["from_id"] = chat_msg.mFromID;
+-			//notification["time"] = chat_msg.mTime;
+-			//notification["source"] = (S32)chat_msg.mSourceType;
+-			//notification["chat_type"] = (S32)chat_msg.mChatType;
+-			//notification["chat_style"] = (S32)chat_msg.mChatStyle;
++		std::string r_color_name = "White";
++		F32 r_color_alpha = 1.0f; 
++		LLViewerChat::getChatColor( chat_msg, r_color_name, r_color_alpha);
+ 			
+-			std::string r_color_name = "White";
+-			F32 r_color_alpha = 1.0f; 
+-			LLViewerChat::getChatColor( chat_msg, r_color_name, r_color_alpha);
+-			
+-			notification["text_color"] = r_color_name;
+-			notification["color_alpha"] = r_color_alpha;
+-			notification["font_size"] = (S32)LLViewerChat::getChatFontSize() ;
+-			channel->addNotification(notification);	
+-		}
+-	}
+-}
+-
+-//-TT 2.6.9 merge
+-//Ansariel name lookup function
+-void LLNearbyChatHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const LLChat& chat_msg)
+-{
+-	std::string consoleChat;
+-	std::string senderName(chat_msg.mFromName);
+-	std::string prefix = chat_msg.mText.substr(0, 4);
+-	LLStringUtil::toLower(prefix);
+-
+-	//IRC styled /me messages.
+-	bool irc_me = prefix == "/me " || prefix == "/me'";
+-
+-	// Delimiter after a name in header copy/past and in plain text mode
+-	std::string delimiter = ": ";
+-	std::string shout = LLTrans::getString("shout");
+-	std::string whisper = LLTrans::getString("whisper");
+-	if (chat_msg.mChatType == CHAT_TYPE_SHOUT || 
+-		chat_msg.mChatType == CHAT_TYPE_WHISPER ||
+-		chat_msg.mText.compare(0, shout.length(), shout) == 0 ||
+-		chat_msg.mText.compare(0, whisper.length(), whisper) == 0)
+-	{
+-		delimiter = " ";
+-	}
+-
+-	// Don't add any delimiter after name in irc styled messages
+-	if (irc_me || chat_msg.mChatStyle == CHAT_STYLE_IRC)
+-	{
+-		delimiter = LLStringUtil::null;
++		notification["text_color"] = r_color_name;
++		notification["color_alpha"] = r_color_alpha;
++		notification["font_size"] = (S32)LLViewerChat::getChatFontSize() ;
++		notification["message"] = chat_msg.mText;
++		channel->addNotification(notification);	
+ 	}
+-
+-	std::string message = irc_me ? chat_msg.mText.substr(3) : chat_msg.mText;
+-
+-	// Get the display name of the sender if required
+-	static LLCachedControl<bool> nameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
+-	static LLCachedControl<bool> useDisplayNames(gSavedSettings, "UseDisplayNames");
+-	if (!chat_msg.mRlvNamesFiltered)
+-	{
+-		if (nameTagShowUsernames && useDisplayNames)
+-		{
+-			senderName = av_name.getCompleteName();
+-		}
+-		else if (useDisplayNames)
+-		{
+-			senderName = av_name.mDisplayName;
+-		}
+-	}
+-
+-	consoleChat = senderName + delimiter + message;
+-	LLColor4 chatcolor;
+-	LLViewerChat::getChatColor(chat_msg, chatcolor);
+-	gConsole->addConsoleLine(consoleChat, chatcolor);
+-	LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
+-	if( nearby_chat )
+-		gConsole->setVisible(!nearby_chat->getVisible());
+ }
+ 
+ void LLNearbyChatHandler::onDeleteToast(LLToast* toast)

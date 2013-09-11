@@ -1,0 +1,36 @@
+diff --git a/Source/indra/newview/llgroupmgr.h b/Source/indra/newview/llgroupmgr.h
+index ad93c7c..0256df6 100644
+--- a/Source/indra/newview/llgroupmgr.h
++++ b/Source/indra/newview/llgroupmgr.h
+@@ -90,7 +90,7 @@ public:
+ 
+ 	BOOL isInRole(const LLUUID& role_id) { return (mRolesList.find(role_id) != mRolesList.end()); }
+ 
+-protected:
++private:
+ 	LLUUID	mID;
+ 	S32		mContribution;
+ 	U64		mAgentPowers;
+@@ -243,6 +243,11 @@ public:
+ //	BOOL isRoleMemberDataComplete() { return mRoleMemberDataComplete; }
+ //	BOOL isGroupPropertiesDataComplete() { return mGroupPropertiesDataComplete; }
+ 
++	F32 getAccessTime() const { return mAccessTime; }
++	void setAccessed();
++
++	const LLUUID& getMemberVersion() const { return mMemberVersion; }
++
+ public:
+ 	typedef	std::map<LLUUID,LLGroupMemberData*> member_list_t;
+ 	typedef	std::map<LLUUID,LLGroupRoleData*> role_list_t;
+@@ -290,6 +295,10 @@ private:
+ 	BOOL				mGroupPropertiesDataComplete;
+ 
+ 	BOOL				mPendingRoleMemberRequest;
++	F32					mAccessTime;
++
++	// Generate a new ID every time mMembers
++	LLUUID				mMemberVersion;
+ };
+ 
+ struct LLRoleAction

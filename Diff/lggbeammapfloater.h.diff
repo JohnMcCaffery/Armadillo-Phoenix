@@ -1,0 +1,21 @@
+diff --git a/Source/indra/newview/lggbeammapfloater.h b/Source/indra/newview/lggbeammapfloater.h
+index 4b0be5a..a3eb4ad 100644
+--- a/Source/indra/newview/lggbeammapfloater.h
++++ b/Source/indra/newview/lggbeammapfloater.h
+@@ -11,6 +11,9 @@
+  * http://sam.zoy.org/wtfpl/COPYING for more details.
+  */
+ 
++#ifndef LGG_BEAMMAPFLOATER_H
++#define LGG_BEAMMAPFLOATER_H
++
+ #include "llviewerprecompiledheaders.h"
+ 
+ #include "llagentdata.h"
+@@ -75,3 +78,5 @@ private:
+ 
+ 	F32 mContextConeOpacity;
+ };
++
++#endif // LGG_BEAMMAPFLOATER_H
+\ No newline at end of file

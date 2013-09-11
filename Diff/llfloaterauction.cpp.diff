@@ -1,0 +1,12 @@
+diff --git a/Source/indra/newview/llfloaterauction.cpp b/Source/indra/newview/llfloaterauction.cpp
+index d2d1b5f..2f37531 100644
+--- a/Source/indra/newview/llfloaterauction.cpp
++++ b/Source/indra/newview/llfloaterauction.cpp
+@@ -38,6 +38,7 @@
+ #include "message.h"
+ 
+ #include "llagent.h"
++#include "llassetstorage.h"
+ #include "llcombobox.h"
+ #include "llestateinfomodel.h"
+ #include "llmimetypes.h"

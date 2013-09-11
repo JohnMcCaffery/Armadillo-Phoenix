@@ -1,0 +1,52 @@
+diff --git a/Source/indra/newview/fsmoneytracker.cpp b/Source/indra/newview/fsmoneytracker.cpp
+index 1d10a12..cd4b186 100644
+--- a/Source/indra/newview/fsmoneytracker.cpp
++++ b/Source/indra/newview/fsmoneytracker.cpp
+@@ -18,13 +18,13 @@
+  * You should have received a copy of the GNU Lesser General Public
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
++ * $/LicenseInfo$
+  */
+ 
+ #include "llviewerprecompiledheaders.h"
+ #include "fsmoneytracker.h"
+ #include "llfloaterreg.h"
+ #include "llviewercontrol.h"
+-#include "llchathistory.h"
+ #include "lllineeditor.h"
+ #include "llnotificationmanager.h"
+ #include "lltrans.h"
+@@ -44,7 +44,10 @@ FSMoneyTracker::~FSMoneyTracker()
+ 
+ BOOL FSMoneyTracker::postBuild()
+ {
+-	mTransactionHistory = getChild<LLChatHistory>("money_chat_history");
++	// <FS:Ansariel> [FS communication UI]
++	//mTransactionHistory = getChild<LLChatHistory>("money_chat_history");
++	mTransactionHistory = getChild<FSChatHistory>("money_chat_history");
++	// </FS:Ansariel> [FS communication UI]
+ 	mTransactionHistory->clear();
+ 	
+ 	// Button Actions
+@@ -70,7 +73,12 @@ std::string FSMoneyTracker::appendTime()
+ 	time_t utc_time;
+ 	utc_time = time_corrected();
+ 	std::string timeStr ="["+ LLTrans::getString("TimeHour")+"]:[" + LLTrans::getString("TimeMin")+"]";
+-	if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
++	
++	// <FS:PP> Attempt to speed up things a little
++	// if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
++	static LLCachedControl<bool> FSSecondsinChatTimestamps(gSavedSettings, "FSSecondsinChatTimestamps");
++	if (FSSecondsinChatTimestamps)
++	// </FS:PP>
+ 	{
+ 		timeStr += ":[" + LLTrans::getString("TimeSec")+"]";
+ 	}
+@@ -87,4 +95,4 @@ void FSMoneyTracker::clear()
+ {
+ 	llinfos << "Cleared." << llendl;
+ 	mTransactionHistory->clear();
+-}
+\ No newline at end of file
++}

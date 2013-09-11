@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/lltoolbrush.cpp b/Source/indra/newview/lltoolbrush.cpp
+index aba43a9..08d82ea 100644
+--- a/Source/indra/newview/lltoolbrush.cpp
++++ b/Source/indra/newview/lltoolbrush.cpp
+@@ -657,7 +657,7 @@ bool LLToolBrushLand::canTerraform(LLViewerRegion* regionp) const
+ {
+ 	if (!regionp) return false;
+ 	if (regionp->canManageEstate()) return true;
+-	return !(regionp->getRegionFlags() & REGION_FLAGS_BLOCK_TERRAFORM);
++	return !regionp->getRegionFlag(REGION_FLAGS_BLOCK_TERRAFORM);
+ }
+ 
+ // static

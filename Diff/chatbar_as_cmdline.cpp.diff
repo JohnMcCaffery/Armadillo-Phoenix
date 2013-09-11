@@ -1,0 +1,89 @@
+diff --git a/Source/indra/newview/chatbar_as_cmdline.cpp b/Source/indra/newview/chatbar_as_cmdline.cpp
+index 7cea21d..7f9524c 100644
+--- a/Source/indra/newview/chatbar_as_cmdline.cpp
++++ b/Source/indra/newview/chatbar_as_cmdline.cpp
+@@ -35,16 +35,18 @@
+ 
+ #include "aoengine.h"
+ #include "fscommon.h"
++#include "fsradar.h"
+ #include "llagent.h"
+ #include "llagentcamera.h"
+-#include "llavatarlist.h"
+ #include "llcalc.h"
+-#include "llfloaternearbychat.h"
++// <FS:Ansariel> [FS communication UI]
++//#include "llfloaternearbychat.h"
++#include "fsfloaternearbychat.h"
++// </FS:Ansariel> [FS communication UI]
+ #include "llfloaterreg.h"
+ #include "llfloatersidepanelcontainer.h"
+ #include "llinventorymodel.h"
+ #include "llnotificationmanager.h"
+-#include "llpanelpeople.h"
+ #include "llparcel.h"
+ #include "lltooldraganddrop.h"
+ #include "lltrans.h"
+@@ -851,7 +853,10 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
+ 
+ 			else if (command == std::string(sFSCmdLineClearChat))
+ 			{
+-				LLFloaterNearbyChat* chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
++				// <FS:Ansariel> [FS communication UI]
++				//LLFloaterNearbyChat* chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
++				FSFloaterNearbyChat* chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
++				// </FS:Ansariel> [FS communication UI]
+ 				if (chat)
+ 				{
+ 					chat->clearChatHistory();
+@@ -1163,23 +1168,20 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
+ 	std::string av_name;
+ 	LLStringUtil::toLower(partial_name);
+ 
+-	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
+-	if (panel_people)
++	FSRadar* radar = FSRadar::getInstance();
++	if (radar)
+ 	{
+-		std::vector<LLPanel*> items;
+-		LLAvatarList* nearbyList = ((LLPanelPeople*)panel_people)->getNearbyList();
+-		nearbyList->getItems(items);
+-
+-		for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
++		FSRadar::entry_map_t radar_list = radar->getRadarList();
++		FSRadar::entry_map_t::iterator it_end = radar_list.end();
++		for (FSRadar::entry_map_t::iterator it = radar_list.begin(); it != it_end; ++it)
+ 		{
+-			LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
+-
+-			av_name = av->getUserName();
++			FSRadarEntry* entry = it->second;
++			av_name = entry->getUserName();
+ 
+ 			LLStringUtil::toLower(av_name);
+ 			if (strstr(av_name.c_str(), partial_name.c_str()))
+ 			{
+-				return av->getAvatarId();
++				return entry->getId();
+ 			}
+ 		}
+ 	}
+@@ -1189,13 +1191,13 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
+ void cmdline_tp2name(std::string target)
+ {
+ 	LLUUID avkey = cmdline_partial_name2key(target);
+-	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
+-	if (avkey.notNull() && panel_people)
++	FSRadar* radar = FSRadar::getInstance();
++	if (avkey.notNull() && radar)
+ 	{
+-		LLAvatarListItem* avatar_list_item = ((LLPanelPeople*)panel_people)->getNearbyList()->getAvatarListItem(avkey);
+-		if (avatar_list_item)
++		FSRadarEntry* entry = radar->getEntry(avkey);
++		if (entry)
+ 		{
+-			LLVector3d pos = avatar_list_item->getPosition();
++			LLVector3d pos = entry->getGlobalPos();
+ 			pos.mdV[VZ] += 2.0;
+ 			gAgent.teleportViaLocation(pos);
+ 			return;

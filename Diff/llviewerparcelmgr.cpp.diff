@@ -1,0 +1,199 @@
+diff --git a/Source/indra/newview/llviewerparcelmgr.cpp b/Source/indra/newview/llviewerparcelmgr.cpp
+index c79f9bd..88e111d 100644
+--- a/Source/indra/newview/llviewerparcelmgr.cpp
++++ b/Source/indra/newview/llviewerparcelmgr.cpp
+@@ -123,6 +123,10 @@ LLViewerParcelMgr::LLViewerParcelMgr()
+ 	mRenderSelection(TRUE),
+ 	mCollisionBanned(0),
+ 	mCollisionTimer(),
++// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
++	mCollisionRegionHandle(0),
++	mCollisionUpdateSignal(NULL),
++// [/SL:KB]
+ 	mMediaParcelId(0),
+ 	mMediaRegionId(0)
+ {
+@@ -144,6 +148,11 @@ LLViewerParcelMgr::LLViewerParcelMgr()
+ 	mHighlightSegments = new U8[(mParcelsPerEdge+1)*(mParcelsPerEdge+1)];
+ 	resetSegments(mHighlightSegments);
+ 
++// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
++	mCollisionBitmap = new U8[getCollisionBitmapSize()];
++	memset(mCollisionBitmap, 0, getCollisionBitmapSize());
++// [/SL:KB]
++
+ 	mCollisionSegments = new U8[(mParcelsPerEdge+1)*(mParcelsPerEdge+1)];
+ 	resetSegments(mCollisionSegments);
+ 
+@@ -200,6 +209,11 @@ LLViewerParcelMgr::~LLViewerParcelMgr()
+ 	delete[] mHighlightSegments;
+ 	mHighlightSegments = NULL;
+ 
++// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
++	delete[] mCollisionBitmap;
++	mCollisionBitmap = NULL;
++// [/SL:KB]
++
+ 	delete[] mCollisionSegments;
+ 	mCollisionSegments = NULL;
+ 
+@@ -719,8 +733,8 @@ bool LLViewerParcelMgr::allowAgentScripts(const LLViewerRegion* region, const LL
+ 	// This mirrors the traditional menu bar parcel icon code, but is not
+ 	// technically correct.
+ 	return region
+-		&& !(region->getRegionFlags() & REGION_FLAGS_SKIP_SCRIPTS)
+-		&& !(region->getRegionFlags() & REGION_FLAGS_ESTATE_SKIP_SCRIPTS)
++		&& !region->getRegionFlag(REGION_FLAGS_SKIP_SCRIPTS)
++		&& !region->getRegionFlag(REGION_FLAGS_ESTATE_SKIP_SCRIPTS)
+ 		&& parcel
+ 		&& parcel->getAllowOtherScripts();
+ }
+@@ -1696,9 +1710,6 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
+ 			// Request access list information for this land
+ 			parcel_mgr.sendParcelAccessListRequest(AL_ACCESS | AL_BAN);
+ 
+-			// Request the media url filter list for this land
+-			parcel_mgr.requestParcelMediaURLFilter();
+-
+ 			// Request dwell for this land, if it's not public land.
+ 			parcel_mgr.mSelectedDwell = DWELL_NAN;
+ 			if (0 != local_id)
+@@ -1733,18 +1744,31 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
+ 
+ 		}
+ 
+-		S32 bitmap_size =	parcel_mgr.mParcelsPerEdge
+-							* parcel_mgr.mParcelsPerEdge
+-							/ 8;
+-		U8* bitmap = new U8[ bitmap_size ];
+-		msg->getBinaryDataFast(_PREHASH_ParcelData, _PREHASH_Bitmap, bitmap, bitmap_size);
++//		S32 bitmap_size =	parcel_mgr.mParcelsPerEdge
++//							* parcel_mgr.mParcelsPerEdge
++//							/ 8;
++//		U8* bitmap = new U8[ bitmap_size ];
++//		msg->getBinaryDataFast(_PREHASH_ParcelData, _PREHASH_Bitmap, bitmap, bitmap_size);
++// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
++		msg->getBinaryDataFast(_PREHASH_ParcelData, _PREHASH_Bitmap, parcel_mgr.mCollisionBitmap, parcel_mgr.getCollisionBitmapSize());
++// [/SL:KB]
+ 
+ 		parcel_mgr.resetSegments(parcel_mgr.mCollisionSegments);
+-		parcel_mgr.writeSegmentsFromBitmap( bitmap, parcel_mgr.mCollisionSegments );
++//		parcel_mgr.writeSegmentsFromBitmap( bitmap, parcel_mgr.mCollisionSegments );
++// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
++		parcel_mgr.writeSegmentsFromBitmap(parcel_mgr.mCollisionBitmap, parcel_mgr.mCollisionSegments);
++// [/SL:KB]
++
++//		delete[] bitmap;
++//		bitmap = NULL;
+ 
+-		delete[] bitmap;
+-		bitmap = NULL;
++// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
++		LLViewerRegion* pRegion = LLWorld::getInstance()->getRegion(msg->getSender());
++		parcel_mgr.mCollisionRegionHandle = (pRegion) ? pRegion->getHandle() : 0;
+ 
++		if (parcel_mgr.mCollisionUpdateSignal)
++			(*parcel_mgr.mCollisionUpdateSignal)(pRegion);
++// [/SL:KB]
+ 	}
+ 	else if (sequence_id == HOVERED_PARCEL_SEQ_ID)
+ 	{
+@@ -2033,67 +2057,6 @@ void LLViewerParcelMgr::sendParcelAccessListUpdate(U32 which)
+ 	}
+ }
+ 
+-class LLParcelMediaURLFilterResponder : public LLHTTPClient::Responder
+-{
+-	virtual void result(const LLSD& content)
+-	{
+-		LLViewerParcelMgr::getInstance()->receiveParcelMediaURLFilter(content);
+-	}
+-};
+-
+-void LLViewerParcelMgr::requestParcelMediaURLFilter()
+-{
+-	if (!mSelected)
+-	{
+-		return;
+-	}
+-
+-	LLViewerRegion* region = LLWorld::getInstance()->getRegionFromPosGlobal( mWestSouth );
+-	if (!region)
+-	{
+-		return;
+-	}
+-
+-	LLParcel* parcel = mCurrentParcel;
+-	if (!parcel)
+-	{
+-		llwarns << "no parcel" << llendl;
+-		return;
+-	}
+-
+-	LLSD body;
+-	body["local-id"] = parcel->getLocalID();
+-	body["list"] = parcel->getMediaURLFilterList();
+-
+-	std::string url = region->getCapability("ParcelMediaURLFilterList");
+-	if (!url.empty())
+-	{
+-		LLHTTPClient::post(url, body, new LLParcelMediaURLFilterResponder);
+-	}
+-	else
+-	{
+-		llwarns << "can't get ParcelMediaURLFilterList cap" << llendl;
+-	}
+-}
+-
+-
+-void LLViewerParcelMgr::receiveParcelMediaURLFilter(const LLSD &content)
+-{
+-	if (content.has("list"))
+-	{
+-		LLParcel* parcel = LLViewerParcelMgr::getInstance()->mCurrentParcel;
+-		if (!parcel) return;
+-		
+-		if (content["local-id"].asInteger() == parcel->getLocalID())
+-		{
+-			parcel->setMediaURLFilterList(content["list"]);
+-			
+-			LLViewerParcelMgr::getInstance()->notifyObservers();
+-		}
+-	}
+-}
+-
+-
+ void LLViewerParcelMgr::deedLandToGroup()
+ {
+ 	std::string group_name;
+@@ -2165,7 +2128,7 @@ void LLViewerParcelMgr::startReleaseLand()
+ 		return;
+ 	}
+ /*
+-	if ((region->getRegionFlags() & REGION_FLAGS_BLOCK_LAND_RESELL)
++	if (region->getRegionFlag(REGION_FLAGS_BLOCK_LAND_RESELL)
+ 		&& !gAgent.isGodlike())
+ 	{
+ 		LLSD args;
+@@ -2410,7 +2373,7 @@ void LLViewerParcelMgr::startDeedLandToGroup()
+ 	/*
+ 	if(!gAgent.isGodlike())
+ 	{
+-		if((region->getRegionFlags() & REGION_FLAGS_BLOCK_LAND_RESELL)
++		if(region->getRegionFlag(REGION_FLAGS_BLOCK_LAND_RESELL)
+ 			&& (mCurrentParcel->getOwnerID() != region->getOwner()))
+ 		{
+ 			LLSD args;
+@@ -2614,3 +2577,12 @@ void LLViewerParcelMgr::onTeleportFailed()
+ {
+ 	mTeleportFailedSignal();
+ }
++
++// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
++boost::signals2::connection LLViewerParcelMgr::setCollisionUpdateCallback(const collision_update_signal_t::slot_type & cb)
++{
++	if (!mCollisionUpdateSignal)
++		mCollisionUpdateSignal = new collision_update_signal_t();
++	return mCollisionUpdateSignal->connect(cb); 
++}
++// [/SL:KB]

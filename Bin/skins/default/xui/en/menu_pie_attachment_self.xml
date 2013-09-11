@@ -46,14 +46,48 @@
                 function="Object.EnableTouch"
                 name="EnableTouch"/>
         </pie_slice>
-        <pie_slice
-            enabled="true"
-            label="Derender"
-            name="Derender">
-            <pie_slice.on_click
-                function="Object.Derender" />
+        <pie_menu
+            name="DerenderMenu"
+            label="Derender &gt;">
+			<pie_separator />
+			<pie_separator />
+			<pie_separator />
+			<pie_slice
+				enabled="true"
+				label="Temporary"
+				name="Derender">
+				<pie_slice.on_click
+					function="Object.Derender" />
+				<pie_slice.on_enable
+					function="Object.EnableDerender" />
+			</pie_slice>
+			<pie_slice
+				enabled="true"
+				label="Blacklist"
+				name="DerenderPermanent">
+				<pie_slice.on_click
+					function="Object.DerenderPermanent" />
+				<pie_slice.on_enable
+					function="Object.EnableDerender" />
+			</pie_slice>
+        </pie_menu>
+	<pie_slice
+         enabled="false"
+         label="Export"
+         name="Export">
+         <pie_slice.on_click
+            function="Object.Export" />
+         <pie_slice.on_enable
+            function="Object.EnableExport" />
         </pie_slice>
         <pie_separator name="inspect_placeholder" />
+        <pie_separator/>
+            <pie_slice
+                label="Textures"
+                name="Debug...">
+                <pie_slice.on_click
+                    function="Avatar.Debug" />
+            </pie_slice>
 
     </pie_menu>
     <pie_slice

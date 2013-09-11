@@ -1,0 +1,14 @@
+diff --git a/Source/indra/newview/llpanelplaces.h b/Source/indra/newview/llpanelplaces.h
+index 85bdc2c..bb91fa5 100644
+--- a/Source/indra/newview/llpanelplaces.h
++++ b/Source/indra/newview/llpanelplaces.h
+@@ -81,6 +81,9 @@ public:
+ 
+ 	/*virtual*/ S32 notifyParent(const LLSD& info);
+ 
++	// <FS:Ansariel> Reset (clear) filter
++	void resetFilter();
++
+ private:
+ 	void onLandmarkLoaded(LLLandmark* landmark);
+ 	void onFilterEdit(const std::string& search_string, bool force_filter);

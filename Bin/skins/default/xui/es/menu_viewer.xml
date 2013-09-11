@@ -25,6 +25,7 @@
 		<menu_item_check label="Controles de cámara" name="Camera Controls"/>
 		<menu label="Salud del avatar" name="avhealth">
 			<menu_item_call label="Detener mis animaciones" name="Stop Animating My Avatar"/>
+			<menu_item_call label="Deshacer deformación del avatar" name="undeform_avatar"/>
 			<menu_item_call label="Recargar texturas" name="Rebake Texture"/>
 			<menu_item_call label="Volver al avatar masculino por defecto (Character Test)" name="ResetDefaultAvM"/>
 			<menu_item_call label="Volver al avatar femenino por defecto (Character Test)" name="ResetDefaultAvF"/>
@@ -33,6 +34,7 @@
 			<menu_item_call label="Regenerar el LSL Bridge" name="Recreate LSL Bridge"/>			
 		</menu>
 		<menu_item_call label="Historial de transacciones" name="money_tracker"/>
+		<menu_item_call label="Pose..." name="pose_stand"/>
 		<menu label="Subir" name="Upload">
 			<menu_item_call label="Imagen ([COST])..." name="Upload Image"/>
 			<menu_item_call label="Sonido ([COST])..." name="Upload Sound"/>
@@ -40,6 +42,7 @@
 			<menu_item_call label="Modelo mesh..." name="Upload Model"/>
 			<menu_item_call label="Masivo (múltiples archivos)..." name="Bulk Upload"/>
 			<menu_item_call label="Configurar permisos de subida por defecto" name="perm prefs"/>
+			<menu_item_call label="Importar linkset" name="import linkset"/>
 		</menu>
 		<menu_item_call label="Comprar L$..." name="Buy and Sell L$"/>
 		<menu_item_call label="Panel de control de la cuenta..." name="Manage My Account">
@@ -48,6 +51,7 @@
 		<menu_item_call label="Preferencias..." name="Preferences"/>
 		<menu_item_call label="Botones de la barra de herramientas..." name="Toolbars"/>
 		<menu_item_call label="Ocultar todos los controles" name="Hide UI"/>
+		<menu_item_check label="Mostrar los HUD anexados" name="Show HUD Attachments"/>
 		<menu_item_call label="Salir de [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Comunicarme" name="Communicate">
@@ -62,17 +66,18 @@
 		<menu_item_check label="Grupos de contactos" name="Contact Sets"/>
 		<menu_item_call label="Grupos" name="My Groups"/>
 		<menu_item_check label="Chat" name="Nearby Chat"/>
-		<menu_item_check label="Conversaciones" name="Conversations"/>
 		<menu_item_check label="Gente" name="People"/>
-		<menu_item_check label="Lugares" name="Places"/>
+		<menu_item_check label="Conversaciones" name="Conversations"/>
 		<menu_item_check label="Gestos" name="Gestures"/>
 		<menu_item_check label="Filtros de voz" name="ShowVoice"/>
 		<menu_item_check label="Chat de voz" name="Nearby Voice"/>
+		<menu_item_call label="Lista de bloqueados" name="Block List"/>
 	</menu>
 	<menu label="Mundo" name="World">
+		<menu_item_call label="Resincronizar animaciones" name="Resync Animations"/>
 		<menu_item_call label="Gente cercana" name="Active Speakers"/>
 		<menu_item_call label="Historial de teleportes" name="Teleport History"/>
-		<menu_item_check label="Lugares / Historial de teleportes" name="Places"/>
+		<menu_item_check label="Lugares" name="Places"/>
 		<menu_item_check label="Minimapa" name="Mini-Map"/>
 		<menu_item_check label="Mapa del mundo" name="World Map"/>
 		<menu_item_call label="Crear un hito de este sitio" name="Create Landmark Here"/>
@@ -97,7 +102,7 @@
 			<menu_item_call label="Mediodía" name="Noon"/>
 			<menu_item_call label="Atardecer" name="Sunset"/>
 			<menu_item_call label="Medianoche" name="Midnight"/>
-			<menu_item_call label="Hora de la región" name="Revert to Region Default"/>
+			<menu_item_call label="Hora del estado" name="Revert to Region Default"/>
 		</menu>
 		<menu label="Editor de entorno" name="Environment Editor">
 			<menu_item_call label="Configuración de entorno..." name="Environment Settings"/>
@@ -117,6 +122,7 @@
 				<menu_item_call label="Eliminar configuración..." name="delete_day_preset"/>
 			</menu>
 		</menu>
+		<menu name="photo_and_video" label="Foto y vídeo"/>
 		<menu_item_call label="Buscar en el área" name="area_search"/>
 		<menu_item_call label="Explorador de sonidos" name="Sound Explorer"/>
 		<menu_item_call label="Lista negra" name="asset_blacklist"/>
@@ -152,6 +158,7 @@
 			<menu_item_call label="Devolver objeto" name="Return Object back to Owner"/>
 		</menu>
 		<menu label="Scripts" name="Scripts">
+			<menu_item_call label="Mostrar advertencias/errores de script" name="Script Debug"/>
 			<menu_item_call label="Información de scripts (contador)" name="Script Info"/>
 			<menu_item_call label="Recompilar los scripts (Mono)" name="Mono"/>
 			<menu_item_call label="Recompilar los scripts (LSL)" name="LSL"/>
@@ -162,15 +169,16 @@
 		</menu>
 		<menu label="Pathfinding" name="Pathfinding">
 			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
-			<menu_item_call label="Caracteres..." name="pathfinding_characters_menu_item"/>
-			<menu_item_call label="Ver / probar..." name="pathfinding_console_menu_item"/>
-			<menu_item_call label="Actualizar navmesh de la región" name="rebake_region_navmesh"/>
+			<menu_item_call label="Personajes..." name="pathfinding_characters_menu_item"/>
+			<menu_item_call label="Ver/probar..." name="pathfinding_console_menu_item"/>
+			<menu_item_call label="Actualizar región" name="pathfinding_rebake_navmesh_item"/>
 		</menu>
 		<menu label="Opciones" name="Options">
 			<menu_item_check label="Mostrar los permisos avanzados" name="DebugPermissions"/>
 			<menu_item_check label="Seleccionar sólo mis objetos" name="Select Only My Objects"/>
 			<menu_item_check label="Seleccionar sólo los objetos movibles" name="Select Only Movable Objects"/>
 			<menu_item_check label="Seleccionar marcando los alrededores" name="Select By Surrounding"/>
+			<menu_item_check label="Incluir objetos pertenecientes a grupos" name="Include Group-Owned Objects"/>
 			<menu_item_check label="Mostrar detalles de la selección" name="Show Selection Outlines"/>
 			<menu_item_check label="Al seleccionar, mostrar lo oculto" name="Show Hidden Selection"/>
 			<menu_item_check label="Al seleccionar, mostrar el radio de la luz" name="Show Light Radius for Selection"/>
@@ -187,6 +195,7 @@
 			<menu_item_call label="Modelo mesh..." name="Upload Model"/>
 			<menu_item_call label="Masivo ([COST] por archivo)..." name="Bulk Upload"/>
 			<menu_item_call label="Configurar permisos de subida por defecto" name="perm prefs"/>
+			<menu_item_call label="Importar linkset" name="import linkset"/>
 		</menu>
 		<menu_item_call label="Deshacer" name="Undo"/>
 		<menu_item_call label="Rehacer" name="Redo"/>
@@ -231,7 +240,6 @@
 		<menu_item_check label="Vestir reemplaza lo no bloqueado" name="Wear Replaces Unlocked"/>
 		<menu_item_check label="Restricciones..." name="Restrictions"/>
 	</menu>
-
 	<menu label="Avanzado" name="Advanced">
 		<menu_item_call label="Recargar texturas" name="Rebake Texture"/>
 		<menu_item_call label="Interfaz en el tamaño predeterminado" name="Set UI Size to Default"/>
@@ -252,6 +260,11 @@
 			<menu_item_check label="Realzar transparencias" name="Highlight Transparent"/>
 			<menu_item_check label="Mostrar HUDs anexados" name="Show HUD Attachments"/>
 			<menu_item_check label="Mostrar punto de mira en vista subjetiva" name="ShowCrosshairs"/>
+			<menu label="Bulas" name="Hover Tips">
+				<menu_item_check label="Mostrar bulas" name="Show Tips"/>
+				<menu_item_check label="Mostrar bulas de terreno" name="Land Tips"/>
+				<menu_item_check label="Mostrar bulas en todos los objetos" name="Tips On All Objects"/>
+			</menu>
 		</menu>
 		<menu label="Objetos representados" name="Rendering Types">
 			<menu_item_check label="Simple" name="Rendering Type Simple"/>
@@ -278,6 +291,10 @@
 			<menu_item_check label="Objetos flexibles" name="Flexible Objects"/>
 		</menu>
 		<menu label="RLVa" name="RLVa Embedded"/>
+		<menu label="Respaldo de flujos de medios" name="media_stream_import_export">
+			<menu_item_call label="Importar lista de flujos en XML..." name="media_stream_import"/>
+			<menu_item_call label="Exportar lista de flujos a XML..." name="media_stream_export"/>
+		</menu>
 		<menu_item_check label="Usar Plugin Read Thread" name="Use Plugin Read Thread"/>
 		<menu_item_call label="Vaciar caché de grupo" name="ClearGroupCache"/>
 		<menu_item_check label="Vista subjetiva suavizada" name="Mouse Smoothing"/>
@@ -322,7 +339,8 @@
 			<menu_item_check label="Cámara" name="Camera"/>
 			<menu_item_check label="Viento" name="Wind"/>
 			<menu_item_check label="Campo de visión (FOV)" name="FOV"/>
-			<menu_item_check label="Distintivo" name="Badge"/>
+			<menu_item_check label="¡Hipopótamos!" name="Badge"/>
+			<menu_item_check label="¡Galletas!" name="Cookies"/>
 		</menu>
 		<menu label="Mostrar información" name="Display Info">
 			<menu_item_check label="Tiempo" name="Show Time"/>
@@ -353,8 +371,10 @@
 		</menu>
 		<menu label="Metadatos de dibujo" name="Render Metadata">
 			<menu_item_check label="Cajas de dimensionado" name="Bounding Boxes"/>
-			<menu_item_check label="Normales" name="Normals"/>
-			<menu_item_check label="Formas del físico" name="Physics Shapes"/>
+			<menu_item_check label="Vectores Normales" name="Normals"/>
+			<menu_item_check label="Árbol de oclusión (Octree)" name="Octree"/>
+			<menu_item_check label="Refuerzo de oclusión (Shadow Frusta)" name="Shadow Frusta"/>
+			<menu_item_check label="Formas físicas" name="Physics Shapes"/>
 			<menu_item_check label="Oclusión" name="Occlusion"/>
 			<menu_item_check label="Lotes de dibujo" name="Render Batches"/>
 			<menu_item_check label="Tipo de actualización" name="Update Type"/>
@@ -386,7 +406,7 @@
 			<menu_item_check label="Información base de textura de lo seleccionado" name="Selected Texture Info Basis"/>
 			<menu_item_check label="Wireframe" name="Wireframe"/>
 			<menu_item_check label="Oclusión objeto-objeto" name="Object-Object Occlusion"/>
-			<menu_item_check label="Iluminación y sombras" name="Lighting and Shadows"/>
+			<menu_item_check label="Modelo avanzado de iluminación" name="Lighting and Shadows"/>
 			<menu_item_check label="Sombras del sol/la luna/proyectores" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO y suavizado de sombras" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Iluminación global (experimental)" name="Global Illumination"/>
@@ -435,7 +455,6 @@
 			<menu_item_call label="Volcar objeto del foco" name="Dump Focus Holder"/>
 			<menu_item_call label="Imprimir información del objeto seleccionado" name="Print Selected Object Info"/>
 			<menu_item_call label="Imprimir información del avatar" name="Print Agent Info"/>
-			<menu_item_call label="Estadísticas de memoria" name="Memory Stats"/>
 			<menu_item_check label="Piloto automático con doble clic" name="Double-ClickAuto-Pilot"/>
 			<menu_item_check label="Teleporte con doble clic" name="DoubleClick Teleport"/>
 			<menu_item_check label="Depurar SelectMgr" name="Debug SelectMgr"/>
@@ -452,6 +471,7 @@
 			<menu_item_call label="Cargar desde XML" name="Load from XML"/>
 			<menu_item_call label="Salvar a XML" name="Save to XML"/>
 			<menu_item_check label="Mostrar nombres de XUI" name="Show XUI Names"/>
+			<menu_item_check label="Mostrar información de depuración de las vistas" name="DebugViews"/>
 			<menu_item_call label="Enviar MIs de prueba" name="Send Test IMs"/>
 			<menu_item_call label="Eliminar cachés de nombres" name="Flush Names Caches"/>
 		</menu>
@@ -471,9 +491,14 @@
 				<menu_item_call label="Conmutar PG" name="Toggle PG"/>
 				<menu_item_check label="Permitir seleccionar avatar" name="Allow Select Avatar"/>
 			</menu>
+			<menu label="Velocidad de las animaciones" name="Animation Speed">
+				<menu_item_call label="Todas un 10% más rápido" name="All Animations 10 Faster"/>
+				<menu_item_call label="Todas un 10% más lento" name="All Animations 10 Slower"/>
+				<menu_item_call label="Restablecer la velocidad de todas" name="Reset All Animation Speed"/>
+				<menu_item_check label="Cámara lenta" name="Slow Motion Animations"/>
+			</menu>
 			<menu_item_call label="Forzar parámetros por defecto" name="Force Params to Default"/>
 			<menu_item_check label="Información de animación" name="Animation Info"/>
-			<menu_item_check label="Animaciones en cámara lenta" name="Slow Motion Animations"/>
 			<menu_item_check label="Mostrar puntos de mira de foco" name="Show Look At"/>
 			<menu_item_check label="Mostrar puntos de mira de ratón" name="Show Point At"/>
 			<menu_item_check label="Depurar actualizaciones de articulación" name="Debug Joint Updates"/>

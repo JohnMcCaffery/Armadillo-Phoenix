@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llfloatercamera.h b/Source/indra/newview/llfloatercamera.h
+index effd59d..10c7310 100644
+--- a/Source/indra/newview/llfloatercamera.h
++++ b/Source/indra/newview/llfloatercamera.h
+@@ -81,6 +81,8 @@ public:
+ 	LLPanelCameraZoom*	mZoom;
+ 	LLJoystickCameraTrack*	mTrack;
+ 
++	void setCameraFloaterTransparencyMode(const LLSD &data); // <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
++
+ private:
+ 
+ 	LLFloaterCamera(const LLSD& val);

@@ -1,0 +1,49 @@
+diff --git a/Source/indra/newview/llvopartgroup.cpp b/Source/indra/newview/llvopartgroup.cpp
+index 9cce68f..6e43a86 100644
+--- a/Source/indra/newview/llvopartgroup.cpp
++++ b/Source/indra/newview/llvopartgroup.cpp
+@@ -196,9 +196,8 @@ void LLVOPartGroup::updateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
+ 	mDrawable->setPositionGroup(pos);
+ }
+ 
+-BOOL LLVOPartGroup::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
++void LLVOPartGroup::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
+ {
+-	return TRUE;
+ }
+ 
+ void LLVOPartGroup::setPixelAreaAndAngle(LLAgent &agent)
+@@ -471,10 +470,21 @@ void LLVOPartGroup::getGeometry(S32 idx,
+ 	verticesp->setAdd(ppamu, right);
+ 	(*verticesp++).getF32ptr()[3] = 0.f;
+ 
+-	*colorsp++ = part.mColor;
+-	*colorsp++ = part.mColor;
+-	*colorsp++ = part.mColor;
+-	*colorsp++ = part.mColor;
++	// <FS:ND> Only convert to LLColour4U once
++
++	// *colorsp++ = part.mColor;
++	// *colorsp++ = part.mColor;
++	// *colorsp++ = part.mColor;
++	// *colorsp++ = part.mColor;
++
++	LLColor4U color4u( part.mColor );
++	*colorsp++ = color4u;
++	*colorsp++ = color4u;
++	*colorsp++ = color4u;
++	*colorsp++ = color4u;
++
++	// </FS:ND>
++
+ 
+ 	if (!(part.mFlags & LLPartData::LL_PART_EMISSIVE_MASK))
+ 	{ //not fullbright, needs normal
+@@ -600,7 +610,6 @@ static LLFastTimer::DeclareTimer FTM_REBUILD_PARTICLE_GEOM("Particle Geom");
+ 
+ void LLParticlePartition::getGeometry(LLSpatialGroup* group)
+ {
+-	LLMemType mt(LLMemType::MTYPE_SPACE_PARTITION);
+ 	LLFastTimer ftm(FTM_REBUILD_PARTICLE_GEOM);
+ 
+ 	std::sort(mFaceList.begin(), mFaceList.end(), LLFace::CompareDistanceGreater());
