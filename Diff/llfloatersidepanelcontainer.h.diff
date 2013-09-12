@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llfloatersidepanelcontainer.h b/Source/indra/newview/llfloatersidepanelcontainer.h
+index fa8ceb6..0dfcefe 100644
+--- a/Source/indra/newview/llfloatersidepanelcontainer.h
++++ b/Source/indra/newview/llfloatersidepanelcontainer.h
+@@ -51,6 +51,8 @@ public:
+ 
+ 	/*virtual*/ void onOpen(const LLSD& key);
+ 
++	/*virtual*/ void onClickCloseBtn();
++
+ 	LLPanel* openChildPanel(const std::string& panel_name, const LLSD& params);
+ 
+ // [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5

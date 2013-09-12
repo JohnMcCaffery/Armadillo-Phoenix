@@ -1,0 +1,14 @@
+diff --git a/Source/indra/newview/lltoolgun.h b/Source/indra/newview/lltoolgun.h
+index 8ae926b..9608dd7 100644
+--- a/Source/indra/newview/lltoolgun.h
++++ b/Source/indra/newview/lltoolgun.h
+@@ -48,6 +48,9 @@ public:
+ 	virtual BOOL	clipMouseWhenDown()		{ return FALSE; }
+ private:
+ 	BOOL mIsSelected;
++
++	// <FS:Ansariel> Performance tweak
++	LLUIImagePtr	mCrosshairp;
+ };
+ 
+ #endif

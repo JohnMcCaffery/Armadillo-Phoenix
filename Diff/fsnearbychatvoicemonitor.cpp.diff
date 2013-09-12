@@ -1,0 +1,31 @@
+diff --git a/Source/indra/newview/fsnearbychatvoicemonitor.cpp b/Source/indra/newview/fsnearbychatvoicemonitor.cpp
+index 127efe1..904be7b 100644
+--- a/Source/indra/newview/fsnearbychatvoicemonitor.cpp
++++ b/Source/indra/newview/fsnearbychatvoicemonitor.cpp
+@@ -18,6 +18,10 @@
+  * You should have received a copy of the GNU Lesser General Public
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
++ * 
++ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * http://www.firestormviewer.org
++ * $/LicenseInfo$
+  */
+ 
+ #include "llviewerprecompiledheaders.h"
+@@ -33,7 +37,7 @@ FSNearbyChatVoiceControl::Params::Params() :
+ {}
+ 
+ FSNearbyChatVoiceControl::FSNearbyChatVoiceControl(const FSNearbyChatVoiceControl::Params& p) :
+-	LLNearbyChatControl(p),
++	FSNearbyChatControl(p),
+ 	mVoiceMonitor(NULL),
+ 	mOriginalTextpadLeft(p.text_pad_left),
+ 	mOriginalTextpadRight(p.text_pad_right),
+@@ -70,5 +74,5 @@ void FSNearbyChatVoiceControl::draw()
+ 			mVoiceMonitor->setVisible(FALSE);
+ 		}
+ 	}
+-	LLNearbyChatControl::draw();
++	FSNearbyChatControl::draw();
+ }

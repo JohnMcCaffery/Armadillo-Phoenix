@@ -1,0 +1,93 @@
+diff --git a/Source/indra/newview/lggcontactsetsfloater.h b/Source/indra/newview/lggcontactsetsfloater.h
+index c64534a..3543909 100644
+--- a/Source/indra/newview/lggcontactsetsfloater.h
++++ b/Source/indra/newview/lggcontactsetsfloater.h
+@@ -1,4 +1,5 @@
+-/* Copyright (C) 2011 LordGregGreg Back (Greg Hendrickson)
++/* @file lggcontactsetsfloater.h
++   Copyright (C) 2011 LordGregGreg Back (Greg Hendrickson)
+ 
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+@@ -15,8 +16,8 @@
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+    02111-1307, USA.  */
+ 
+-#ifndef LGG_FRIENDS_GROUPS_FLOATER_H
+-#define LGG_FRIENDS_GROUPS_FLOATER_H
++#ifndef LGG_CONTACTSETSFLOATER_H
++#define LGG_CONTACTSETSFLOATER_H
+ 
+ #include "llview.h"
+ #include "llviewerinventory.h"
+@@ -33,13 +34,14 @@ class lggContactSetsFloater : public LLFloater, public LLFriendObserver, public
+ {
+ public:
+ 	lggContactSetsFloater(const LLSD& seed);
+-	virtual ~lggContactSetsFloater();
++	
++	BOOL postBuild();
+ 	// LLAvatarPropertiesProcessor observer trigger
+ 	virtual void processProperties(void* data, EAvatarProcessorType type);
+ 
++private:
++	virtual ~lggContactSetsFloater();
+ 	virtual void changed(U32 mask);
+-	void onClose(bool app_quitting);
+-	BOOL postBuild(void);
+ 	BOOL handleMouseDown(S32 x, S32 y, MASK mask);
+ 	void update();
+ 	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+@@ -59,16 +61,14 @@ public:
+ 	BOOL toggleSelect(LLUUID whoToToggle);
+ 	static BOOL compareAv(LLUUID av1, LLUUID av2);
+ 
+-	static void onClickSettings(void* data);
+-	static void onClickNew(void* data);
+-	static void onClickDelete(void* data);
+-	static void onPickAvatar(const std::vector<LLUUID>& ids, const std::vector<LLAvatarName> names);
+-
+-
++	void onClickSettings();
++	void onClickNew();
++	void onClickDelete();
++	void onPickAvatar(const std::vector<LLUUID>& ids, const std::vector<LLAvatarName> names);
+ 	void onBackgroundChange();
+-
+ 	void onNoticesChange();
+ 	void onCheckBoxChange();
++
+ 	void hitSpaceBar();
+ 
+ 	void updateGroupsList();
+@@ -81,9 +81,6 @@ public:
+ 	LLCheckBoxCtrl* noticeBox;
+ 	LLRect contextRect;
+ 
+-	static lggContactSetsFloater* sInstance;
+-
+-private:
+ 	S32 mouse_x;
+ 	S32 mouse_y;
+ 	F32 hovered;
+@@ -106,16 +103,11 @@ class lggContactSetsFloaterSettings : public LLFloater
+ {
+ public:
+ 	lggContactSetsFloaterSettings(const LLSD& seed);
+-	virtual ~lggContactSetsFloaterSettings();
+-	static lggContactSetsFloaterSettings* showFloater();
+-
+-	void onClose(bool app_quitting);
+ 	BOOL postBuild(void);
+-	static void onClickOk(void* data);
+-	void onSelectNameFormat();
++	
++private:
++	virtual ~lggContactSetsFloaterSettings() {}
+ 	void onDefaultBackgroundChange();
+-	static lggContactSetsFloaterSettings* sSettingsInstance;
+ };
+ 
+-
+-#endif 
++#endif // LGG_CONTACTSETSFLOATER_H

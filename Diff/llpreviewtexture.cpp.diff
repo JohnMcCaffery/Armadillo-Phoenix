@@ -1,0 +1,72 @@
+diff --git a/Source/indra/newview/llpreviewtexture.cpp b/Source/indra/newview/llpreviewtexture.cpp
+index 2cd5b61..1444ff1 100644
+--- a/Source/indra/newview/llpreviewtexture.cpp
++++ b/Source/indra/newview/llpreviewtexture.cpp
+@@ -45,6 +45,7 @@
+ #include "lltextbox.h"
+ #include "lltextureview.h"
+ #include "llui.h"
++#include "llviewercontrol.h" // <FS:PP> For user-defined default save format for textures
+ #include "llviewerinventory.h"
+ #include "llviewertexture.h"
+ #include "llviewertexturelist.h"
+@@ -77,7 +78,7 @@ LLPreviewTexture::LLPreviewTexture(const LLSD& key)
+ 	  mAspectRatio(0.f),
+ 	  mPreviewToSave(FALSE),
+ 	  mImage(NULL),
+-	  mImageOldBoostLevel(LLViewerTexture::BOOST_NONE),
++	  mImageOldBoostLevel(LLGLTexture::BOOST_NONE),
+ 	  mShowingButtons(false),
+ 	  mDisplayNameCallback(false)
+ {
+@@ -183,7 +184,17 @@ void LLPreviewTexture::onSaveAsBtn(LLUICtrl* ctrl, void* data)
+ 	}
+ 	else
+ 	{
+-		self->saveAs(LLPreviewTexture::FORMAT_TGA);
++		// <FS:PP> Allow to use user-defined default save format for textures
++		// self->saveAs(LLPreviewTexture::FORMAT_TGA);
++		if (!gSavedSettings.getBOOL("FSTextureDefaultSaveAsFormat"))
++		{
++			self->saveAs(LLPreviewTexture::FORMAT_TGA);
++		}
++		else
++		{
++			self->saveAs(LLPreviewTexture::FORMAT_PNG);
++		}
++		// </FS:PP>
+ 	}
+ }
+ 
+@@ -302,7 +313,18 @@ BOOL LLPreviewTexture::canSaveAs() const
+ // virtual
+ void LLPreviewTexture::saveAs()
+ {
+-	saveAs(LLPreviewTexture::FORMAT_TGA);
++	// <FS:PP> Allow to use user-defined default save format for textures
++	// saveAs(LLPreviewTexture::FORMAT_TGA);
++	if (!gSavedSettings.getBOOL("FSTextureDefaultSaveAsFormat"))
++	{
++		saveAs(LLPreviewTexture::FORMAT_TGA);
++	}
++	else
++	{
++		saveAs(LLPreviewTexture::FORMAT_PNG);
++	}
++	// </FS:PP>
++	
+ }
+ 
+ void LLPreviewTexture::saveAs(EFileformatType format)
+@@ -814,9 +836,9 @@ void LLPreviewTexture::onAspectRatioCommit(LLUICtrl* ctrl, void* userdata)
+ 
+ void LLPreviewTexture::loadAsset()
+ {
+-	mImage = LLViewerTextureManager::getFetchedTexture(mImageID, MIPMAP_TRUE, LLViewerTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
++	mImage = LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, MIPMAP_TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+ 	mImageOldBoostLevel = mImage->getBoostLevel();
+-	mImage->setBoostLevel(LLViewerTexture::BOOST_PREVIEW);
++	mImage->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
+ 	mImage->forceToSaveRawImage(0) ;
+ 	mAssetStatus = PREVIEW_ASSET_LOADING;
+ 	mUpdateDimensions = TRUE;

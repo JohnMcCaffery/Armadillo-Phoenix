@@ -1,0 +1,68 @@
+diff --git a/Source/indra/newview/llviewertexteditor.cpp b/Source/indra/newview/llviewertexteditor.cpp
+index 98a6564..dc107e4 100644
+--- a/Source/indra/newview/llviewertexteditor.cpp
++++ b/Source/indra/newview/llviewertexteditor.cpp
+@@ -80,7 +80,18 @@ public:
+ 		LLSD key;
+ 		key["type"] = "landmark";
+ 		key["id"] = landmark_inv_id;
+-		LLFloaterSidePanelContainer::showPanel("places", key);
++
++		// <FS:Ansariel> FIRE-817: Separate place details floater
++		//LLFloaterSidePanelContainer::showPanel("places", key);
++		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++		{
++			LLFloaterReg::showInstance("fs_placedetails", key);
++		}
++		else
++		{
++			LLFloaterSidePanelContainer::showPanel("places", key);
++		}
++		// </FS:Ansariel>
+ 	}
+ 
+ // [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-05 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
+@@ -91,7 +102,18 @@ public:
+ 		key["x"] = global_pos.mdV[0];
+ 		key["y"] = global_pos.mdV[1];
+ 		key["z"] = global_pos.mdV[2];
+-		LLFloaterSidePanelContainer::showPanel("panel_places", key);
++
++		// <FS:Ansariel> FIRE-817: Separate place details floater
++		//LLFloaterSidePanelContainer::showPanel("places", key);
++		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++		{
++			LLFloaterReg::showInstance("fs_placedetails", key);
++		}
++		else
++		{
++			LLFloaterSidePanelContainer::showPanel("places", key);
++		}
++		// </FS:Ansariel>
+ 	}
+ // [/SL:KB]
+ 
+@@ -1118,8 +1140,6 @@ void LLViewerTextEditor::findEmbeddedItemSegments(S32 start, S32 end)
+ {
+ 	LLWString text = getWText();
+ 
+-	LLColor4 text_color = ( mReadOnly ? mReadOnlyFgColor.get() : mFgColor.get()  );
+-
+ 	// Start with i just after the first embedded item
+ 	for(S32 idx = start; idx < end; idx++ )
+ 	{
+@@ -1216,6 +1236,14 @@ void LLViewerTextEditor::openEmbeddedTexture( LLInventoryItem* item, llwchar wc
+ 	{
+ 		preview->setAuxItem( item );
+ 		preview->setNotecardInfo(mNotecardInventoryID, mObjectID);
++		if (preview->hasString("Title"))
++		{
++			LLStringUtil::format_map_t args;
++			args["[NAME]"] = item->getName();
++			LLUIString title = preview->getString("Title", args);
++			preview->setTitle(title.getString());
++		}
++		preview->getChild<LLUICtrl>("desc")->setValue(item->getDescription());
+ 	}
+ }
+ 

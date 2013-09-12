@@ -1,0 +1,47 @@
+diff --git a/Source/indra/newview/llpanelgroupgeneral.h b/Source/indra/newview/llpanelgroupgeneral.h
+index 15345fc..9bbd0c1 100644
+--- a/Source/indra/newview/llpanelgroupgeneral.h
++++ b/Source/indra/newview/llpanelgroupgeneral.h
+@@ -38,6 +38,7 @@ class LLNameListCtrl;
+ class LLCheckBoxCtrl;
+ class LLComboBox;
+ class LLSpinCtrl;
++class LLAvatarName;
+ 
+ class LLPanelGroupGeneral : public LLPanelGroupTab
+ {
+@@ -62,8 +63,13 @@ public:
+ 
+ 	virtual void setupCtrls	(LLPanel* parent);
+ 
++	void onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name);
++	
++// <FS> Copy button callbacks
+ protected:
+-    void onCopyURI();
++	void onCopyURI();
++	void onCopyName();
++// </FS>
+ 
+ private:
+ 	void	reset();
+@@ -78,7 +84,8 @@ private:
+ 	static void onReceiveNotices(LLUICtrl* ctrl, void* data);
+ 	static void openProfile(void* data);
+ 
+-	S32		sortMembersList(S32,const LLScrollListItem*,const LLScrollListItem*);
++	S32	 sortMembersList(S32,const LLScrollListItem*,const LLScrollListItem*);
++	void addMember(LLGroupMemberData* member);
+ 
+     static bool joinDlgCB(const LLSD& notification, const LLSD& response);
+ 
+@@ -113,6 +120,9 @@ private:
+ 
+ 	LLGroupMgrGroupData::member_list_t::iterator mMemberProgress;
+ 	LLUUID mIteratorGroup; // <FS:ND/> FIRE-6074; UUID of the group mMemberProgress belongs to.
++
++	// <FS:Ansariel> For storing group name for copy name button
++	std::string		mGroupName;
+ };
+ 
+ #endif

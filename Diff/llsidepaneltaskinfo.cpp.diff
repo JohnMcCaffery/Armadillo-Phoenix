@@ -1,0 +1,40 @@
+diff --git a/Source/indra/newview/llsidepaneltaskinfo.cpp b/Source/indra/newview/llsidepaneltaskinfo.cpp
+index b8b17cf..9b08986 100644
+--- a/Source/indra/newview/llsidepaneltaskinfo.cpp
++++ b/Source/indra/newview/llsidepaneltaskinfo.cpp
+@@ -105,6 +105,8 @@ BOOL LLSidepanelTaskInfo::postBuild()
+ 	mDetailsBtn = getChild<LLButton>("details_btn");
+ 	mDetailsBtn->setClickedCallback(boost::bind(&LLSidepanelTaskInfo::onDetailsButtonClicked, this));
+ 
++	mDeedBtn = getChild<LLButton>("button deed");
++
+ 	mLabelGroupName = getChild<LLNameBox>("Group Name Proxy");
+ 
+ 	childSetCommitCallback("Object Name",						LLSidepanelTaskInfo::onCommitName,this);
+@@ -267,7 +269,7 @@ void LLSidepanelTaskInfo::disableAll()
+ 
+ void LLSidepanelTaskInfo::refresh()
+ {
+-	LLButton* btn_deed_to_group = getChild<LLButton>("button deed");
++	LLButton* btn_deed_to_group = mDeedBtn; 
+ 	if (btn_deed_to_group)
+ 	{	
+ 		std::string deedText;
+@@ -372,10 +374,14 @@ void LLSidepanelTaskInfo::refresh()
+ 	
+ 	// Update creator text field
+ 	getChildView("Creator:")->setEnabled(TRUE);
+-	BOOL creators_identical;
++// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
++	BOOL creators_identical = FALSE;
++// [/RLVa:KB]
+ 	std::string creator_name;
+-	creators_identical = LLSelectMgr::getInstance()->selectGetCreator(mCreatorID,
+-																	  creator_name);
++// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
++	creators_identical = LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_name);
++// [/RLVa:KB]
++//	LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_name);
+ 
+ //	getChild<LLUICtrl>("Creator Name")->setValue(creator_name);
+ //	getChildView("Creator Name")->setEnabled(TRUE);

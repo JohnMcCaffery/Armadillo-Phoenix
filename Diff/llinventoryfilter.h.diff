@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llinventoryfilter.h b/Source/indra/newview/llinventoryfilter.h
+index f1e7387..34e6cd0 100644
+--- a/Source/indra/newview/llinventoryfilter.h
++++ b/Source/indra/newview/llinventoryfilter.h
+@@ -158,7 +158,7 @@ public:
+ 	// ## Zi: Extended Inventory Search
+ 	void setFilterSubStringTarget(const std::string& targetName);
+ 	EFilterSubstringTarget getFilterSubStringTarget() const;
+-	const std::string& getSearchableTarget(const LLFolderViewItem* item) const;
++	std::string getSearchableTarget(const LLFolderViewItem* item) const;
+ 	// ## Zi: Extended Inventory Search
+ 
+ 	// +-------------------------------------------------------------------+

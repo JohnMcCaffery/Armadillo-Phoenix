@@ -8,6 +8,5 @@ xcopy /y Source\indra\newview\*.h ..\indra\newview\
 xcopy /y Source\indra\newview\app_settings\*.xml ..\indra\newview\app_settings
 xcopy /y Source\scripts\messages\*.msg ..\scripts\messages\
 xcopy /y Source\scripts\messages\*.msg ..\build-vc100\newview\Release\app_settings\
-xcopy /y Bin\featuretable*.txt ..\indra\newview
 
 goto:eof

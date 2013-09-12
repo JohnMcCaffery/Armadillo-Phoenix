@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llscrollingpanelparambase.cpp b/Source/indra/newview/llscrollingpanelparambase.cpp
+index 62e3039..8e083dd 100644
+--- a/Source/indra/newview/llscrollingpanelparambase.cpp
++++ b/Source/indra/newview/llscrollingpanelparambase.cpp
+@@ -94,7 +94,7 @@ void LLScrollingPanelParamBase::onSliderMoved(LLUICtrl* ctrl, void* userdata)
+ 	if (current_weight != new_weight )
+ 	{
+ 		self->mWearable->setVisualParamWeight( param->getID(), new_weight, FALSE );
+-		self->mWearable->writeToAvatar();
++		self->mWearable->writeToAvatar(gAgentAvatarp);
+ 		gAgentAvatarp->updateVisualParams();
+ 	}
+ }

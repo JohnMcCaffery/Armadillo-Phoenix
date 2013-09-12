@@ -1,5 +1,5 @@
 diff --git a/Source/indra/newview/llfollowcam.h b/Source/indra/newview/llfollowcam.h
-index f4b7b27..c099c97 100644
+index f4b7b27..2184d83 100644
 --- a/Source/indra/newview/llfollowcam.h
 +++ b/Source/indra/newview/llfollowcam.h
 @@ -69,6 +69,7 @@ public:
@@ -10,7 +10,13 @@ index f4b7b27..c099c97 100644
  	virtual void setPositionLocked		( bool );
  	virtual void setFocusLocked			( bool );
  
-@@ -92,6 +93,9 @@ public:
+@@ -87,11 +88,15 @@ public:
+ 	virtual F32			getBehindnessLag() const;
+ 	virtual LLVector3	getPosition() const;
+ 	virtual LLVector3	getFocus() const;
++	virtual LLVector3	getUpVector() const;
+ 	virtual bool		getFocusLocked() const;
+ 	virtual bool		getPositionLocked() const;
  	virtual bool		getUseFocus() const { return mUseFocus; }
  	virtual bool		getUsePosition() const { return mUsePosition; }
  
@@ -20,7 +26,7 @@ index f4b7b27..c099c97 100644
  protected:
  	F32		mPositionLag;
  	F32		mFocusLag;
-@@ -110,6 +114,15 @@ protected:
+@@ -110,6 +115,15 @@ protected:
  	bool			mUseFocus; // specific focus point specified by script
  	LLVector3		mPosition;			// where the camera is (in world-space)
  	LLVector3		mFocus;				// what the camera is aimed at (in world-space)
@@ -36,6 +42,14 @@ index f4b7b27..c099c97 100644
  };
  
  class LLFollowCam : public LLFollowCamParams
+@@ -146,7 +160,6 @@ public:
+ 
+ 	void setMaxCameraDistantFromSubject	( F32 m ); // this should be determined by llAgent
+ 	bool isZoomedToMinimumDistance();
+-	LLVector3	getUpVector();
+ 	void zoom( S32 );
+ 
+ 	// overrides for setters and getters
 @@ -154,6 +167,7 @@ public:
  	virtual void setDistance( F32 );
  	virtual void setPosition(const LLVector3& pos);

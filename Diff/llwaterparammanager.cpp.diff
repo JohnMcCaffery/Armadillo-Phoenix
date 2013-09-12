@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llwaterparammanager.cpp b/Source/indra/newview/llwaterparammanager.cpp
+index e386112..4f52ff9 100644
+--- a/Source/indra/newview/llwaterparammanager.cpp
++++ b/Source/indra/newview/llwaterparammanager.cpp
+@@ -100,7 +100,7 @@ void LLWaterParamManager::loadPresetsFromDir(const std::string& dir)
+ 			break; // no more files
+ 		}
+ 
+-		std::string path = dir + file;
++		std::string path = gDirUtilp->add(dir, file);
+ 		if (!loadPreset(path))
+ 		{
+ 			llwarns << "Error loading water preset from " << path << llendl;

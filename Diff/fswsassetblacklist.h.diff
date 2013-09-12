@@ -1,0 +1,63 @@
+diff --git a/Source/indra/newview/fswsassetblacklist.h b/Source/indra/newview/fswsassetblacklist.h
+index 9804bf1..d8f827f 100644
+--- a/Source/indra/newview/fswsassetblacklist.h
++++ b/Source/indra/newview/fswsassetblacklist.h
+@@ -20,34 +20,43 @@
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+  *
+- * The Phoenix Viewer Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+- * http://www.phoenixviewer.com
++ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * http://www.firestormviewer.org
+  * $/LicenseInfo$
+  */
+ 
+-#include "llviewerprecompiledheaders.h"
++#ifndef FS_WSASSETBLACKLIST_H
++#define FS_WSASSETBLACKLIST_H
++
++#include <boost/unordered_map.hpp>
++#include <boost/unordered_set.hpp>
++
+ #include "llsingleton.h"
+-#include "llfloater.h"
+ #include "llassettype.h"
+ 
+-
+-typedef std::map<LLAssetType::EType,std::vector<LLUUID> > BlacklistMAP;
++typedef boost::unordered_set<LLUUID, FSUUIDHash> blacklisted_uuid_container_t;
++typedef std::map<LLAssetType::EType, blacklisted_uuid_container_t> blacklist_type_map_t;
++typedef boost::unordered_map<LLUUID, LLSD, FSUUIDHash> blacklist_data_t;
+ 
+ class FSWSAssetBlacklist : public LLSingleton<FSWSAssetBlacklist>
+ {
+ public:
+ 	void init();
+-	bool isBlacklisted(LLUUID id, LLAssetType::EType type);
+-	void addNewItemToBlacklist(LLUUID id, std::string name, std::string region, LLAssetType::EType type, bool save = true);
+-	void addNewItemToBlacklistData(LLUUID id, LLSD data, bool save = true);
+-	void removeItemFromBlacklist(LLUUID id);
+-	static std::map<LLUUID,LLSD> BlacklistData;
++	bool isBlacklisted(const LLUUID& id, LLAssetType::EType type);
++	void addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool save = true);
++	void removeItemFromBlacklist(const LLUUID& id);
++
++	blacklist_data_t getBlacklistData() const { return mBlacklistData; };
+ 
+ private:
+ 	void loadBlacklist();
+ 	void saveBlacklist();
+-	bool addEntryToBlacklistMap(LLUUID id, LLAssetType::EType type);
++	bool addEntryToBlacklistMap(const LLUUID& id, LLAssetType::EType type);
++	void addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save = true);
+ 	
+-	static std::string blacklist_file_name;
+-	static BlacklistMAP BlacklistIDs;
++	std::string				mBlacklistFileName;
++	blacklist_type_map_t	mBlacklistTypeContainer;
++	blacklist_data_t		mBlacklistData;
+ };
++
++#endif // FS_WSASSETBLACKLIST_H
+\ No newline at end of file

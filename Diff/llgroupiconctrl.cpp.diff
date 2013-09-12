@@ -1,0 +1,12 @@
+diff --git a/Source/indra/newview/llgroupiconctrl.cpp b/Source/indra/newview/llgroupiconctrl.cpp
+index 2f98107..97f72b0 100644
+--- a/Source/indra/newview/llgroupiconctrl.cpp
++++ b/Source/indra/newview/llgroupiconctrl.cpp
+@@ -29,6 +29,7 @@
+ #include "llgroupiconctrl.h"
+ 
+ #include "llagent.h"
++#include "llviewertexture.h"
+ /*
+ #include "llavatarconstants.h"
+ #include "llcallingcard.h" // for LLAvatarTracker

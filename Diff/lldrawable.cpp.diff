@@ -1,0 +1,178 @@
+diff --git a/Source/indra/newview/lldrawable.cpp b/Source/indra/newview/lldrawable.cpp
+index bd9f5ea..cff3e12 100644
+--- a/Source/indra/newview/lldrawable.cpp
++++ b/Source/indra/newview/lldrawable.cpp
+@@ -99,7 +99,6 @@ void LLDrawable::init()
+ 	mPositionGroup.clear();
+ 	mExtents[0].clear();
+ 	mExtents[1].clear();
+-	mQuietCount = 0;
+ 
+ 	mState     = 0;
+ 	mVObjp   = NULL;
+@@ -255,11 +254,17 @@ S32 LLDrawable::findReferences(LLDrawable *drawablep)
+ 	return count;
+ }
+ 
++static LLFastTimer::DeclareTimer FTM_ALLOCATE_FACE("Allocate Face", true);
++
+ LLFace*	LLDrawable::addFace(LLFacePool *poolp, LLViewerTexture *texturep)
+ {
+-	LLMemType mt(LLMemType::MTYPE_DRAWABLE);
+ 	
+-	LLFace *face = new LLFace(this, mVObjp);
++	LLFace *face;
++	{
++		LLFastTimer t(FTM_ALLOCATE_FACE);
++		face = new LLFace(this, mVObjp);
++	}
++
+ 	if (!face) llerrs << "Allocating new Face: " << mFaces.size() << llendl;
+ 	
+ 	if (face)
+@@ -281,10 +286,12 @@ LLFace*	LLDrawable::addFace(LLFacePool *poolp, LLViewerTexture *texturep)
+ 
+ LLFace*	LLDrawable::addFace(const LLTextureEntry *te, LLViewerTexture *texturep)
+ {
+-	LLMemType mt(LLMemType::MTYPE_DRAWABLE);
+-	
+ 	LLFace *face;
+-	face = new LLFace(this, mVObjp);
++
++	{
++		LLFastTimer t(FTM_ALLOCATE_FACE);
++		face = new LLFace(this, mVObjp);
++	}
+ 
+ 	face->setTEOffset(mFaces.size());
+ 	face->setTexture(texturep);
+@@ -407,6 +414,8 @@ void LLDrawable::makeActive()
+ 		if (!isRoot() && !mParent->isActive())
+ 		{
+ 			mParent->makeActive();
++			//NOTE: linked set will now NEVER become static
++			mParent->setState(LLDrawable::ACTIVE_CHILD);
+ 		}
+ 
+ 		//all child objects must also be active
+@@ -426,41 +435,27 @@ void LLDrawable::makeActive()
+ 
+ 		if (mVObjp->getPCode() == LL_PCODE_VOLUME)
+ 		{
+-			if (mVObjp->isFlexible())
+-			{
+-				return;
+-			}
+-		}
+-	
+-		if (mVObjp->getPCode() == LL_PCODE_VOLUME)
+-		{
+ 			gPipeline.markRebuild(this, LLDrawable::REBUILD_VOLUME, TRUE);
+ 		}
+ 		updatePartition();
+ 	}
+ 
+-	if (isRoot())
+-	{
+-		mQuietCount = 0;
+-	}
+-	else
+-	{
+-		getParent()->mQuietCount = 0;
+-	}
++	llassert(isAvatar() || isRoot() || mParent->isActive());
+ }
+ 
+ 
+ void LLDrawable::makeStatic(BOOL warning_enabled)
+ {
+-	if (isState(ACTIVE))
++	if (isState(ACTIVE) && 
++		!isState(ACTIVE_CHILD) && 
++		!mVObjp->isAttachment() && 
++		!mVObjp->isFlexible())
+ 	{
+ 		clearState(ACTIVE | ANIMATED_CHILD);
+ 
+-		if (mParent.notNull() && mParent->isActive() && warning_enabled)
+-		{
+-			LL_WARNS_ONCE("Drawable") << "Drawable becomes static with active parent!" << LL_ENDL;
+-		}
+-
++		//drawable became static with active parent, not acceptable
++		llassert(mParent.isNull() || !mParent->isActive() || !warning_enabled);
++		
+ 		LLViewerObject::const_child_list_t& child_list = mVObjp->getChildren();
+ 		for (LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
+ 			 iter != child_list.end(); iter++)
+@@ -487,8 +482,8 @@ void LLDrawable::makeStatic(BOOL warning_enabled)
+ 			mSpatialBridge->markDead();
+ 			setSpatialBridge(NULL);
+ 		}
++		updatePartition();
+ 	}
+-	updatePartition();
+ }
+ 
+ // Returns "distance" between target destination and resulting xfrom
+@@ -516,7 +511,6 @@ F32 LLDrawable::updateXform(BOOL undamped)
+ 	//scaling
+ 	LLVector3 target_scale = mVObjp->getScale();
+ 	LLVector3 old_scale = mCurrentScale;
+-	LLVector3 dest_scale = target_scale;
+ 	
+ 	// Damping
+ 	F32 dist_squared = 0.f;
+@@ -529,6 +523,7 @@ F32 LLDrawable::updateXform(BOOL undamped)
+ 		dist_squared = dist_vec_squared(new_pos, target_pos);
+ 
+ 		LLQuaternion new_rot = nlerp(lerp_amt, old_rot, target_rot);
++		// FIXME: This can be negative! It is be possible for some rots to 'cancel out' pos or size changes.
+ 		dist_squared += (1.f - dot(new_rot, target_rot)) * 10.f;
+ 
+ 		LLVector3 new_scale = lerp(old_scale, target_scale, lerp_amt);
+@@ -552,6 +547,15 @@ F32 LLDrawable::updateXform(BOOL undamped)
+ 			}
+ 		}
+ 	}
++	else
++	{
++		// The following fixes MAINT-1742 but breaks vehicles similar to MAINT-2275
++		// dist_squared = dist_vec_squared(old_pos, target_pos);
++
++		// The following fixes MAINT-2247 but causes MAINT-2275
++		//dist_squared += (1.f - dot(old_rot, target_rot)) * 10.f;
++		//dist_squared += dist_vec_squared(old_scale, target_scale);
++	}
+ 
+ 	LLVector3 vec = mCurrentScale-target_scale;
+ 	
+@@ -637,9 +641,9 @@ BOOL LLDrawable::updateMove()
+ 	{
+ 		return FALSE;
+ 	}
+-	
++
+ 	makeActive();
+-	
++
+ 	BOOL done;
+ 
+ 	if (isState(MOVE_UNDAMPED))
+@@ -777,8 +781,6 @@ void LLDrawable::updateDistance(LLCamera& camera, bool force_update)
+ 
+ void LLDrawable::updateTexture()
+ {
+-	LLMemType mt(LLMemType::MTYPE_DRAWABLE);
+-	
+ 	if (isDead())
+ 	{
+ 		llwarns << "Dead drawable updating texture!" << llendl;
+@@ -1238,7 +1240,6 @@ LLCamera LLSpatialBridge::transformCamera(LLCamera& camera)
+ 	LLCamera ret = camera;
+ 	LLXformMatrix* mat = mDrawable->getXform();
+ 	LLVector3 center = LLVector3(0,0,0) * mat->getWorldMatrix();
+-	LLQuaternion rotation = LLQuaternion(mat->getWorldMatrix());
+ 
+ 	LLVector3 delta = ret.getOrigin() - center;
+ 	LLQuaternion rot = ~mat->getRotation();

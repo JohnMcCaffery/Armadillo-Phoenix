@@ -88,6 +88,7 @@ public:
 	virtual F32			getBehindnessLag() const;
 	virtual LLVector3	getPosition() const;
 	virtual LLVector3	getFocus() const;
+	virtual LLVector3	getUpVector() const;
 	virtual bool		getFocusLocked() const;
 	virtual bool		getPositionLocked() const;
 	virtual bool		getUseFocus() const { return mUseFocus; }
@@ -159,7 +160,6 @@ public:
 
 	void setMaxCameraDistantFromSubject	( F32 m ); // this should be determined by llAgent
 	bool isZoomedToMinimumDistance();
-	LLVector3	getUpVector();
 	void zoom( S32 );
 
 	// overrides for setters and getters

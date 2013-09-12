@@ -1,8 +1,8 @@
 diff --git a/Source/scripts/messages/message_template.msg b/Source/scripts/messages/message_template.msg
-index c2df9ad..2a2acf9 100644
+index c2df9ad..602e11a 100644
 --- a/Source/scripts/messages/message_template.msg
 +++ b/Source/scripts/messages/message_template.msg
-@@ -1,9022 +1,9107 @@
+@@ -1,9022 +1,9130 @@
 -// Linden Lab development message templates
 -
 -version 2.0
@@ -11966,6 +11966,10 @@ index c2df9ad..2a2acf9 100644
 +		PidStat Single
 +		{	PID					S32				}
 +	}
++	{
++		RegionInfo Variable
++		{	RegionFlagsExtended	U64				}
++	}
 +}
 +
 +// viewer -> sim
@@ -12018,6 +12022,10 @@ index c2df9ad..2a2acf9 100644
 +		{	HardMaxAgents		U32			}
 +		{	HardMaxObjects		U32			}
 +	}
++	{
++		RegionInfo3		Variable
++		{	RegionFlagsExtended	U64			}
++	}
 +}
 +
 +// GodUpdateRegionInfo
@@ -12042,6 +12050,10 @@ index c2df9ad..2a2acf9 100644
 +		{	PricePerMeter 		S32			}
 +		{	RedirectGridX 		S32			}
 +		{	RedirectGridY 		S32			}
++	}
++	{
++		RegionInfo2	Variable
++		{	RegionFlagsExtended	U64			}
 +	}
 +}
 +
@@ -12142,6 +12154,11 @@ index c2df9ad..2a2acf9 100644
 +		{	ColoName				Variable	1	}	// string
 +		{	ProductSKU				Variable	1	}	// string
 +		{	ProductName				Variable	1	}	// string
++	}
++	{
++		RegionInfo4		Variable
++		{	RegionFlagsExtended	U64			}
++		{	RegionProtocols		U64			}
 +	}
 +}
 +
@@ -12597,6 +12614,12 @@ index c2df9ad..2a2acf9 100644
 +	{
 +		VisualParam			Variable
 +		{	ParamValue		U8	}
++	}
++	{
++		AppearanceData		Variable
++		{	AppearanceVersion	U8	}
++		{	CofVersion			S32	}
++		{	Flags				U32	}
 +	}
 +}
 +

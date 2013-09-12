@@ -1,8 +1,8 @@
 diff --git a/Source/indra/newview/llfollowcam.cpp b/Source/indra/newview/llfollowcam.cpp
-index b670af1..ea365b9 100644
+index b670af1..f5805fd 100644
 --- a/Source/indra/newview/llfollowcam.cpp
 +++ b/Source/indra/newview/llfollowcam.cpp
-@@ -1,901 +1,1000 @@
+@@ -1,901 +1,997 @@
 -/** 
 - * @file llfollowcam.cpp
 - * @author Jeffrey Ventrella
@@ -1137,6 +1137,7 @@ index b670af1..ea365b9 100644
 +void LLFollowCamParams::setUpVector( const LLVector3& u ) 
 +{ 
 +	mUpVector = u;
++	gSavedSettings.setVector3("UpVector", mUpVector);
 +}
 +
 +//---------------------------------------------------------
@@ -1160,6 +1161,7 @@ index b670af1..ea365b9 100644
 +F32			LLFollowCamParams::getBehindnessLag		() const { return mBehindnessLag;		}
 +LLVector3	LLFollowCamParams::getPosition			() const { return mPosition;			}
 +LLVector3	LLFollowCamParams::getFocus				() const { return mFocus;				}
++LLVector3	LLFollowCamParams::getUpVector			() const { return mUpVector;			}
 +bool		LLFollowCamParams::getPositionLocked	() const { return mPositionLocked;		}
 +bool		LLFollowCamParams::getFocusLocked		() const { return mFocusLocked;			}
 +
@@ -1515,7 +1517,7 @@ index b670af1..ea365b9 100644
 +{
 +	setPosition(p);
 +	setFocus(f);
-+	mUpVector	= u;
++	//mUpVector	= u;
 +}
 +
 +//---------------------------------------------------------
@@ -1606,11 +1608,6 @@ index b670af1..ea365b9 100644
 +{ 
 +	// return simulated focus point
 +	return mSubjectPosition + (mRelativeFocus * mSubjectRotation);
-+}
-+
-+LLVector3	LLFollowCam::getUpVector() 
-+{ 
-+	return mUpVector;			
 +}
 +
 +//------------------------------------

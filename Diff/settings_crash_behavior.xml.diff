@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/app_settings/settings_crash_behavior.xml b/Source/indra/newview/app_settings/settings_crash_behavior.xml
+index 73e2133..a4dc379 100644
+--- a/Source/indra/newview/app_settings/settings_crash_behavior.xml
++++ b/Source/indra/newview/app_settings/settings_crash_behavior.xml
+@@ -20,7 +20,7 @@
+         <key>Type</key>
+             <string>Boolean</string>
+         <key>Value</key>
+-            <integer>0</integer>
++            <integer>1</integer>
+         </map>
+     <key>CrashSubmitSettings</key>
+         <map>

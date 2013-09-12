@@ -1,0 +1,55 @@
+diff --git a/Source/indra/newview/llhudicon.cpp b/Source/indra/newview/llhudicon.cpp
+index 7e1025c..d33920e 100644
+--- a/Source/indra/newview/llhudicon.cpp
++++ b/Source/indra/newview/llhudicon.cpp
+@@ -61,6 +61,10 @@ static F32 calc_bouncy_animation(F32 x)
+ //-----------------------------------------------------------------------------
+ LLHUDIcon::icon_instance_t LLHUDIcon::sIconInstances;
+ 
++// <FS:Ansariel> Mark script error icons
++LLHUDIcon::icon_instance_t LLHUDIcon::sScriptErrorIconInstances;
++// </FS:Ansariel> Mark script error icons
++
+ LLHUDIcon::LLHUDIcon(const U8 type) :
+ 			LLHUDObject(type),
+ 			mImagep(NULL),
+@@ -390,6 +394,17 @@ void LLHUDIcon::cleanupDeadIcons()
+ 		{
+ 			sIconInstances.erase(found_it);
+ 		}
++
++		// <FS:Ansariel> Mark script error icons
++		if ((*icon_it)->mScriptError)
++		{
++			icon_instance_t::iterator found_script_it = std::find(sScriptErrorIconInstances.begin(), sScriptErrorIconInstances.end(), *icon_it);
++			if (found_script_it != sScriptErrorIconInstances.end())
++			{
++				sScriptErrorIconInstances.erase(found_script_it);
++			}
++		}
++		// </FS:Ansariel> Mark script error icons
+ 	}
+ }
+ 
+@@ -398,3 +413,20 @@ S32 LLHUDIcon::getNumInstances()
+ {
+ 	return (S32)sIconInstances.size();
+ }
++
++// <FS:Ansariel> Mark script error icons
++void LLHUDIcon::setScriptError()
++{
++	if (std::find(sScriptErrorIconInstances.begin(), sScriptErrorIconInstances.end(), this) == sScriptErrorIconInstances.end())
++	{
++		mScriptError = true;
++		sScriptErrorIconInstances.push_back(this);
++	}
++}
++
++//static
++BOOL LLHUDIcon::scriptIconsNearby()
++{
++	return !sScriptErrorIconInstances.empty();
++}
++// </FS:Ansariel> Mark script error icons
+\ No newline at end of file

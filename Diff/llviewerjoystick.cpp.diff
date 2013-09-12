@@ -1,0 +1,17 @@
+diff --git a/Source/indra/newview/llviewerjoystick.cpp b/Source/indra/newview/llviewerjoystick.cpp
+index 07f43e7..658de36 100644
+--- a/Source/indra/newview/llviewerjoystick.cpp
++++ b/Source/indra/newview/llviewerjoystick.cpp
+@@ -24,6 +24,12 @@
+  * $/LicenseInfo$
+  */
+ 
++// </FS:ND> Fix for GCC 4.4.5, oherwise it complains at boost/signal
++#ifdef LL_LINUX
++#pragma GCC diagnostic ignored "-Wuninitialized"
++#endif
++// </FS:ND>
++
+ #include "llviewerprecompiledheaders.h"
+ 
+ #include "llviewerjoystick.h"

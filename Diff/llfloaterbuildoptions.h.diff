@@ -1,0 +1,11 @@
+diff --git a/Source/indra/newview/llfloaterbuildoptions.h b/Source/indra/newview/llfloaterbuildoptions.h
+index 632ed1c..164944d 100644
+--- a/Source/indra/newview/llfloaterbuildoptions.h
++++ b/Source/indra/newview/llfloaterbuildoptions.h
+@@ -44,4 +44,4 @@ private:
+ 	~LLFloaterBuildOptions();
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif

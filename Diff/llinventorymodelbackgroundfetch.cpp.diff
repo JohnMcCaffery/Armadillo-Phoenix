@@ -1,0 +1,69 @@
+diff --git a/Source/indra/newview/llinventorymodelbackgroundfetch.cpp b/Source/indra/newview/llinventorymodelbackgroundfetch.cpp
+index 473aea9..04b2bd3 100644
+--- a/Source/indra/newview/llinventorymodelbackgroundfetch.cpp
++++ b/Source/indra/newview/llinventorymodelbackgroundfetch.cpp
+@@ -183,8 +183,9 @@ void LLInventoryModelBackgroundFetch::backgroundFetchCB(void *)
+ 
+ void LLInventoryModelBackgroundFetch::backgroundFetch()
+ {
++// <FS:TM> new:	if (mBackgroundFetchActive && gAgent.getRegion() && gAgent.getRegion()->capabilitiesReceived()) 
+ // <FS:AW>
+-//	if (mBackgroundFetchActive && gAgent.getRegion())
++// <FS:TM> old:	if (mBackgroundFetchActive && gAgent.getRegion())
+ 	LLViewerRegion* region = gAgent.getRegion();
+ 	if (!region || !region->capabilitiesReceived())
+ 	{
+@@ -385,7 +386,7 @@ class LLInventoryModelFetchItemResponder : public LLInventoryModel::fetchInvento
+ public:
+ 	LLInventoryModelFetchItemResponder(const LLSD& request_sd) : LLInventoryModel::fetchInventoryResponder(request_sd) {};
+ 	void result(const LLSD& content);			
+-	void error(U32 status, const std::string& reason);
++	void errorWithContent(U32 status, const std::string& reason, const LLSD& content);
+ };
+ 
+ void LLInventoryModelFetchItemResponder::result( const LLSD& content )
+@@ -394,9 +395,9 @@ void LLInventoryModelFetchItemResponder::result( const LLSD& content )
+ 	LLInventoryModelBackgroundFetch::instance().incrFetchCount(-1);
+ }
+ 
+-void LLInventoryModelFetchItemResponder::error( U32 status, const std::string& reason )
++void LLInventoryModelFetchItemResponder::errorWithContent( U32 status, const std::string& reason, const LLSD& content )
+ {
+-	LLInventoryModel::fetchInventoryResponder::error(status, reason);
++	LLInventoryModel::fetchInventoryResponder::errorWithContent(status, reason, content);
+ 	LLInventoryModelBackgroundFetch::instance().incrFetchCount(-1);
+ }
+ 
+@@ -410,7 +411,7 @@ public:
+ 	{};
+ 	//LLInventoryModelFetchDescendentsResponder() {};
+ 	void result(const LLSD& content);
+-	void error(U32 status, const std::string& reason);
++	void errorWithContent(U32 status, const std::string& reason, const LLSD& content);
+ protected:
+ 	BOOL getIsRecursive(const LLUUID& cat_id) const;
+ private:
+@@ -548,12 +549,12 @@ void LLInventoryModelFetchDescendentsResponder::result(const LLSD& content)
+ }
+ 
+ // If we get back an error (not found, etc...), handle it here.
+-void LLInventoryModelFetchDescendentsResponder::error(U32 status, const std::string& reason)
++void LLInventoryModelFetchDescendentsResponder::errorWithContent(U32 status, const std::string& reason, const LLSD& content)
+ {
+ 	LLInventoryModelBackgroundFetch *fetcher = LLInventoryModelBackgroundFetch::getInstance();
+ 
+-	llinfos << "LLInventoryModelFetchDescendentsResponder::error "
+-		<< status << ": " << reason << llendl;
++	llinfos << "LLInventoryModelFetchDescendentsResponder::error [status:"
++			<< status << "]: " << content << llendl;
+ 						
+ 	fetcher->incrFetchCount(-1);
+ 
+@@ -583,7 +584,6 @@ BOOL LLInventoryModelFetchDescendentsResponder::getIsRecursive(const LLUUID& cat
+ {
+ 	return (std::find(mRecursiveCatUUIDs.begin(),mRecursiveCatUUIDs.end(), cat_id) != mRecursiveCatUUIDs.end());
+ }
+-
+ // Bundle up a bunch of requests to send all at once.
+ // static   
+ void LLInventoryModelBackgroundFetch::bulkFetch()

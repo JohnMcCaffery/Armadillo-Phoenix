@@ -1,0 +1,28 @@
+diff --git a/Source/indra/newview/fspanelprofile.h b/Source/indra/newview/fspanelprofile.h
+index 9e9cf4b..c87cbcf 100644
+--- a/Source/indra/newview/fspanelprofile.h
++++ b/Source/indra/newview/fspanelprofile.h
+@@ -20,13 +20,13 @@
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+  *
+- * The Phoenix Viewer Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+- * http://www.phoenixviewer.com
++ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * http://www.firestormviewer.org
+  * $/LicenseInfo$
+  */
+ 
+-#ifndef FS_FSPANELPROFILE_H
+-#define FS_FSPANELPROFILE_H
++#ifndef FS_PANELPROFILE_H
++#define FS_PANELPROFILE_H
+ 
+ #include "llfloater.h"
+ #include "llavatarpropertiesprocessor.h"
+@@ -584,4 +584,4 @@ protected:
+ 	LLTextEditor*		mNotesEditor;
+ };
+ 
+-#endif // FS_FSPANELPROFILE_H
++#endif // FS_PANELPROFILE_H

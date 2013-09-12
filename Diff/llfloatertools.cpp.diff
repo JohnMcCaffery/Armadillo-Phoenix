@@ -1,0 +1,322 @@
+diff --git a/Source/indra/newview/llfloatertools.cpp b/Source/indra/newview/llfloatertools.cpp
+index d60b433..afd7f64 100644
+--- a/Source/indra/newview/llfloatertools.cpp
++++ b/Source/indra/newview/llfloatertools.cpp
+@@ -264,14 +264,15 @@ BOOL	LLFloaterTools::postBuild()
+ 	mCheckStretchTexture	= getChild<LLCheckBoxCtrl>("checkbox stretch textures");
+ 	getChild<LLUICtrl>("checkbox stretch textures")->setValue((BOOL)gSavedSettings.getBOOL("ScaleStretchTextures"));
+ 	mComboGridMode			= getChild<LLComboBox>("combobox grid mode");
+-	//Phoenix:KC show highlight
++
++	// <FS:KC> show highlight
++	//mCheckStretchUniformLabel = getChild<LLTextBox>("checkbox uniform label");
+ 	mCheckShowHighlight = getChild<LLCheckBoxCtrl>("checkbox show highlight");
+ 	mOrginalShowHighlight = gSavedSettings.getBOOL("RenderHighlightSelections");
+ 	mCheckShowHighlight->setValue(mOrginalShowHighlight);
+ 
+ 	mCheckActualRoot = getChild<LLCheckBoxCtrl>("checkbox actual root");
+-
+-	//mCheckStretchUniformLabel = getChild<LLTextBox>("checkbox uniform label");
++	// </FS:KC>
+ 
+ 
+ 	//
+@@ -327,14 +328,16 @@ BOOL	LLFloaterTools::postBuild()
+ 
+ 	sShowObjectCost = gSavedSettings.getBOOL("ShowObjectRenderingCost");
+ 	
+-	//Phoenix:KC - added back more/less button
++	// <FS:KC> Added back more/less button
+ 	LLButton* btnExpand = getChild<LLButton>("btnExpand");
+-	if (btnExpand)
++	if (btnExpand && mTab)
+ 	{
+ 		mExpandedHeight = getRect().getHeight();
+-		if (mTab) mCollapsedHeight = mExpandedHeight - mTab->getRect().getHeight() + btnExpand->getRect().getHeight();
++		mCollapsedHeight = mExpandedHeight - mTab->getRect().getHeight() + btnExpand->getRect().getHeight();
+ 		if(!gSavedSettings.getBOOL("FSToolboxExpanded"))
+ 		{
++			mTab->setVisible(FALSE);
++			reshape( getRect().getWidth(), mCollapsedHeight);
+ 			btnExpand->setImageOverlay("Arrow_Down", btnExpand->getImageOverlayHAlign());
+ 		}
+ 	}
+@@ -342,6 +345,7 @@ BOOL	LLFloaterTools::postBuild()
+ 	{
+ 		gSavedSettings.setBOOL("FSToolboxExpanded", TRUE);
+ 	}
++	// </FS:KC>
+ 
+ 	return TRUE;
+ }
+@@ -369,8 +373,11 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
+ 	mComboGridMode(NULL),
+ 	mCheckStretchUniform(NULL),
+ 	mCheckStretchTexture(NULL),
+-	mCheckShowHighlight(NULL), //Phoenix:KC
+-	mCheckActualRoot(NULL), //Phoenix:KC
++	// <FS:KC>
++	//mCheckStretchUniformLabel(NULL),
++	mCheckShowHighlight(NULL),
++	mCheckActualRoot(NULL),
++	// </FS:KC>
+ 
+ 	mBtnRotateLeft(NULL),
+ 	mBtnRotateReset(NULL),
+@@ -428,7 +435,6 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
+ 	mCommitCallbackRegistrar.add("BuildTool.selectComponent",	boost::bind(&commit_select_component, this));
+ 	mCommitCallbackRegistrar.add("BuildTool.gridOptions",		boost::bind(&LLFloaterTools::onClickGridOptions,this));
+ 	mCommitCallbackRegistrar.add("BuildTool.applyToSelection",	boost::bind(&click_apply_to_selection, this));
+-	mCommitCallbackRegistrar.add("BuildTool.gridMode",			boost::bind(&commit_grid_mode,_1));
+ 	mCommitCallbackRegistrar.add("BuildTool.commitRadioLand",	boost::bind(&commit_radio_group_land,_1));
+ 	mCommitCallbackRegistrar.add("BuildTool.LandBrushForce",	boost::bind(&commit_slider_dozer_force,_1));
+ 	mCommitCallbackRegistrar.add("BuildTool.AddMedia",			boost::bind(&LLFloaterTools::onClickBtnAddMedia,this));
+@@ -438,8 +444,10 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
+ 	mCommitCallbackRegistrar.add("BuildTool.LinkObjects",		boost::bind(&LLSelectMgr::linkObjects, LLSelectMgr::getInstance()));
+ 	mCommitCallbackRegistrar.add("BuildTool.UnlinkObjects",		boost::bind(&LLSelectMgr::unlinkObjects, LLSelectMgr::getInstance()));
+ 
++	// <FS>
+ 	mCommitCallbackRegistrar.add("BuildTool.CopyKeys",			boost::bind(&LLFloaterTools::onClickBtnCopyKeys,this));
+ 	mCommitCallbackRegistrar.add("BuildTool.Expand",			boost::bind(&LLFloaterTools::onClickExpand,this));
++	// </FS>
+ 
+ 	mLandImpactsObserver = new LLLandImpactsObserver();
+ 	LLViewerParcelMgr::getInstance()->addObserver(mLandImpactsObserver);
+@@ -493,11 +501,7 @@ void LLFloaterTools::refresh()
+ 	// Refresh object and prim count labels
+ 	LLLocale locale(LLLocale::USER_LOCALE);
+ 	
+-	//-TT 2.8.2 - from KC
+-	//std::string obj_count_string;
+-	//LLResMgr::getInstance()->getIntegerString(obj_count_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
+-	//getChild<LLUICtrl>("obj_count")->setTextArg("[COUNT]", obj_count_string);	
+-
++	// <FS:KC>
+ 	std::string desc_string;
+ 	std::string num_string;
+ 	bool enable_link_count = true;
+@@ -563,11 +567,7 @@ void LLFloaterTools::refresh()
+ 	}
+ 	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[DESC]", desc_string);
+ 	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[NUM]", num_string);
+-	// - KC
+-	std::string prim_count_string;
+-	LLResMgr::getInstance()->getIntegerString(prim_count_string, prim_count);
+-	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
+-	//getChild<LLUICtrl>("prim_count")->setTextArg("[COUNT]", prim_count_string);
++	// </FS:KC>
+ #if 0
+ 	if (!gMeshRepo.meshRezEnabled())
+ 	{		
+@@ -601,6 +601,11 @@ void LLFloaterTools::refresh()
+ #endif
+ 	{
+ 		F32 link_cost  = LLSelectMgr::getInstance()->getSelection()->getSelectedLinksetCost();
++// <FS:CR> FIRE-9287 - LI/Prim count not reflected on OpenSim
++#ifdef OPENSIM
++		S32 prim_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
++#endif // OPENSIM
++// </FS:CR>
+ 		S32 link_count = LLSelectMgr::getInstance()->getSelection()->getRootObjectCount();
+ 
+ 		LLCrossParcelFunctor func;
+@@ -627,6 +632,13 @@ void LLFloaterTools::refresh()
+ 
+ 		LLStringUtil::format_map_t selection_args;
+ 		selection_args["OBJ_COUNT"] = llformat("%.1d", link_count);
++// <FS:CR> FIRE-9287 - LI/Prim count not reflected on OpenSim
++#ifdef OPENSIM
++		if (LLGridManager::getInstance()->isInOpenSim())
++			selection_args["LAND_IMPACT"] = llformat("%.1d", (S32)prim_count);
++		else
++#endif // OPENSIM
++// </FS:CR>
+ 		selection_args["LAND_IMPACT"] = llformat("%.1d", (S32)link_cost);
+ 
+ 		std::ostringstream selection_info;
+@@ -641,14 +653,10 @@ void LLFloaterTools::refresh()
+ 		childSetVisible("selection_empty", !have_selection);
+ 	}
+ 
+-	// disable the object and prim counts if nothing selected
++	// <FS> disable the object and prim counts if nothing selected
+ 	bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
+-	//getChildView("obj_count")->setEnabled(have_selection);
+ 	getChildView("link_num_obj_count")->setEnabled(have_selection && enable_link_count);
+-	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
+-	//getChildView("prim_count")->setEnabled(have_selection);
+-	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1917 SH-1935
+-	//getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
++	// </FS>
+ 
+ 	// Refresh child tabs
+ 	mPanelPermissions->refresh();
+@@ -665,6 +673,10 @@ void LLFloaterTools::refresh()
+ 	{
+ 		object_weights_floater->refresh();
+ 	}
++	
++	// <FS:CR> Only enable Copy Keys when we have something selected
++	getChild<LLButton>("btnCopyKeys")->setEnabled(have_selection);
++	// </FS:CR>
+ }
+ 
+ void LLFloaterTools::draw()
+@@ -825,34 +837,6 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
+ 		mRadioGroupEdit->setValue("radio align");
+ 	}
+ 
+-		if (mComboGridMode) 
+-	{
+-		mComboGridMode->setVisible( edit_visible );
+-		S32 index = mComboGridMode->getCurrentIndex();
+-		mComboGridMode->removeall();
+-
+-		switch (mObjectSelection->getSelectType())
+-		{
+-		case SELECT_TYPE_HUD:
+-		  mComboGridMode->add(getString("grid_screen_text"));
+-		  mComboGridMode->add(getString("grid_local_text"));
+-		  //mComboGridMode->add(getString("grid_reference_text"));
+-		  break;
+-		case SELECT_TYPE_WORLD:
+-		  mComboGridMode->add(getString("grid_world_text"));
+-		  mComboGridMode->add(getString("grid_local_text"));
+-		  mComboGridMode->add(getString("grid_reference_text"));
+-		  break;
+-		case SELECT_TYPE_ATTACHMENT:
+-		  mComboGridMode->add(getString("grid_attachment_text"));
+-		  mComboGridMode->add(getString("grid_local_text"));
+-		  mComboGridMode->add(getString("grid_reference_text"));
+-		  break;
+-		}
+-
+-		mComboGridMode->setCurrentByIndex(index);
+-	}
+-
+ 	if (mComboGridMode) 
+ 	{
+ 		mComboGridMode->setVisible( edit_visible );
+@@ -887,8 +871,11 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
+ 	//mCheckSelectLinked	->setVisible( edit_visible );
+ 	if (mCheckStretchUniform) mCheckStretchUniform->setVisible( edit_visible );
+ 	if (mCheckStretchTexture) mCheckStretchTexture->setVisible( edit_visible );
+-	if (mCheckShowHighlight) mCheckShowHighlight->setVisible( edit_visible ); //Phoenix:KC
+-	if (mCheckActualRoot) mCheckActualRoot->setVisible( edit_visible ); //Phoenix:KC
++	// <FS:KC>
++	//if (mCheckStretchUniformLabel) mCheckStretchUniformLabel->setVisible( edit_visible );
++	if (mCheckShowHighlight) mCheckShowHighlight->setVisible( edit_visible );
++	if (mCheckActualRoot) mCheckActualRoot->setVisible( edit_visible );
++	// </FS:KC>
+ 
+ 	// Create buttons
+ 	BOOL create_visible = (tool == LLToolCompCreate::getInstance());
+@@ -984,13 +971,11 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
+ 		getChildView("Strength:")->setVisible( land_visible);
+ 	}
+ 
+-	//getChildView("link_num_obj_count")->setVisible( !land_visible);
+-	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
+-	//getChildView("prim_count")->setVisible( !land_visible);
+-
++	// <FS>
+ 	static LLCachedControl<bool> sFSToolboxExpanded(gSavedSettings,  "FSToolboxExpanded", TRUE);
+ 	mTab->setVisible(!land_visible && sFSToolboxExpanded);
+ 	mPanelLandInfo->setVisible(land_visible && sFSToolboxExpanded);
++	// </FS>
+ 
+ 	bool have_selection = !LLSelectMgr::getInstance()->getSelection()->isEmpty();
+ 
+@@ -1017,7 +1002,7 @@ void LLFloaterTools::onOpen(const LLSD& key)
+ 	mParcelSelection = LLViewerParcelMgr::getInstance()->getFloatingParcelSelection();
+ 	mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
+ 	
+-	//Phoenix:KC - set the check box value from the saved setting
++	// <FS:KC> Set the check box value from the saved setting
+ 	// this function runs on selection change
+ 	if (!mOpen)
+ 	{
+@@ -1025,6 +1010,7 @@ void LLFloaterTools::onOpen(const LLSD& key)
+ 		mOrginalShowHighlight = gSavedSettings.getBOOL("RenderHighlightSelections");
+ 		mCheckShowHighlight->setValue(mOrginalShowHighlight);
+ 	}
++	// </FS:KC>
+ 
+ 	std::string panel = key.asString();
+ 	if (!panel.empty())
+@@ -1054,9 +1040,10 @@ void LLFloaterTools::onClose(bool app_quitting)
+ 	LLSelectMgr::getInstance()->promoteSelectionToRoot();
+ 	gSavedSettings.setBOOL("EditLinkedParts", FALSE);
+ 
+-	//Reset silhouette override -KC
++	// <FS:KC>
+ 	gSavedSettings.setBOOL("RenderHighlightSelections", mOrginalShowHighlight);
+ 	mOpen = FALSE; //hack cause onOpen runs on every selection change but onClose doesnt.
++	// </FS:KC>
+ 
+ 	gViewerWindow->showCursor();
+ 
+@@ -1065,11 +1052,25 @@ void LLFloaterTools::onClose(bool app_quitting)
+ 	mParcelSelection = NULL;
+ 	mObjectSelection = NULL;
+ 
++	// <FS:Ansariel> Enable context/pie menu in mouselook
+ 	// Switch back to basic toolset
+-	LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
++	//LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
+ 	// we were already in basic toolset, using build tools
+ 	// so manually reset tool to default (pie menu tool)
+-	LLToolMgr::getInstance()->getCurrentToolset()->selectFirstTool();
++	//LLToolMgr::getInstance()->getCurrentToolset()->selectFirstTool();
++	if (!gAgentCamera.cameraMouselook())
++	{
++		LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
++		LLToolMgr::getInstance()->getCurrentToolset()->selectFirstTool();
++	}
++	else 
++	{
++		// Switch back to mouselook toolset
++		LLToolMgr::getInstance()->setCurrentToolset(gMouselookToolset);
++		gViewerWindow->hideCursor();
++		gViewerWindow->moveCursorToCenter();
++	}
++	// </FS:Ansariel>
+ 
+ 	//gMenuBarView->setItemVisible("BuildTools", FALSE);
+ 	LLFloaterReg::hideInstance("media_settings");
+@@ -1247,6 +1248,17 @@ void commit_grid_mode(LLUICtrl *ctrl)
+ 	LLSelectMgr::getInstance()->setGridMode((EGridMode)combo->getCurrentIndex());
+ }
+ 
++// static
++void LLFloaterTools::setGridMode(S32 mode)
++{
++	LLFloaterTools* tools_floater = LLFloaterReg::getTypedInstance<LLFloaterTools>("build");
++	if (!tools_floater || !tools_floater->mComboGridMode)
++	{
++		return;
++	}
++
++	tools_floater->mComboGridMode->setCurrentByIndex(mode);
++}
+ 
+ void LLFloaterTools::onClickGridOptions()
+ {
+@@ -2163,8 +2175,16 @@ void LLFloaterTools::onClickBtnCopyKeys()
+ {
+ 	std::string separator = gSavedSettings.getString("FSCopyObjKeySeparator");
+ 	std::string stringKeys;
++	MASK mask = gKeyboard->currentMask(FALSE);
+ 	LLFloaterToolsCopyKeysFunctor copy_keys(stringKeys, separator);
+-	bool copied = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&copy_keys);
++	bool copied = false;
++	if (mask == MASK_SHIFT)
++		copied = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&copy_keys);
++	else if (mCheckSelectIndividual && mCheckSelectIndividual->get())
++		copied = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&copy_keys);
++	else
++		copied = LLSelectMgr::getInstance()->getSelection()->applyToRootObjects(&copy_keys);
++	
+ 	if (copied)
+ 	{
+ 		LLView::getWindow()->copyTextToClipboard(utf8str_to_wstring(stringKeys));

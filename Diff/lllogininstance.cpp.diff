@@ -1,0 +1,48 @@
+diff --git a/Source/indra/newview/lllogininstance.cpp b/Source/indra/newview/lllogininstance.cpp
+index 265a14c..30c5ec1 100644
+--- a/Source/indra/newview/lllogininstance.cpp
++++ b/Source/indra/newview/lllogininstance.cpp
+@@ -486,7 +486,6 @@ LLLoginInstance::LLLoginInstance() :
+ 	mDispatcher.add("connect",    "", boost::bind(&LLLoginInstance::handleLoginSuccess, this, _1));
+ 	mDispatcher.add("disconnect", "", boost::bind(&LLLoginInstance::handleDisconnect, this, _1));
+ 	mDispatcher.add("indeterminate", "", boost::bind(&LLLoginInstance::handleIndeterminate, this, _1));
+-
+ }
+ 
+ LLLoginInstance::~LLLoginInstance()
+@@ -562,16 +561,7 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
+ 
+ 	//send this info to login.cgi for stats gathering 
+ 	//since viewerstats isn't reliable enough
+-	if (gSavedSettings.getString("SessionSettingsFile").empty())
+-	{
+-		requested_options.append("advanced-mode");
+-	}
+-	else
+-	{
+-		requested_options.append("basic-mode");
+-		//requested_options.append("inventory-basic");
+-	}
+-
++	requested_options.append("advanced-mode");
+ #endif
+ 	requested_options.append("max-agent-groups");	
+ 	requested_options.append("map-server-url");	
+@@ -586,7 +576,7 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
+ 	}
+ 
+ // <FS:AW various patches>
+-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
++#ifdef OPENSIM // <FS:AW optional opensim support>
+ 	//TODO: make this more flexible
+ 	if (LLGridManager::getInstance()->isInOpenSim())
+ 	{
+@@ -598,7 +588,7 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
+ 		//not in this patch
+ 		//requested_options.append("profile-server-url");
+ 	}
+-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
++#endif // OPENSIM // <FS:AW optional opensim support>
+ // </FS:AW various patches>
+ 
+ 	// (re)initialize the request params with creds.

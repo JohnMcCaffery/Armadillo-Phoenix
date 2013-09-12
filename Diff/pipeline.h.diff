@@ -1,13 +1,158 @@
 diff --git a/Source/indra/newview/pipeline.h b/Source/indra/newview/pipeline.h
-index 2a2c9b5..e9ed442 100644
+index 2a2c9b5..16d76a8 100644
 --- a/Source/indra/newview/pipeline.h
 +++ b/Source/indra/newview/pipeline.h
-@@ -78,7 +78,7 @@ void glh_set_current_modelview(const glh::matrix4f& mat);
- glh::matrix4f glh_get_current_projection();
- void glh_set_current_projection(glh::matrix4f& mat);
- glh::matrix4f gl_ortho(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat znear, GLfloat zfar);
--glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar);
-+glh::matrix4f gl_perspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar, bool render);
- glh::matrix4f gl_lookat(LLVector3 eye, LLVector3 center, LLVector3 up);
+@@ -119,8 +119,25 @@ public:
+ 	void createGLBuffers();
+ 	void createLUTBuffers();
  
- extern LLFastTimer::DeclareTimer FTM_RENDER_GEOMETRY;
+-	void allocateScreenBuffer(U32 resX, U32 resY);
++	//allocate the largest screen buffer possible up to resX, resY
++	//returns true if full size buffer allocated, false if some other size is allocated
++	bool allocateScreenBuffer(U32 resX, U32 resY);
++
++	typedef enum {
++		FBO_SUCCESS_FULLRES = 0,
++		FBO_SUCCESS_LOWRES,
++		FBO_FAILURE
++	} eFBOStatus;
++
++private:
++	//implementation of above, wrapped for easy error handling
++	eFBOStatus doAllocateScreenBuffer(U32 resX, U32 resY);
++public:
++
++	//attempt to allocate screen buffers at resX, resY
++	//returns true if allocation successful, false otherwise
+ 	bool allocateScreenBuffer(U32 resX, U32 resY, U32 samples);
++
+ 	void allocatePhysicsBuffer();
+ 	
+ 	void resetVertexBuffers(LLDrawable* drawable);
+@@ -151,6 +168,8 @@ public:
+ 
+ 	void		 unlinkDrawable(LLDrawable*);
+ 
++	static void removeMutedAVsLights(LLVOAvatar*);
++
+ 	// Object related methods
+ 	void        markVisible(LLDrawable *drawablep, LLCamera& camera);
+ 	void		markOccluder(LLSpatialGroup* group);
+@@ -168,6 +187,9 @@ public:
+ 	//get the object between start and end that's closest to start.
+ 	LLViewerObject* lineSegmentIntersectInWorld(const LLVector3& start, const LLVector3& end,
+ 												BOOL pick_transparent,
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++												BOOL pick_rigged,
++// [/SL:KB]
+ 												S32* face_hit,                          // return the face hit
+ 												LLVector3* intersection = NULL,         // return the intersection point
+ 												LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point
+@@ -223,6 +245,7 @@ public:
+ 	void updateGL();
+ 	void rebuildPriorityGroups();
+ 	void rebuildGroups();
++	void clearRebuildGroups();
+ 
+ 	//calculate pixel area of given box from vantage point of given camera
+ 	static F32 calcPixelArea(LLVector3 center, LLVector3 size, LLCamera& camera);
+@@ -304,20 +327,28 @@ public:
+ 
+ 	BOOL hasRenderDebugFeatureMask(const U32 mask) const	{ return (mRenderDebugFeatureMask & mask) ? TRUE : FALSE; }
+ 	BOOL hasRenderDebugMask(const U32 mask) const			{ return (mRenderDebugMask & mask) ? TRUE : FALSE; }
+-	
+-
++	void setAllRenderDebugFeatures() { mRenderDebugFeatureMask = 0xffffffff; }
++	void clearAllRenderDebugFeatures() { mRenderDebugFeatureMask = 0x0; }
++	void setAllRenderDebugDisplays() { mRenderDebugMask = 0xffffffff; }
++	void clearAllRenderDebugDisplays() { mRenderDebugMask = 0x0; }
+ 
+ 	BOOL hasRenderType(const U32 type) const;
+ 	BOOL hasAnyRenderType(const U32 type, ...) const;
+ 
+ 	void setRenderTypeMask(U32 type, ...);
+-	void orRenderTypeMask(U32 type, ...);
++	// This is equivalent to 'setRenderTypeMask'
++	//void orRenderTypeMask(U32 type, ...);
+ 	void andRenderTypeMask(U32 type, ...);
+ 	void clearRenderTypeMask(U32 type, ...);
++	void setAllRenderTypes();
++	void clearAllRenderTypes();
+ 	
+ 	void pushRenderTypeMask();
+ 	void popRenderTypeMask();
+ 
++	void pushRenderDebugFeatureMask();
++	void popRenderDebugFeatureMask();
++
+ 	static void toggleRenderType(U32 type);
+ 
+ 	// For UI control of render features
+@@ -382,6 +413,7 @@ private:
+ 	BOOL updateDrawableGeom(LLDrawable* drawable, BOOL priority);
+ 	void assertInitializedDoError();
+ 	bool assertInitialized() { const bool is_init = isInit(); if (!is_init) assertInitializedDoError(); return is_init; };
++	void connectRefreshCachedSettingsSafe(const std::string name);
+ 	void hideDrawable( LLDrawable *pDrawable );
+ 	void unhideDrawable( LLDrawable *pDrawable );
+ public:
+@@ -537,6 +569,8 @@ public:
+ 	static F32				sMinRenderSize;
+ 	static F32        		sVolumeSAFrame;
+ 
++	static bool				sRenderParticles; // <FS:LO> flag to hold correct, user selected, status of particles
++
+ 	//screen texture
+ 	U32 					mScreenWidth;
+ 	U32 					mScreenHeight;
+@@ -615,6 +649,7 @@ protected:
+ 
+ 	U32						mRenderDebugFeatureMask;
+ 	U32						mRenderDebugMask;
++	std::stack<U32>			mRenderDebugFeatureStack;
+ 
+ 	U32						mOldRenderDebugMask;
+ 	
+@@ -666,12 +701,15 @@ protected:
+ 	LLSpatialGroup::sg_vector_t		mGroupQ1; //priority
+ 	LLSpatialGroup::sg_vector_t		mGroupQ2; // non-priority
+ 
+-	LLSpatialGroup::sg_vector_t		mGroupSaveQ1; // <FS:ND/> FIRE-3737, save mGroupQ1 until it is safe to unref
++	LLSpatialGroup::sg_vector_t		mGroupSaveQ1; // a place to save mGroupQ1 until it is safe to unref
+ 
+ 	LLSpatialGroup::sg_vector_t		mMeshDirtyGroup; //groups that need rebuildMesh called
+ 	U32 mMeshDirtyQueryObject;
+ 
+-	LLDrawable::drawable_list_t		mPartitionQ; //drawables that need to update their spatial partition radius 
++	// <FS:ND> A vector is much better suited for the use case of mPartitionQ
++	// LLDrawable::drawable_list_t		mPartitionQ; //drawables that need to update their spatial partition radius 
++	LLDrawable::drawable_vector_t	mPartitionQ; //drawables that need to update their spatial partition radius 
++	// </FS:ND>
+ 
+ 	bool mGroupQ2Locked;
+ 	bool mGroupQ1Locked;
+@@ -800,6 +838,7 @@ public:
+ 	//cached settings
+ 	static BOOL WindLightUseAtmosShaders;
+ 	static BOOL VertexShaderEnable;
++
+ 	static BOOL RenderAvatarVP;
+ 	static BOOL RenderDeferred;
+ 	static F32 RenderDeferredSunWash;
+@@ -872,6 +911,16 @@ public:
+ 	static F32 CameraMaxCoF;
+ 	static F32 CameraDoFResScale;
+ 	static F32 RenderAutoHideSurfaceAreaLimit;
++
++
++ 	// <FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
++	// Depending on the state of the pipeline. this can trigger illegal deletion of drawables.
++	// To work around that, resizeScreenTexture will just set a flag, which then later does trigger the change
++	// in shaders.
++	static bool TriggeredDisabledDeferred;
++
++	void disableDeferredOnLowMemory();
++	// </FS:ND>
+ };
+ 
+ void render_bbox(const LLVector3 &min, const LLVector3 &max);

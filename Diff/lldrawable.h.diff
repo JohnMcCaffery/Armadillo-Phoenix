@@ -1,0 +1,43 @@
+diff --git a/Source/indra/newview/lldrawable.h b/Source/indra/newview/lldrawable.h
+index b4b3a2f..06bc89e 100644
+--- a/Source/indra/newview/lldrawable.h
++++ b/Source/indra/newview/lldrawable.h
+@@ -38,7 +38,6 @@
+ #include "llvector4a.h"
+ #include "llquaternion.h"
+ #include "xform.h"
+-#include "llmemtype.h"
+ #include "lldarray.h"
+ #include "llviewerobject.h"
+ #include "llrect.h"
+@@ -87,7 +86,6 @@ public:
+ 	}
+ 
+ 	LLDrawable()				{ init(); }
+-	MEM_TYPE_NEW(LLMemType::MTYPE_DRAWABLE);
+ 	
+ 	void markDead();			// Mark this drawable as dead
+ 	BOOL isDead() const			{ return isState(DEAD); }
+@@ -286,12 +284,12 @@ public:
+  		NEARBY_LIGHT	= 0x00200000, // In gPipeline.mNearbyLightSet
+ 		BUILT			= 0x00400000,
+ 		FORCE_INVISIBLE = 0x00800000, // stay invis until CLEAR_INVISIBLE is set (set of orphaned)
+-		CLEAR_INVISIBLE = 0x01000000, // clear FORCE_INVISIBLE next draw frame
+ 		REBUILD_SHADOW =  0x02000000,
+ 		HAS_ALPHA		= 0x04000000,
+ 		RIGGED			= 0x08000000,
+ 		PARTITION_MOVE	= 0x10000000,
+ 		ANIMATED_CHILD  = 0x20000000,
++		ACTIVE_CHILD	= 0x40000000,
+ 	} EDrawableFlags;
+ 
+ private: //aligned members
+@@ -305,8 +303,6 @@ public:
+ 	LLPointer<LLDrawable> mParent;
+ 
+ 	F32				mDistanceWRTCamera;
+-	
+-	S32				mQuietCount;
+ 
+ 	static S32 getCurrentFrame() { return sCurVisible; }
+ 	static S32 getMinVisFrameRange();

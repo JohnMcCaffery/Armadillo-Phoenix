@@ -1,0 +1,89 @@
+diff --git a/Source/indra/newview/lldrawpoolterrain.cpp b/Source/indra/newview/lldrawpoolterrain.cpp
+index 0352fb0..19c194a 100644
+--- a/Source/indra/newview/lldrawpoolterrain.cpp
++++ b/Source/indra/newview/lldrawpoolterrain.cpp
+@@ -66,10 +66,19 @@ LLDrawPoolTerrain::LLDrawPoolTerrain(LLViewerTexture *texturep) :
+ 	U32 int_format = GL_ALPHA;
+ 
+ 	// Hack!
+-	sDetailScale = 1.f/gSavedSettings.getF32("RenderTerrainScale");
+-	sDetailMode = gSavedSettings.getS32("RenderTerrainDetail");
++
++	// <FS:PP> Attempt to speed up things a little
++	// sDetailScale = 1.f/gSavedSettings.getF32("RenderTerrainScale");
++	// sDetailMode = gSavedSettings.getS32("RenderTerrainDetail");
++	static LLCachedControl<F32> RenderTerrainScale(gSavedSettings, "RenderTerrainScale");
++	static LLCachedControl<S32> RenderTerrainDetail(gSavedSettings, "RenderTerrainDetail");
++	sDetailScale = 1.f/RenderTerrainScale;
++	sDetailMode = RenderTerrainDetail;
++	// </FS:PP>
++
+ 	mAlphaRampImagep = LLViewerTextureManager::getFetchedTextureFromFile("alpha_gradient.tga", 
+-													TRUE, LLViewerTexture::BOOST_UI, 
++													FTT_LOCAL_FILE,
++													TRUE, LLGLTexture::BOOST_UI, 
+ 													LLViewerTexture::FETCHED_TEXTURE,
+ 													format, int_format,
+ 													LLUUID("e97cf410-8e61-7005-ec06-629eba4cd1fb"));
+@@ -78,7 +87,8 @@ LLDrawPoolTerrain::LLDrawPoolTerrain(LLViewerTexture *texturep) :
+ 	mAlphaRampImagep->setAddressMode(LLTexUnit::TAM_CLAMP);
+ 
+ 	m2DAlphaRampImagep = LLViewerTextureManager::getFetchedTextureFromFile("alpha_gradient_2d.j2c", 
+-													TRUE, LLViewerTexture::BOOST_UI, 
++													FTT_LOCAL_FILE,
++													TRUE, LLGLTexture::BOOST_UI, 
+ 													LLViewerTexture::FETCHED_TEXTURE,
+ 													format, int_format,
+ 													LLUUID("38b86f85-2575-52a9-a531-23108d8da837"));
+@@ -86,7 +96,7 @@ LLDrawPoolTerrain::LLDrawPoolTerrain(LLViewerTexture *texturep) :
+ 	//gGL.getTexUnit(0)->bind(m2DAlphaRampImagep.get());
+ 	m2DAlphaRampImagep->setAddressMode(LLTexUnit::TAM_CLAMP);
+ 	
+-	mTexturep->setBoostLevel(LLViewerTexture::BOOST_TERRAIN);
++	mTexturep->setBoostLevel(LLGLTexture::BOOST_TERRAIN);
+ 	
+ 	//gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+ }
+@@ -174,7 +184,7 @@ void LLDrawPoolTerrain::render(S32 pass)
+ 	LLVLComposition *compp = regionp->getComposition();
+ 	for (S32 i = 0; i < 4; i++)
+ 	{
+-		compp->mDetailTextures[i]->setBoostLevel(LLViewerTexture::BOOST_TERRAIN);
++		compp->mDetailTextures[i]->setBoostLevel(LLGLTexture::BOOST_TERRAIN);
+ 		compp->mDetailTextures[i]->addTextureStats(1024.f*1024.f); // assume large pixel area
+ 	}
+ 
+@@ -316,6 +326,7 @@ void LLDrawPoolTerrain::drawLoop()
+ 
+ 			if (model_matrix != gGLLastMatrix)
+ 			{
++				llassert(gGL.getMatrixMode() == LLRender::MM_MODELVIEW);
+ 				gGLLastMatrix = model_matrix;
+ 				gGL.loadMatrix(gGLModelView);
+ 				if (model_matrix)
+@@ -602,7 +613,8 @@ void LLDrawPoolTerrain::renderFull4TU()
+ 	gGL.matrixMode(LLRender::MM_TEXTURE);
+ 	gGL.loadIdentity();
+ 	gGL.translatef(-1.f, 0.f, 0.f);
+-  
++	gGL.matrixMode(LLRender::MM_MODELVIEW);
++
+ 	// Set alpha texture and do lighting modulation
+ 	gGL.getTexUnit(3)->setTextureColorBlend(LLTexUnit::TBO_MULT, LLTexUnit::TBS_PREV_COLOR, LLTexUnit::TBS_VERT_COLOR);
+ 	gGL.getTexUnit(3)->setTextureAlphaBlend(LLTexUnit::TBO_REPLACE, LLTexUnit::TBS_TEX_ALPHA);
+@@ -750,6 +762,7 @@ void LLDrawPoolTerrain::renderFull2TU()
+ 	gGL.matrixMode(LLRender::MM_TEXTURE);
+ 	gGL.loadIdentity();
+ 	gGL.translatef(-1.f, 0.f, 0.f);
++	gGL.matrixMode(LLRender::MM_MODELVIEW);
+ 
+ 	// Care about alpha only
+ 	gGL.getTexUnit(0)->setTextureColorBlend(LLTexUnit::TBO_REPLACE, LLTexUnit::TBS_PREV_COLOR);
+@@ -789,6 +802,7 @@ void LLDrawPoolTerrain::renderFull2TU()
+ 	gGL.matrixMode(LLRender::MM_TEXTURE);
+ 	gGL.loadIdentity();
+ 	gGL.translatef(-2.f, 0.f, 0.f);
++	gGL.matrixMode(LLRender::MM_MODELVIEW);
+ 
+ 	// Care about alpha only
+ 	gGL.getTexUnit(0)->setTextureColorBlend(LLTexUnit::TBO_REPLACE, LLTexUnit::TBS_PREV_COLOR);

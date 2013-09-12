@@ -1,0 +1,119 @@
+diff --git a/Source/indra/newview/llcallfloater.cpp b/Source/indra/newview/llcallfloater.cpp
+index 8785742..3e9268a 100644
+--- a/Source/indra/newview/llcallfloater.cpp
++++ b/Source/indra/newview/llcallfloater.cpp
+@@ -27,6 +27,8 @@
+ 
+ #include "llviewerprecompiledheaders.h"
+ 
++#if 0
++
+ #include "llcallfloater.h"
+ 
+ #include "llnotificationsutil.h"
+@@ -52,8 +54,6 @@
+ #include "llviewerparcelmgr.h"
+ #include "llfirstuse.h"
+ 
+-#include "llsliderctrl.h"
+-
+ static void get_voice_participants_uuids(uuid_vec_t& speakers_uuids);
+ void reshape_floater(LLCallFloater* floater, S32 delta_height);
+ 
+@@ -147,19 +147,11 @@ BOOL LLCallFloater::postBuild()
+ 	mAvatarList = getChild<LLAvatarList>("speakers_list");
+ 	mAvatarListRefreshConnection = mAvatarList->setRefreshCompleteCallback(boost::bind(&LLCallFloater::onAvatarListRefreshed, this));
+ 
+-	mAvatarList->setCommitCallback(boost::bind(&LLCallFloater::onParticipantSelected,this));
+-
+ 	childSetAction("leave_call_btn", boost::bind(&LLCallFloater::leaveCall, this));
+ 
+ 	mNonAvatarCaller = findChild<LLNonAvatarCaller>("non_avatar_caller");
+ 	mNonAvatarCaller->setVisible(FALSE);
+ 
+-	mVolumeSlider=getChild<LLSliderCtrl>("volume_slider");
+-	mVolumeSlider->setCommitCallback(boost::bind(&LLCallFloater::onVolumeChanged,this));
+-
+-	mMuteButton=getChild<LLButton>("mute_btn");
+-	mMuteButton->setCommitCallback(boost::bind(&LLCallFloater::onMuteChanged,this));
+-
+ 	initAgentData();
+ 
+ 	connectToChannel(LLVoiceChannel::getCurrentVoiceChannel());
+@@ -325,10 +317,6 @@ void LLCallFloater::updateSession()
+ 			setVisible(true);
+ 		}
+ 	}
+-
+-// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+-	mAvatarList->setRlvCheckShowNames(is_local_chat);
+-// [/RLVa:KB]
+ }
+ 
+ void LLCallFloater::refreshParticipantList()
+@@ -377,59 +365,6 @@ void LLCallFloater::onAvatarListRefreshed()
+ 	}
+ }
+ 
+-void LLCallFloater::onParticipantSelected()
+-{
+-	uuid_vec_t participants;
+-	mAvatarList->getSelectedUUIDs(participants);
+-
+-	mVolumeSlider->setEnabled(FALSE);
+-	mMuteButton->setEnabled(FALSE);
+-
+-	mSelectedParticipant=LLUUID::null;
+-
+-	if(participants.size()!=1)
+-		return;
+-
+-	mSelectedParticipant=participants[0];
+-
+-	if(mSelectedParticipant.isNull())
+-		return;
+-
+-	if(!LLVoiceClient::instance().getVoiceEnabled(mSelectedParticipant))
+-		return;
+-
+-	mVolumeSlider->setEnabled(TRUE);
+-	mMuteButton->setEnabled(TRUE);
+-
+-	mMuteButton->setToggleState(LLVoiceClient::instance().getOnMuteList(mSelectedParticipant));
+-	mVolumeSlider->setValue(LLVoiceClient::instance().getUserVolume(mSelectedParticipant));
+-}
+-
+-void LLCallFloater::onVolumeChanged()
+-{
+-	if(mSelectedParticipant.isNull())
+-		return;
+-
+-	LLVoiceClient::instance().setUserVolume(mSelectedParticipant,mVolumeSlider->getValueF32());
+-}
+-
+-void LLCallFloater::onMuteChanged()
+-{
+-	if(mSelectedParticipant.isNull())
+-		return;
+-
+-	LLAvatarListItem* item=dynamic_cast<LLAvatarListItem*>(mAvatarList->getItemByValue(mSelectedParticipant));
+-	if(!item)
+-		return;
+-
+-	LLMute mute(mSelectedParticipant,item->getAvatarName(),LLMute::AGENT);
+-
+-	if(mMuteButton->getValue().asBoolean())
+-		LLMuteList::instance().add(mute,LLMute::flagVoiceChat);
+-	else
+-		LLMuteList::instance().remove(mute,LLMute::flagVoiceChat);
+-}
+-
+ // static
+ void LLCallFloater::sOnCurrentChannelChanged(const LLUUID& /*session_id*/)
+ {
+@@ -886,3 +821,5 @@ void LLCallFloater::reset(const LLVoiceChannel::EState& new_state)
+ }
+ 
+ //EOF
++
++#endif

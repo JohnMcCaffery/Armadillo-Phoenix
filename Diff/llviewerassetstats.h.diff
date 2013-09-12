@@ -1,0 +1,42 @@
+diff --git a/Source/indra/newview/llviewerassetstats.h b/Source/indra/newview/llviewerassetstats.h
+index 8319752..3381c01 100644
+--- a/Source/indra/newview/llviewerassetstats.h
++++ b/Source/indra/newview/llviewerassetstats.h
+@@ -36,7 +36,6 @@
+ #include "llviewerassetstorage.h"
+ #include "llsimplestat.h"
+ #include "llsd.h"
+-#include "llvoavatar.h"
+ 
+ /**
+  * @class LLViewerAssetStats
+@@ -182,9 +181,6 @@ public:
+ 	// Frames-Per-Second Samples
+ 	void recordFPS(F32 fps);
+ 
+-	// Avatar-related statistics
+-	void recordAvatarStats();
+-
+ 	// Merge a source instance into a destination instance.  This is
+ 	// conceptually an 'operator+=()' method:
+ 	// - counts are added
+@@ -256,10 +252,6 @@ protected:
+ 
+ 	// Time of last reset
+ 	duration_t mResetTimestamp;
+-
+-	// Nearby avatar stats
+-	std::vector<S32> mAvatarRezStates;
+-	LLViewerStats::phase_stats_t mPhaseStats;
+ };
+ 
+ 
+@@ -318,8 +310,6 @@ void record_response_main(LLViewerAssetType::EType at, bool with_http, bool is_t
+ 
+ void record_fps_main(F32 fps);
+ 
+-void record_avatar_stats();
+-
+ /**
+  * Region context, event and duration loggers for Thread 1.
+  */

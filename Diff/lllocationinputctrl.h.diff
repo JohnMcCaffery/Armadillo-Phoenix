@@ -1,0 +1,16 @@
+diff --git a/Source/indra/newview/lllocationinputctrl.h b/Source/indra/newview/lllocationinputctrl.h
+index b9fd7b7..ceebc1b 100644
+--- a/Source/indra/newview/lllocationinputctrl.h
++++ b/Source/indra/newview/lllocationinputctrl.h
+@@ -209,6 +209,11 @@ private:
+ 	// <FS:Zi> Pathfinding rebake functions
+ 	BOOL	rebakeRegionCallback(const LLSD& notification,const LLSD& response);
+ 	// </FS:Zi>
++
++	// <FS:ND> Prevent querying LLTrans each frame
++	enum ETooltip{ eGeneral, eAdult, eModerate };
++	std::vector< std::string > mTooltips;
++	// </FS:ND>
+ };
+ 
+ #endif

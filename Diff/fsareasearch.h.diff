@@ -1,0 +1,114 @@
+diff --git a/Source/indra/newview/fsareasearch.h b/Source/indra/newview/fsareasearch.h
+index 3aded81..f839ac2 100644
+--- a/Source/indra/newview/fsareasearch.h
++++ b/Source/indra/newview/fsareasearch.h
+@@ -20,11 +20,14 @@
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+  * 
+- * The Phoenix Viewer Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+- * http://www.phoenixviewer.com
++ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * http://www.firestormviewer.org
+  * $/LicenseInfo$
+  */
+ 
++#ifndef FS_AREASEARCH_H
++#define FS_AREASEARCH_H
++
+ #include "llfloater.h"
+ #include "llsingleton.h"
+ #include "lluuid.h"
+@@ -55,7 +58,6 @@ class FSPanelAreaSearchOptions;
+ struct FSObjectProperties
+ {
+ 	LLUUID id;
+-	bool valid;
+ 	bool listed;
+ 	std::string name;
+ 	std::string description;
+@@ -77,9 +79,19 @@ struct FSObjectProperties
+ 	LLPermissions permissions;
+ 	uuid_vec_t texture_ids;
+ 	bool name_requested;
++	U32 local_id;
++	
++	typedef enum e_object_properties_request
++	{
++		NEED,
++		SENT,
++		FINISHED,
++		FAILED
++	} EObjectPropertiesRequest;
++	EObjectPropertiesRequest request;
+ 	
+ 	FSObjectProperties() :
+-		valid(false),
++		request(NEED),
+ 		listed(false),
+ 		name_requested(false)
+ 	{
+@@ -141,6 +153,14 @@ public:
+ 	void setFilterDistance(bool b) { mFilterDistance = b; }
+ 	void setFilterDistanceMin(S32 s) { mFilterDistanceMin = s; }
+ 	void setFilterDistanceMax(S32 s) { mFilterDistanceMax = s; }
++	
++	void setColumnDistance(bool b) { mColumnDistance = b; }
++	void setColumnName(bool b) { mColumnName = b; }
++	void setColumnDescription(bool b) { mColumnDescription = b; }
++	void setColumnOwner(bool b) { mColumnOwner = b; }
++	void setColumnGroup(bool b) { mColumnGroup = b; }
++	void setColumnCreator(bool b) { mColumnCreator = b; }
++	void setColumnLastOwner(bool b) { mColumnLastOwner = b; }
+ 
+ private:
+ 	void requestObjectProperties(const std::vector<U32>& request_list, bool select);
+@@ -150,11 +170,15 @@ private:
+ 	void updateCounterText();
+ 	bool regexTest(std::string text);
+ 	void findObjects();
++	void processRequestQueue();
+ 
+ 	S32 mRequested;
+ 	bool mRefresh;
+ 	S32 mSearchableObjects;
+ 	bool mActive;
++	bool mRequestQueuePause;
++	bool mRequestNeedsSent;
++	S32 mOutstandingRequests;
+ 
+ 	std::string mSearchName;
+ 	std::string mSearchDescription;
+@@ -172,6 +196,7 @@ private:
+ 	boost::regex mRegexSearchLastOwner;
+ 
+ 	LLFrameTimer mLastUpdateTimer;
++	LLFrameTimer mLastProptiesRecievedTimer;
+ 
+ 	std::vector<LLUUID> mNamesRequested;
+ 
+@@ -218,6 +243,14 @@ private:
+ 
+ 	bool mFilterClickAction;
+ 	U8 mFilterClickActionType;
++	
++	bool mColumnDistance;
++	bool mColumnName;
++	bool mColumnDescription;
++	bool mColumnOwner;
++	bool mColumnGroup;
++	bool mColumnCreator;
++	bool mColumnLastOwner;
+ 
+ protected:
+ 	static void* createPanelList(void* data);
+@@ -388,4 +421,6 @@ public:
+ 
+ private:
+ 	FSAreaSearch* mFSAreaSearch;
+-};
+\ No newline at end of file
++};
++
++#endif // FS_AREASEARCH_H
+\ No newline at end of file

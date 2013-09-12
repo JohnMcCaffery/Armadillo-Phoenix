@@ -1,0 +1,82 @@
+diff --git a/Source/indra/newview/llfloaterabout.cpp b/Source/indra/newview/llfloaterabout.cpp
+index 0d8fb62..452ee72 100644
+--- a/Source/indra/newview/llfloaterabout.cpp
++++ b/Source/indra/newview/llfloaterabout.cpp
+@@ -244,11 +244,11 @@ LLSD LLFloaterAbout::getInfo()
+ 	info["BUILD_TIME"] = __TIME__;
+ 	info["CHANNEL"] = LLVersionInfo::getChannel();
+ // <FS:CR> FIRE-8273: Add Open-sim indicator to About floater
+-#ifdef HAS_OPENSIM_SUPPORT
++#ifdef OPENSIM
+ 	info["BUILD_TYPE"] = LLTrans::getString("FSWithOpensim");
+ #else
+ 	info["BUILD_TYPE"] = LLTrans::getString("FSWithHavok");
+-#endif
++#endif // OPENSIM
+ // </FS:CR>
+ 	info["SKIN"] = gSavedSettings.getString("FSInternalSkinCurrent");
+ 	info["THEME"] = gSavedSettings.getString("FSInternalSkinCurrentTheme");
+@@ -272,12 +272,13 @@ LLSD LLFloaterAbout::getInfo()
+ 	info["BANDWIDTH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+ 	info["LOD"] =gSavedSettings.getF32("RenderVolumeLODFactor");
+ 
+-
+ 	//[FIRE 3113 : SJ] Added Settingsfile to info
+-	if (gSavedSettings.getString("SessionSettingsFile") == "settings_firestorm.xml") info["MODE"] = "Firestorm";
+-	else if (gSavedSettings.getString("SessionSettingsFile") == "settings_phoenix.xml") info["MODE"] = "Phoenix";
+-	else if (gSavedSettings.getString("SessionSettingsFile") == "settings_v3.xml") info["MODE"] = "V3";
+-	else if (gSavedSettings.getString("SessionSettingsFile") == "settings_hybrid.xml") info["MODE"] = "Hybrid";
++	info["MODE"] = "Unknown Mode";
++	std::string sessionSettingsFile = gSavedSettings.getString("SessionSettingsFile");
++	if (sessionSettingsFile == "settings_firestorm.xml") info["MODE"] = "Firestorm";
++	else if (sessionSettingsFile == "settings_phoenix.xml") info["MODE"] = "Phoenix";
++	else if (sessionSettingsFile == "settings_v3.xml") info["MODE"] = "Viewer 3";
++	else if (sessionSettingsFile == "settings_hybrid.xml") info["MODE"] = "Hybrid";
+ 
+ 	info["VIEWER_RELEASE_NOTES_URL"] = get_viewer_release_notes_url();
+ 
+@@ -347,6 +348,44 @@ LLSD LLFloaterAbout::getInfo()
+ 		info["PACKETS_PCT"] = 100.f*info["PACKETS_LOST"].asReal() / info["PACKETS_IN"].asReal();
+ 	}
+ 
++	// <FS:PP> FIRE-4785: Current render quality setting in sysinfo / about floater
++	switch (gSavedSettings.getU32("RenderQualityPerformance"))
++	{
++		case 0:
++			info["RENDERQUALITY"] = LLTrans::getString("render_quality_low");
++			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Low (1/7)";
++			break;
++		case 1:
++			info["RENDERQUALITY"] = LLTrans::getString("render_quality_mediumlow");
++			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium-Low (2/7)";
++			break;
++		case 2:
++			info["RENDERQUALITY"] = LLTrans::getString("render_quality_medium");
++			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium (3/7)";
++			break;
++		case 3:
++			info["RENDERQUALITY"] = LLTrans::getString("render_quality_mediumhigh");
++			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium-High (4/7)";
++			break;
++		case 4:
++			info["RENDERQUALITY"] = LLTrans::getString("render_quality_high");
++			info["RENDERQUALITY_FSDATA_ENGLISH"] = "High (5/7)";
++			break;
++		case 5:
++			info["RENDERQUALITY"] = LLTrans::getString("render_quality_highultra");
++			info["RENDERQUALITY_FSDATA_ENGLISH"] = "High-Ultra (6/7)";
++			break;
++		case 6:
++			info["RENDERQUALITY"] = LLTrans::getString("render_quality_ultra");
++			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Ultra (7/7)";
++			break;
++		default:
++			info["RENDERQUALITY"] = LLTrans::getString("render_quality_unknown");
++			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Unknown, user has RenderQualityPerformance debug setting beyond the normal range (0-6)";
++			break;
++	}
++	// </FS:PP>
++
+     return info;
+ }
+ 

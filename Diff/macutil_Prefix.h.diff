@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/macutil_Prefix.h b/Source/indra/newview/macutil_Prefix.h
+index fd8e927..b54a764 100644
+--- a/Source/indra/newview/macutil_Prefix.h
++++ b/Source/indra/newview/macutil_Prefix.h
+@@ -33,7 +33,7 @@
+  */
+ 
+ #include <Carbon/Carbon.h>
++#include "fix_macros.h"
+ 
+-#undef check
+ #undef verify
+ #undef require

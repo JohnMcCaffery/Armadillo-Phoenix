@@ -1,0 +1,75 @@
+diff --git a/Source/indra/newview/llpanelplaceprofile.cpp b/Source/indra/newview/llpanelplaceprofile.cpp
+index 917db44..2d0f1be 100644
+--- a/Source/indra/newview/llpanelplaceprofile.cpp
++++ b/Source/indra/newview/llpanelplaceprofile.cpp
+@@ -175,29 +175,43 @@ void LLPanelPlaceProfile::resetLocation()
+ 	mForSalePanel->setVisible(FALSE);
+ 	mYouAreHerePanel->setVisible(FALSE);
+ 
++	// <FS:Ansariel> Fix loading icon; don't use translated string!
++	const std::string unknown("Unknown_Icon");
++
+ 	std::string loading = LLTrans::getString("LoadingData");
+ 	mParcelOwner->setValue(loading);
+ 
+-	mParcelRatingIcon->setValue(loading);
++// <FS:Ansariel> Fix loading icon; don't use translated string!
++	//mParcelRatingIcon->setValue(loading);
++	mParcelRatingIcon->setValue(unknown);
+ 	mParcelRatingText->setText(loading);
+-	mVoiceIcon->setValue(loading);
++	//mVoiceIcon->setValue(loading);
++	mVoiceIcon->setValue(unknown);
+ 	mVoiceText->setText(loading);
+-	mFlyIcon->setValue(loading);
++	//mFlyIcon->setValue(loading);
++	mFlyIcon->setValue(unknown);
+ 	mFlyText->setText(loading);
+-	mPushIcon->setValue(loading);
++	//mPushIcon->setValue(loading);
++	mPushIcon->setValue(unknown);
+ 	mPushText->setText(loading);
+-	mBuildIcon->setValue(loading);
++	//mBuildIcon->setValue(loading);
++	mBuildIcon->setValue(unknown);
+ 	mBuildText->setText(loading);
+-	mScriptsIcon->setValue(loading);
++	//mScriptsIcon->setValue(loading);
++	mScriptsIcon->setValue(unknown);
+ 	mScriptsText->setText(loading);
+-	mDamageIcon->setValue(loading);
++	//mDamageIcon->setValue(loading);
++	mDamageIcon->setValue(unknown);
+ 	mDamageText->setText(loading);
+-	mSeeAVsIcon->setValue(loading);
++	//mSeeAVsIcon->setValue(loading);
++	mSeeAVsIcon->setValue(unknown);
+ 	mSeeAVsText->setText(loading);
+ 
+ 	mRegionNameText->setValue(loading);
+ 	mRegionTypeText->setValue(loading);
+-	mRegionRatingIcon->setValue(loading);
++	//mRegionRatingIcon->setValue(loading);
++	mRegionRatingIcon->setValue(unknown);
++// </FS:Ansariel> Fix loading icon; don't use translated string!
+ 	mRegionRatingText->setValue(loading);
+ 	mRegionOwnerText->setValue(loading);
+ 	mRegionGroupText->setValue(loading);
+@@ -575,7 +589,7 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
+ 
+ 		mTerraformLimitsText->setText(parcel->getAllowTerraform() ? on : off);
+ 
+-		if (region->getRegionFlags() & REGION_FLAGS_ALLOW_PARCEL_CHANGES)
++		if (region->getRegionFlag(REGION_FLAGS_ALLOW_PARCEL_CHANGES))
+ 		{
+ 			mSubdivideText->setText(getString("can_change"));
+ 		}
+@@ -583,7 +597,7 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
+ 		{
+ 			mSubdivideText->setText(getString("can_not_change"));
+ 		}
+-		if (region->getRegionFlags() & REGION_FLAGS_BLOCK_LAND_RESELL)
++		if (region->getRegionFlag(REGION_FLAGS_BLOCK_LAND_RESELL))
+ 		{
+ 			mResaleText->setText(getString("can_not_resell"));
+ 		}

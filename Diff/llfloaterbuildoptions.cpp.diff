@@ -1,0 +1,11 @@
+diff --git a/Source/indra/newview/llfloaterbuildoptions.cpp b/Source/indra/newview/llfloaterbuildoptions.cpp
+index 1a0a8a4..99a41bb 100644
+--- a/Source/indra/newview/llfloaterbuildoptions.cpp
++++ b/Source/indra/newview/llfloaterbuildoptions.cpp
+@@ -44,4 +44,4 @@ LLFloaterBuildOptions::LLFloaterBuildOptions(const LLSD& key)
+ 
+ LLFloaterBuildOptions::~LLFloaterBuildOptions()
+ {
+-}
+\ No newline at end of file
++}

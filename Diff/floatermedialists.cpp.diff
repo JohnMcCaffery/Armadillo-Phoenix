@@ -1,0 +1,29 @@
+diff --git a/Source/indra/newview/floatermedialists.cpp b/Source/indra/newview/floatermedialists.cpp
+index 336d5bd..9f5d9e8 100644
+--- a/Source/indra/newview/floatermedialists.cpp
++++ b/Source/indra/newview/floatermedialists.cpp
+@@ -5,7 +5,7 @@
+  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
+  * Phoenix Firestorm Viewer Source Code
+  * Copyright (C) 2011, Sione Lomu
+- * Copyright (C) 2011, The Phoenix Viewer Project, Inc.
++ * Copyright (C) 2011, The Phoenix Firestorm Project, Inc.
+  * 
+  * This library is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU Lesser General Public
+@@ -21,7 +21,7 @@
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+  *
+- * The Phoenix Viewer Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+  * $/LicenseInfo$
+  */
+ #include "llviewerprecompiledheaders.h"
+@@ -230,4 +230,4 @@ void FloaterMediaLists::onCommitDomain( void* data )
+ 	self->getChildView("input_domain")->setVisible(false);
+ 	self->getChildView("commit_domain")->setVisible(false);
+ 	self->getChildView("add_text")->setVisible(false);
+-}
+\ No newline at end of file
++}

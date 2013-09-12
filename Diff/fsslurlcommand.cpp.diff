@@ -1,0 +1,90 @@
+diff --git a/Source/indra/newview/fsslurlcommand.cpp b/Source/indra/newview/fsslurlcommand.cpp
+index e7a22f8..ae47bdc 100644
+--- a/Source/indra/newview/fsslurlcommand.cpp
++++ b/Source/indra/newview/fsslurlcommand.cpp
+@@ -18,31 +18,21 @@
+  * You should have received a copy of the GNU Lesser General Public
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
++ * 
++ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
++ * http://www.firestormviewer.org
++ * $/LicenseInfo$
+  */
+ 
+ #include "llviewerprecompiledheaders.h"
+ #include "fsslurlcommand.h"
+ 
++#include "fscommon.h"
++#include "fsradar.h"
+ #include "llagent.h"
+ #include "llavataractions.h"
+-#include "llavatarlist.h"
+-#include "llavatarlistitem.h"
+ #include "llcommandhandler.h"
+-#include "llfloatersidepanelcontainer.h"
+ #include "llnotificationsutil.h"
+-#include "llpanelpeople.h"
+-
+-
+-LLAvatarListItem* getAvatarListItem(const LLUUID& avatar_id)
+-{
+-	LLPanelPeople* panel_people = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("people", "panel_people"));
+-	if (panel_people)
+-	{
+-		return panel_people->getNearbyList()->getAvatarListItem(avatar_id);
+-	}
+-
+-	return NULL;
+-}
+ 
+ 
+ class FSSlurlCommandHandler : public LLCommandHandler
+@@ -94,13 +84,17 @@ public:
+ 		{
+ 			if (gAgentID != target_id)
+ 			{
+-				LLAvatarListItem* avatar_list_item = getAvatarListItem(target_id);
+-				if (avatar_list_item)
++				FSRadar* radar = FSRadar::getInstance();
++				if (radar)
+ 				{
+-					LLVector3d pos = avatar_list_item->getPosition();
+-					pos.mdV[VZ] += 2.0;
+-					gAgent.teleportViaLocation(pos);
+-					return true;
++					FSRadarEntry* entry = radar->getEntry(target_id);
++					if (entry)
++					{
++						LLVector3d pos = entry->getGlobalPos();
++						pos.mdV[VZ] += 2.0;
++						gAgent.teleportViaLocation(pos);
++						return true;
++					}
+ 				}
+ 
+ 				LLNotificationsUtil::add("TeleportToAvatarNotPossible");
+@@ -113,14 +107,18 @@ public:
+ 		{
+ 			if (gAgentID != target_id)
+ 			{
+-				LLPanelPeople* panel_people = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("people", "panel_people"));
+-				LLAvatarListItem* avatar_list_item = getAvatarListItem(target_id);
+-				if (avatar_list_item && panel_people)
++				FSRadar* radar = FSRadar::getInstance();
++				if (radar)
+ 				{
+-					panel_people->startTracking(target_id);
+-					return true;
++					FSRadarEntry* entry = radar->getEntry(target_id);
++					if (entry)
++					{
++						radar->startTracking(target_id);
++						return true;
++					}
+ 				}
+ 
++
+ 				LLNotificationsUtil::add("TrackAvatarNotPossible");
+ 			}
+ 	

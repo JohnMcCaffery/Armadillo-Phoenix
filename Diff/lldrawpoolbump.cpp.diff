@@ -1,0 +1,70 @@
+diff --git a/Source/indra/newview/lldrawpoolbump.cpp b/Source/indra/newview/lldrawpoolbump.cpp
+index 165a9d6..b44ee67 100644
+--- a/Source/indra/newview/lldrawpoolbump.cpp
++++ b/Source/indra/newview/lldrawpoolbump.cpp
+@@ -153,7 +153,7 @@ void LLStandardBumpmap::addstandard()
+ 		gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mLabel = label;
+ 		gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage = 
+ 			LLViewerTextureManager::getFetchedTexture(LLUUID(bump_image_id));	
+-		gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage->setBoostLevel(LLViewerTexture::BOOST_BUMP) ;
++		gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage->setBoostLevel(LLGLTexture::BOOST_BUMP) ;
+ 		gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage->setLoadedCallback(LLBumpImageList::onSourceStandardLoaded, 0, TRUE, FALSE, NULL, NULL );
+ 		gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage->forceToSaveRawImage(0) ;
+ 		LLStandardBumpmap::sStandardBumpmapCount++;
+@@ -803,7 +803,11 @@ void LLDrawPoolBump::endBump(U32 pass)
+ 
+ S32 LLDrawPoolBump::getNumDeferredPasses()
+ { 
+-	if (gSavedSettings.getBOOL("RenderObjectBump"))
++	// <FS:PP> Attempt to speed up things a little
++	// if (gSavedSettings.getBOOL("RenderObjectBump"))
++	static LLCachedControl<bool> RenderObjectBump(gSavedSettings, "RenderObjectBump");
++	if (RenderObjectBump)
++	// </FS:PP>
+ 	{
+ 		return 1;
+ 	}
+@@ -1079,7 +1083,7 @@ LLViewerTexture* LLBumpImageList::getBrightnessDarknessImage(LLViewerFetchedText
+ 			src_image->getHeight() != bump->getHeight())// ||
+ 			//(LLPipeline::sRenderDeferred && bump->getComponents() != 4))
+ 		{
+-			src_image->setBoostLevel(LLViewerTexture::BOOST_BUMP) ;
++			src_image->setBoostLevel(LLGLTexture::BOOST_BUMP) ;
+ 			src_image->setLoadedCallback( callback_func, 0, TRUE, FALSE, new LLUUID(src_image->getID()), NULL );
+ 			src_image->forceToSaveRawImage(0) ;
+ 		}
+@@ -1144,7 +1148,11 @@ void LLBumpImageList::generateNormalMapFromAlpha(LLImageRaw* src, LLImageRaw* nr
+ 
+ 	S32 src_cmp = src->getComponents();
+ 
+-	F32 norm_scale = gSavedSettings.getF32("RenderNormalMapScale");
++	// <FS:PP> Attempt to speed up things a little
++	// F32 norm_scale = gSavedSettings.getF32("RenderNormalMapScale");
++	static LLCachedControl<F32> RenderNormalMapScale(gSavedSettings, "RenderNormalMapScale");
++	F32 norm_scale = RenderNormalMapScale;
++	// </FS:PP>
+ 
+ 	U32 idx = 0;
+ 	//generate normal map from pseudo-heightfield
+@@ -1196,7 +1204,7 @@ static LLFastTimer::DeclareTimer FTM_BUMP_SOURCE_MIN_MAX("Min/Max");
+ static LLFastTimer::DeclareTimer FTM_BUMP_SOURCE_RGB2LUM("RGB to Luminance");
+ static LLFastTimer::DeclareTimer FTM_BUMP_SOURCE_RESCALE("Rescale");
+ static LLFastTimer::DeclareTimer FTM_BUMP_SOURCE_GEN_NORMAL("Generate Normal");
+-static LLFastTimer::DeclareTimer FTM_BUMP_SOURCE_CREATE("Create");
++static LLFastTimer::DeclareTimer FTM_BUMP_SOURCE_CREATE("Bump Source Create");
+ 
+ // static
+ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLImageRaw* src, LLUUID& source_asset_id, EBumpEffect bump_code )
+@@ -1373,7 +1381,11 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
+ 					LLGLDisable blend(GL_BLEND);
+ 					gGL.setColorMask(TRUE, TRUE);
+ 					gNormalMapGenProgram.bind();
+-					gNormalMapGenProgram.uniform1f("norm_scale", gSavedSettings.getF32("RenderNormalMapScale"));
++					// <FS:PP> Attempt to speed up things a little
++					// gNormalMapGenProgram.uniform1f("norm_scale", gSavedSettings.getF32("RenderNormalMapScale"));
++					static LLCachedControl<F32> RenderNormalMapScale(gSavedSettings, "RenderNormalMapScale");
++					gNormalMapGenProgram.uniform1f("norm_scale", RenderNormalMapScale);
++					// </FS:PP>
+ 					gNormalMapGenProgram.uniform1f("stepX", 1.f/bump->getWidth());
+ 					gNormalMapGenProgram.uniform1f("stepY", 1.f/bump->getHeight());
+ 

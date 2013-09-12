@@ -8,6 +8,7 @@
      button_alignment="left"
      button_display_mode="icons_only"
      button_layout_style="fill">
+     <!--
      <command name="chat"/>
      <command name="speak"/>
      <command name="voice"/>
@@ -25,10 +26,13 @@
          name="animationoverride" />
         <command
          name="quickprefs" />
+         -->
    </bottom_toolbar>
    <left_toolbar
     button_display_mode="icons_only"
     button_layout_style="none">
+    <!--
     <command name="destinations"/>
+    -->
    </left_toolbar>
 </toolbars>

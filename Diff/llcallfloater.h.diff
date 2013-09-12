@@ -1,0 +1,73 @@
+diff --git a/Source/indra/newview/llcallfloater.h b/Source/indra/newview/llcallfloater.h
+index c3a7219..2273aa3 100644
+--- a/Source/indra/newview/llcallfloater.h
++++ b/Source/indra/newview/llcallfloater.h
+@@ -25,6 +25,8 @@
+  * $/LicenseInfo$
+  */
+ 
++#if 0
++ 
+ #ifndef LL_LLCALLFLOATER_H
+ #define LL_LLCALLFLOATER_H
+ 
+@@ -40,7 +42,6 @@ class LLOutputMonitorCtrl;
+ class LLParticipantList;
+ class LLSpeakerMgr;
+ class LLSpeakersDelayActionsStorage;
+-class LLSliderCtrl;
+ 
+ /**
+  * The Voice Control Panel is an ambient window summoned by clicking the flyout chevron
+@@ -76,10 +77,6 @@ public:
+ 
+ 	static void sOnCurrentChannelChanged(const LLUUID& session_id);
+ 
+-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+-	LLAvatarList* getAvatarCallerList() { return mAvatarList; }
+-// [/RLVa:KB]
+-
+ private:
+ 	typedef enum e_voice_controls_type
+ 	{
+@@ -124,24 +121,6 @@ private:
+ 	void onAvatarListRefreshed();
+ 
+ 	/**
+-	 * Gets called whenever a selection changes in the nearby voice list.
+-	 * 
+-	 * This updates the slider and mute button at the lower edge, so the selected participant
+-	 * becomes the target of this control.
+-	 */
+-	void onParticipantSelected();
+-
+-	/**
+-	 * Gets called whenever the volume on the optional single slider control gets changed
+-	 */
+-	void onVolumeChanged();
+-
+-	/**
+-	 * Gets called whenever the optional single mute button gets toggled
+-	 */
+-	void onMuteChanged();
+-
+-	/**
+ 	 * Updates window title with an avatar name
+ 	 */
+ 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+@@ -257,10 +236,6 @@ private:
+ 	LLOutputMonitorCtrl* mSpeakingIndicator;
+ 	bool mIsModeratorMutedVoice;
+ 
+-	LLUUID mSelectedParticipant;
+-	LLSliderCtrl* mVolumeSlider;
+-	LLButton* mMuteButton;
+-
+ 	/**
+ 	 * Flag indicated that participants voice states should be initialized.
+ 	 *
+@@ -298,3 +273,4 @@ private:
+ 
+ #endif //LL_LLCALLFLOATER_H
+ 
++#endif

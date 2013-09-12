@@ -1,0 +1,11 @@
+diff --git a/Source/indra/newview/exoflickrauth.cpp b/Source/indra/newview/exoflickrauth.cpp
+index b13509a..cd62f35 100644
+--- a/Source/indra/newview/exoflickrauth.cpp
++++ b/Source/indra/newview/exoflickrauth.cpp
+@@ -209,4 +209,4 @@ void exoFlickrAuthResponse::completedRaw(U32 status, const std::string& reason,
+ 	std::string str = oss.str();
+ 	LLSD result = LLURI::queryMap(str);
+ 	mCallback((status == 200), result);
+-}
+\ No newline at end of file
++}

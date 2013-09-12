@@ -1,0 +1,51 @@
+diff --git a/Source/indra/newview/lltoolbarview.cpp b/Source/indra/newview/lltoolbarview.cpp
+index 441a2fc..11637f8 100644
+--- a/Source/indra/newview/lltoolbarview.cpp
++++ b/Source/indra/newview/lltoolbarview.cpp
+@@ -81,11 +81,11 @@ LLToolBarView::LLToolBarView(const LLToolBarView::Params& p)
+ 	mShowToolbars(true),
+ 	mDragToolbarButton(NULL),
+ 	mDragItem(NULL),
+-	// <FS:Ansariel> Member variables needed for console chat bottom offset
+-	//mToolbarsLoaded(false)
+ 	mToolbarsLoaded(false),
+-	mBottomChatStack(NULL),
+-	mBottomToolbarPanel(NULL)
++	// <FS:Ansariel> Member variables needed for console chat bottom offset
++	//mBottomToolbarPanel(NULL)
++	mBottomToolbarPanel(NULL),
++	mBottomChatStack(NULL)
+ 	// </FS:Ansariel> Member variables needed for console chat bottom offset
+ {
+ 	for (S32 i = 0; i < TOOLBAR_COUNT; i++)
+@@ -110,6 +110,7 @@ BOOL LLToolBarView::postBuild()
+ 	mToolbars[TOOLBAR_LEFT]   = getChild<LLToolBar>("toolbar_left");
+ 	mToolbars[TOOLBAR_RIGHT]  = getChild<LLToolBar>("toolbar_right");
+ 	mToolbars[TOOLBAR_BOTTOM] = getChild<LLToolBar>("toolbar_bottom");
++	mBottomToolbarPanel = getChild<LLView>("bottom_toolbar_panel");
+ 
+ 	for (int i = TOOLBAR_FIRST; i <= TOOLBAR_LAST; i++)
+ 	{
+@@ -259,8 +260,9 @@ bool LLToolBarView::loadToolbars(bool force_default)
+ 	LLXUIParser parser;
+ 	if (!err)
+ 	{
+-	parser.readXUI(root, toolbar_set, toolbar_file);
++	    parser.readXUI(root, toolbar_set, toolbar_file);
+ 	}
++
+ 	if (!err && !toolbar_set.validateBlock())
+ 	{
+ 		llwarns << "Unable to validate toolbars from file: " << toolbar_file << llendl;
+@@ -272,8 +274,9 @@ bool LLToolBarView::loadToolbars(bool force_default)
+ 		if (force_default)
+ 		{
+ 			llerrs << "Unable to load toolbars from default file : " << toolbar_file << llendl;
+-		return false;
+-	}
++		    return false;
++	    }
++
+ 		// Try to load the default toolbars
+ 		return loadToolbars(true);
+ 	}

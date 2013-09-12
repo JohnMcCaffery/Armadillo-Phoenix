@@ -1,0 +1,20 @@
+diff --git a/Source/indra/newview/llpanelobjectinventory.cpp b/Source/indra/newview/llpanelobjectinventory.cpp
+index 7489760..b34a677 100644
+--- a/Source/indra/newview/llpanelobjectinventory.cpp
++++ b/Source/indra/newview/llpanelobjectinventory.cpp
+@@ -47,6 +47,7 @@
+ #include "llfolderview.h"
+ #include "llinventorybridge.h"
+ #include "llinventorydefines.h"
++#include "llinventoryicon.h"
+ #include "llinventoryfilter.h"
+ #include "llinventoryfunctions.h"
+ #include "llpreviewanim.h"
+@@ -71,7 +72,6 @@
+ // [/RLVa:KB]
+ 
+ #include "tea.h" // <FS:AW opensim currency support>
+-
+ ///----------------------------------------------------------------------------
+ /// Class LLTaskInvFVBridge
+ ///----------------------------------------------------------------------------

@@ -1,0 +1,135 @@
+diff --git a/Source/indra/newview/llface.cpp b/Source/indra/newview/llface.cpp
+index ed6642f..59c08b0 100644
+--- a/Source/indra/newview/llface.cpp
++++ b/Source/indra/newview/llface.cpp
+@@ -263,8 +263,6 @@ void LLFace::setPool(LLFacePool* pool)
+ 
+ void LLFace::setPool(LLFacePool* new_pool, LLViewerTexture *texturep)
+ {
+-	LLMemType mt1(LLMemType::MTYPE_DRAWABLE);
+-	
+ 	if (!new_pool)
+ 	{
+ 		llerrs << "Setting pool to null!" << llendl;
+@@ -442,8 +440,6 @@ U16 LLFace::getGeometryAvatar(
+ 						LLStrider<F32>		 &vertex_weights,
+ 						LLStrider<LLVector4> &clothing_weights)
+ {
+-	LLMemType mt1(LLMemType::MTYPE_DRAWABLE);
+-
+ 	if (mVertexBuffer.notNull())
+ 	{
+ 		mVertexBuffer->getVertexStrider      (vertices, mGeomIndex, mGeomCount);
+@@ -459,8 +455,6 @@ U16 LLFace::getGeometryAvatar(
+ U16 LLFace::getGeometry(LLStrider<LLVector3> &vertices, LLStrider<LLVector3> &normals,
+ 					    LLStrider<LLVector2> &tex_coords, LLStrider<U16> &indicesp)
+ {
+-	LLMemType mt1(LLMemType::MTYPE_DRAWABLE);
+-	
+ 	if (mVertexBuffer.notNull())
+ 	{
+ 		mVertexBuffer->getVertexStrider(vertices,   mGeomIndex, mGeomCount);
+@@ -561,8 +555,8 @@ void LLFace::renderSelected(LLViewerTexture *imagep, const LLColor4& color)
+ /* removed in lieu of raycast uv detection
+ void LLFace::renderSelectedUV()
+ {
+-	LLViewerTexture* red_blue_imagep = LLViewerTextureManager::getFetchedTextureFromFile("uv_test1.j2c", TRUE, LLViewerTexture::BOOST_UI);
+-	LLViewerTexture* green_imagep = LLViewerTextureManager::getFetchedTextureFromFile("uv_test2.tga", TRUE, LLViewerTexture::BOOST_UI);
++	LLViewerTexture* red_blue_imagep = LLViewerTextureManager::getFetchedTextureFromFile("uv_test1.j2c", TRUE, LLGLTexture::BOOST_UI);
++	LLViewerTexture* green_imagep = LLViewerTextureManager::getFetchedTextureFromFile("uv_test2.tga", TRUE, LLGLTexture::BOOST_UI);
+ 
+ 	LLGLSUVSelect object_select;
+ 
+@@ -770,8 +764,6 @@ bool less_than_max_mag(const LLVector4a& vec)
+ BOOL LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
+ 								const LLMatrix4& mat_vert_in, const LLMatrix3& mat_normal_in, BOOL global_volume)
+ {
+-	LLMemType mt1(LLMemType::MTYPE_DRAWABLE);
+-
+ 	//get bounding box
+ 	if (mDrawablep->isState(LLDrawable::REBUILD_VOLUME | LLDrawable::REBUILD_POSITION | LLDrawable::REBUILD_RIGGED))
+ 	{
+@@ -1068,11 +1060,10 @@ bool LLFace::canRenderAsMask()
+ 	}
+ 
+ 	const LLTextureEntry* te = getTextureEntry();
+-
+-	// <FS:ND> Crashfix; Guard against 0 pointer
+ 	if( !te || !getViewerObject() || !getTexture() )
++	{
+ 		return false;
+-	// </FS:ND>
++	}
+ 
+ 	if ((te->getColor().mV[3] == 1.0f) &&			// can't treat as mask if we have face alpha
+ 		(te->getGlow() == 0.f) &&					// glowing masks are hard to implement - don't mask
+@@ -1205,6 +1196,21 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
+ 	}
+ 
+ 
++	// <FS:ND> The volume face vf can have more indices/vertices than this face. All striders below are aquired with a size of this face, but then written with num_verices/num_indices values,
++	// thus overflowing the buffer when vf holds more data.
++	// We can either clamp num_* down like here, or aquire all striders not using the face size, but the size if vf (that is swapping out mGeomCount with num_vertices and mIndicesCout with num_indices
++	// in all calls to nVertbuffer->get*Strider(...). Final solution is to just return FALSE and be done with it.
++	// 
++	// The correct poison of choice is debatable, either copying not all data of vf (clamping) or writing more data than this face claims to have (aquiring bigger striders). Returning will not display this face at all.
++	//
++	// clamping it is for now.
++
++	num_vertices = llclamp( num_vertices, (S32)0, (S32)mGeomCount );
++	num_indices = llclamp( num_indices, (S32)0, (S32)mIndicesCount );
++
++	// </FS:ND>
++
++
+ 	//don't use map range (generates many redundant unmap calls)
+ 	bool map_range = false; //gGLManager.mHasMapBufferRange || gGLManager.mHasFlushBufferRange;
+ 
+@@ -1662,7 +1668,14 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
+ 						if (!do_xform)
+ 						{
+ 							LLFastTimer t(FTM_FACE_TEX_QUICK_NO_XFORM);
+-							S32 tc_size = (num_vertices*2*sizeof(F32)+0xF) & ~0xF;
++
++							// <FS:ND> Don't round up, or there's high risk to write past buffer
++
++							// S32 tc_size = (num_vertices*2*sizeof(F32)+0xF) & ~0xF;
++							S32 tc_size = (num_vertices*2*sizeof(F32));
++
++							// </FS:ND>
++
+ 							LLVector4a::memcpyNonAliased16((F32*) tex_coords.get(), (F32*) vf.mTexCoords, tc_size);
+ 						}
+ 						else
+@@ -2182,6 +2195,12 @@ BOOL LLFace::hasMedia() const
+ const F32 LEAST_IMPORTANCE = 0.05f ;
+ const F32 LEAST_IMPORTANCE_FOR_LARGE_IMAGE = 0.3f ;
+ 
++void LLFace::resetVirtualSize()
++{
++	setVirtualSize(0.f);
++	mImportanceToCamera = 0.f;
++}
++
+ F32 LLFace::getTextureVirtualSize()
+ {
+ 	F32 radius;
+@@ -2247,8 +2266,17 @@ BOOL LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
+ 	LLVector4a t;
+ 	t.load3(camera->getOrigin().mV);
+ 	lookAt.setSub(center, t);
++	
+ 	F32 dist = lookAt.getLength3().getF32();
+-	dist = llmax(dist-size.getLength3().getF32(), 0.f);
++	dist = llmax(dist-size.getLength3().getF32(), 0.001f);
++	//ramp down distance for nearby objects
++	if (dist < 16.f)
++	{
++		dist /= 16.f;
++		dist *= dist;
++		dist *= 16.f;
++	}
++
+ 	lookAt.normalize3fast() ;	
+ 
+ 	//get area of circle around node

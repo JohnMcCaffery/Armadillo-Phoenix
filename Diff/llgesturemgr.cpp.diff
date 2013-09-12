@@ -1,0 +1,54 @@
+diff --git a/Source/indra/newview/llgesturemgr.cpp b/Source/indra/newview/llgesturemgr.cpp
+index dd1bf4a..f2f49b0 100644
+--- a/Source/indra/newview/llgesturemgr.cpp
++++ b/Source/indra/newview/llgesturemgr.cpp
+@@ -53,7 +53,7 @@
+ #include "llviewerstats.h"
+ // <FS:Zi> Remove floating chat bar
+ // #include "llnearbychatbar.h"
+-#include "llnearbychathub.h"
++#include "fsnearbychathub.h"
+ // </FS:Zi>
+ #include "llappearancemgr.h"
+ #include "llgesturelistener.h"
+@@ -61,7 +61,7 @@
+ #include "chatbar_as_cmdline.h" // <ND/> For FIRE-1624
+ 
+ // Longest time, in seconds, to wait for all animations to stop playing
+-const F32 MAX_WAIT_ANIM_SECS = 30.f;
++const F32 MAX_WAIT_ANIM_SECS = 60.f;
+ 
+ // If this gesture is a link, get the base gesture that this link points to,
+ // otherwise just return this id.
+@@ -342,7 +342,7 @@ void LLGestureMgr::deactivateGesture(const LLUUID& item_id)
+ 
+ 	gAgent.sendReliableMessage();
+ 
+-	LLAppearanceMgr::instance().removeCOFItemLinks(base_item_id, false);
++	LLAppearanceMgr::instance().removeCOFItemLinks(base_item_id);
+ 
+ 	notifyObservers();
+ }
+@@ -1001,19 +1001,19 @@ void LLGestureMgr::runStep(LLMultiGesture* gesture, LLGestureStep* step)
+ 			// Don't animate the nodding, as this might not blend with
+ 			// other playing animations.
+ 
+-			// <ND> FIRE-1624, try to parse text as command first. If that fails output it as chat
++			// <FS:ND> FIRE-1624, try to parse text as command first. If that fails output it as chat
+ 			if( !cmd_line_chat( chat_text, CHAT_TYPE_NORMAL, true ) )
+ 			{
+ 				gesture->mCurrentStep++;
+ 				break;
+ 			}
+-			//</ND>
++			//</FS:ND>
+ 			
+ 			const BOOL animate = FALSE;
+ 
+ 			// <FS:Zi> Remove floating chat bar
+ 			// LLNearbyChatBar::getInstance()->sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
+-			LLNearbyChat::instance().sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
++			FSNearbyChat::instance().sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
+ 			// </FS:Zi>
+ 
+ 			gesture->mCurrentStep++;

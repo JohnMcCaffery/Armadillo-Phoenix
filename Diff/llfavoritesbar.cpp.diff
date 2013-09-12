@@ -1,0 +1,217 @@
+diff --git a/Source/indra/newview/llfavoritesbar.cpp b/Source/indra/newview/llfavoritesbar.cpp
+index 4cbc9ca..a0f986e 100644
+--- a/Source/indra/newview/llfavoritesbar.cpp
++++ b/Source/indra/newview/llfavoritesbar.cpp
+@@ -302,35 +302,26 @@ protected:
+ };
+ 
+ /**
+- * This class is needed to update an item being copied to the favorites folder
++ * This callback is needed to update an item being copied to the favorites folder
+  * with a sort field value (required to save favorites bar's tabs order).
+  * See method handleNewFavoriteDragAndDrop for more details on how this class is used.
+  */
+-class LLItemCopiedCallback : public LLInventoryCallback
++void item_copied_cb(const LLUUID& inv_item, S32 sort_field)
+ {
+-public:
+-	LLItemCopiedCallback(S32 sortField): mSortField(sortField) {}
+-
+-	virtual void fire(const LLUUID& inv_item)
++	LLViewerInventoryItem* item = gInventory.getItem(inv_item);
++	
++	if (item)
+ 	{
+-		LLViewerInventoryItem* item = gInventory.getItem(inv_item);
+-
+-		if (item)
+-		{
+-			item->setSortField(mSortField);
+-			item->setComplete(TRUE);
+-			item->updateServer(FALSE);
+-
+-			gInventory.updateItem(item);
+-			gInventory.notifyObservers();
+-		}
+-
+-		LLView::getWindow()->setCursor(UI_CURSOR_ARROW);
++		item->setSortField(sort_field);
++		item->setComplete(TRUE);
++		item->updateServer(FALSE);
++		
++		gInventory.updateItem(item);
++		gInventory.notifyObservers();
+ 	}
+-
+-private:
+-	S32 mSortField;
+-};
++	
++	LLView::getWindow()->setCursor(UI_CURSOR_ARROW);
++}
+ 
+ // updateButtons's helper
+ struct LLFavoritesSort
+@@ -363,6 +354,9 @@ struct LLFavoritesSort
+ LLFavoritesBarCtrl::Params::Params()
+ : image_drag_indication("image_drag_indication"),
+   more_button("more_button"),
++  // <FS:Ansariel> Allow V3 and FS style favorites bar
++  chevron_button("chevron_button"),
++  // </FS:Ansariel>
+   label("label")
+ {
+ }
+@@ -391,10 +385,26 @@ LLFavoritesBarCtrl::LLFavoritesBarCtrl(const LLFavoritesBarCtrl::Params& p)
+ 	gInventory.addObserver(this);
+ 
+ 	//make chevron button                                                                                                                               
+-	LLTextBox::Params more_button_params(p.more_button);
+-	mMoreTextBox = LLUICtrlFactory::create<LLTextBox> (more_button_params);
+-	mMoreTextBox->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));
+-	addChild(mMoreTextBox);
++	// <FS:Ansariel> Allow V3 and FS style favorites bar
++	//LLTextBox::Params more_button_params(p.more_button);
++	//mMoreTextBox = LLUICtrlFactory::create<LLTextBox> (more_button_params);
++	//mMoreTextBox->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));
++	//addChild(mMoreTextBox);
++	if (p.chevron_button.isProvided())
++	{
++		LLButton::Params chevron_button_params(p.chevron_button);                                         
++		chevron_button_params.click_callback.function(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));     
++		mMoreCtrl = LLUICtrlFactory::create<LLButton> (chevron_button_params);
++		addChild(mMoreCtrl);
++	}
++	else
++	{
++		LLTextBox::Params more_button_params(p.more_button);
++		mMoreCtrl = LLUICtrlFactory::create<LLTextBox> (more_button_params);
++		((LLTextBox*)mMoreCtrl)->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));
++		addChild(mMoreCtrl);
++	}
++	// </FS:Ansariel>
+ 
+ 	LLTextBox::Params label_param(p.label);
+ 	mBarLabel = LLUICtrlFactory::create<LLTextBox> (label_param);
+@@ -574,7 +584,7 @@ void LLFavoritesBarCtrl::handleNewFavoriteDragAndDrop(LLInventoryItem *item, con
+ 	}
+ 
+ 	int sortField = 0;
+-	LLPointer<LLItemCopiedCallback> cb;
++	LLPointer<LLInventoryCallback> cb;
+ 
+ 	// current order is saved by setting incremental values (1, 2, 3, ...) for the sort field
+ 	for (LLInventoryModel::item_array_t::iterator i = mItems.begin(); i != mItems.end(); ++i)
+@@ -583,7 +593,7 @@ void LLFavoritesBarCtrl::handleNewFavoriteDragAndDrop(LLInventoryItem *item, con
+ 
+ 		if (currItem->getUUID() == item->getUUID())
+ 		{
+-			cb = new LLItemCopiedCallback(++sortField);
++			cb = new LLBoostFuncInventoryCallback(boost::bind(item_copied_cb, _1, ++sortField));
+ 		}
+ 		else
+ 		{
+@@ -720,7 +730,10 @@ void LLFavoritesBarCtrl::updateButtons()
+ 	const child_list_t* childs = getChildList();
+ 	child_list_const_iter_t child_it = childs->begin();
+ 	int first_changed_item_index = 0;
+-	int rightest_point = getRect().mRight - mMoreTextBox->getRect().getWidth();
++	// <FS:Ansariel> Allow V3 and FS style favorites bar
++	//int rightest_point = getRect().mRight - mMoreTextBox->getRect().getWidth();
++	int rightest_point = getRect().mRight - mMoreCtrl->getRect().getWidth();
++	// </FS:Ansariel>
+ 	//lets find first changed button
+ 	while (child_it != childs->end() && first_changed_item_index < mItems.count())
+ 	{
+@@ -763,10 +776,16 @@ void LLFavoritesBarCtrl::updateButtons()
+ 		}
+ 		// we have to remove ChevronButton to make sure that the last item will be LandmarkButton to get the right aligning
+ 		// keep in mind that we are cutting all buttons in space between the last visible child of favbar and ChevronButton
+-		if (mMoreTextBox->getParent() == this)
++		// <FS:Ansariel> Allow V3 and FS style favorites bar
++		//if (mMoreTextBox->getParent() == this)
++		//{
++		//	removeChild(mMoreTextBox);
++		//}
++		if (mMoreCtrl->getParent() == this)
+ 		{
+-			removeChild(mMoreTextBox);
++			removeChild(mMoreCtrl);
+ 		}
++		// </FS:Ansariel>
+ 		int last_right_edge = 0;
+ 		//calculate new buttons offset
+ 		if (getChildList()->size() > 0)
+@@ -805,13 +824,22 @@ void LLFavoritesBarCtrl::updateButtons()
+ 			S32 buttonHGap = button_params.rect.left; // default value
+ 			LLRect rect;
+ 			// Chevron button should stay right aligned
+-			rect.setOriginAndSize(getRect().mRight - mMoreTextBox->getRect().getWidth() - buttonHGap, 0,
+-					mMoreTextBox->getRect().getWidth(),
+-					mMoreTextBox->getRect().getHeight());
+-
+-			addChild(mMoreTextBox);
+-			mMoreTextBox->setRect(rect);
+-			mMoreTextBox->setVisible(TRUE);
++			// <FS:Ansariel> Allow V3 and FS style favorites bar
++			//rect.setOriginAndSize(getRect().mRight - mMoreTextBox->getRect().getWidth() - buttonHGap, 0,
++			//		mMoreTextBox->getRect().getWidth(),
++			//		mMoreTextBox->getRect().getHeight());
++
++			//addChild(mMoreTextBox);
++			//mMoreTextBox->setRect(rect);
++			//mMoreTextBox->setVisible(TRUE);
++			rect.setOriginAndSize(getRect().mRight - mMoreCtrl->getRect().getWidth() - buttonHGap, 0,
++					mMoreCtrl->getRect().getWidth(),
++					mMoreCtrl->getRect().getHeight());
++
++			addChild(mMoreCtrl);
++			mMoreCtrl->setRect(rect);
++			mMoreCtrl->setVisible(TRUE);
++			// </FS:Ansariel>
+ 		}
+ 		// Update overflow menu
+ 		LLToggleableMenu* overflow_menu = static_cast <LLToggleableMenu*> (mOverflowMenuHandle.get());
+@@ -845,7 +873,10 @@ LLButton* LLFavoritesBarCtrl::createButton(const LLPointer<LLViewerInventoryItem
+ 	LLFavoriteLandmarkButton* fav_btn = NULL;
+ 
+ 	// do we have a place for next button + double buttonHGap + mMoreTextBox ?
+-	if(curr_x + width + 2*button_x_delta +  mMoreTextBox->getRect().getWidth() > getRect().mRight )
++	// <FS:Ansariel> Allow V3 and FS style favorites bar
++	//if(curr_x + width + 2*button_x_delta +  mMoreTextBox->getRect().getWidth() > getRect().mRight )
++	if(curr_x + width + 2*button_x_delta +  mMoreCtrl->getRect().getWidth() > getRect().mRight )
++	// </FS:Ansariel>
+ 	{
+ 		return NULL;
+ 	}
+@@ -933,7 +964,10 @@ void LLFavoritesBarCtrl::showDropDownMenu()
+ 
+ 		menu->buildDrawLabels();
+ 		menu->updateParent(LLMenuGL::sMenuContainer);
+-		menu->setButtonRect(mMoreTextBox->getRect(), this);
++		// <FS:Ansariel> Allow V3 and FS style favorites bar
++		//menu->setButtonRect(mMoreTextBox->getRect(), this);
++		menu->setButtonRect(mMoreCtrl->getRect(), this);
++		// </FS:Ansariel>
+ 		positionAndShowMenu(menu);
+ 	}
+ }
+@@ -1157,7 +1191,17 @@ void LLFavoritesBarCtrl::doToSelected(const LLSD& userdata)
+ 		key["type"] = "landmark";
+ 		key["id"] = mSelectedItemID;
+ 
+-		LLFloaterSidePanelContainer::showPanel("places", key);
++		// <FS:Ansariel> FIRE-817: Separate place details floater
++		//LLFloaterSidePanelContainer::showPanel("places", key);
++		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++		{
++			LLFloaterReg::showInstance("fs_placedetails", key);
++		}
++		else
++		{
++			LLFloaterSidePanelContainer::showPanel("places", key);
++		}
++		// </FS:Ansariel>
+ 	}
+ 	else if (action == "copy_slurl")
+ 	{

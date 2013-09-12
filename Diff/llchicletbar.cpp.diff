@@ -1,0 +1,63 @@
+diff --git a/Source/indra/newview/llchicletbar.cpp b/Source/indra/newview/llchicletbar.cpp
+index f1bc51f..6ad89a1 100644
+--- a/Source/indra/newview/llchicletbar.cpp
++++ b/Source/indra/newview/llchicletbar.cpp
+@@ -34,7 +34,10 @@
+ 
+ // newview includes
+ #include "llchiclet.h"
+-#include "llimfloater.h" // for LLIMFloater
++// <FS:Ansariel> [FS communication UI]
++//#include "llimfloater.h" // for LLIMFloater
++#include "fsfloaterim.h"
++// </FS:Ansariel> [FS communication UI]
+ #include "llpaneltopinfobar.h"
+ #include "llsyswellwindow.h"
+ 
+@@ -110,7 +113,10 @@ void LLChicletBar::sessionAdded(const LLUUID& session_id, const std::string& nam
+ 		chiclet->setIMSessionName(name);
+ 		chiclet->setOtherParticipantId(other_participant_id);
+ 		
+-		LLIMFloater::onIMChicletCreated(session_id);
++		// <FS:Ansariel> [FS communication UI]
++		//LLIMFloater::onIMChicletCreated(session_id);
++		FSFloaterIM::onIMChicletCreated(session_id);
++		// </FS:Ansariel> [FS communication UI]
+ 
+ 	}
+ 	else
+@@ -125,7 +131,10 @@ void LLChicletBar::sessionRemoved(const LLUUID& session_id)
+ 	if(getChicletPanel())
+ 	{
+ 		// IM floater should be closed when session removed and associated chiclet closed
+-		LLIMFloater* iMfloater = LLFloaterReg::findTypedInstance<LLIMFloater>("impanel", session_id);
++		// <FS:Ansariel> [FS communication UI]
++		//LLIMFloater* iMfloater = LLFloaterReg::findTypedInstance<LLIMFloater>("impanel", session_id);
++		FSFloaterIM* iMfloater = LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id);
++		// </FS:Ansariel> [FS communication UI]
+ 		if (iMfloater != NULL)
+ 		{
+ 			iMfloater->closeFloater();
+@@ -163,6 +172,11 @@ BOOL LLChicletBar::postBuild()
+ 	LLPanelTopInfoBar::instance().setResizeCallback(boost::bind(&LLChicletBar::fitWithTopInfoBar, this));
+ 	LLPanelTopInfoBar::instance().setVisibleCallback(boost::bind(&LLChicletBar::fitWithTopInfoBar, this));
+ 
++	// <FS:PP> Option to hide IM/Group chat chiclets
++	gSavedSettings.getControl("FSDisableIMChiclets")->getSignal()->connect(boost::bind(&LLChicletBar::updateVisibility, this, _2));
++	mChicletPanel->setVisible(!gSavedSettings.getBOOL("FSDisableIMChiclets"));
++	// </FS:PP> Option to hide IM/Group chat chiclets
++
+ 	return TRUE;
+ }
+ 
+@@ -343,3 +357,10 @@ void LLChicletBar::fitWithTopInfoBar()
+ 	setRect(rect);
+ 	LLPanel::reshape(width, rect.getHeight(), false);
+ }
++
++// <FS:Ansariel> Option to hide IM/Group chat chiclets
++void LLChicletBar::updateVisibility(const LLSD &data)
++{
++	mChicletPanel->setVisible(!data.asBoolean());
++}
++// </FS:Ansariel>

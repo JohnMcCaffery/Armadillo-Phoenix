@@ -1,0 +1,92 @@
+diff --git a/Source/indra/newview/llpaneltopinfobar.cpp b/Source/indra/newview/llpaneltopinfobar.cpp
+index 25c26ba..899011c 100644
+--- a/Source/indra/newview/llpaneltopinfobar.cpp
++++ b/Source/indra/newview/llpaneltopinfobar.cpp
+@@ -69,9 +69,6 @@ private:
+ 
+ LLPanelTopInfoBar::LLPanelTopInfoBar(): mParcelChangedObserver(0)
+ {
+-	LLUICtrl::CommitCallbackRegistry::currentRegistrar()
+-			.add("TopInfoBar.Action", boost::bind(&LLPanelTopInfoBar::onContextMenuItemClicked, this, _2));
+-
+ 	buildFromFile( "panel_topinfo_bar.xml");
+ }
+ 
+@@ -137,6 +134,11 @@ void LLPanelTopInfoBar::handleLoginComplete()
+ 
+ BOOL LLPanelTopInfoBar::handleRightMouseDown(S32 x, S32 y, MASK mask)
+ {
++	if(!LLUICtrl::CommitCallbackRegistry::getValue("TopInfoBar.Action"))
++	{
++		LLUICtrl::CommitCallbackRegistry::currentRegistrar()
++				.add("TopInfoBar.Action", boost::bind(&LLPanelTopInfoBar::onContextMenuItemClicked, this, _2));
++	}
+ 	show_topinfobar_context_menu(this, x, y);
+ 	return TRUE;
+ }
+@@ -420,11 +422,11 @@ void LLPanelTopInfoBar::onParcelIconClick(EParcelIcon icon)
+ 	case SCRIPTS_ICON:
+ 	{
+ 		LLViewerRegion* region = gAgent.getRegion();
+-		if(region && region->getRegionFlags() & REGION_FLAGS_ESTATE_SKIP_SCRIPTS)
++		if(region && region->getRegionFlag(REGION_FLAGS_ESTATE_SKIP_SCRIPTS))
+ 		{
+ 			LLNotificationsUtil::add("ScriptsStopped");
+ 		}
+-		else if(region && region->getRegionFlags() & REGION_FLAGS_SKIP_SCRIPTS)
++		else if(region && region->getRegionFlag(REGION_FLAGS_SKIP_SCRIPTS))
+ 		{
+ 			LLNotificationsUtil::add("ScriptsNotRunning");
+ 		}
+@@ -463,11 +465,31 @@ void LLPanelTopInfoBar::onContextMenuItemClicked(const LLSD::String& item)
+ 
+ 			if(landmark == NULL)
+ 			{
+-				LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
++				// <FS:Ansariel> FIRE-817: Separate place details floater
++				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
++				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++				{
++					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "create_landmark"));
++				}
++				else
++				{
++					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
++				}
++				// </FS:Ansariel>
+ 			}
+ 			else
+ 			{
+-				LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
++				// <FS:Ansariel> FIRE-817: Separate place details floater
++				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
++				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++				{
++					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
++				}
++				else
++				{
++					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
++				}
++				// </FS:Ansariel>
+ 			}
+ // [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+ 		}
+@@ -497,6 +519,16 @@ void LLPanelTopInfoBar::onInfoButtonClicked()
+ 		return;
+ // [/RLVa:KB]
+ 
+-//	LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
++	// <FS:Ansariel> FIRE-817: Separate place details floater
++	//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
++	//if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
++	//{
++	//	LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "agent"));
++	//}
++	//else
++	//{
++	//	LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
++	//}
++	// </FS:Ansariel>
+ 	LLFloaterReg::showInstance("about_land");
+ }

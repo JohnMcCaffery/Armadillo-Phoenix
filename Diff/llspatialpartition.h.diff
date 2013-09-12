@@ -1,0 +1,45 @@
+diff --git a/Source/indra/newview/llspatialpartition.h b/Source/indra/newview/llspatialpartition.h
+index b1706d9..bac613a 100644
+--- a/Source/indra/newview/llspatialpartition.h
++++ b/Source/indra/newview/llspatialpartition.h
+@@ -68,16 +68,22 @@ protected:
+ 	~LLDrawInfo();	
+ 	
+ public:
+-	void* operator new(size_t size)
+-	{
+-		return ll_aligned_malloc_16(size);
+-	}
++	// <FS:ND> Make this non inline to use an object pool
+ 
+-	void operator delete(void* ptr)
+-	{
+-		ll_aligned_free_16(ptr);
+-	}
++	// void* operator new(size_t size)
++	// {
++	// 	return ll_aligned_malloc_16(size);
++	// }
++
++	// void operator delete(void* ptr)
++	// {
++	// 	ll_aligned_free_16(ptr);
++	// }
++
++	void* operator new(size_t size);
++	void operator delete(void* ptr);
+ 
++	// </FS:ND>
+ 
+ 	LLDrawInfo(const LLDrawInfo& rhs)
+ 	{
+@@ -479,6 +485,9 @@ public:
+ 	
+ 	LLDrawable* lineSegmentIntersect(const LLVector3& start, const LLVector3& end,
+ 									 BOOL pick_transparent, 
++// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
++									 BOOL pick_rigged,
++// [/SL:KB]
+ 									 S32* face_hit,                          // return the face hit
+ 									 LLVector3* intersection = NULL,         // return the intersection point
+ 									 LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point

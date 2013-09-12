@@ -1,0 +1,178 @@
+diff --git a/Source/indra/newview/llnotificationhandlerutil.cpp b/Source/indra/newview/llnotificationhandlerutil.cpp
+index c7f182d..f950148 100644
+--- a/Source/indra/newview/llnotificationhandlerutil.cpp
++++ b/Source/indra/newview/llnotificationhandlerutil.cpp
+@@ -34,11 +34,17 @@
+ #include "llurlaction.h"
+ 
+ #include "llagent.h"
+-#include "llimfloater.h"
++// <FS:Ansariel> [FS communication UI]
++//#include "llimfloater.h"
++#include "fsfloaterim.h"
++// </FS:Ansariel> [FS communication UI]
+ #include "llimview.h"
+ // <FS:Zi> Remove floating chat bar
+ // #include "llnearbychat.h"
+-#include "llfloaternearbychat.h"
++// <FS:Ansariel> [FS communication UI]
++//#include "llfloaternearbychat.h"
++#include "fsfloaternearbychat.h"
++// </FS:Ansariel> [FS communication UI]
+ // </FS:Zi>
+ #include "llnotificationhandler.h"
+ #include "llnotifications.h"
+@@ -143,7 +149,12 @@ const static std::string GRANTED_MODIFY_RIGHTS("GrantedModifyRights"),
+ 						TELEPORT_OFFERED_MATURITY_EXCEEDED("TeleportOffered_MaturityExceeded"),
+ 						TELEPORT_OFFERED_MATURITY_BLOCKED("TeleportOffered_MaturityBlocked"),
+ 						TELEPORT_OFFER_SENT("TeleportOfferSent"),
+-						IM_SYSTEM_MESSAGE_TIP("IMSystemMessageTip");
++						IM_SYSTEM_MESSAGE_TIP("IMSystemMessageTip"),
++// <FS:CR> Additional Firestorm notifications
++						RADAR_ALERT("RadarAlert"),
++						STREAM_METADATA("StreamMetadata"),
++						STREAM_METADATA_NA("StreamMetadataNoArtist");
++// </FS:CR>
+ 
+ 
+ // static
+@@ -177,7 +188,13 @@ bool LLHandlerUtil::canLogToNearbyChat(const LLNotificationPtr& notification)
+ 			&& FRIEND_OFFLINE != notification->getName()
+ 			&& INVENTORY_ACCEPTED != notification->getName()
+ 			&& INVENTORY_DECLINED != notification->getName()
+-			&& IM_SYSTEM_MESSAGE_TIP != notification->getName();
++			&& IM_SYSTEM_MESSAGE_TIP != notification->getName()
++/// <FS:CR> Don't log RadarAlert or StreamMetadata notifications to nearby chat.
++/// If the user elects to log them, they can use the Nearby chat logging modes.
++			&& RADAR_ALERT != notification->getName()
++			&& STREAM_METADATA != notification->getName()
++			&& STREAM_METADATA_NA != notification->getName();
++// </FS:CR>
+ }
+ 
+ // static
+@@ -189,18 +206,19 @@ bool LLHandlerUtil::canSpawnIMSession(const LLNotificationPtr& notification)
+ //			|| TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()
+ //			|| TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName();
+ // [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+-//	return 
++//	return
+ //		(canEmbedNotificationInIM(notification)) && 
+ //		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
+-//		  (TELEPORT_OFFERED == notification->getName()) );
++//		  (TELEPORT_OFFERED == notification->getName()) || 
++//		  (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
+ // [/SL:KB]
+ // [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+-	return 
++	return
+ 		(canEmbedNotificationInIM(notification)) && 
+ 		( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStartIM(notification->getPayload()["from_id"].asUUID())) ) &&
+ 		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
+-		  (TELEPORT_OFFERED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) ||
+-		  (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
++		  (TELEPORT_OFFERED == notification->getName()) || 
++		  (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
+ // [/RLVa:KB]
+ }
+ 
+@@ -233,8 +251,8 @@ bool LLHandlerUtil::canAddNotifPanelToIM(const LLNotificationPtr& notification)
+ 	return 
+ 		(canEmbedNotificationInIM(notification)) && 
+ 		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
+-		  (TELEPORT_OFFERED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) ||
+-		  (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
++		  (TELEPORT_OFFERED == notification->getName()) || 
++		  (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
+ // [/SL:KB]
+ }
+ 
+@@ -250,8 +268,8 @@ bool LLHandlerUtil::isNotificationReusable(const LLNotificationPtr& notification
+ 	return 
+ 		(canEmbedNotificationInIM(notification)) && 
+ 		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
+-		  (TELEPORT_OFFERED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) ||
+-		  (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
++		  (TELEPORT_OFFERED == notification->getName()) ||
++		  (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
+ // [/SL:KB]
+ }
+ 
+@@ -295,11 +313,17 @@ bool LLHandlerUtil::canSpawnToast(const LLNotificationPtr& notification)
+ }
+ 
+ // static
+-LLIMFloater* LLHandlerUtil::findIMFloater(const LLNotificationPtr& notification)
++// <FS:Ansariel> [FS communication UI]
++//LLIMFloater* LLHandlerUtil::findIMFloater(const LLNotificationPtr& notification)
++FSFloaterIM* LLHandlerUtil::findIMFloater(const LLNotificationPtr& notification)
++// </FS:Ansariel> [FS communication UI]
+ {
+ 	LLUUID from_id = notification->getPayload()["from_id"];
+ 	LLUUID session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, from_id);
+-	return LLFloaterReg::findTypedInstance<LLIMFloater>("impanel", session_id);
++	// <FS:Ansariel> [FS communication UI]
++	//return LLFloaterReg::findTypedInstance<LLIMFloater>("impanel", session_id);
++	return LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id);
++	// </FS:Ansariel> [FS communication UI]
+ }
+ 
+ // static
+@@ -307,7 +331,10 @@ bool LLHandlerUtil::isIMFloaterOpened(const LLNotificationPtr& notification)
+ {
+ 	bool res = false;
+ 
+-	LLIMFloater* im_floater = findIMFloater(notification);
++	// <FS:Ansariel> [FS communication UI]
++	//LLIMFloater* im_floater = findIMFloater(notification);
++	FSFloaterIM* im_floater = findIMFloater(notification);
++	// </FS:Ansariel> [FS communication UI]
+ 	if (im_floater != NULL)
+ 	{
+ 		res = im_floater->getVisible() == TRUE;
+@@ -320,7 +347,10 @@ bool LLHandlerUtil::isIMFloaterFocused(const LLNotificationPtr& notification)
+ {
+ 	bool res = false;
+ 
+-	LLIMFloater* im_floater = findIMFloater(notification);
++	// <FS:Ansariel> [FS communication UI]
++	//LLIMFloater* im_floater = findIMFloater(notification);
++	FSFloaterIM* im_floater = findIMFloater(notification);
++	// </FS:Ansariel> [FS communication UI]
+ 	if (im_floater != NULL)
+ 	{
+ 		res = im_floater->hasFocus() == TRUE;
+@@ -432,7 +462,8 @@ void LLHandlerUtil::logToIMP2P(const LLNotificationPtr& notification, bool to_fi
+ 
+ 		if (from_id.isNull())
+ 		{
+-			llwarns << " from_id for notification " << notification->getName() << " is null " << llendl;
++			// Normal behavior for system generated messages, don't spam.
++			// llwarns << " from_id for notification " << notification->getName() << " is null " << llendl;
+ 			return;
+ 		}
+ 
+@@ -482,7 +513,10 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
+ // static
+ void LLHandlerUtil::logToNearbyChat(const LLNotificationPtr& notification, EChatSourceType type)
+ {
+-	LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
++	// <FS:Ansariel> [FS communication UI]
++	//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
++	FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
++	// </FS:Ansariel> [FS communication UI]
+ 	if(nearby_chat)
+ 	{
+ 		LLChat chat_msg(notification->getMessage());
+@@ -571,7 +605,10 @@ void LLHandlerUtil::addNotifPanelToIM(const LLNotificationPtr& notification)
+ // static
+ void LLHandlerUtil::updateIMFLoaterMesages(const LLUUID& session_id)
+ {
+-	LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
++	// <FS:Ansariel> [FS communication UI]
++	//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
++	FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
++	// </FS:Ansariel> [FS communication UI]
+ 	if (im_floater != NULL && im_floater->getVisible())
+ 	{
+ 		im_floater->updateMessages();

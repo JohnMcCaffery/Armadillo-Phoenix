@@ -1,0 +1,37 @@
+diff --git a/Source/indra/newview/llviewermenu.h b/Source/indra/newview/llviewermenu.h
+index 095268c..35c7e5c 100644
+--- a/Source/indra/newview/llviewermenu.h
++++ b/Source/indra/newview/llviewermenu.h
+@@ -50,7 +50,6 @@ void show_context_menu( S32 x, S32 y, MASK mask );
+ void show_build_mode_context_menu(S32 x, S32 y, MASK mask);
+ void show_navbar_context_menu(LLView* ctrl, S32 x, S32 y);
+ void show_topinfobar_context_menu(LLView* ctrl, S32 x, S32 y);
+-BOOL enable_save_into_inventory(void*);
+ void handle_reset_view();
+ void handle_cut(void*);
+ void handle_copy(void*);
+@@ -157,6 +156,15 @@ bool update_grid_help();
+ // Export to XML or Collada
+ void handle_export_selected( void * );
+ 
++// Convert strings to internal types
++U32 render_type_from_string(std::string render_type);
++U32 feature_from_string(std::string feature);
++U32 info_display_from_string(std::string info_display);
++// <FS:Techwolf Lupindo> export
++bool enable_object_export();
++// </FS:Techwolf Lupindo>
++
++
+ class LLViewerMenuHolderGL : public LLMenuHolderGL
+ {
+ public:
+@@ -177,8 +185,6 @@ protected:
+ 	LLSafeHandle<LLObjectSelection> mObjectSelection;
+ };
+ 
+-extern const std::string SAVE_INTO_INVENTORY;
+-
+ extern LLMenuBarGL*		gMenuBarView;
+ //extern LLView*			gMenuBarHolder;
+ extern LLMenuGL*		gEditMenu;

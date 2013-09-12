@@ -1,0 +1,12 @@
+diff --git a/Source/indra/newview/aoset.cpp b/Source/indra/newview/aoset.cpp
+index 068cc55..7680792 100644
+--- a/Source/indra/newview/aoset.cpp
++++ b/Source/indra/newview/aoset.cpp
+@@ -19,6 +19,7 @@
+  * You should have received a copy of the GNU Lesser General Public
+  * License along with this library; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
++ * $/LicenseInfo$
+  */
+ 
+ #include "llviewerprecompiledheaders.h"

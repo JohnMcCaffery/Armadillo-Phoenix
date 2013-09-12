@@ -1,0 +1,12 @@
+diff --git a/Source/indra/newview/lltoastscripttextbox.cpp b/Source/indra/newview/lltoastscripttextbox.cpp
+index 24de336..2c4d96c 100644
+--- a/Source/indra/newview/lltoastscripttextbox.cpp
++++ b/Source/indra/newview/lltoastscripttextbox.cpp
+@@ -43,6 +43,7 @@
+ 
+ #include "llglheaders.h"
+ #include "llagent.h"
++#include "lldbstrings.h"
+ 
+ const S32 LLToastScriptTextbox::DEFAULT_MESSAGE_MAX_LINE_COUNT= 7;
+ 

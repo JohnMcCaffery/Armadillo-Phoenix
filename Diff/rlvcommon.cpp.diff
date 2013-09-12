@@ -1,0 +1,29 @@
+diff --git a/Source/indra/newview/rlvcommon.cpp b/Source/indra/newview/rlvcommon.cpp
+index 3876993..856cabe 100644
+--- a/Source/indra/newview/rlvcommon.cpp
++++ b/Source/indra/newview/rlvcommon.cpp
+@@ -1,5 +1,5 @@
+ /** 
+- *
++ * @file rlvcommon.cpp
+  * Copyright (c) 2009-2011, Kitty Barnett
+  * 
+  * The source code in this file is provided to you under the terms of the 
+@@ -607,7 +607,7 @@ bool rlvPredCanNotWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWea
+ }
+ 
+ // Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+-bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem)
++bool rlvPredCanRemoveItem(const LLInventoryItem* pItem)
+ {
+ 	if ( (pItem) && (RlvForceWear::isWearableItem(pItem)) )
+ 	{
+@@ -628,7 +628,7 @@ bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem)
+ }
+ 
+ // Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+-bool rlvPredCanNotRemoveItem(const LLViewerInventoryItem* pItem)
++bool rlvPredCanNotRemoveItem(const LLInventoryItem* pItem)
+ {
+ 	return !rlvPredCanRemoveItem(pItem);
+ }

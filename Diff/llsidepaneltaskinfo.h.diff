@@ -1,0 +1,12 @@
+diff --git a/Source/indra/newview/llsidepaneltaskinfo.h b/Source/indra/newview/llsidepaneltaskinfo.h
+index 124229a..05edcda 100644
+--- a/Source/indra/newview/llsidepaneltaskinfo.h
++++ b/Source/indra/newview/llsidepaneltaskinfo.h
+@@ -113,6 +113,7 @@ private:
+ 	LLButton*					mPayBtn;
+ 	LLButton*					mBuyBtn;
+ 	LLButton*					mDetailsBtn;
++	LLButton*					mDeedBtn;
+ 
+ protected:
+ 	LLViewerObject*				getObject();

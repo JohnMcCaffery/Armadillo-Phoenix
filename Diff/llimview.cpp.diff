@@ -1,0 +1,454 @@
+diff --git a/Source/indra/newview/llimview.cpp b/Source/indra/newview/llimview.cpp
+index ffd8302..763b669 100644
+--- a/Source/indra/newview/llimview.cpp
++++ b/Source/indra/newview/llimview.cpp
+@@ -48,7 +48,10 @@
+ #include "llavatariconctrl.h"
+ #include "llcallingcard.h"
+ #include "llchat.h"
+-#include "llimfloater.h"
++// <FS:Ansariel> [FS communication UI]
++//#include "llimfloater.h"
++#include "fsfloaterim.h"
++// </FS:Ansariel> [FS communication UI]
+ #include "llgroupiconctrl.h"
+ #include "llmd5.h"
+ #include "llmutelist.h"
+@@ -59,7 +62,10 @@
+ #include "llnotificationsutil.h"
+ // <FS:Zi> Remove floating chat bar
+ // #include "llnearbychat.h"
+-#include "llfloaternearbychat.h"
++// <FS:Ansariel> [FS communication UI]
++//#include "llfloaternearbychat.h"
++#include "fsfloaternearbychat.h"
++// </FS:Ansariel> [FS communication UI]
+ // </FS:Zi>
+ #include "llspeakers.h" //for LLIMSpeakerMgr
+ #include "lltextbox.h"
+@@ -71,6 +77,11 @@
+ // [/RLVa:KB]
+ 
+ #include "exogroupmutelist.h"
++#include "fsconsoleutils.h"
++#include "fscommon.h"
++#ifdef OPENSIM
++#include "llviewernetwork.h"
++#endif // OPENSIM
+ 
+ const static std::string ADHOC_NAME_SUFFIX(" Conference");
+ 
+@@ -115,7 +126,10 @@ static void on_avatar_name_cache_toast(const LLUUID& agent_id,
+ 	args["FROM"] = av_name.getCompleteName();
+ 	args["FROM_ID"] = msg["from_id"];
+ 	args["SESSION_ID"] = msg["session_id"];
+-	LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&LLIMFloater::show, msg["session_id"].asUUID()));
++	// <FS:Ansariel> [FS communication UI]
++	//LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&LLIMFloater::show, msg["session_id"].asUUID()));
++	LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&FSFloaterIM::show, msg["session_id"].asUUID()));
++	// </FS:Ansariel> [FS communication UI]
+ }
+ 
+ void toast_callback(const LLSD& msg){
+@@ -125,13 +139,23 @@ void toast_callback(const LLSD& msg){
+ 		return;
+ 	}
+ 
++	// <FS:Ansariel> Don't toast if the message is an announcement
++	if (msg["is_announcement"].asBoolean())
++	{
++		return;
++	}
++	// </FS:Ansariel> Don't toast if the message is an announcement
++
++	// <FS:Ansariel> (Group-)IMs in chat console
++	if (FSConsoleUtils::ProcessInstantMessage(msg["session_id"], msg["from_id"], msg["message"]))
++	{
++		return;
++	}
++	// </FS:Ansariel> (Group-)IMs in chat console
++
+ 	// check whether incoming IM belongs to an active session or not
+ 	if (LLIMModel::getInstance()->getActiveSessionID().notNull()
+-	// <FS:Ansariel> Don't abort if we want to log in chat console and the IM floater has focus
+-	//		&& LLIMModel::getInstance()->getActiveSessionID() == msg["session_id"])
+-			&& LLIMModel::getInstance()->getActiveSessionID() == msg["session_id"]
+-			 && !gSavedSettings.getBOOL("FSLogImToChatConsole"))
+-	// </FS:Ansariel> Don't abort if we want to log in chat console and the IM floater has focus
++			&& LLIMModel::getInstance()->getActiveSessionID() == msg["session_id"])
+ 	{
+ 		return;
+ 	}
+@@ -157,22 +181,15 @@ void toast_callback(const LLSD& msg){
+ 	}
+ 
+ 	// Skip toasting if we have open window of IM with this session id
+-	LLIMFloater* open_im_floater = LLIMFloater::findInstance(msg["session_id"]);
+-	// <FS:Ansariel> Don't abort if we want to log in chat console
+-	//if (open_im_floater && open_im_floater->getVisible())
+-	if (open_im_floater && open_im_floater->getVisible() && !gSavedSettings.getBOOL("FSLogImToChatConsole"))
+-	// </FS:Ansariel> Don't abort if we want to log in chat console
++	// <FS:Ansariel> [FS communication UI]
++	//LLIMFloater* open_im_floater = LLIMFloater::findInstance(msg["session_id"]);
++	FSFloaterIM* open_im_floater = FSFloaterIM::findInstance(msg["session_id"]);
++	// </FS:Ansariel> [FS communication UI]
++	if (open_im_floater && open_im_floater->getVisible())
+ 	{
+ 		return;
+ 	}
+ 
+-	// <FS:Ansariel> Don't toast if the message is an announcement
+-	if (msg["is_announcement"].asBoolean())
+-	{
+-		return;
+-	}
+-	// </FS:Ansariel> Don't toast if the message is an announcement
+-
+ 	LLAvatarNameCache::get(msg["from_id"].asUUID(),
+ 		boost::bind(&on_avatar_name_cache_toast,
+ 			_1, _2, msg));
+@@ -192,7 +209,10 @@ void LLIMModel::setActiveSessionID(const LLUUID& session_id)
+ 
+ LLIMModel::LLIMModel() 
+ {
+-	addNewMsgCallback(boost::bind(&LLIMFloater::newIMCallback, _1));
++	// <FS:Ansariel> [FS communication UI]
++	//addNewMsgCallback(boost::bind(&LLIMFloater::newIMCallback, _1));
++	addNewMsgCallback(boost::bind(&FSFloaterIM::newIMCallback, _1));
++	// </FS:Ansariel> [FS communication UI]
+ 	addNewMsgCallback(boost::bind(&toast_callback, _1));
+ }
+ 
+@@ -711,7 +731,10 @@ void LLIMModel::processSessionInitializedReply(const LLUUID& old_session_id, con
+ 			gIMMgr->notifyObserverSessionIDUpdated(old_session_id, new_session_id);
+ 		}
+ 
+-		LLIMFloater* im_floater = LLIMFloater::findInstance(old_session_id);
++		// <FS:Ansariel> [FS communication UI]
++		//LLIMFloater* im_floater = LLIMFloater::findInstance(old_session_id);
++		FSFloaterIM* im_floater = FSFloaterIM::findInstance(old_session_id);
++		// </FS:Ansariel> [FS communication UI]
+ 		if (im_floater)
+ 		{
+ 			im_floater->sessionInitReplyReceived(new_session_id);
+@@ -881,7 +904,10 @@ bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from,
+ 		chat.mSourceType = CHAT_SOURCE_AGENT;
+ 		chat.mText = utf8_text;
+ 		chat.mTimeStr = timestr;
+-		LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
++		// <FS:Ansariel> [FS communication UI]
++		//LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
++		FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
++		// </FS:Ansariel> [FS communication UI]
+ 		nearby_chat->addMessage(chat, true, LLSD());
+ 	}
+ 	// </Ansariel>
+@@ -991,7 +1017,9 @@ LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id,
+ 
+ 	if (!session)
+ 	{
+-		llwarns << "session " << session_id << " does not exist " << llendl;
++	        //<FS:TS> Don't spam the log with one of these every time
++	        //        someone logs on or off
++		//llwarns << "session " << session_id << " does not exist " << llendl;
+ 		return NULL;
+ 	}
+ 
+@@ -1441,7 +1469,7 @@ public:
+ 		mAgents = agents_to_invite;
+ 	}
+ 
+-	virtual void error(U32 statusNum, const std::string& reason)
++	virtual void errorWithContent(U32 statusNum, const std::string& reason, const LLSD& content)
+ 	{
+ 		//try an "old school" way.
+ 		if ( statusNum == 400 )
+@@ -1453,6 +1481,9 @@ public:
+ 				mAgents);
+ 		}
+ 
++		llwarns << "LLStartConferenceChatResponder error [status:"
++				<< statusNum << "]: " << content << llendl;
++
+ 		//else throw an error back to the client?
+ 		//in theory we should have just have these error strings
+ 		//etc. set up in this file as opposed to the IMMgr,
+@@ -1598,8 +1629,10 @@ public:
+ 		}
+ 	}
+ 
+-	void error(U32 statusNum, const std::string& reason)
+-	{		
++	void errorWithContent(U32 statusNum, const std::string& reason, const LLSD& content)
++	{
++		llwarns << "LLViewerChatterBoxInvitationAcceptResponder error [status:"
++				<< statusNum << "]: " << content << llendl;
+ 		//throw something back to the viewer here?
+ 		if ( gIMMgr )
+ 		{
+@@ -1734,7 +1767,10 @@ LLIMMgr::onConfirmForceCloseError(
+ 	//only 1 option really
+ 	LLUUID session_id = notification["payload"]["session_id"];
+ 
+-	LLFloater* floater = LLIMFloater::findInstance(session_id);
++	// <FS:Ansariel> [FS communication UI]
++	//LLFloater* floater = LLIMFloater::findInstance(session_id);
++	LLFloater* floater = FSFloaterIM::findInstance(session_id);
++	// </FS:Ansariel> [FS communication UI]
+ 	if ( floater )
+ 	{
+ 		floater->closeFloater(FALSE);
+@@ -2600,7 +2636,10 @@ LLIMMgr::LLIMMgr()
+ 	mPendingInvitations = LLSD::emptyMap();
+ 	mPendingAgentListUpdates = LLSD::emptyMap();
+ 
+-	LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&LLIMFloater::sRemoveTypingIndicator, _1));
++	// <FS:Ansariel> [FS communication UI]
++	//LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&LLIMFloater::sRemoveTypingIndicator, _1));
++	LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&FSFloaterIM::sRemoveTypingIndicator, _1));
++	// </FS:Ansariel> [FS communication UI]
+ }
+ 
+ // Add a message to a session. 
+@@ -2632,9 +2671,34 @@ void LLIMMgr::addMessage(
+ 		fixed_session_name = session_name;
+ 	}
+ 
++	// <FS:PP> Configurable IM sounds
++	static LLCachedControl<U32> PlayModeUISndNewIncomingIMSession(gSavedSettings, "PlayModeUISndNewIncomingIMSession");
++	static LLCachedControl<U32> PlayModeUISndNewIncomingGroupIMSession(gSavedSettings, "PlayModeUISndNewIncomingGroupIMSession");
++	// </FS:PP> Configurable IM sounds
++
+ 	bool new_session = !hasSession(new_session_id);
+ 	if (new_session)
+ 	{
++		// <FS:Ansariel> Clear muted group chat early to prevent contacts floater
++		//               (re-)gaining focus; the server already knows the correct
++		//               session id, so we can leave it!
++		if (exoGroupMuteList::instance().isMuted(new_session_id))
++		{
++			llinfos << "Muting group chat from " << new_session_id.asString() << ": " << fixed_session_name << llendl;
++
++			if (gSavedSettings.getBOOL("FSReportMutedGroupChat"))
++			{
++				LLStringUtil::format_map_t args;
++				args["NAME"] = fixed_session_name;
++				reportToNearbyChat(LLTrans::getString("GroupChatMuteNotice", args));
++			}
++			clearPendingInvitation(new_session_id);
++			clearPendingAgentListUpdates(new_session_id);
++			LLIMModel::getInstance()->sendLeaveSession(new_session_id, other_participant_id);
++			return;
++		}
++		// </FS:Ansariel>
++
+ 		LLIMModel::getInstance()->newSession(new_session_id, fixed_session_name, dialog, other_participant_id);
+ 
+ 		// When we get a new IM, and if you are a god, display a bit
+@@ -2660,9 +2724,7 @@ void LLIMMgr::addMessage(
+ 
+ 		// Logically it would make more sense to reject the session sooner, in another area of the
+ 		// code, but the session has to be established inside the server before it can be left.
+-		//if (LLMuteList::getInstance()->isMuted(other_participant_id) && !LLMuteList::getInstance()->isLinden(from))
+-		if ((LLMuteList::getInstance()->isMuted(other_participant_id) && !LLMuteList::getInstance()->isLinden(from))
+-			|| exoGroupMuteList::instance().isMuted(new_session_id)) // <exodus/>
++		if (LLMuteList::getInstance()->isMuted(other_participant_id) && !LLMuteList::getInstance()->isLinden(from))
+ 		{
+ 			llwarns << "Leaving IM session from initiating muted resident " << from << llendl;
+ 			if(!gIMMgr->leaveSession(new_session_id))
+@@ -2673,24 +2735,48 @@ void LLIMMgr::addMessage(
+ 		}
+ 
+ 	// <FS:PP> Configurable IM sounds
+-		if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") != 0 && dialog == IM_NOTHING_SPECIAL)
++		if(PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL)
+ 		{
+ 			make_ui_sound("UISndNewIncomingIMSession");
+ 		}
+-		else if(gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") != 0 && dialog != IM_NOTHING_SPECIAL)
++		else if(PlayModeUISndNewIncomingGroupIMSession != 0 && dialog != IM_NOTHING_SPECIAL)
+ 		{
+ 			make_ui_sound("UISndNewIncomingGroupIMSession");
+ 		}
+ 	}
+-	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") == 2 && dialog == IM_NOTHING_SPECIAL)
++	else if(PlayModeUISndNewIncomingIMSession == 2 && dialog == IM_NOTHING_SPECIAL)
+ 	{
+ 		make_ui_sound("UISndNewIncomingIMSession");
+ 	}
+-	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") == 2 && dialog != IM_NOTHING_SPECIAL)
++	else if(PlayModeUISndNewIncomingGroupIMSession == 2 && dialog != IM_NOTHING_SPECIAL)
+ 	{
+ 		make_ui_sound("UISndNewIncomingGroupIMSession");
+ 	// </FS:PP>
+ 	}
++	// <FS:WoLf> IM Sounds only for sessions not in focus
++	else if(PlayModeUISndNewIncomingIMSession == 3 && dialog == IM_NOTHING_SPECIAL)
++	{
++		// <FS:Ansariel> [FS communication UI]
++		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
++		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
++		// </FS:Ansariel> [FS communication UI]
++		if (im_floater && !im_floater->hasFocus())
++		{
++			make_ui_sound("UISndNewIncomingIMSession");
++		}
++	}
++	else if(PlayModeUISndNewIncomingGroupIMSession == 3 && dialog != IM_NOTHING_SPECIAL)
++	{
++		// <FS:Ansariel> [FS communication UI]
++		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
++		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
++		// </FS:Ansariel> [FS communication UI]
++		if (im_floater && !im_floater->hasFocus())
++		{
++			make_ui_sound("UISndNewIncomingGroupIMSession");
++		}
++	}
++	// </FS:WoLf>
+ 
+ 	//<FS:TS> FIRE-6650: Group chat for non-friends mutes when disabling voice chat from non-friends
+ 	bool skip_message = false;
+@@ -2729,7 +2815,10 @@ void LLIMMgr::addSystemMessage(const LLUUID& session_id, const std::string& mess
+ 		// <FS:Zi> Remove floating chat bar
+ 		// LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
+ 		// LLNearbyChat* nearby_chat = chat_bar->findChild<LLNearbyChat>("nearby_chat");
+-		LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
++		// <FS:Ansariel> [FS communication UI]
++		//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
++		FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
++		// </FS:Ansariel> [FS communication UI]
+ 		// </FS:Zi>
+ 
+ 		if(nearby_chat)
+@@ -2929,7 +3018,6 @@ void LLIMMgr::inviteToSession(
+ 	// voice invite question is different from default only for group call (EXT-7118)
+ 	std::string question_type = "VoiceInviteQuestionDefault";
+ 
+-	BOOL ad_hoc_invite = FALSE;
+ 	BOOL voice_invite = FALSE;
+ 	bool is_linden = LLMuteList::getInstance()->isLinden(caller_name);
+ 
+@@ -2952,13 +3040,11 @@ void LLIMMgr::inviteToSession(
+ 		//else it's an ad-hoc
+ 		//and a voice ad-hoc
+ 		notify_box_type = "VoiceInviteAdHoc";
+-		ad_hoc_invite = TRUE;
+ 		voice_invite = TRUE;
+ 	}
+ 	else if ( inv_type == INVITATION_TYPE_IMMEDIATE )
+ 	{
+ 		notify_box_type = "InviteAdHoc";
+-		ad_hoc_invite = TRUE;
+ 	}
+ 
+ 	LLSD payload;
+@@ -3061,7 +3147,10 @@ void LLIMMgr::clearPendingInvitation(const LLUUID& session_id)
+ 
+ void LLIMMgr::processAgentListUpdates(const LLUUID& session_id, const LLSD& body)
+ {
+-	LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
++	// <FS:Ansariel> [FS communication UI]
++	//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
++	FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
++	// </FS:Ansariel> [FS communication UI]
+ 	if ( im_floater )
+ 	{
+ 		im_floater->processAgentListUpdates(body);
+@@ -3342,7 +3431,10 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
+ 		gIMMgr->addMessage(
+ 			session_id,
+ 			im_info->mFromID,
+-			LLStringUtil::null, // Pass null value so no name gets prepended
++			//<FS:TS> FIRE-8601: Use system name instead of NULL
++			//         Growl notifier acts funny with NULL here.
++			SYSTEM_FROM,
++			//</FS:TS> FIRE-8601
+ 			LLTrans::getString("IM_announce_incoming", args),
+ 			im_info->mName,
+ 			IM_NOTHING_SPECIAL,
+@@ -3415,7 +3507,10 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
+ 	}
+ 	// </Ansariel>
+ 
+-	LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
++	// <FS:Ansariel> [FS communication UI]
++	//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
++	FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
++	// </FS:Ansariel> [FS communication UI]
+ 
+ 	if ( im_floater )
+ 	{
+@@ -3461,7 +3556,10 @@ public:
+ 				speaker_mgr->updateSpeakers(gIMMgr->getPendingAgentListUpdates(session_id));
+ 			}
+ 
+-			LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
++			// <FS:Ansariel> [FS communication UI]
++			//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
++			FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
++			// </FS:Ansariel> [FS communication UI]
+ 			if ( im_floater )
+ 			{
+ 				if ( body.has("session_info") )
+@@ -3555,7 +3653,10 @@ public:
+ 		const LLSD& input) const
+ 	{
+ 		LLUUID session_id = input["body"]["session_id"].asUUID();
+-		LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
++		// <FS:Ansariel> [FS communication UI]
++		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
++		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
++		// </FS:Ansariel> [FS communication UI]
+ 		if ( im_floater )
+ 		{
+ 			im_floater->processSessionUpdate(input["body"]["info"]);
+@@ -3634,6 +3735,13 @@ public:
+ 				if (FSMuteAllGroups || (FSMuteGroupWhenNoticesDisabled && !group_data.mAcceptNotices))
+ 				{
+ 					llinfos << "Firestorm: muting group chat: " << group_data.mName << LL_ENDL;
++
++					if (gSavedSettings.getBOOL("FSReportMutedGroupChat"))
++					{
++						LLStringUtil::format_map_t args;
++						args["NAME"] = group_data.mName;
++						reportToNearbyChat(LLTrans::getString("GroupChatMuteNotice", args));
++					}
+ 					
+ 					//KC: make sure we leave the group chat at the server end as well
+ 					std::string aname;
+@@ -3668,10 +3776,16 @@ public:
+ 			}
+ 			std::string buffer = saved + message;
+ 
+-			BOOL is_this_agent = FALSE;
++// <FS:CR> FIRE-9762 - Don't bail here on OpenSim, we'll need to echo local posts
++#ifdef OPENSIM
++			bool is_opensim = LLGridManager::getInstance()->isInOpenSim();
++			if (!is_opensim && from_id == gAgentID)
++#else // OPENSIM
+ 			if(from_id == gAgentID)
++#endif // OPENSIM
++// </FS:CR>
+ 			{
+-				is_this_agent = TRUE;
++				return;
+ 			}
+ 			gIMMgr->addMessage(
+ 				session_id,
+@@ -3684,7 +3798,14 @@ public:
+ 				message_params["region_id"].asUUID(),
+ 				ll_vector3_from_sd(message_params["position"]),
+ 				true);
+-
++// <FS:CR> FIRE-9762 - OK, return here if we must!
++#ifdef OPENSIM
++			if (is_opensim && from_id == gAgentID)
++			{
++				return;
++			}
++#endif // OPENSIM
++// </FS:CR>
+ 			if (LLMuteList::getInstance()->isMuted(from_id, name, LLMute::flagTextChat))
+ 			{
+ 				return;

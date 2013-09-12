@@ -1,0 +1,30 @@
+diff --git a/Source/indra/newview/llnotificationmanager.cpp b/Source/indra/newview/llnotificationmanager.cpp
+index 1a49654..ff452d9 100644
+--- a/Source/indra/newview/llnotificationmanager.cpp
++++ b/Source/indra/newview/llnotificationmanager.cpp
+@@ -97,10 +97,12 @@ bool LLNotificationManager::onNotification(const LLSD& notify)
+ {
+ 	LLSysHandler* handle = NULL;
+ 
+-	// <FS:ND> Crashfix: Don't bother if we're going down. Otherwise we might crash when trying to use handlers that are already dead.
++	// Don't bother if we're going down.
++	// Otherwise we might crash when trying to use handlers that are already dead.
+ 	if( LLApp::isExiting() )
++	{
+ 		return false;
+-	// </FS:ND>
++	}
+ 
+ 	if (LLNotifications::destroyed())
+ 		return false;
+@@ -127,7 +129,9 @@ void LLNotificationManager::onChat(const LLChat& msg, const LLSD &args)
+ 	// check ENotificationType argument
+ 	switch(args["type"].asInteger())
+ 	{
+-	case NT_MONEYCHAT: // Added by Ansariel for processing L$ balance changes in nearby chat
++	// <FS:Ansariel> Process L$ balance changes in nearby chat
++	case NT_MONEYCHAT:
++	// </FS:Ansariel>
+ 	case NT_NEARBYCHAT:
+ 		{
+ 			LLNearbyChatHandler* handle = dynamic_cast<LLNearbyChatHandler*>(mNotifyHandlers["nearbychat"].get());

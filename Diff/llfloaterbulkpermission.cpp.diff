@@ -1,0 +1,13 @@
+diff --git a/Source/indra/newview/llfloaterbulkpermission.cpp b/Source/indra/newview/llfloaterbulkpermission.cpp
+index 90f4062..39b6e46 100644
+--- a/Source/indra/newview/llfloaterbulkpermission.cpp
++++ b/Source/indra/newview/llfloaterbulkpermission.cpp
+@@ -336,8 +336,6 @@ void LLFloaterBulkPermission::handleInventory(LLViewerObject* viewer_obj, LLInve
+ 
+ void LLFloaterBulkPermission::updateInventory(LLViewerObject* object, LLViewerInventoryItem* item, U8 key, bool is_new)
+ {
+-	LLMemType mt(LLMemType::MTYPE_OBJECT);
+-	
+ 	// This slices the object into what we're concerned about on the viewer. 
+ 	// The simulator will take the permissions and transfer ownership.
+ 	LLPointer<LLViewerInventoryItem> task_item =

@@ -1,0 +1,16 @@
+diff --git a/Source/indra/newview/llviewermediafocus.cpp b/Source/indra/newview/llviewermediafocus.cpp
+index 4543a1b..2979068 100644
+--- a/Source/indra/newview/llviewermediafocus.cpp
++++ b/Source/indra/newview/llviewermediafocus.cpp
+@@ -406,11 +406,9 @@ void LLViewerMediaFocus::update()
+ 	LLViewerObject *viewer_object = getFocusedObject();
+ 	S32 face = mFocusedObjectFace;
+ 	LLVector3 normal = mFocusedObjectNormal;
+-	bool focus = true;
+ 	
+ 	if(!media_impl || !viewer_object)
+ 	{
+-		focus = false;
+ 		media_impl = getHoverMediaImpl();
+ 		viewer_object = getHoverObject();
+ 		face = mHoverObjectFace;

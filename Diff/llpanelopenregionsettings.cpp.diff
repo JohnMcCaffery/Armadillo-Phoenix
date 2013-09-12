@@ -1,0 +1,11 @@
+diff --git a/Source/indra/newview/llpanelopenregionsettings.cpp b/Source/indra/newview/llpanelopenregionsettings.cpp
+index 259dad7..d6689e1 100644
+--- a/Source/indra/newview/llpanelopenregionsettings.cpp
++++ b/Source/indra/newview/llpanelopenregionsettings.cpp
+@@ -205,4 +205,4 @@ class OpenRegionInfoUpdate : public LLHTTPNode
+ 
+ LLHTTPRegistration<OpenRegionInfoUpdate>
+ gHTTPRegistrationOpenRegionInfoUpdate(
+-	"/message/OpenRegionInfo");
+\ No newline at end of file
++	"/message/OpenRegionInfo");

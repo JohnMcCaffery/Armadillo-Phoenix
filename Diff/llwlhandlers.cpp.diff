@@ -1,0 +1,67 @@
+diff --git a/Source/indra/newview/llwlhandlers.cpp b/Source/indra/newview/llwlhandlers.cpp
+index 7011839..93eba5b 100644
+--- a/Source/indra/newview/llwlhandlers.cpp
++++ b/Source/indra/newview/llwlhandlers.cpp
+@@ -105,20 +105,12 @@ LLEnvironmentRequestResponder::LLEnvironmentRequestResponder()
+ 		return;
+ 	}
+ 
+-	// <FS:ND> Chrashfix, Region can be 0 here.
+-
+-	// if (unvalidated_content[0]["regionID"].asUUID() != gAgent.getRegion()->getRegionID())
+-	// {
+-	// 	LL_WARNS("WindlightCaps") << "Not in the region from where this data was received (wanting "
+-	// 		<< gAgent.getRegion()->getRegionID() << " but got " << unvalidated_content[0]["regionID"].asUUID()
+-	// 		<< ") - ignoring..." << LL_ENDL;
+-	// 	return;
+-	// }
+-
+ 	LLUUID regionId;
+ 	if( gAgent.getRegion() )
++	{
+ 		regionId = gAgent.getRegion()->getRegionID();
+-
++	}
++	
+ 	if (unvalidated_content[0]["regionID"].asUUID() != regionId )
+ 	{
+ 		LL_WARNS("WindlightCaps") << "Not in the region from where this data was received (wanting "
+@@ -127,13 +119,13 @@ LLEnvironmentRequestResponder::LLEnvironmentRequestResponder()
+ 		return;
+ 	}
+ 
+-	// </FS:ND>
+-
+ 	LLEnvManagerNew::getInstance()->onRegionSettingsResponse(unvalidated_content);
+ }
+-/*virtual*/ void LLEnvironmentRequestResponder::error(U32 status, const std::string& reason)
++/*virtual*/
++void LLEnvironmentRequestResponder::errorWithContent(U32 status, const std::string& reason, const LLSD& content)
+ {
+-	LL_INFOS("WindlightCaps") << "Got an error, not using region windlight..." << LL_ENDL;
++	LL_INFOS("WindlightCaps") << "Got an error, not using region windlight... [status:" 
++		<< status << "]: " << content << LL_ENDL;
+ 	LLEnvManagerNew::getInstance()->onRegionSettingsResponse(LLSD());
+ }
+ 
+@@ -200,14 +192,15 @@ bool LLEnvironmentApply::initiateRequest(const LLSD& content)
+ 		LLEnvManagerNew::instance().onRegionSettingsApplyResponse(false);
+ 	}
+ }
+-/*virtual*/ void LLEnvironmentApplyResponder::error(U32 status, const std::string& reason)
++/*virtual*/
++void LLEnvironmentApplyResponder::errorWithContent(U32 status, const std::string& reason, const LLSD& content)
+ {
+-	std::stringstream msg;
+-	msg << reason << " (Code " << status << ")";
+-
+-	LL_WARNS("WindlightCaps") << "Couldn't apply windlight settings to region!  Reason: " << msg << LL_ENDL;
++	LL_WARNS("WindlightCaps") << "Couldn't apply windlight settings to region!  [status:"
++		<< status << "]: " << content << LL_ENDL;
+ 
+ 	LLSD args(LLSD::emptyMap());
++	std::stringstream msg;
++	msg << reason << " (Code " << status << ")";
+ 	args["FAIL_REASON"] = msg.str();
+ 	LLNotificationsUtil::add("WLRegionApplyFail", args);
+ }
