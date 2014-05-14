@@ -1,7 +1,18 @@
 <?xml version="1.0" ?>
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="llsd.xsd">
-  <map>
+  <map>    <key>PolygonsLogFrequency</key>
+    <map>
+      <key>Comment</key>
+      <string>How frequently the number of polygons on screen is written to the log file, 0 if the number of polygons are not to be written to file.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0</real>
+    </map>
+
     <key>UpVector</key>
     <map>
       <key>Comment</key>
