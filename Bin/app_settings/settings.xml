@@ -1,21 +1,10 @@
 <?xml version="1.0" ?>
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="llsd.xsd">
-  <map>    <key>PolygonsLogFrequency</key>
+  <map>    <key>StatsLogFrequency</key>
     <map>
       <key>Comment</key>
-      <string>How frequently the number of polygons on screen is written to the log file, If 0 the number of polygons will not to be written to file.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>0</real>
-    </map>
-    <key>PingLogFrequency</key>
-    <map>
-      <key>Comment</key>
-      <string>How frequently the number of ping time to the server is written to the log file. If 0 the number of polygons will not to be written to file.</string>
+      <string>How frequently statistics are written to the log. Statistics are FPS, # Polygons on screen and ping time.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
