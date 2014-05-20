@@ -11205,6 +11205,17 @@
     <integer>0</integer>
     </map>
 
+    <key>UpdateLODTime</key>
+    <map>
+      <key>Comment</key>
+      <string>The amount of time (in seconds) per frame that can be spent updating the LODs for the scenegraph.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.01</real>
+    </map>
     <key>RenderDynamicLOD</key>
     <map>
       <key>Comment</key>
