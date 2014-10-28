@@ -1200,11 +1200,9 @@ void LLAgentCamera::updateCamera()
 	}
 
 	//NOTE - this needs to be integrated into a general upVector system here within llAgent. 
-	//if ( camera_mode == CAMERA_MODE_FOLLOW && mFocusOnAvatar )
-	if ( camera_mode == CAMERA_MODE_FOLLOW )
+	if ( camera_mode == CAMERA_MODE_FOLLOW && mFocusOnAvatar )
 	{
 		mCameraUpVector = mFollowCam.getUpVector();
-		//gSavedSettings.setVector3("UpVector", mCameraUpVector);
 	}
 
 	if (mSitCameraEnabled)
@@ -1438,10 +1436,7 @@ void LLAgentCamera::updateCamera()
 
 	// Move the camera
 
-
-	//mCameraUpVector = ;
-	LLViewerCamera::getInstance()->updateCameraLocation(mCameraPositionAgent, gSavedSettings.getVector3("UpVector"), focus_agent);
-	//LLViewerCamera::getInstance()->updateCameraLocation(mCameraPositionAgent, mCameraUpVector, focus_agent);
+	LLViewerCamera::getInstance()->updateCameraLocation(mCameraPositionAgent, mCameraUpVector, focus_agent);
 	//LLViewerCamera::getInstance()->updateCameraLocation(mCameraPositionAgent, camera_skyward, focus_agent);
 	
 	// Change FOV

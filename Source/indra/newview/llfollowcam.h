@@ -69,7 +69,6 @@ public:
 	virtual void setBehindnessLag		( F32 );
 	virtual void setPosition			( const LLVector3& );
 	virtual void setFocus				( const LLVector3& );
-	virtual void setUpVector			( const LLVector3& up);
 	virtual void setPositionLocked		( bool );
 	virtual void setFocusLocked			( bool );
 
@@ -88,14 +87,10 @@ public:
 	virtual F32			getBehindnessLag() const;
 	virtual LLVector3	getPosition() const;
 	virtual LLVector3	getFocus() const;
-	virtual LLVector3	getUpVector() const;
 	virtual bool		getFocusLocked() const;
 	virtual bool		getPositionLocked() const;
 	virtual bool		getUseFocus() const { return mUseFocus; }
 	virtual bool		getUsePosition() const { return mUsePosition; }
-
-	virtual void		interpolate();
-	virtual void		setWindow(LLVector3 position, LLVector3 positionDelta, LLVector3 lookAt, LLVector3 lookAtDelta, int tickLength);
 
 protected:
 	F32		mPositionLag;
@@ -115,15 +110,6 @@ protected:
 	bool			mUseFocus; // specific focus point specified by script
 	LLVector3		mPosition;			// where the camera is (in world-space)
 	LLVector3		mFocus;				// what the camera is aimed at (in world-space)
-	LLVector3		mUpVector;			// the camera's up vector in world-space (determines roll)
-
-	U64				mLastUpdate;	//When the last updated was received
-	U32				mTickLength;	//How long between updates
-	U64				mThreshold;
-	LLVector3		mLastPosition; //The camera position last time it was set
-	LLVector3		mLastLookAt; //The camera look at last time it was set
-	LLVector3		mPositionDelta; //The change in camera position last time it was set
-	LLVector3		mLookAtDelta; //The change in camera look at last time it was set
 };
 
 class LLFollowCam : public LLFollowCamParams
@@ -160,6 +146,7 @@ public:
 
 	void setMaxCameraDistantFromSubject	( F32 m ); // this should be determined by llAgent
 	bool isZoomedToMinimumDistance();
+	LLVector3	getUpVector();
 	void zoom( S32 );
 
 	// overrides for setters and getters
@@ -167,7 +154,6 @@ public:
 	virtual void setDistance( F32 );
 	virtual void setPosition(const LLVector3& pos);
 	virtual void setFocus(const LLVector3& focus);
-	virtual void setUpVector(const LLVector3& up);
 	virtual void setPositionLocked		( bool );
 	virtual void setFocusLocked			( bool );
 
@@ -191,11 +177,11 @@ protected:
 	LLFrameTimer	mTimer;
 	LLVector3		mSubjectPosition;	// this is the position of what I'm looking at
 	LLQuaternion	mSubjectRotation;	// this is the rotation of what I'm looking at
+	LLVector3		mUpVector;			// the camera's up vector in world-space (determines roll)
 	LLVector3		mRelativeFocus;
 	LLVector3		mRelativePos;
 
 	bool mPitchSineAndCosineNeedToBeUpdated;
-
 
 	//------------------------------------------
 	// protected methods of FollowCam
@@ -222,7 +208,6 @@ public:
 	static void setBehindnessAngle		( const LLUUID& source, F32 angle);
 	static void setBehindnessLag		( const LLUUID& source, F32 lag);
 	static void setPosition				( const LLUUID& source, const LLVector3 position);
-	static void setUpVector				( const LLUUID& source, const LLVector3 up);
 	static void setFocus				( const LLUUID& source, const LLVector3 focus);
 	static void setPositionLocked		( const LLUUID& source, bool locked);
 	static void setFocusLocked			( const LLUUID& source, bool locked );
@@ -235,9 +220,6 @@ public:
 	static bool isScriptedCameraSource(const LLUUID& source);
 	static void dump();
 
-	static void updateScriptFollowCams();
-	static void	setWindow( const LLUUID& source, LLVector3 position, LLVector3 positionDelta, LLVector3 lookAt, LLVector3 lookAtDelta, int tickLength);
-	static void	removeScriptFollowCam( const LLUUID& source );
 protected:
 
 	typedef std::map<LLUUID, LLFollowCamParams*> param_map_t;
@@ -245,7 +227,6 @@ protected:
 
 	typedef std::vector<LLFollowCamParams*> param_stack_t;
 	static param_stack_t sParamStack;
-	static param_stack_t sScriptParamStack;
 };
 
 #endif //LL_FOLLOWCAM_H

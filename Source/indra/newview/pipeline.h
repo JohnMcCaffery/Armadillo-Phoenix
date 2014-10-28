@@ -838,7 +838,6 @@ public:
 	//cached settings
 	static BOOL WindLightUseAtmosShaders;
 	static BOOL VertexShaderEnable;
-
 	static BOOL RenderAvatarVP;
 	static BOOL RenderDeferred;
 	static F32 RenderDeferredSunWash;

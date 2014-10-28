@@ -1677,11 +1677,7 @@ void LLViewerRegion::unpackRegionHandshake()
 	msg->addUUID("AgentID", gAgent.getID());
 	msg->addUUID("SessionID", gAgent.getSessionID());
 	msg->nextBlock("RegionInfo");
-
-	U32 flags = 0;
-	flags |= REGION_HANDSHAKE_SUPPORTS_SELF_APPEARANCE;
-
-	msg->addU32("Flags", flags );
+	msg->addU32("Flags", 0x0 );
 	msg->sendReliable(host);
 }
 

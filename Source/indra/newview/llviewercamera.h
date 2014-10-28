@@ -33,7 +33,6 @@
 #include "lltimer.h"
 #include "m4math.h"
 #include "llcoord.h"
-#include "llgl.h"
 
 class LLViewerObject;
 
@@ -127,9 +126,6 @@ public:
 	void setZoomParameters(F32 factor, S16 subregion) { mZoomFactor = factor; mZoomSubregion = subregion; }
 	F32 getZoomFactor() { return mZoomFactor; }                             
 	S16 getZoomSubRegion() { return mZoomSubregion; } 
-
-	static void setManualProjectionMatrixSet(bool set);
-	static void setManualProjectionMatrix(LLMatrix4 mat);
 
 protected:
 	void calcProjection(const F32 far_distance) const;

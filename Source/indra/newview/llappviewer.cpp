@@ -55,7 +55,6 @@
 #include "llstartup.h"
 #include "llfocusmgr.h"
 #include "llviewerjoystick.h"
-#include "llviewerremotecontrol.h"
 #include "llallocator.h"
 #include "llares.h" 
 #include "llcurl.h"
@@ -1399,7 +1398,6 @@ bool LLAppViewer::mainLoop()
 	LLTimer frameTimer,idleTimer,periodicRenderingTimer;
 	LLTimer debugTime;
 	LLViewerJoystick* joystick(LLViewerJoystick::getInstance());
-	LLViewerRemoteControl* remoteControl(LLViewerRemoteControl::getInstance());
 	joystick->setNeedsReset(true);
 
     LLEventPump& mainloop(LLEventPumps::instance().obtain("mainloop"));
@@ -1494,7 +1492,6 @@ bool LLAppViewer::mainLoop()
 			if (!LLApp::isExiting())
 			{
 				pingMainloopTimeout("Main:JoystickKeyboard");
-				LLFollowCamMgr::updateScriptFollowCams();
 				
 				// Scan keyboard for movement keys.  Command keys and typing
 				// are handled by windows callbacks.  Don't do this until we're
@@ -1508,7 +1505,6 @@ bool LLAppViewer::mainLoop()
 				{
 					joystick->scanJoystick();
 					gKeyboard->scanKeyboard();
-					remoteControl->Tick();
 					// <FS:Ansariel> Chalice Yao's crouch toggle
 					static LLCachedControl<bool> fsCrouchToggle(gSavedSettings, "FSCrouchToggle");
 					static LLCachedControl<bool> fsCrouchToggleStatus(gSavedSettings, "FSCrouchToggleStatus");
@@ -4581,10 +4577,6 @@ bool finish_forced_disconnect(const LLSD& notification, const LLSD& response)
 
 void LLAppViewer::forceDisconnect(const std::string& mesg)
 {
-	if (gSavedSettings.getBOOL("EnableFailSilently")) {
-		LLAppViewer::instance()->forceQuit();
-		return;
-	}
 	if (gDoDisconnect)
     {
 		// Already popped up one of these dialogs, don't
