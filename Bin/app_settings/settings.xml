@@ -5378,7 +5378,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>10.0</real>
+      <real>1.0</real>
         <key>Backup</key>
             <integer>0</integer>
     </map>

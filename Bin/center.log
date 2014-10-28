@@ -1,0 +1,54 @@
+2013-09-16T15:03:03Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 43.00
+2013-09-16T15:03:05Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 45.00
+2013-09-16T15:03:06Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 39.00
+2013-09-16T15:03:07Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 41.00
+2013-09-16T15:03:08Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 36.00
+2013-09-16T15:03:09Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 43.00
+2013-09-16T15:03:10Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 39.00
+2013-09-16T15:03:11Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 41.00
+2013-09-16T15:03:11Z INFO: llcommon/llsys.cpp(1294) : FrameWatcher::tick:  slowest framerate for last 200 seconds 41.0
+2013-09-16T15:03:11Z <mem>             Avail Physical KB:     10981956
+2013-09-16T15:03:11Z <mem>              Avail Virtual KB:      3197588
+2013-09-16T15:03:11Z <mem>                 Avail page KB:     25296208
+2013-09-16T15:03:11Z <mem>                CommitLimit KB:     33439084
+2013-09-16T15:03:11Z <mem>                 CommitPeak KB:      8164664
+2013-09-16T15:03:11Z <mem>                CommitTotal KB:      8142876
+2013-09-16T15:03:11Z <mem>                   HandleCount:        32948
+2013-09-16T15:03:11Z <mem>             KernelNonpaged KB:       137820
+2013-09-16T15:03:11Z <mem>                KernelPaged KB:       393228
+2013-09-16T15:03:11Z <mem>                KernelTotal KB:       531048
+2013-09-16T15:03:11Z <mem>              Page Fault Count:      6569435
+2013-09-16T15:03:11Z <mem>                   PageSize KB:            4
+2013-09-16T15:03:11Z <mem>              PagefileUsage KB:       602384
+2013-09-16T15:03:11Z <mem>          PeakPagefileUsage KB:       602384
+2013-09-16T15:03:11Z <mem>         PeakWorkingSetSize KB:       618244
+2013-09-16T15:03:11Z <mem>            Percent Memory use:            0
+2013-09-16T15:03:11Z <mem>              PhysicalAvail KB:     10981956
+2013-09-16T15:03:11Z <mem>              PhysicalTotal KB:     16720472
+2013-09-16T15:03:11Z <mem>               PrivateUsage KB:       602384
+2013-09-16T15:03:11Z <mem>                  ProcessCount:           99
+2013-09-16T15:03:11Z <mem>     QuotaNonPagedPoolUsage KB:           55
+2013-09-16T15:03:11Z <mem>        QuotaPagedPoolUsage KB:          436
+2013-09-16T15:03:11Z <mem> QuotaPeakNonPagedPoolUsage KB:          268
+2013-09-16T15:03:11Z <mem>     QutaPeakPagedPoolUsage KB:          441
+2013-09-16T15:03:11Z <mem>                SystemCache KB:      3550024
+2013-09-16T15:03:11Z <mem>                   ThreadCount:         1254
+2013-09-16T15:03:11Z <mem>             Total Physical KB:     16720472
+2013-09-16T15:03:11Z <mem>              Total Virtual KB:      4194176
+2013-09-16T15:03:11Z <mem>                 Total page KB:     33439084
+2013-09-16T15:03:11Z <mem>             WorkingSetSize KB:       617700
+2013-09-16T15:03:11Z <mem>                     timestamp: 2013-09-16T15:03:10.98Z
+total pages: 6 unused pages: 0 total bytes: 6.00 used: 5.00 (92.36%) unused: 0.00
+page usage (page #/% free): 5/45.9
+small allocations (size/#/%): 128/60223/1.56 256/1577888/40.99 512/1470068/38.18 1024/1946/0.05 2048/396965/10.31 4096/68877/1.79 8192/73083/1.90 16384/50101/1.30 32768/30321/0.79 65536/16383/0.43 t/s (% s) 3849896/3745855(97.30)
+2013-09-16T15:03:12Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 43.00
+2013-09-16T15:03:13Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 42.00
+2013-09-16T15:03:14Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 37.00
+2013-09-16T15:03:15Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 42.00
+2013-09-16T15:03:16Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 34.00
+2013-09-16T15:03:17Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 39.00
+2013-09-16T15:03:18Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 46.00
+2013-09-16T15:03:19Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 43.00
+2013-09-16T15:03:20Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 41.00
+2013-09-16T15:03:21Z INFO: newview/llviewerdisplay.cpp(219) : display_stats: FPS: 40.00
+2013-09-16T15:03:21Z WARNING: llcommon/llfile.cpp(127) : warnif: Couldn't remove 'C:\Users\openvritualworlds\AppData\Roaming\Firestorm\logs\center.log' (errno 2): No such file or directory
